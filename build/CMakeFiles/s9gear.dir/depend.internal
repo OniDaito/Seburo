@@ -246,8 +246,13 @@ CMakeFiles/s9gear.dir/src/app.cpp.o
  ../lib/glm/gtc/swizzle.inl
  ../lib/glm/gtc/type_ptr.hpp
  ../lib/glm/gtc/type_ptr.inl
+ ../lib/glm/gtx/../gtx/integer.hpp
+ ../lib/glm/gtx/../gtx/integer.inl
+ ../lib/glm/gtx/../gtx/quaternion.hpp
  ../lib/glm/gtx/matrix_interpolation.hpp
  ../lib/glm/gtx/matrix_interpolation.inl
+ ../lib/glm/gtx/string_cast.hpp
+ ../lib/glm/gtx/string_cast.inl
  /home/oni/Projects/S9Gear/src/app.cpp
  /home/oni/Projects/S9Gear/src/app.hpp
  /home/oni/Projects/S9Gear/src/camera.hpp

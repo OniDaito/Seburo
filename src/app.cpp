@@ -67,6 +67,10 @@ void GLApp::display(GLFWwindow window){
 	sRefQuad->draw();
 	sShaderQuad.unbind();
 	
+#ifdef DEBUG
+	cout<< "Window: " << w << "," << h << " Camera Matrix: " << glm::to_string(sCam->getMatrix()) << endl;
+#endif
+	
 	CXGLERROR
 }
 
@@ -317,6 +321,10 @@ void GLApp::init() {
 	// Create basic references
 	sRefQuad = PrimPtr(new Primitive);
 	makeReferenceQuad(sRefQuad,1.0,1.0);
+	
+	// Move the Camera
+	sCam.move(glm::vec3(0,0,20));
+	
 	
 	// Load Basic Shader
 	sShaderQuad.load("../shaders/quad.vert", "../shaders/quad.frag");

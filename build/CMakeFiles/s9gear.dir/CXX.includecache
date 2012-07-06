@@ -680,11 +680,47 @@ type_ptr.inl
 
 ../lib/glm/gtc/type_ptr.inl
 
+../lib/glm/gtx/../gtx/integer.hpp
+../glm.hpp
+../lib/glm/gtx/../gtx/../glm.hpp
+integer.inl
+../lib/glm/gtx/../gtx/integer.inl
+
+../lib/glm/gtx/../gtx/integer.inl
+
+../lib/glm/gtx/../gtx/quaternion.hpp
+../glm.hpp
+../lib/glm/gtx/../gtx/../glm.hpp
+../gtc/quaternion.hpp
+../lib/glm/gtx/../gtx/../gtc/quaternion.hpp
+quaternion.inl
+../lib/glm/gtx/../gtx/quaternion.inl
+
 ../lib/glm/gtx/matrix_interpolation.hpp
 matrix_interpolation.inl
 ../lib/glm/gtx/matrix_interpolation.inl
 
 ../lib/glm/gtx/matrix_interpolation.inl
+
+../lib/glm/gtx/string_cast.hpp
+../glm.hpp
+../lib/glm/gtx/../glm.hpp
+../gtc/half_float.hpp
+../lib/glm/gtx/../gtc/half_float.hpp
+../gtx/integer.hpp
+../lib/glm/gtx/../gtx/integer.hpp
+../gtx/quaternion.hpp
+../lib/glm/gtx/../gtx/quaternion.hpp
+string
+-
+string_cast.inl
+../lib/glm/gtx/string_cast.inl
+
+../lib/glm/gtx/string_cast.inl
+cstdarg
+-
+cstdio
+-
 
 /home/oni/Projects/S9Gear/src/app.cpp
 app.hpp
@@ -757,9 +793,9 @@ glm/gtc/type_ptr.hpp
 -
 glm/gtc/swizzle.hpp
 -
-glm/gtc/swizzle.hpp
--
 glm/gtx/matrix_interpolation.hpp
+-
+glm/gtx/string_cast.hpp
 -
 GL/glew.h
 -

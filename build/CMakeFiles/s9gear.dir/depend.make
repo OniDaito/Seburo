@@ -245,8 +245,13 @@ CMakeFiles/s9gear.dir/src/app.cpp.o: ../lib/glm/gtc/swizzle.hpp
 CMakeFiles/s9gear.dir/src/app.cpp.o: ../lib/glm/gtc/swizzle.inl
 CMakeFiles/s9gear.dir/src/app.cpp.o: ../lib/glm/gtc/type_ptr.hpp
 CMakeFiles/s9gear.dir/src/app.cpp.o: ../lib/glm/gtc/type_ptr.inl
+CMakeFiles/s9gear.dir/src/app.cpp.o: ../lib/glm/gtx/../gtx/integer.hpp
+CMakeFiles/s9gear.dir/src/app.cpp.o: ../lib/glm/gtx/../gtx/integer.inl
+CMakeFiles/s9gear.dir/src/app.cpp.o: ../lib/glm/gtx/../gtx/quaternion.hpp
 CMakeFiles/s9gear.dir/src/app.cpp.o: ../lib/glm/gtx/matrix_interpolation.hpp
 CMakeFiles/s9gear.dir/src/app.cpp.o: ../lib/glm/gtx/matrix_interpolation.inl
+CMakeFiles/s9gear.dir/src/app.cpp.o: ../lib/glm/gtx/string_cast.hpp
+CMakeFiles/s9gear.dir/src/app.cpp.o: ../lib/glm/gtx/string_cast.inl
 CMakeFiles/s9gear.dir/src/app.cpp.o: ../src/app.cpp
 CMakeFiles/s9gear.dir/src/app.cpp.o: ../src/app.hpp
 CMakeFiles/s9gear.dir/src/app.cpp.o: ../src/camera.hpp

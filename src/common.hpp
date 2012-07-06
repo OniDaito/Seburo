@@ -42,8 +42,8 @@
 #include <glm/gtc/matrix_inverse.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/swizzle.hpp>
-#include <glm/gtc/swizzle.hpp>
 #include <glm/gtx/matrix_interpolation.hpp>
+#include <glm/gtx/string_cast.hpp>
 
 #include <GL/glew.h>
 #include <GL/glut.h>
