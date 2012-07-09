@@ -16,6 +16,7 @@ using namespace s9;
 
 /*
  * Basic Camera - This one keeps the up vector always parallel to Y axis
+ * \todo add inertia
  */
 
 Camera::Camera(){
@@ -26,20 +27,23 @@ Camera::Camera(){
 	mField = 55.0f;
 	mFar = 100.0f;
 }
-	
+
+ 
 void Camera::yaw(float_t a){
 	glm::quat q_rotate;
-	q_rotate = glm::rotate( q_rotate, a, glm::vec3( 0, 1, 0 ) );
+	q_rotate = glm::rotate( q_rotate, a, mUp );
 	mLook = q_rotate * mLook;
 	mUp = q_rotate * mUp;
 	
 	compute();
-	
 }
 
 void Camera::pitch(float_t a){
 	glm::quat q_rotate;
-	q_rotate = glm::rotate( q_rotate, a, glm::vec3( 1, 0, 0 ) );
+	
+	glm::vec3 right = glm::cross(mUp,mLook);
+	
+	q_rotate = glm::rotate( q_rotate, a, right );
 	mLook = q_rotate * mLook;
 	mUp = q_rotate * mUp;
 	
@@ -48,7 +52,7 @@ void Camera::pitch(float_t a){
 
 void Camera::roll(float_t a){
 	glm::quat q_rotate;
-	q_rotate = glm::rotate( q_rotate, a, glm::vec3( 0, 0, 1 ) );
+	q_rotate = glm::rotate( q_rotate, a, mLook);
 	mLook = q_rotate * mLook;
 	mUp = q_rotate * mUp;
 	
@@ -82,11 +86,15 @@ void Camera::compute() {
 OrbitCamera::OrbitCamera() : Camera() {
 	mPos = glm::vec3(0,0,1.0);
 	mLook = glm::vec3(0,0,0);
+	mUp = glm::vec3(0,1,0);
+	mNear = 1.0f;
+	mField = 55.0f;
+	mFar = 100.0f;
 }
 
 void OrbitCamera::compute() {
 	mViewMatrix = glm::lookAt(mPos, mLook, mUp);
-	mProjectionMatrix = glm::perspective(mField,mR,mNear, mFar);
+	mProjectionMatrix = glm::perspective(mField, mR, mNear, mFar);
 }
 
 void OrbitCamera::zoom(float_t z) {
@@ -110,42 +118,41 @@ void OrbitCamera::shift(float_t du, float_t dv) {
 	compute();
 }
 
-
-/*
- * Real Camera is a little different
- */
- 
- 
- 
-void RealCamera::yaw(float_t a){
+void OrbitCamera::yaw(float_t a){
 	glm::quat q_rotate;
 	q_rotate = glm::rotate( q_rotate, a, mUp );
-	mLook = q_rotate * mLook;
 	mUp = q_rotate * mUp;
-	
+	mPos = q_rotate *mPos;
 	compute();
-	
 }
 
-void RealCamera::pitch(float_t a){
+void OrbitCamera::pitch(float_t a){
 	glm::quat q_rotate;
 	
-	glm::vec3 right = glm::cross(mUp,mLook);
+	glm::vec3 right = glm::normalize(glm::cross(mUp, glm::normalize(mLook - mPos)));
 	
 	q_rotate = glm::rotate( q_rotate, a, right );
-	mLook = q_rotate * mLook;
+	mUp = q_rotate * mUp;
+	mPos = q_rotate * mPos;
+	
+	compute();
+}
+
+void OrbitCamera::roll(float_t a){
+	glm::quat q_rotate;
+	q_rotate = glm::rotate( q_rotate, a,  glm::normalize(mLook - mPos));
 	mUp = q_rotate * mUp;
 	
 	compute();
 }
 
-void RealCamera::roll(float_t a){
-	glm::quat q_rotate;
-	q_rotate = glm::rotate( q_rotate, a, mLook);
-	mLook = q_rotate * mLook;
-	mUp = q_rotate * mUp;
-	
-	compute();
+/*
+ * Screen Camera - Simply maps ortho style to screen width and height in pixels
+ */
+ 
+void ScreenCamera::compute() {
+	mViewMatrix = glm::mat4(1.0f);
+	mProjectionMatrix = glm::ortho(0.0f, static_cast<float_t>(mW), static_cast<float_t>(mH), 0.0f);
 }
 
 

@@ -70,26 +70,30 @@ namespace s9{
 		OrbitCamera();
 		void zoom(float_t z);
 		void shift(float_t du, float_t dv);
+		
+		void yaw(float_t a);
+		void pitch(float_t a);
+		void roll(float_t a);
 
 	protected:
 		void compute();
 		
 	};
-
+	
 	/*
-	 * Real Camera - i.e up can change
+	 * Screen Camera
 	 */
 	 
-	 
-	class RealCamera : public Camera {
+	class ScreenCamera : public Camera {
 	public:
-		RealCamera();
+		ScreenCamera() {mW = 800; mH = 600; compute(); };
+		void setDim(size_t w, size_t h) {mW = w; mH = h; compute(); };
 		
-		void yaw(float_t a);
-		void pitch(float_t a);
-		void roll(float_t a);
-		
-	 };
+	protected:
+		void compute();
+		size_t mW, mH;
+	};
+
  }
 	 
 

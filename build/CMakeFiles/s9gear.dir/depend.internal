@@ -347,8 +347,13 @@ CMakeFiles/s9gear.dir/src/camera.cpp.o
  ../lib/glm/gtc/swizzle.inl
  ../lib/glm/gtc/type_ptr.hpp
  ../lib/glm/gtc/type_ptr.inl
+ ../lib/glm/gtx/../gtx/integer.hpp
+ ../lib/glm/gtx/../gtx/integer.inl
+ ../lib/glm/gtx/../gtx/quaternion.hpp
  ../lib/glm/gtx/matrix_interpolation.hpp
  ../lib/glm/gtx/matrix_interpolation.inl
+ ../lib/glm/gtx/string_cast.hpp
+ ../lib/glm/gtx/string_cast.inl
  /home/oni/Projects/S9Gear/src/camera.cpp
  /home/oni/Projects/S9Gear/src/camera.hpp
  /home/oni/Projects/S9Gear/src/common.hpp
@@ -434,8 +439,13 @@ CMakeFiles/s9gear.dir/src/fbo.cpp.o
  ../lib/glm/gtc/swizzle.inl
  ../lib/glm/gtc/type_ptr.hpp
  ../lib/glm/gtc/type_ptr.inl
+ ../lib/glm/gtx/../gtx/integer.hpp
+ ../lib/glm/gtx/../gtx/integer.inl
+ ../lib/glm/gtx/../gtx/quaternion.hpp
  ../lib/glm/gtx/matrix_interpolation.hpp
  ../lib/glm/gtx/matrix_interpolation.inl
+ ../lib/glm/gtx/string_cast.hpp
+ ../lib/glm/gtx/string_cast.inl
  /home/oni/Projects/S9Gear/src/common.hpp
  /home/oni/Projects/S9Gear/src/fbo.cpp
  /home/oni/Projects/S9Gear/src/fbo.hpp
@@ -546,8 +556,13 @@ CMakeFiles/s9gear.dir/src/primitive.cpp.o
  ../lib/glm/gtc/swizzle.inl
  ../lib/glm/gtc/type_ptr.hpp
  ../lib/glm/gtc/type_ptr.inl
+ ../lib/glm/gtx/../gtx/integer.hpp
+ ../lib/glm/gtx/../gtx/integer.inl
+ ../lib/glm/gtx/../gtx/quaternion.hpp
  ../lib/glm/gtx/matrix_interpolation.hpp
  ../lib/glm/gtx/matrix_interpolation.inl
+ ../lib/glm/gtx/string_cast.hpp
+ ../lib/glm/gtx/string_cast.inl
  /home/oni/Projects/S9Gear/src/common.hpp
  /home/oni/Projects/S9Gear/src/glutils.hpp
  /home/oni/Projects/S9Gear/src/primitive.cpp
@@ -634,8 +649,13 @@ CMakeFiles/s9gear.dir/src/shader.cpp.o
  ../lib/glm/gtc/swizzle.inl
  ../lib/glm/gtc/type_ptr.hpp
  ../lib/glm/gtc/type_ptr.inl
+ ../lib/glm/gtx/../gtx/integer.hpp
+ ../lib/glm/gtx/../gtx/integer.inl
+ ../lib/glm/gtx/../gtx/quaternion.hpp
  ../lib/glm/gtx/matrix_interpolation.hpp
  ../lib/glm/gtx/matrix_interpolation.inl
+ ../lib/glm/gtx/string_cast.hpp
+ ../lib/glm/gtx/string_cast.inl
  /home/oni/Projects/S9Gear/src/common.hpp
  /home/oni/Projects/S9Gear/src/glutils.hpp
  /home/oni/Projects/S9Gear/src/shader.cpp
@@ -746,8 +766,13 @@ CMakeFiles/s9gear.dir/src/shapes.cpp.o
  ../lib/glm/gtc/swizzle.inl
  ../lib/glm/gtc/type_ptr.hpp
  ../lib/glm/gtc/type_ptr.inl
+ ../lib/glm/gtx/../gtx/integer.hpp
+ ../lib/glm/gtx/../gtx/integer.inl
+ ../lib/glm/gtx/../gtx/quaternion.hpp
  ../lib/glm/gtx/matrix_interpolation.hpp
  ../lib/glm/gtx/matrix_interpolation.inl
+ ../lib/glm/gtx/string_cast.hpp
+ ../lib/glm/gtx/string_cast.inl
  /home/oni/Projects/S9Gear/src/common.hpp
  /home/oni/Projects/S9Gear/src/glutils.hpp
  /home/oni/Projects/S9Gear/src/primitive.hpp

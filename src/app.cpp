@@ -22,9 +22,11 @@ using namespace s9;
  
 FBO sFBO;
 OrbitCamera sCam;
+ScreenCamera sHUDCam;
 PrimPtr sRefQuad;
+PrimPtr sHUDQuad;
 Shader sShaderQuad;
-
+Shader sShaderTexQuad;
 /*
  * GLApp Static variables
  */
@@ -56,6 +58,8 @@ void GLApp::display(GLFWwindow window){
 	glfwGetWindowSize(window, &w,&h);
 	glViewport(0,0,w,h);
 	
+	sCam.setRatio(static_cast<float_t>(w) / static_cast<float_t>(h));
+	
 	glClearBufferfv(GL_COLOR, 0, &glm::vec4(0.9f, 0.9f, 0.93f, 1.0f)[0]);
 	GLfloat depth = 1.0f;
 	glClearBufferfv(GL_DEPTH, 0, &depth );
@@ -63,13 +67,35 @@ void GLApp::display(GLFWwindow window){
 	glm::mat4 mvp = getMatrix(sCam, sRefQuad);
 	
 	sShaderQuad.bind();
-	glUniformMatrix4fv(	sShaderQuad.location("uMVPMatrix") , 1, GL_FALSE, glm::value_ptr(mvp));
+	glUniformMatrix4fv(sShaderQuad.location("uMVPMatrix"), 1, GL_FALSE, glm::value_ptr(mvp));
 	sRefQuad->draw();
 	sShaderQuad.unbind();
 	
+	// Render to FBO
+	
+	sFBO.bind();
+	glClearBufferfv(GL_COLOR, 0, &glm::vec4(0.8f, 0.8f, 0.83f, 1.0f)[0]);
+	glClearBufferfv(GL_DEPTH, 0, &depth );
+	
+	sShaderQuad.bind();
+	glUniformMatrix4fv(sShaderQuad.location("uMVPMatrix"), 1, GL_FALSE, glm::value_ptr(mvp));
+	sRefQuad->draw();
+	sShaderQuad.unbind();
+	sFBO.unbind();
+	
+	// Draw FBO
+	glActiveTexture(GL_TEXTURE0);
+	mvp = sHUDCam.getMatrix();
+	sShaderTexQuad.bind();
+	sFBO.bindColour();
+	glUniformMatrix4fv(sShaderTexQuad.location("uMVPMatrix"), 1, GL_FALSE, glm::value_ptr(mvp));
+	sHUDQuad->draw();
+	sFBO.unbindColour();
+	sShaderTexQuad.unbind();
+	
 #ifdef DEBUG
-	cout<< "Window: " << w << "," << h << " Camera Matrix: " << glm::to_string(sCam->getMatrix()) << endl;
-#endif
+	cout << "Final Matrix: " << glm::to_string(mvp) << endl;
+#endif	
 	
 	CXGLERROR
 }
@@ -102,8 +128,7 @@ void GLApp::mainLoop() {
 	double_t t = glfwGetTime();
 
 	while (mRunning){
-		bool ui = true;
-		
+
 		BOOST_FOREACH ( GLFWwindow b, vWindows) {	
 			glfwMakeContextCurrent(b);
 			display(b);
@@ -169,20 +194,21 @@ void GLApp::mouseButtonCallback(GLFWwindow window, int button, int action) {
 			}
 		}
 	}
+	
 }
 
 /*
  * Mouse Callback for Position
  */
 
-static float_t msense = 0.01;
+static float_t msense = 0.1;
 
 void GLApp::mousePositionCallback(GLFWwindow window, int x, int y) {
 	if( !TwEventMousePosGLFW(x, y) ){  
 		if (mMouseStatus.mButton & MOUSE_LEFT){
 	
-			sCam.yaw(mMouseStatus.mDX * msense);
-			sCam.pitch(mMouseStatus.mDY * msense);
+			sCam.yaw(static_cast<float_t>(mMouseStatus.mDX) * msense);
+			sCam.pitch(static_cast<float_t>(mMouseStatus.mDY) * msense);
 			
 		}
 		
@@ -194,6 +220,7 @@ void GLApp::mousePositionCallback(GLFWwindow window, int x, int y) {
 	}
 
 #ifdef DEBUG
+	cout << "DX: " << mMouseStatus.mDX << ", DY: " << mMouseStatus.mDY << endl;
 	printf("%08x at %0.3f: Mouse position: %i %i\n", 0, glfwGetTime(), x, y);
 #endif
 
@@ -260,7 +287,33 @@ void GLApp::monitorCallback( GLFWmonitor m, int p){
  */
  
 void GLApp::reshape(GLFWwindow window, int w, int h ) {
+	sFBO.resize(w,h);
+
 	
+	resizeHUD(w,h);
+}
+
+void GLApp::resizeHUD(int w, int h){
+	sHUDCam.setDim(w,h);
+
+	if (sHUDQuad){
+		// Resize the hud quad and also resize the texture coordinates
+		sHUDQuad->bind();
+		sHUDQuad->getVBO().mTexCoords[1] = static_cast<float_t>(h);
+		sHUDQuad->getVBO().mTexCoords[2] = static_cast<float_t>(w);
+		sHUDQuad->getVBO().mTexCoords[3] = static_cast<float_t>(h);
+		sHUDQuad->getVBO().mTexCoords[4] = static_cast<float_t>(w);
+		sHUDQuad->getVBO().allocateTexCoords();
+		
+		sHUDQuad->getVBO().mTexCoords[1] = static_cast<float_t>(h);
+		sHUDQuad->getVBO().mTexCoords[2] = static_cast<float_t>(w);
+		sHUDQuad->getVBO().mTexCoords[3] = static_cast<float_t>(h);
+		sHUDQuad->getVBO().mTexCoords[4] = static_cast<float_t>(w);
+		sHUDQuad->getVBO().allocateTexCoords();
+		
+		sHUDQuad->unbind();
+	}
+
 }
 
 /*
@@ -308,8 +361,8 @@ void GLApp::init() {
 		cout << "GLEWInit failed, aborting." << endl;
 		glfwTerminate();
 		exit( EXIT_FAILURE );
-		
 	}
+	
 	CXGLERROR
 	
 	TwInit(TW_OPENGL, NULL);
@@ -319,17 +372,31 @@ void GLApp::init() {
 	vWindows.push_back(w);
 	
 	// Create basic references
-	sRefQuad = PrimPtr(new Primitive);
+	sRefQuad.reset(new Primitive());
 	makeReferenceQuad(sRefQuad,1.0,1.0);
-	
+
+	sHUDQuad.reset(new Primitive());
+	makeReferenceQuad(sHUDQuad,400.0,300.0);
+
+
+
 	// Move the Camera
 	sCam.move(glm::vec3(0,0,20));
-	
+	resizeHUD(800,600);
 	
 	// Load Basic Shader
 	sShaderQuad.load("../shaders/quad.vert", "../shaders/quad.frag");
+	sShaderTexQuad.load("../shaders/quad_texture.vert", "../shaders/quad_texture.frag");
+	
+	// Setup FBO
+	
+	sFBO.setup(800,600);
+	//sFBO.printFramebufferInfo();
 	
 	CXGLERROR
+	
+	// OpenGL Constants
+	glEnable(GL_TEXTURE_RECTANGLE);
 }
 
 

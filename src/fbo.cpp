@@ -40,14 +40,10 @@ void FBO::setup(size_t w, size_t h){
 	glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_RECTANGLE, mColour, 0);
 	glFramebufferRenderbuffer(GL_DRAW_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, mDepth);
  
-	GLenum fboStatus = glCheckFramebufferStatus(GL_DRAW_FRAMEBUFFER);   
- 
-	if (fboStatus != GL_FRAMEBUFFER_COMPLETE)  {
-		std::cout << "Couldn't create frame buffer: " << fboStatus << std::endl;
-		checkStatus();
-	}
-	else
+	if (checkStatus() )  {
+		mOk = true;
 		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+	}
 }
 
 
@@ -185,6 +181,8 @@ void FBO::printFramebufferInfo() {
 
 
 void FBO::resize(size_t w, size_t h){
+	if(!mOk) return;
+	
 	mW = w;
 	mH = h;
 	

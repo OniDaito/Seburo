@@ -25,22 +25,24 @@ namespace s9 {
 	 
 	class FBO {
 	public:
+		FBO() {mOk = false;};
 		void setup(size_t w, size_t h);
 		void bind() { glBindFramebuffer(GL_FRAMEBUFFER, mID); glViewport(0,0,mW,mH); };
 		void unbind() { glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0); } ;
 		bool checkStatus();
 		void printFramebufferInfo();
 		void resize(size_t w, size_t h);
-		void bindColour() {glBindTexture(GL_TEXTURE_RECTANGLE, mColour); }
-		void unbindColour() {glBindTexture(GL_TEXTURE_RECTANGLE, 0); }
-		void bindDepth() {glBindTexture(GL_TEXTURE_RECTANGLE, mDepth); }
-		void unbindDepth() {glBindTexture(GL_TEXTURE_RECTANGLE, 0);  }
+		void bindColour() { glBindTexture(GL_TEXTURE_RECTANGLE, mColour); }
+		void unbindColour() { glBindTexture(GL_TEXTURE_RECTANGLE, 0); }
+		void bindDepth() { glBindTexture(GL_TEXTURE_RECTANGLE, mDepth); }
+		void unbindDepth() { glBindTexture(GL_TEXTURE_RECTANGLE, 0);  }
 		
 		GLuint getWidth() {return mW; };
 		GLuint getHeight() {return mH; }
 		
 	protected:
 		GLuint mW,mH,mID,mDepth,mColour;
+		bool mOk;
 
 	};
 

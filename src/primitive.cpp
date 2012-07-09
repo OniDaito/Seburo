@@ -64,6 +64,7 @@ void Primitive::draw() {
 	else
 		glDrawArrays(GL_TRIANGLES, 0, mVBO.mNumElements);
 	
+	CXGLERROR
 	mVBO.unbind();
 
 }

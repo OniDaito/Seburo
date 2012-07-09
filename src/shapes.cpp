@@ -16,50 +16,64 @@ namespace s9{
 
 	void makeQuad(PrimPtr p, float_t w, float_t h) {
 		
-		VBOData vbo = p->getVBO();
-		
 		// Quad for Camera drawing
-		vbo.mIndices += 0,3,1,3,2,1;
-		vbo.mVertices += 0.0f,0.0f,0.0f,
+		p->getVBO().mIndices += 0,3,1,3,2,1;
+		p->getVBO().mVertices += 0.0f,0.0f,0.0f,
 			w, 0.0f,0.0f, 
 			w, h,0.0f,
 			0.0f, h,0.0f;
 		
-		vbo.mTexCoords += 0.0, h,
+		p->getVBO().mTexCoords += 0.0, h,
 			w, h,
 			w, 0.0,
 			0.0,0.0;
 		
-			
-		vbo.mColours += 1.0f,1.0f,1.0f,1.0f,
+		p->getVBO().mColours += 1.0f,1.0f,1.0f,1.0f,
 			1.0f,1.0f,1.0f,1.0f,
 			1.0f,1.0f,1.0f,1.0f,
 			1.0f,1.0f,1.0f,1.0f;
 			
-		vbo.compile(VBO_VERT | VBO_IDCE | VBO_TEXC | VBO_COLR );
+		p->getVBO().compile(VBO_VERT | VBO_IDCE | VBO_TEXC | VBO_COLR );
 	}
 
 	void makeReferenceQuad(PrimPtr p, float_t w, float_t h) {
-		
-		VBOData vbo = p->getVBO();
-		
+				
 		// Quad for Camera drawing
-		vbo.mIndices += 0,3,1,3,2,1;
-		vbo.mVertices += 0.0f,0.0f,0.0f,
+		p->getVBO().mIndices += 0,3,1,3,2,1;
+		p->getVBO().mVertices += 0.0f,0.0f,0.0f,
 			w, 0.0f,0.0f, 
 			w, h,0.0f,
 			0.0f, h,0.0f;
 		
-		vbo.mTexCoords += 0.0, h,
+		p->getVBO().mTexCoords += 0.0, h,
 			w, h,
 			w, 0.0,
 			0.0,0.0;
 		
-		vbo.mColours += 0.0f,0.0f,0.0f,1.0f,
+		p->getVBO().mColours += 0.0f,0.0f,0.0f,1.0f,
 			0.0f,0.0f,1.0f,1.0f,
 			0.0f,1.0f,0.0f,1.0f,
 			1.0f,0.0f,0.0f,1.0f;
 			
-		vbo.compile(VBO_VERT | VBO_IDCE | VBO_TEXC | VBO_COLR );
+		p->getVBO().compile(VBO_VERT | VBO_IDCE | VBO_TEXC | VBO_COLR );
+		
+		CXGLERROR
 	}
+	
+	void makeReferenceTriangle(PrimPtr p, float_t w, float_t h){
+		// Quad for Camera drawing
+		p->getVBO().mIndices += 0,1,2;
+		p->getVBO().mVertices += 0.0f,0.0f,0.0f,
+			w, 0.0f,0.0f, 
+			w/2, h,0.0f;
+
+		p->getVBO().mColours += 0.0f,0.0f,0.0f,1.0f,
+			0.0f,0.0f,1.0f,1.0f,
+			0.0f,1.0f,0.0f,1.0f;
+			
+		p->getVBO().compile(VBO_VERT | VBO_IDCE | VBO_COLR );
+		
+		CXGLERROR
+	}
+	
 }

@@ -32,7 +32,7 @@ namespace s9 {
 	public:
 		MouseStatus() {mButton = 0x00; mX = mY = mDX = mDY = 0; };
 		uint8_t mButton;
-		uint16_t mX,mY,mDX,mDY;
+		int16_t mX,mY,mDX,mDY;
 	};
 	
 	class GLApp{
@@ -45,6 +45,8 @@ namespace s9 {
 		static void init();
 		static void reshape(GLFWwindow window, int w, int h);
 		static void display(GLFWwindow window);
+		
+		static void resizeHUD(int w, int h);
 		
 		static glm::mat4 getMatrix(Camera &c, PrimPtr p) { return c.getMatrix() * p->getMatrix(); }
 
