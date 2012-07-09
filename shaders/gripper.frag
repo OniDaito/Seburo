@@ -1,9 +1,10 @@
 #version 420 compatibility
 
-in vec4 vertex_light_position;
-in vec4 vertex_normal;
-in vec4 vertex_position;
-in vec4 tangent_direction;
+in vec4 vLightPos;
+in vec4 vVertexNormal;
+in vec4 vVertexPosition;
+in vec4 vTangentDir;
+
 
 uniform mat4 uMVPMatrix;
 uniform mat4 uMVMatrix;
@@ -15,8 +16,8 @@ uniform vec3 uCamPos;
 
 void main(){
 
-	vec3 normalDirection = normalize(vertex_normal.xyz);
-	vec3 tangentDirection = normalize(uTangent.xyz);
+	vec3 normalDirection = normalize(vVertexNormal.xyz);
+	vec3 vTangentDir = normalize(uTangent.xyz);
 
 	vec3 ambient = vec3(0.1,0.1,0.1);
 	vec3 colour = vec3(0.9,0.9,0.92);
@@ -25,19 +26,19 @@ void main(){
 	float alphax = 0.99;
 	float alphay = 0.99;
 
-	vec3 viewDirection =  normalize(uCamPos - vec3(vertex_position.xyz));
+	vec3 viewDirection =  normalize(uCamPos - vec3(vVertexPosition.xyz));
 	vec3 lightDirection;
 	float attenuation;
 
 	// Assuming point light
-	vec3 vertexToLightSource = vec3(uLight0 - vertex_position.xyz);
+	vec3 vertexToLightSource = vec3(uLight0 - vVertexPosition.xyz);
 	float distance = length(vertexToLightSource);
 	attenuation = 1.0 / distance; // linear attenuation 
 	lightDirection = normalize(vertexToLightSource);
 
 
 	vec3 halfwayVector = normalize(lightDirection + viewDirection);
-	vec3 binormalDirection = cross(normalDirection, tangentDirection);
+	vec3 binormalDirection = cross(normalDirection, vTangentDir);
 	float dotLN = dot(lightDirection, normalDirection); 
 
 	// compute this dot product only once
@@ -52,7 +53,7 @@ void main(){
 	} else {
 		float dotHN = dot(halfwayVector, normalDirection);
 		float dotVN = dot(viewDirection, normalDirection);
-		float dotHTAlphaX = dot(halfwayVector, tangentDirection) / alphax;
+		float dotHTAlphaX = dot(halfwayVector, vTangentDir) / alphax;
 		float dotHBAlphaY = dot(halfwayVector, binormalDirection) / alphay;
 
 		specularReflection = attenuation * vec3(speccolour) 

@@ -10,6 +10,18 @@ SET(CMAKE_FORCE_UNIX_PATHS 1)
 
 # The C and CXX include file search paths:
 SET(CMAKE_C_INCLUDE_PATH
+  "/usr/include/vtk-5.6"
+  "/usr/include/mpi"
+  "/usr/include/tcl8.5"
+  "/usr/include/python2.7"
+  "/usr/lib/jvm/default-java/include"
+  "/usr/include/libxml2"
+  "/usr/include/freetype2"
+  "/usr/local/include/pcl-1.6"
+  "/usr/local/include/eigen3"
+  "/usr/include/ni"
+  "/usr/local/include"
+  "/usr/include/qhull"
   "/usr/include/glib-2.0"
   "/usr/lib/x86_64-linux-gnu/glib-2.0/include"
   "../lib"
@@ -20,7 +32,6 @@ SET(CMAKE_C_INCLUDE_PATH
   "/usr/include/pango-1.0"
   "/usr/include/cairo"
   "/usr/include/pixman-1"
-  "/usr/include/freetype2"
   "/usr/include/libpng12"
   "/usr/include/gio-unix-2.0"
   "/usr/include/gtkmm-3.0"
@@ -41,7 +52,6 @@ SET(CMAKE_C_INCLUDE_PATH
   "/usr/include/sigc++-2.0"
   "/usr/lib/sigc++-2.0/include"
   "/usr/local/include/opencv2"
-  "/usr/local/include"
   )
 SET(CMAKE_CXX_INCLUDE_PATH ${CMAKE_C_INCLUDE_PATH})
 SET(CMAKE_Fortran_INCLUDE_PATH ${CMAKE_C_INCLUDE_PATH})

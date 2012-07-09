@@ -111,29 +111,31 @@ s9gear/fast:
 	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/build
 .PHONY : s9gear/fast
 
-src/app.o: src/app.cpp.o
-.PHONY : src/app.o
+#=============================================================================
+# Target rules for targets named basic
 
-# target to build an object file
-src/app.cpp.o:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/app.cpp.o
-.PHONY : src/app.cpp.o
+# Build rule for target.
+basic: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 basic
+.PHONY : basic
 
-src/app.i: src/app.cpp.i
-.PHONY : src/app.i
+# fast build rule for target.
+basic/fast:
+	$(MAKE) -f examples/Basic/CMakeFiles/basic.dir/build.make examples/Basic/CMakeFiles/basic.dir/build
+.PHONY : basic/fast
 
-# target to preprocess a source file
-src/app.cpp.i:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/app.cpp.i
-.PHONY : src/app.cpp.i
+#=============================================================================
+# Target rules for targets named leeds
 
-src/app.s: src/app.cpp.s
-.PHONY : src/app.s
+# Build rule for target.
+leeds: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 leeds
+.PHONY : leeds
 
-# target to generate assembly for a file
-src/app.cpp.s:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/app.cpp.s
-.PHONY : src/app.cpp.s
+# fast build rule for target.
+leeds/fast:
+	$(MAKE) -f examples/Leeds/CMakeFiles/leeds.dir/build.make examples/Leeds/CMakeFiles/leeds.dir/build
+.PHONY : leeds/fast
 
 src/camera.o: src/camera.cpp.o
 .PHONY : src/camera.o
@@ -230,6 +232,30 @@ src/jpeg.s: src/jpeg.c.s
 src/jpeg.c.s:
 	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/jpeg.c.s
 .PHONY : src/jpeg.c.s
+
+src/pclmesh.o: src/pclmesh.cpp.o
+.PHONY : src/pclmesh.o
+
+# target to build an object file
+src/pclmesh.cpp.o:
+	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/pclmesh.cpp.o
+.PHONY : src/pclmesh.cpp.o
+
+src/pclmesh.i: src/pclmesh.cpp.i
+.PHONY : src/pclmesh.i
+
+# target to preprocess a source file
+src/pclmesh.cpp.i:
+	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/pclmesh.cpp.i
+.PHONY : src/pclmesh.cpp.i
+
+src/pclmesh.s: src/pclmesh.cpp.s
+.PHONY : src/pclmesh.s
+
+# target to generate assembly for a file
+src/pclmesh.cpp.s:
+	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/pclmesh.cpp.s
+.PHONY : src/pclmesh.cpp.s
 
 src/primitive.o: src/primitive.cpp.o
 .PHONY : src/primitive.o
@@ -447,6 +473,30 @@ src/vbo.cpp.s:
 	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/vbo.cpp.s
 .PHONY : src/vbo.cpp.s
 
+src/wingedge.o: src/wingedge.cpp.o
+.PHONY : src/wingedge.o
+
+# target to build an object file
+src/wingedge.cpp.o:
+	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/wingedge.cpp.o
+.PHONY : src/wingedge.cpp.o
+
+src/wingedge.i: src/wingedge.cpp.i
+.PHONY : src/wingedge.i
+
+# target to preprocess a source file
+src/wingedge.cpp.i:
+	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/wingedge.cpp.i
+.PHONY : src/wingedge.cpp.i
+
+src/wingedge.s: src/wingedge.cpp.s
+.PHONY : src/wingedge.s
+
+# target to generate assembly for a file
+src/wingedge.cpp.s:
+	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/wingedge.cpp.s
+.PHONY : src/wingedge.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -456,9 +506,8 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... s9gear"
-	@echo "... src/app.o"
-	@echo "... src/app.i"
-	@echo "... src/app.s"
+	@echo "... basic"
+	@echo "... leeds"
 	@echo "... src/camera.o"
 	@echo "... src/camera.i"
 	@echo "... src/camera.s"
@@ -471,6 +520,9 @@ help:
 	@echo "... src/jpeg.o"
 	@echo "... src/jpeg.i"
 	@echo "... src/jpeg.s"
+	@echo "... src/pclmesh.o"
+	@echo "... src/pclmesh.i"
+	@echo "... src/pclmesh.s"
 	@echo "... src/primitive.o"
 	@echo "... src/primitive.i"
 	@echo "... src/primitive.s"
@@ -498,6 +550,9 @@ help:
 	@echo "... src/vbo.o"
 	@echo "... src/vbo.i"
 	@echo "... src/vbo.s"
+	@echo "... src/wingedge.o"
+	@echo "... src/wingedge.i"
+	@echo "... src/wingedge.s"
 .PHONY : help
 
 

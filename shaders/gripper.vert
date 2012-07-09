@@ -1,9 +1,9 @@
 #version 420 compatibility
 
-out vec4 vertex_light_position;
-out vec4 vertex_normal;
-out vec4 vertex_position;
-out vec4 tangent_direction;
+out vec4 vLightPos;
+out vec4 vVertexNormal;
+out vec4 vVertexPosition;
+out vec4 vTangentDir;
 
 uniform mat4 uMVPMatrix;
 uniform mat4 uMVMatrix;
@@ -18,9 +18,9 @@ layout (location = 1) in vec3 attribNormal;
 
 void main() {                              
 	
-	vertex_position = uMVMatrix * vec4(attribVertPosition,1.0);
-	vertex_normal = normalize(vec4(attribNormal,1.0) * uMInverseMatrix);
-	tangent_direction = normalize(uMVMatrix * vec4(uTangent, 0.0));
+	vVertexPosition = uMVMatrix * vec4(attribVertPosition,1.0);
+	vVertexNormal = normalize(vec4(attribNormal,1.0) * uMInverseMatrix);
+	vTangentDir = normalize(uMVMatrix * vec4(uTangent, 0.0));
 	gl_Position = uMVPMatrix * vec4(attribVertPosition,1.0);
 	
 }

@@ -1,12 +1,12 @@
 #version 420 compatibility
 
-in vec4 vertex_light_position;
-in vec4 vertex_normal;
-in vec4 vertex_position;
-in vec2 texCoord;
-flat in uint texID;
+in vec4 vLightPos;
+in vec4 vVertexNormal;
+in vec4 vVertexPosition;
+in vec2 vTexCoord;
+flat in uint vTexID;
 
-uniform sampler2DRect mBaseTex;
+uniform sampler2DRect uBaseTex;
 uniform float uShininess;
 
 ///\todo pass in face normals so we can work out the best texture to use based in the shader
@@ -23,7 +23,7 @@ layout(binding=7) uniform sampler2DRect mCamTex7;
 ///\todo pass in here the number of active cameras - useful to know
 
 void main() {
-	vec3 n = normalize(vertex_normal.xyz);
+	vec3 n = normalize(vVertexNormal.xyz);
 	vec4 diffuse = vec4(0.0);
 	vec4 specular = vec4(0.0);
 	
@@ -32,29 +32,29 @@ void main() {
 	vec4 mat_diffuse = vec4(0.0, 0.0, 1.0, 0.0);
 	
 	///\todo fix this because it sucks
-	if (texID == 0){
-		mat_diffuse = texture(mCamTex0,texCoord);
+	if (vTexID == 0){
+		mat_diffuse = texture(mCamTex0,vTexCoord);
 	}
-	else if (texID == 1){
-		mat_diffuse = texture(mCamTex1,texCoord);
+	else if (vTexID == 1){
+		mat_diffuse = texture(mCamTex1,vTexCoord);
 	}
-	else if (texID == 2){
-		mat_diffuse = texture(mCamTex2,texCoord);
+	else if (vTexID == 2){
+		mat_diffuse = texture(mCamTex2,vTexCoord);
 	}
-	else if (texID == 3){
-		mat_diffuse = texture(mCamTex3,texCoord);
+	else if (vTexID == 3){
+		mat_diffuse = texture(mCamTex3,vTexCoord);
 	}
-	else if (texID == 4){
-		mat_diffuse = texture(mCamTex4,texCoord);
+	else if (vTexID == 4){
+		mat_diffuse = texture(mCamTex4,vTexCoord);
 	}
-	else if (texID == 5){
-		mat_diffuse = texture(mCamTex5,texCoord);
+	else if (vTexID == 5){
+		mat_diffuse = texture(mCamTex5,vTexCoord);
 	}
-	else if (texID == 6){
-		mat_diffuse = texture(mCamTex6,texCoord);
+	else if (vTexID == 6){
+		mat_diffuse = texture(mCamTex6,vTexCoord);
 	}
-	else if (texID == 7){
-		mat_diffuse = texture(mCamTex7,texCoord);
+	else if (vTexID == 7){
+		mat_diffuse = texture(mCamTex7,vTexCoord);
 	}
 	
 	if (length(mat_diffuse) == 0)
@@ -78,7 +78,7 @@ void main() {
 	vec4 ks = mat_specular * light_specular;
 	
 	// diffuse term
-	vec3 lightDir = normalize(vertex_light_position.xyz - vertex_position.xyz);
+	vec3 lightDir = normalize(vLightPos.xyz - vVertexPosition.xyz);
 	float NdotL = dot(n, lightDir);
 	
 	if (NdotL > 0.0)
@@ -86,7 +86,7 @@ void main() {
 	
 	// specular term
 	vec3 rVector = normalize(2.0 * n * dot(n, lightDir) - lightDir);
-	vec3 viewVector = normalize(-vertex_position.xyz);
+	vec3 viewVector = normalize(-vVertexPosition.xyz);
 	float RdotV = dot(rVector, viewVector);
 	
 	if (RdotV > 0.0)

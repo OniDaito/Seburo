@@ -19,7 +19,8 @@ set(SOURCE_FILES
 	src/primitive.cpp
 	src/shapes.cpp
 	src/camera.cpp
-	src/app.cpp
+	src/wingedge.cpp
+	src/pclmesh.cpp
 )
 
 if (CMAKE_COMPILER_IS_GNUCC)
@@ -44,7 +45,7 @@ else()
 endif()
 
 
-option(USEPCL "usepcl" OFF)
+option(USEPCL "usepcl" ON)
 
 ################################################################
 # PCL Libs - included in the way mentioned on their FAQ
@@ -93,9 +94,9 @@ include_directories(lib)
 ################################
 # DEBUG mode
 
-#add_definitions(-DDEBUG)
-#SET(CMAKE_BUILD_TYPE debug)
-#SET(CMAKE_CXX_FLAGS_DEBUG "-g")
+add_definitions(-DDEBUG)
+SET(CMAKE_BUILD_TYPE debug)
+SET(CMAKE_CXX_FLAGS_DEBUG "-g")
 
 
 #SET(CMAKE_CXX_FLAGS_DEBUG "-std=c++0x")
@@ -105,6 +106,7 @@ include_directories(lib)
 
 link_directories(${EXTRA_LIBS})
 link_directories(${PROJECT_SOURCE_DIR}/lib)
+link_directories(${CMAKE_CURRENT_BINARY_DIR}/lib)
 
 
 ################################################################
@@ -264,7 +266,7 @@ endif ()
 set (CMAKE_LIBRARY_PATH ${LIBRARIES_SEARCH_PATHS} /usr/lib /usr/local/lib )
 set (CMAKE_INCLUDE_PATH ${INCLUDES_SEARCH_PATHS} /usr/include /usr/local/include )
 
-add_executable (s9gear 
+add_library(s9gear 
 	${SOURCE_FILES} 
 ) 
 
@@ -292,5 +294,13 @@ project(${PROJECT_NAME})
 if(APPLE)
   set(CMAKE_OSX_ARCHITECTURES "i386")
 endif(APPLE)
+
+################################################################
+# Extra Projects to compile in
+
+if (NOT TARGET examples)
+	add_subdirectory("${CMAKE_SOURCE_DIR}/examples/Basic")
+    add_subdirectory("${CMAKE_SOURCE_DIR}/examples/Leeds")
+endif() 
 
 

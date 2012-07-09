@@ -27,68 +27,94 @@ namespace s9 {
 	class Primitive;
 	
 	typedef boost::shared_ptr<Primitive> PrimPtr;
-	 
-	 
+		
 	class Primitive {
 	public:
 		Primitive();
+		virtual void make();
+		
+		virtual operator int() const { return mObj.use_count() > 0; };
 
 		virtual ~Primitive(); 
 		
-		void move(glm::vec3 p) {mPos += p; mLook+=p; compute(); };
+		void move(glm::vec3 p) { mObj->mPos += p; mObj->mLook+=p; compute(); };
 		void rotate(glm::vec3 r);
-		glm::mat4 getMatrix() { return mTransMatrix * mRotMatrix * mScaleMatrix; };
+		glm::mat4 getMatrix() { return mObj->mTransMatrix * mObj->mRotMatrix * mObj->mScaleMatrix; };
 		
-		void setLook(glm::vec3 v) {mLook = v; compute(); };
-		void setPos(glm::vec3 v) {mPos = v; compute(); };
-		void setScale(glm::vec3 v) {mScale = v; compute(); };
+		void setLook(glm::vec3 v) {mObj->mLook = v; compute(); };
+		void setPos(glm::vec3 v) {mObj->mPos = v; compute(); };
+		void setScale(glm::vec3 v) {mObj->mScale = v; compute(); };
 		
-		int addChild(PrimPtr p) { vChildren.push_back(p); return vChildren.size()-1; };
+		int addChild(PrimPtr p) { mObj->vChildren.push_back(p); return mObj->vChildren.size()-1; };
 		
 		void compute();
 		void draw();
 	
-		glm::vec3 getPos() { return mPos;};
-		glm::vec3 getLook() { return mLook;}
-		glm::vec3 getScale() { return mScale;}
-		glm::vec3 getUp() { return mUp;}
+		glm::vec3 getPos() { return mObj->mPos;};
+		glm::vec3 getLook() { return mObj->mLook;}
+		glm::vec3 getScale() { return mObj->mScale;}
+		glm::vec3 getUp() { return mObj->mUp;}
 				
-		void bind() { mVBO.bind(); };
-		void unbind() {mVBO.unbind(); };
-		GLuint getNumElements() { return mVBO.mNumElements; };
+		void bind() { mObj->mVBO.bind(); };
+		void unbind() {mObj->mVBO.unbind(); };
+		GLuint getNumElements() { return mObj->mVBO.mNumElements; };
 		
-		VBOData& getVBO() {return mVBO;};
+		VBOData& getVBO() {return mObj->mVBO;};
 		
 	protected:
 		
-		VBOData mVBO;
+		class SharedObj {
+		public:
+			SharedObj();
+			
+			std::vector<PrimPtr> vChildren;
+			VBOData mVBO;
+			glm::vec3 mPos;
+			glm::vec3 mUp;
+			glm::vec3 mLook;
+			glm::vec3 mScale;
 		
-		std::vector<PrimPtr> vChildren;
+			glm::mat4 mTransMatrix;
+			glm::mat4 mRotMatrix;
+			glm::mat4 mScaleMatrix;
+		};
 		
-		glm::vec3 mPos;
-		glm::vec3 mUp;
-		glm::vec3 mLook;
-		glm::vec3 mScale;
-		
-		glm::mat4 mTransMatrix;
-		glm::mat4 mRotMatrix;
-		glm::mat4 mScaleMatrix;
+	
+		boost::shared_ptr<SharedObj> mObj; 
 
 	};
 	
-	/*
-	 * A Primitive with a model loader - assimp library
-	 */
 
-	class AssetPrimitive : public Primitive{
+
+	/*
+	 * Creates a primtive from an assimp call
+	 */
+	 
+	template <class T>
+	class AssetDecorator{
 	public:
-		~AssetPrimitive();
-		int loadAsset(std::string filename);
-			
-	protected:
-		void recursiveCreate (const struct aiScene *sc, const struct aiNode* nd);
-		const struct aiScene* pScene;
+		void recursiveCreate (const struct aiScene *sc, const struct aiNode* nd) {};
+		int loadAsset(std::string filename) {};
 	};
+	 
+	template<>
+	class AssetDecorator<Primitive> : public Primitive{  
+	public:
+		~AssetDecorator();
+		int loadAsset(std::string filename);
+
+	protected:
+		
+		void recursiveCreate (const struct aiScene *sc, const struct aiNode* nd);
+	
+		const struct aiScene* pScene;
+	
+	};
+	
+	
+	typedef AssetDecorator<Primitive> AssetPrimitive;
+	
+	
 }
 
 #endif

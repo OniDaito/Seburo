@@ -12,9 +12,10 @@ FILE(REMOVE_RECURSE
   "CMakeFiles/s9gear.dir/src/primitive.cpp.o"
   "CMakeFiles/s9gear.dir/src/shapes.cpp.o"
   "CMakeFiles/s9gear.dir/src/camera.cpp.o"
-  "CMakeFiles/s9gear.dir/src/app.cpp.o"
-  "s9gear.pdb"
-  "s9gear"
+  "CMakeFiles/s9gear.dir/src/wingedge.cpp.o"
+  "CMakeFiles/s9gear.dir/src/pclmesh.cpp.o"
+  "libs9gear.pdb"
+  "libs9gear.a"
 )
 
 # Per-language clean rules from dependency scanning.

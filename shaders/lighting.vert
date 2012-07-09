@@ -1,15 +1,15 @@
 #version 420 compatibility
 
-out vec4 vertex_light_position;
-out vec4 vertex_normal;
-out vec4 vertex_position;
-out vec2 texCoord;
-out flat uint texID;
+out vec4 vLightPos;
+out vec4 vVertexNormal;
+out vec4 vVertexPosition;
+out vec2 vTexCoord;
+flat out uint vTexID;
 
-uniform mat4 mMVPMatrix;
-uniform mat4 mMVMatrix;
-uniform mat4 mNormalMatrix;
-uniform vec3 mLight0;
+uniform mat4 uMVPMatrix;
+uniform mat4 uMVMatrix;
+uniform mat4 uNormalMatrix;
+uniform vec3 uLight0;
 
 
 // no indices for the mesh drawing
@@ -21,11 +21,11 @@ layout (location = 3) in uint attribTexID;
 
 
 void main() {            
-    vertex_normal = normalize(mNormalMatrix * vec4(-attribNormal,1.0));
-    vertex_light_position = normalize( vec4(mLight0,1.0));
-    vertex_position = mMVPMatrix * vec4(attribVertPosition,1.0);
-    gl_Position = vertex_position;
-    texCoord = attribTexCoord;
-    texID = attribTexID;
+    vVertexNormal = normalize(uNormalMatrix * vec4(-attribNormal,1.0));
+    vLightPos = normalize( vec4(uLight0,1.0));
+    vVertexPosition = uMVPMatrix * vec4(attribVertPosition,1.0);
+    gl_Position = vVertexPosition;
+    vTexCoord = attribTexCoord;
+    vTexID = attribTexID;
 } 
 

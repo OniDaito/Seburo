@@ -11,10 +11,21 @@ SET(CMAKE_MAKEFILE_DEPENDS
   "CMakeFiles/CMakeCCompiler.cmake"
   "CMakeFiles/CMakeCXXCompiler.cmake"
   "CMakeFiles/CMakeSystem.cmake"
+  "../examples/Basic/CMakeLists.txt"
+  "../examples/Leeds/CMakeLists.txt"
+  "/usr/lib/vtk-5.6/CMake/vtkMakeInstantiator.cmake"
+  "/usr/lib/vtk-5.6/UseVTK.cmake"
+  "/usr/lib/vtk-5.6/VTKConfig.cmake"
+  "/usr/lib/vtk-5.6/VTKConfigQt.cmake"
+  "/usr/lib/vtk-5.6/VTKConfigVersion.cmake"
+  "/usr/lib/vtk-5.6/VTKLibraryDepends.cmake"
+  "/usr/local/share/pcl-1.6/PCLConfig.cmake"
+  "/usr/local/share/pcl-1.6/PCLConfigVersion.cmake"
   "/usr/share/cmake-2.8/Modules/CMakeCInformation.cmake"
   "/usr/share/cmake-2.8/Modules/CMakeCXXInformation.cmake"
   "/usr/share/cmake-2.8/Modules/CMakeCommonLanguageInclude.cmake"
   "/usr/share/cmake-2.8/Modules/CMakeGenericSystem.cmake"
+  "/usr/share/cmake-2.8/Modules/CMakeImportBuildSettings.cmake"
   "/usr/share/cmake-2.8/Modules/CMakeParseArguments.cmake"
   "/usr/share/cmake-2.8/Modules/CMakeSystemSpecificInformation.cmake"
   "/usr/share/cmake-2.8/Modules/CheckFunctionExists.cmake"
@@ -28,6 +39,7 @@ SET(CMAKE_MAKEFILE_DEPENDS
   "/usr/share/cmake-2.8/Modules/FindPackageHandleStandardArgs.cmake"
   "/usr/share/cmake-2.8/Modules/FindPackageMessage.cmake"
   "/usr/share/cmake-2.8/Modules/FindPkgConfig.cmake"
+  "/usr/share/cmake-2.8/Modules/FindVTK.cmake"
   "/usr/share/cmake-2.8/Modules/FindX11.cmake"
   "/usr/share/cmake-2.8/Modules/Platform/Linux-GNU-C.cmake"
   "/usr/share/cmake-2.8/Modules/Platform/Linux-GNU-CXX.cmake"
@@ -45,9 +57,13 @@ SET(CMAKE_MAKEFILE_OUTPUTS
 # Byproducts of CMake generate step:
 SET(CMAKE_MAKEFILE_PRODUCTS
   "CMakeFiles/CMakeDirectoryInformation.cmake"
+  "examples/Basic/CMakeFiles/CMakeDirectoryInformation.cmake"
+  "examples/Leeds/CMakeFiles/CMakeDirectoryInformation.cmake"
   )
 
 # Dependency information for all targets:
 SET(CMAKE_DEPEND_INFO_FILES
   "CMakeFiles/s9gear.dir/DependInfo.cmake"
+  "examples/Basic/CMakeFiles/basic.dir/DependInfo.cmake"
+  "examples/Leeds/CMakeFiles/leeds.dir/DependInfo.cmake"
   )
