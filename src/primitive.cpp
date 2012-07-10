@@ -15,9 +15,10 @@ using namespace s9;
 
 
 Primitive::SharedObj::SharedObj() {
-		
+	
+	// Initial state of the world
 	mPos = glm::vec3(0,0,0);
-	mLook = glm::vec3(0,0,1);
+	mLook = glm::vec3(0,0,-1);
 	mUp = glm::vec3(0,1,0);
 	
 	mRotMatrix = glm::mat4(1.0f);
@@ -26,7 +27,6 @@ Primitive::SharedObj::SharedObj() {
 }
 
 Primitive::Primitive() {
-
 }
 
 
@@ -67,105 +67,130 @@ void Primitive::compute() {
  * Draw - need to specify whether to draw the children recursively as well - Probably yes
  */
  
-void Primitive::draw() {
+void Primitive::draw(GLuint type) {
 	mObj->mVBO.bind();
 	
-	if (mObj->mVBO.mUsed & VBO_IDCE)
-		glDrawElements(GL_TRIANGLES, mObj->mVBO.mNumIndices, GL_UNSIGNED_INT, 0);
-	else
-		glDrawArrays(GL_TRIANGLES, 0, mObj->mVBO.mNumElements);
+	if (mObj->mVBO.mUsed & VBO_IDCE && mObj->mVBO.mNumIndices > 0)
+		glDrawElements(type, mObj->mVBO.mNumIndices, GL_UNSIGNED_INT, 0);
+	else if (mObj->mVBO.mNumElements > 0)
+		glDrawArrays(type, 0, mObj->mVBO.mNumElements);
 	
 	CXGLERROR
 	mObj->mVBO.unbind();
+	
+	BOOST_FOREACH ( PrimPtr p, mObj->vChildren) {
+		p->draw();
+	}
+}
 
+/*
+ * Get Matrix - a recursive call all the way up the hierarchy
+ */
+ 
+glm::mat4 Primitive::getMatrix() {
+	glm::mat4 m = getLocalMatrix();
+	if (getParent())
+		m = _getMatrix(getParent(),m);
+	return m;
+}
+
+glm::mat4 Primitive::_getMatrix(PrimPtr p, glm::mat4 m) {
+	m = p->getLocalMatrix() * m;
+	if (p->getParent()){
+		_getMatrix(p->getParent(),m);
+	}
+	return m;
 }
  
 
 /*
  * Assimp Related Functions - use of this-> as this class is a decorator 
  */
+ 
+const struct aiScene* AssetGenerator::pScene;
 
-void AssetDecorator<Primitive>::recursiveCreate (const struct aiScene *sc, const struct aiNode* nd) {
-	unsigned int i;
-	unsigned int n = 0, t;
+	
+void AssetGenerator::recursiveCreate (const struct aiScene *sc, const struct aiNode* nd, PrimPtr p) {
 
 	// draw all meshes assigned to this node - assuming triangles
-	for (; n < nd->mNumMeshes; ++n) {
+	for (size_t n = 0; n < nd->mNumMeshes; ++n) {
 		const struct aiMesh* mesh = pScene->mMeshes[nd->mMeshes[n]];
 
 		// Allocate vertices
 		for (size_t k = 0; k < mesh->mNumVertices; k++){
-			mObj->mVBO.mVertices.push_back(0.0f);
-			mObj->mVBO.mVertices.push_back(0.0f);
-			mObj->mVBO.mVertices.push_back(0.0f);
+			p->getVBO().mVertices.push_back(0.0f);
+			p->getVBO().mVertices.push_back(0.0f);
+			p->getVBO().mVertices.push_back(0.0f);
 			
-			mObj->mVBO.mNormals.push_back(0.0f);
-			mObj->mVBO.mNormals.push_back(0.0f);
-			mObj->mVBO.mNormals.push_back(0.0f);
+			p->getVBO().mNormals.push_back(0.0f);
+			p->getVBO().mNormals.push_back(0.0f);
+			p->getVBO().mNormals.push_back(0.0f);
 		}
 	
 
-		for (t = 0; t < mesh->mNumFaces; ++t) {
+		for (size_t t = 0; t < mesh->mNumFaces; ++t) {
 			const struct aiFace* face = &mesh->mFaces[t];
 			
-			for(i = 0; i < face->mNumIndices; i++) {
-				int index = face->mIndices[i];
-				mObj->mVBO.mIndices.push_back(index);
-				
-			//	if(mesh->mColors[0] != NULL)
-			//		glColor4fv((GLfloat*)&mesh->mColors[0][index]);
-				
-				if(mesh->mNormals != NULL) {
-					mObj->mVBO.mNormals[index * 3 ] =  mesh->mNormals[index].x;
-					mObj->mVBO.mNormals[index * 3 + 1] =  mesh->mNormals[index].y;
-					mObj->mVBO.mNormals[index * 3 + 2] =  mesh->mNormals[index].z;
-				}
-				
-				mObj->mVBO.mVertices[index * 3 ] =  mesh->mVertices[index].x;
-				mObj->mVBO.mVertices[index * 3 + 1] =  mesh->mVertices[index].y;
-				mObj->mVBO.mVertices[index * 3 + 2] =  mesh->mVertices[index].z;	
+			if ( face->mNumIndices == 3) {
+				for(size_t i = 0; i < face->mNumIndices; ++i) {
+					int index = face->mIndices[i];
+					p->getVBO().mIndices.push_back(index);
+					
+				//	if(mesh->mColors[0] != NULL)
+				//		glColor4fv((GLfloat*)&mesh->mColors[0][index]);
+					
+					if(mesh->mNormals != NULL) {
+						p->getVBO().mNormals[index * 3 ] = mesh->mNormals[index].x;
+						p->getVBO().mNormals[index * 3 + 1] =  mesh->mNormals[index].y;
+						p->getVBO().mNormals[index * 3 + 2] =  mesh->mNormals[index].z;
+					}
+					
+					p->getVBO().mVertices[index * 3 ] =  mesh->mVertices[index].x;
+					p->getVBO().mVertices[index * 3 + 1] =  mesh->mVertices[index].y;
+					p->getVBO().mVertices[index * 3 + 2] =  mesh->mVertices[index].z;	
 
+				}
 			}
 		}
 	}
+	
+	
+	p->getVBO().mNumElements = p->getVBO().mVertices.size() / 3;
+	p->getVBO().mNumIndices = p->getVBO().mIndices.size();
+	p->getVBO().compile(VBO_IDCE | VBO_VERT | VBO_NORM);
+	CXGLERROR
 
-
-
-
-	///\todo recursive create should create child primitives
-/*
-	for (n = 0; n < nd->mNumChildren; ++n) {
-		recursiveCreate(sc, nd->mChildren[n]);
-	}*/
+	for (size_t n = 0; n < nd->mNumChildren; ++n) {
+		PrimPtr pp(new Primitive());
+		pp->make();
+		p->addChild(pp);
+		recursiveCreate(sc, nd->mChildren[n], pp);
+	}
 }
 
 
-int AssetDecorator<Primitive>::loadAsset(std::string filename){
-	make();
-		
+void AssetGenerator::loadAsset(std::string filename, Primitive &p){
+
+	p.make();
+	
 	pScene = aiImportFile(filename.c_str(),aiProcessPreset_TargetRealtime_MaxQuality);
 	if (pScene) {
 	/*	get_bounding_box(&scene_min,&scene_max);
 		scene_center.x = (scene_min.x + scene_max.x) / 2.0f;
 		scene_center.y = (scene_min.y + scene_max.y) / 2.0f;
 		scene_center.z = (scene_min.z + scene_max.z) / 2.0f;*/
-		recursiveCreate(pScene, pScene->mRootNode);
 		
-		mObj->mVBO.mNumElements = mObj->mVBO.mVertices.size() / 3;
-		mObj->mVBO.mNumIndices = mObj->mVBO.mIndices.size();
-		mObj->mVBO.compile(VBO_IDCE | VBO_VERT | VBO_NORM);
-		CXGLERROR
+		PrimPtr pp = boost::make_shared<Primitive>(p);
+		recursiveCreate(pScene, pScene->mRootNode,pp);
 	
 #ifdef DEBUG
-		cout << "S9Gear - " << filename << " loaded with " << mObj->mVBO.mNumIndices / 3 << " faces." << endl;
+		cout << "S9Gear - " << filename << " loaded with " <<  pp->getVBO().mNumIndices / 3 << " faces." << endl;
 #endif
-		
-		return 0;
-	}
-	cout << "S9Gear - Failed to load asset: " << filename << endl;
-	return 1;
+	
+	}else
+		cout << "S9Gear - Failed to load asset: " << filename << endl;
 }
 
-AssetPrimitive::~AssetPrimitive() {
+AssetGenerator::~AssetGenerator() {
 	aiReleaseImport(pScene);
 }

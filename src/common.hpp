@@ -33,6 +33,7 @@
 #include <boost/ptr_container/ptr_deque.hpp>
 #include <boost/ptr_container/ptr_list.hpp>
 #include <boost/shared_ptr.hpp>
+#include <boost/make_shared.hpp>
 
 
 #define GLM_SWIZZLE 

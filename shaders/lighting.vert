@@ -12,12 +12,10 @@ uniform mat4 uNormalMatrix;
 uniform vec3 uLight0;
 
 
-// no indices for the mesh drawing
-
-layout (location = 0) in vec3 attribVertPosition; 
-layout (location = 1) in vec3 attribNormal;
-layout (location = 2) in vec2 attribTexCoord;
-layout (location = 3) in uint attribTexID;
+layout (location = 0) in vec3 attribVertPosition; // 1 is the indices
+layout (location = 2) in vec3 attribNormal;
+layout (location = 3) in vec2 attribTexCoord;
+layout (location = 4) in uint attribTexID;
 
 
 void main() {            

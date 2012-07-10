@@ -11,6 +11,7 @@
 #define CAMERA_HPP
 
 #include "common.hpp"
+#include "primitive.hpp"
 
 /* 
  * Camera Class for a camera that pitches and yaws whilst keeping up always parallel with y
@@ -27,6 +28,8 @@ namespace s9{
 		virtual void yaw(float_t a);
 		virtual void pitch(float_t a);
 		virtual void roll(float_t a);
+		
+		virtual void align(Primitive &p);
 		
 		void setNear(float_t n) {mNear = n; compute(); };
 		void setFar(float_t n) {mFar = n; compute(); };
@@ -48,7 +51,6 @@ namespace s9{
 
 	protected:
 		virtual void compute();
-
 		
 		glm::mat4 mViewMatrix;
 		glm::mat4 mProjectionMatrix;
@@ -69,7 +71,8 @@ namespace s9{
 	public:
 		OrbitCamera();
 		void zoom(float_t z);
-		void shift(float_t du, float_t dv);
+		void shift(glm::vec2 s);
+		void align(Primitive &p){};
 		
 		void yaw(float_t a);
 		void pitch(float_t a);
@@ -88,6 +91,7 @@ namespace s9{
 	public:
 		ScreenCamera() {mW = 800; mH = 600; compute(); };
 		void setDim(size_t w, size_t h) {mW = w; mH = h; compute(); };
+		void align(Primitive &p){};
 		
 	protected:
 		void compute();

@@ -141,6 +141,31 @@ CMakeFiles/s9gear.dir/src/jpeg.c.o: /usr/include/glib-2.0/glib/gvarianttype.h
 CMakeFiles/s9gear.dir/src/jpeg.c.o: /usr/include/glib-2.0/glib/gwin32.h
 CMakeFiles/s9gear.dir/src/jpeg.c.o: /usr/lib/x86_64-linux-gnu/glib-2.0/include/glibconfig.h
 
+CMakeFiles/s9gear.dir/src/camera.cpp.o: ../lib/assimp/./Compiler/poppack1.h
+CMakeFiles/s9gear.dir/src/camera.cpp.o: ../lib/assimp/./Compiler/pushpack1.h
+CMakeFiles/s9gear.dir/src/camera.cpp.o: ../lib/assimp/anim.h
+CMakeFiles/s9gear.dir/src/camera.cpp.o: ../lib/assimp/camera.h
+CMakeFiles/s9gear.dir/src/camera.cpp.o: ../lib/assimp/cimport.h
+CMakeFiles/s9gear.dir/src/camera.cpp.o: ../lib/assimp/color4.h
+CMakeFiles/s9gear.dir/src/camera.cpp.o: ../lib/assimp/color4.inl
+CMakeFiles/s9gear.dir/src/camera.cpp.o: ../lib/assimp/defs.h
+CMakeFiles/s9gear.dir/src/camera.cpp.o: ../lib/assimp/light.h
+CMakeFiles/s9gear.dir/src/camera.cpp.o: ../lib/assimp/material.h
+CMakeFiles/s9gear.dir/src/camera.cpp.o: ../lib/assimp/material.inl
+CMakeFiles/s9gear.dir/src/camera.cpp.o: ../lib/assimp/matrix3x3.h
+CMakeFiles/s9gear.dir/src/camera.cpp.o: ../lib/assimp/matrix3x3.inl
+CMakeFiles/s9gear.dir/src/camera.cpp.o: ../lib/assimp/matrix4x4.h
+CMakeFiles/s9gear.dir/src/camera.cpp.o: ../lib/assimp/matrix4x4.inl
+CMakeFiles/s9gear.dir/src/camera.cpp.o: ../lib/assimp/mesh.h
+CMakeFiles/s9gear.dir/src/camera.cpp.o: ../lib/assimp/postprocess.h
+CMakeFiles/s9gear.dir/src/camera.cpp.o: ../lib/assimp/quaternion.h
+CMakeFiles/s9gear.dir/src/camera.cpp.o: ../lib/assimp/scene.h
+CMakeFiles/s9gear.dir/src/camera.cpp.o: ../lib/assimp/texture.h
+CMakeFiles/s9gear.dir/src/camera.cpp.o: ../lib/assimp/types.h
+CMakeFiles/s9gear.dir/src/camera.cpp.o: ../lib/assimp/vector2.h
+CMakeFiles/s9gear.dir/src/camera.cpp.o: ../lib/assimp/vector2.inl
+CMakeFiles/s9gear.dir/src/camera.cpp.o: ../lib/assimp/vector3.h
+CMakeFiles/s9gear.dir/src/camera.cpp.o: ../lib/assimp/vector3.inl
 CMakeFiles/s9gear.dir/src/camera.cpp.o: ../lib/glm/./core/_detail.hpp
 CMakeFiles/s9gear.dir/src/camera.cpp.o: ../lib/glm/./core/_fixes.hpp
 CMakeFiles/s9gear.dir/src/camera.cpp.o: ../lib/glm/./core/_swizzle.hpp
@@ -230,6 +255,8 @@ CMakeFiles/s9gear.dir/src/camera.cpp.o: ../src/camera.cpp
 CMakeFiles/s9gear.dir/src/camera.cpp.o: ../src/camera.hpp
 CMakeFiles/s9gear.dir/src/camera.cpp.o: ../src/common.hpp
 CMakeFiles/s9gear.dir/src/camera.cpp.o: ../src/glutils.hpp
+CMakeFiles/s9gear.dir/src/camera.cpp.o: ../src/primitive.hpp
+CMakeFiles/s9gear.dir/src/camera.cpp.o: ../src/vbo.hpp
 CMakeFiles/s9gear.dir/src/camera.cpp.o: /usr/local/include/GL/freeglut_std.h
 CMakeFiles/s9gear.dir/src/camera.cpp.o: /usr/local/include/GL/glut.h
 

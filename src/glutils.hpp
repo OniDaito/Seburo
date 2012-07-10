@@ -11,9 +11,9 @@
 
 #include "common.hpp"
 
-#define CXGLERROR checkError(__FUNCTION__,__LINE__);
+#define CXGLERROR checkError(__FUNCTION__,__LINE__,__FILE__);
 
-inline bool checkError(const char * func, int line) {
+inline bool checkError(const char * func, int line, const char* file) {
 	int Error;
 	if((Error = glGetError()) != GL_NO_ERROR){
 		std::string ErrorString;
@@ -38,7 +38,7 @@ inline bool checkError(const char * func, int line) {
 			ErrorString = "UNKNOWN";
 			break;
 		}
-		std::cerr << "S9Gear - OpenGL Error " << ErrorString << " at " << line << " in " << func << std::endl;
+		std::cerr << "S9Gear - OpenGL Error " << ErrorString << " at " << line << " in " << func << " in " <<  file << std::endl;
 	}
 	return Error == GL_NO_ERROR;
 }

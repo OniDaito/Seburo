@@ -26,6 +26,7 @@ Camera::Camera(){
 	mNear = 1.0f;
 	mField = 55.0f;
 	mFar = 100.0f;
+	compute();
 }
 
  
@@ -54,6 +55,7 @@ void Camera::roll(float_t a){
 	glm::quat q_rotate;
 	q_rotate = glm::rotate( q_rotate, a, mLook);
 	mLook = q_rotate * mLook;
+	mLook = glm::normalize(mLook);
 	mUp = q_rotate * mUp;
 	
 	compute();
@@ -72,6 +74,13 @@ void Camera::move(glm::vec3 m){
 void Camera::setRatio(float_t r) {
 	mR = r;
 	compute();
+}
+
+void Camera::align(Primitive &p) { 
+	mLook = p.getLook();
+	mUp = p.getUp();
+	mPos = p.getPos();
+	compute();	
 }
 	
 void Camera::compute() {
@@ -105,12 +114,12 @@ void OrbitCamera::zoom(float_t z) {
 	compute();
 }
 
-void OrbitCamera::shift(float_t du, float_t dv) {
+void OrbitCamera::shift(glm::vec2 s) {
 	glm::vec3 dir = mPos - mLook;
 	dir = glm::normalize(dir);
 	glm::vec3 shiftx = glm::cross(dir,mUp);
-	shiftx *= du;
-	glm::vec3 shifty = mUp * dv;
+	shiftx *= s.x;
+	glm::vec3 shifty = mUp * s.y;
 
 	mPos += shiftx + shifty;
 	mLook += shiftx + shifty;

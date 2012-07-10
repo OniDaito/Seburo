@@ -82,4 +82,55 @@ namespace s9{
 		CXGLERROR
 	}
 	
+	/*
+	 * Create a bounding box, centrered around 0,0,0
+	 */
+	
+	void makeBoundingBox(Primitive &p, float_t w, float_t h, float_t d, float_t s){
+		p.make();
+		
+		glm::vec3 corners[8];
+		corners[0] = glm::vec3(-w/2.0, h/2.0, -d/2.0);
+		corners[1] = glm::vec3(w/2.0, h/2.0, -d/2.0);
+		corners[2] = glm::vec3(-w/2.0, h/2.0, d/2.0);
+		corners[3] = glm::vec3(w/2.0, h/2.0, d/2.0);
+		corners[4] = glm::vec3(-w/2.0, -h/2.0, -d/2.0);
+		corners[5] = glm::vec3(w/2.0, -h/2.0, -d/2.0);
+		corners[6] = glm::vec3(-w/2.0, -h/2.0, d/2.0);
+		corners[7] = glm::vec3(w/2.0, -h/2.0, d/2.0);
+		
+		for (int i=0; i < 8; i++){
+			p.getVBO().mVertices += corners[i].x, corners[i].y, corners[i].z; 
+			
+			glm::vec3 m = glm::vec3(corners[i].x + s, corners[i].y + s, corners[i].z + s); 
+			glm::vec3 n = glm::vec3(corners[i].x + s, corners[i].y + s, corners[i].z + s);
+			glm::vec3 o = glm::vec3(corners[i].x + s, corners[i].y + s, corners[i].z + s);
+			
+			if ( corners[i].x > 0){
+				m.x = corners[i].x - s;
+				n.x = corners[i].x - s;
+				o.x = corners[i].x - s;
+			}
+			
+			if ( corners[i].y > 0){
+				m.y = corners[i].y - s;
+				n.y = corners[i].y - s;
+				o.y = corners[i].y - s;
+			}
+			
+			if ( corners[i].z > 0){
+				m.z = corners[i].z - s;
+				n.z = corners[i].z - s;
+				o.z = corners[i].z - s;
+			}
+			
+		}
+				
+		p.getVBO().mVertices += 0.0f,0.0f,0.0f,
+			w, 0.0f,0.0f, 
+			w/2, h,0.0f;
+		
+	
+	}
+	
 }

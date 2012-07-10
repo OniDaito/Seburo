@@ -15,22 +15,23 @@ using namespace boost::assign;
 using namespace s9;
 
 
-
 /*
  * Test App Variables - global for now
  */
  
-FBO sFBO;
+FBO sFBO, sFBOPick;
 OrbitCamera sCam;
+Camera sGripperCam;
 ScreenCamera sHUDCam;
 Primitive sRefQuad;
 Primitive sHUDQuad;
-AssetPrimitive sModel;
-AssetPrimitive sGripper;
+Primitive sModel;
+Primitive sGripper;
 Shader sShaderQuad;
 Shader sShaderTexQuad;
 Shader sShaderMesh;
 Shader sShaderGripper;
+Shader sShaderPick;
 
 /*
  * GLApp Static variables
@@ -39,6 +40,7 @@ Shader sShaderGripper;
 MouseStatus GLApp::mMouseStatus;
 std::vector<GLFWwindow> GLApp::vWindows;
 GLboolean GLApp::mRunning;
+PrimPtr GLApp::pPicked;
 
 
 /*
@@ -59,52 +61,76 @@ GLApp::GLApp() {
  * Render a Mesh with a choice of shaders and similar
  */
  
-void GLApp::drawMesh() {
+void GLApp::drawMesh(Camera &c) {
 
 	if (sModel) {
 		sShaderMesh.bind();
-		
-		glm::mat4 mvp = getMatrix(sCam, sModel);
+	//	glEnable(GL_CULL_FACE);
+	//	glCullFace(GL_BACK);
+			
+		glm::mat4 mvp = getMatrix(c, sModel);
 		glm::mat4 mv = sCam.getViewMatrix() * sModel.getMatrix();
-		glm::mat4 mn = glm::inverseTranspose(sCam.getViewMatrix());
+		glm::mat4 mn = glm::inverseTranspose(c.getViewMatrix());
 		
 		glUniformMatrix4fv(sShaderMesh.location("uMVPMatrix"), 1, GL_FALSE, glm::value_ptr(mvp));
 		glUniformMatrix4fv(sShaderMesh.location("uMVMatrix"), 1, GL_FALSE, glm::value_ptr(mv));
 		glUniformMatrix4fv(sShaderMesh.location("uNormalMatrix"), 1, GL_FALSE, glm::value_ptr(mn));
 		glUniform1i(sShaderMesh.location("uBaseTex"), 0);
 		glUniform1f(sShaderMesh.location("uShininess"), 20.0f);
-		glUniform3f(sShaderMesh.location("uLight0"),  1.0f,1.0f,1.0f);
+		glm::vec3 l = sCam.getPos() + sCam.getLook();
+		glUniform3f(sShaderMesh.location("uLight0"),l.x,l.y,l.z);
 
 		sModel.draw();
 		sShaderMesh.unbind();
+	//	glDisable(GL_CULL_FACE);
 	}
 	
 }
 
 
-void GLApp::drawGripper() {
+void GLApp::drawGripper(Camera &cam) {
 
 	if (sGripper) {
 		sShaderGripper.bind();
 		
-		glm::mat4 mvp = getMatrix(sCam, sGripper);
-		glm::mat4 mv = sCam.getViewMatrix() * sGripper.getMatrix();
-		glm::mat4 mn = glm::inverseTranspose(sCam.getViewMatrix());
-		glm::mat4 mi = glm::inverse(sCam.getViewMatrix());
+		glm::mat4 mvp = getMatrix(cam, sGripper);
+		glm::mat4 mv = cam.getViewMatrix() * sGripper.getMatrix();
+		glm::mat4 mn = glm::inverseTranspose(cam.getViewMatrix());
+		glm::mat4 mi = glm::inverse(cam.getViewMatrix());
 		
 		glUniformMatrix4fv(sShaderGripper.location("uMVPMatrix"), 1, GL_FALSE, glm::value_ptr(mvp));
 		glUniformMatrix4fv(sShaderGripper.location("uMVMatrix"), 1, GL_FALSE, glm::value_ptr(mv));
 		glUniformMatrix4fv(sShaderGripper.location("uNormalMatrix"), 1, GL_FALSE, glm::value_ptr(mn));
-		glUniformMatrix4fv(sShaderGripper.location("uMInverseMatrix"), 1, GL_FALSE, glm::value_ptr(mi));
 		glUniform1i(sShaderGripper.location("uBaseTex"), 0);
-		glUniform3f(sShaderGripper.location("uTangent"), 1.0f,0.0f,0.0f);
-		glUniform3f(sShaderGripper.location("uLight0"),  1.0f,1.0f,1.0f);
-
+		glUniform1f(sShaderGripper.location("uShininess"), 20.0f);
+		glm::vec3 l = cam.getPos();
+		glUniform3f(sShaderGripper.location("uLight0"),l.x,l.y,l.z);
+		
 		sGripper.draw();
 		sShaderGripper.unbind();
 	}
-	
 }
+
+/*
+ * Check if an object has been picked, returning the value at the picked location
+ */
+ 
+void GLApp::picked(glm::vec2 m, glm::vec4 &c){
+		
+	sFBOPick.bind();
+	glReadBuffer(GL_COLOR_ATTACHMENT0);
+	CXGLERROR
+	
+	GLfloat *data = (GLfloat*) new GLfloat[4];
+	glReadPixels(m.x, m.y, 1, 1, GL_RGBA, GL_FLOAT, data);
+	CXGLERROR
+	c = glm::vec4 ( data[0], data[1], data[2], data[3]);
+	
+	CXGLERROR
+	sFBOPick.unbind();
+
+} 
+
 
 /*
  * display the stuff in this window
@@ -116,6 +142,7 @@ void GLApp::display(GLFWwindow window){
 	glViewport(0,0,w,h);
 	
 	sCam.setRatio(static_cast<float_t>(w) / static_cast<float_t>(h));
+	sGripperCam.setRatio(static_cast<float_t>(w) / static_cast<float_t>(h));
 	
 	glClearBufferfv(GL_COLOR, 0, &glm::vec4(0.9f, 0.9f, 0.93f, 1.0f)[0]);
 	GLfloat depth = 1.0f;
@@ -128,24 +155,43 @@ void GLApp::display(GLFWwindow window){
 	sRefQuad.draw();
 	sShaderQuad.unbind();
 	
-	drawMesh();
-	drawGripper(); 
+	drawMesh(sCam);
+	drawGripper(sCam); 
 	
 	// Render to FBO
 	
 	sFBO.bind();
+
+	sGripperCam.align(sGripper);
+	sGripperCam.pitch(M_PI);
+	sGripperCam.move(glm::vec3(0.5,0,2.0));
+
 	glClearBufferfv(GL_COLOR, 0, &glm::vec4(0.8f, 0.8f, 0.83f, 1.0f)[0]);
 	glClearBufferfv(GL_DEPTH, 0, &depth );
 	
+	glm::mat4 mvpgripper = getMatrix(sGripperCam, sRefQuad);
+	
 	sShaderQuad.bind();
-	glUniformMatrix4fv(sShaderQuad.location("uMVPMatrix"), 1, GL_FALSE, glm::value_ptr(mvp));
+	glUniformMatrix4fv(sShaderQuad.location("uMVPMatrix"), 1, GL_FALSE, glm::value_ptr(mvpgripper));
 	sRefQuad.draw();
 	sShaderQuad.unbind();
 	
-	drawMesh();
-	drawGripper();
-
+	drawMesh(sGripperCam);
+	drawGripper(sGripperCam);
 	sFBO.unbind();
+
+	// Render to Picker
+	sFBOPick.bind();
+	glClearBufferfv(GL_COLOR, 0, &glm::vec4(0.0f, 0.0f, 0.0f, 1.0f)[0]);
+	glClearBufferfv(GL_DEPTH, 0, &depth );
+	mvp = getMatrix(sCam, sGripper);
+	sShaderPick.bind();
+	glUniform4f(sShaderPick.location("uColour"), sGripper.getColour().x, sGripper.getColour().y, sGripper.getColour().z,1.0 );
+	glUniformMatrix4fv(sShaderPick.location("uMVPMatrix"), 1, GL_FALSE, glm::value_ptr(mvp));
+	sGripper.draw();
+	sShaderPick.unbind();
+	sFBOPick.unbind();
+
 	
 	// Draw FBO
 	glActiveTexture(GL_TEXTURE0);
@@ -156,7 +202,6 @@ void GLApp::display(GLFWwindow window){
 	sHUDQuad.draw();
 	sFBO.unbindColour();
 	sShaderTexQuad.unbind();
-
 	
 	CXGLERROR
 }
@@ -235,8 +280,29 @@ void GLApp::mouseButtonCallback(GLFWwindow window, int button, int action) {
 	if (!TwEventMouseButtonGLFW(button,action)){
 		switch(button){
 			case 0: {
-				if (action)
+				if (action) {
 					mMouseStatus.mButton  |= MOUSE_LEFT;
+					glm::vec4 c;
+					// Convert to tex coordinates from screen
+					int w,h;
+					glfwGetWindowSize(window, &w,&h);
+					picked(glm::vec2(mMouseStatus.mX, h - mMouseStatus.mY), c);
+						// Normally loop through objects but we have no need here
+					if (sGripper.getColour() == c){
+						pPicked = boost::make_shared<Primitive>(sGripper);
+#ifdef DEBUG
+						cout << "S9Gear - Picked Gripper" << endl;
+#endif
+			
+					}
+					else{
+						pPicked = PrimPtr(); // set to equivalent of NULL
+#ifdef DEBUG
+						cout << "S9Gear - Picked nothing" << endl;
+#endif
+					}
+				
+				}
 				else
 					mMouseStatus.mButton  ^= MOUSE_LEFT;
 				break;
@@ -248,7 +314,7 @@ void GLApp::mouseButtonCallback(GLFWwindow window, int button, int action) {
 					mMouseStatus.mButton  ^= MOUSE_RIGHT;
 				break;
 			}
-			case 3: {
+			case 2: {
 				if (action)
 					mMouseStatus.mButton  |= MOUSE_MIDDLE;
 				else
@@ -257,22 +323,52 @@ void GLApp::mouseButtonCallback(GLFWwindow window, int button, int action) {
 			}
 		}
 	}
+}
+
+
+
+static float_t msense = 0.1;
+
+/*
+ * Move Picked Function
+ */
+ 
+void GLApp::movePicked(glm::vec2 d){
+	
+	glm::vec3 dir = sCam.getPos() - sCam.getLook();
+	dir = glm::normalize(dir);
+	glm::vec3 shiftx = glm::cross(dir,sCam.getUp());
+	shiftx *= (-d.x * msense);
+	glm::vec3 shifty = sCam.getUp() * (-d.y * msense);
+
+	glm::vec3 dpos = shiftx + shifty;
+	sGripper.move(dpos);
+	
+#ifdef DEBUG
+	cout << "S9Gear - Moved Gripper." << endl;
+#endif
 	
 }
+
 
 /*
  * Mouse Callback for Position
  */
 
-static float_t msense = 0.1;
-
 void GLApp::mousePositionCallback(GLFWwindow window, int x, int y) {
 	if( !TwEventMousePosGLFW(x, y) ){  
 		if (mMouseStatus.mButton & MOUSE_LEFT){
-	
 			sCam.yaw(static_cast<float_t>(mMouseStatus.mDX) * msense);
 			sCam.pitch(static_cast<float_t>(mMouseStatus.mDY) * msense);
-			
+		}
+		
+		if (mMouseStatus.mButton & MOUSE_MIDDLE){
+			if (pPicked){
+				movePicked(glm::vec2(mMouseStatus.mDX,mMouseStatus.mDY));
+			}
+			else{
+				sCam.shift(glm::vec2(mMouseStatus.mDX * msense,mMouseStatus.mDY * msense));
+			}
 		}
 		
 		mMouseStatus.mDX = x - mMouseStatus.mX;
@@ -283,8 +379,8 @@ void GLApp::mousePositionCallback(GLFWwindow window, int x, int y) {
 	}
 
 #ifdef DEBUG
-	cout << "DX: " << mMouseStatus.mDX << ", DY: " << mMouseStatus.mDY << endl;
-	printf("%08x at %0.3f: Mouse position: %i %i\n", 0, glfwGetTime(), x, y);
+	//cout << "DX: " << mMouseStatus.mDX << ", DY: " << mMouseStatus.mDY << endl;
+	//printf("%08x at %0.3f: Mouse position: %i %i\n", 0, glfwGetTime(), x, y);
 #endif
 
 }
@@ -323,7 +419,7 @@ void GLApp::loadFile() {
 	//Handle the response:
 	switch(result) {
 		case(Gtk::RESPONSE_OK): {		
-			sModel.loadAsset(dialog.get_filename());
+			AssetGenerator::loadAsset(dialog.get_filename(),sModel);
 			
 			break;
 		}
@@ -352,6 +448,7 @@ void GLApp::monitorCallback( GLFWmonitor m, int p){
  
 void GLApp::reshape(GLFWwindow window, int w, int h ) {
 	sFBO.resize(w,h);
+	sFBOPick.resize(w,h);
 	resizeHUD(w,h);
 }
 
@@ -439,7 +536,6 @@ void GLApp::init() {
 	makeReferenceQuad(sHUDQuad,400.0,300.0);
 
 
-
 	// Move the Camera
 	sCam.move(glm::vec3(0,0,20));
 	resizeHUD(800,600);
@@ -449,19 +545,28 @@ void GLApp::init() {
 	sShaderTexQuad.load("../../../shaders/quad_texture.vert", "../../../shaders/quad_texture.frag");
 	sShaderMesh.load("../../../shaders/lighting.vert", "../../../shaders/lighting.frag");
 	sShaderGripper.load("../../../shaders/gripper.vert", "../../../shaders/gripper.frag");
+	sShaderPick.load("../../../shaders/picker.vert","../../../shaders/picker.frag");
 
 	// Load Objects
-	sGripper.loadAsset("../../../data/gripper.stl");
+	AssetGenerator::loadAsset("../../../data/gripper.stl",sGripper);
+	sGripper.setScale(glm::vec3(0.2,0.2,0.2));
+	sGripper.setPos(glm::vec3(-0.1,-0.5,-2.0));
+	sGripper.setColour(glm::vec4(1.0f,0.0f,0.0f,1.0f));
+	sGripperCam.align(sGripper);
+	sGripperCam.pitch(M_PI);
 	
-	// Setup FBO
+	// Setup FBOs
 	
 	sFBO.setup(800,600);
+	sFBOPick.setup(800,600);
+
 	//sFBO.printFramebufferInfo();
 	
 	CXGLERROR
 	
 	// OpenGL Constants
 	glEnable(GL_TEXTURE_RECTANGLE);
+	glEnable(GL_DEPTH_TEST);
 	
 }
 

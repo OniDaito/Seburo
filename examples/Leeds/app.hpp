@@ -51,10 +51,15 @@ namespace s9 {
 		static void display(GLFWwindow window);
 		
 		static void resizeHUD(int w, int h);
-		static void drawMesh();
-		static void drawGripper();
+		static void drawMesh(Camera &c);
+		static void drawGripper(Camera &c);
+		
+		static void picked(glm::vec2 m, glm::vec4 &c);
+		static void movePicked(glm::vec2 d);
 		
 		static glm::mat4 getMatrix(Camera &c, Primitive p) { return c.getMatrix() * p.getMatrix(); }
+		
+		static PrimPtr pPicked;
 
 		// OS Dependent
 		static void loadFile();
