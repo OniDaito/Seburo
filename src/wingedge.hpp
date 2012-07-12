@@ -12,6 +12,7 @@
 
 #include "common.hpp"
 #include "primitive.hpp"
+#include "vbo.hpp"
 
 /*
  * Given a primtive with indices, create a winged edge structure for it
@@ -33,14 +34,12 @@ namespace s9 {
 	class WE_Vertex {
 	public:
 		std::vector< boost::shared_ptr<WE_Edge> > edges;
-		GLfloat x,y,z;
+		size_t idc; // Index into original data
 	};
 
 	class WE_Face {
 	public:
 		boost::shared_ptr<WE_Edge> edge;
-		GLfloat nx,ny,nz;
-		GLuint t;
 	};
 	
 	typedef boost::shared_ptr<WE_Face> WEP_Face;
@@ -49,12 +48,17 @@ namespace s9 {
 	class WingedEdge {
 	public:
 		WingedEdge(){};
-		void make(Primitive &p);
+		void make(Primitive p);
+		std::vector<WEP_Face> getFaces() {return mObj->mWE; };
+		VBOData& getVBO() { return mObj->mPrimitive.getVBO(); };
+		
+		Primitive flatten(); 
 	
 	protected:
 		class SharedObj {
 		public:
 			std::vector<WEP_Face> mWE;
+			Primitive mPrimitive;
 		};
 		
 		boost::shared_ptr<SharedObj> mObj;

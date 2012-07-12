@@ -15,6 +15,8 @@ using namespace boost::assign;
 using namespace s9;
 
 
+///\todo technically we can remove all references as we are placing all important stuff on the stack with SharedObj
+
 /*
  * Test App Variables - global for now
  */
@@ -25,11 +27,14 @@ Camera sGripperCam;
 ScreenCamera sHUDCam;
 Primitive sRefQuad;
 Primitive sHUDQuad;
+Primitive sCamQuad;
 Primitive sModel;
 Primitive sGripper;
+Primitive sModelTextured;
 Shader sShaderQuad;
 Shader sShaderTexQuad;
 Shader sShaderMesh;
+Shader sShaderLeedsMesh;
 Shader sShaderGripper;
 Shader sShaderPick;
 
@@ -41,7 +46,11 @@ MouseStatus GLApp::mMouseStatus;
 std::vector<GLFWwindow> GLApp::vWindows;
 GLboolean GLApp::mRunning;
 PrimPtr GLApp::pPicked;
-
+XMLSettings GLApp::mSettings;
+std::vector<S9VidCam> GLApp::vCameras;
+std::vector<CVVidCam> GLApp::vCVCameras;
+WingedEdge GLApp::mWE;
+TwBar* GLApp::pBar; 
 
 /*
  * Create our Windows and contexts
@@ -58,7 +67,7 @@ GLApp::GLApp() {
 
 
 /*
- * Render a Mesh with a choice of shaders and similar
+ * Render a Mesh
  */
  
 void GLApp::drawMesh(Camera &c) {
@@ -75,7 +84,6 @@ void GLApp::drawMesh(Camera &c) {
 		glUniformMatrix4fv(sShaderMesh.location("uMVPMatrix"), 1, GL_FALSE, glm::value_ptr(mvp));
 		glUniformMatrix4fv(sShaderMesh.location("uMVMatrix"), 1, GL_FALSE, glm::value_ptr(mv));
 		glUniformMatrix4fv(sShaderMesh.location("uNormalMatrix"), 1, GL_FALSE, glm::value_ptr(mn));
-		glUniform1i(sShaderMesh.location("uBaseTex"), 0);
 		glUniform1f(sShaderMesh.location("uShininess"), 20.0f);
 		glm::vec3 l = sCam.getPos() + sCam.getLook();
 		glUniform3f(sShaderMesh.location("uLight0"),l.x,l.y,l.z);
@@ -83,6 +91,47 @@ void GLApp::drawMesh(Camera &c) {
 		sModel.draw();
 		sShaderMesh.unbind();
 	//	glDisable(GL_CULL_FACE);
+	}
+	
+}
+
+
+
+/*
+ * Render a Leeds mesh, textured with Cameras
+ */
+ 
+void GLApp::drawLeedsMesh(Camera &c) {
+
+	if (sModelTextured) {
+		sShaderLeedsMesh.bind();
+	//	glEnable(GL_CULL_FACE);
+	//	glCullFace(GL_BACK);
+			
+		glm::mat4 mvp = getMatrix(c, sModel);
+		glm::mat4 mv = sCam.getViewMatrix() * sModel.getMatrix();
+		glm::mat4 mn = glm::inverseTranspose(c.getViewMatrix());
+		
+		glUniformMatrix4fv(sShaderLeedsMesh.location("uMVPMatrix"), 1, GL_FALSE, glm::value_ptr(mvp));
+		glUniformMatrix4fv(sShaderLeedsMesh.location("uMVMatrix"), 1, GL_FALSE, glm::value_ptr(mv));
+		glUniformMatrix4fv(sShaderLeedsMesh.location("uNormalMatrix"), 1, GL_FALSE, glm::value_ptr(mn));
+		
+		for (int i=0; i < vCVCameras.size(); i++){
+			glActiveTexture(GL_TEXTURE0 + i);
+			vCVCameras[i].bind();
+		}
+		
+		glUniform1f(sShaderLeedsMesh.location("uShininess"), 20.0f);
+		glm::vec3 l = sCam.getPos() + sCam.getLook();
+		glUniform3f(sShaderLeedsMesh.location("uLight0"),l.x,l.y,l.z);
+
+		sModelTextured.draw();
+		sShaderLeedsMesh.unbind();
+	//	glDisable(GL_CULL_FACE);
+		for (int i=0; i < vCVCameras.size(); i++){
+			glActiveTexture(GL_TEXTURE0 + i);
+			glBindTexture(GL_TEXTURE_2D, 0);
+		}
 	}
 	
 }
@@ -131,6 +180,115 @@ void GLApp::picked(glm::vec2 m, glm::vec4 &c){
 
 } 
 
+/*
+ * Specific to Leeds - Generate a new VBO with face data
+ * \todo move to a special algorithms class / namespace?
+ * \todo reference that paper as well!
+ */
+
+Primitive GLApp::generateTextured( WingedEdge &w){
+	vector<glm::vec3> normals;
+	Primitive p = mWE.flatten();
+	
+	for (size_t i =0; i < vCVCameras.size(); i++){
+		CVVidCam cam = vCVCameras[i];
+		cv::Mat n = cam.getNormal();
+		glm::vec3 nn (n.at<double_t>(0,0),n.at<double_t>(1,0),n.at<double_t>(2,0));
+		nn  = glm::normalize(nn);
+		normals.push_back(nn);
+	}
+	
+	map<WEP_Face, GLuint> temptex;
+	
+	for (size_t i = 0; i < w.getFaces().size(); ++i) {
+		
+		shared_ptr<WE_Face> sf = w.getFaces()[i];
+		
+		// Generate a face normal
+		size_t i0 = sf->edge->v0->idc;
+		size_t i1 = sf->edge->next->v0->idc;
+		size_t i2 = sf->edge->next->next->v0->idc;
+		
+		glm::vec3 v0 (w.getVBO().vVertices[i0], w.getVBO().vVertices[i0+1], w.getVBO().vVertices[i0+2]);
+		glm::vec3 v1 (w.getVBO().vVertices[i1], w.getVBO().vVertices[i1+1], w.getVBO().vVertices[i1+2]);
+		glm::vec3 v2 (w.getVBO().vVertices[i2], w.getVBO().vVertices[i2+1], w.getVBO().vVertices[i2+2]);
+		
+		glm::vec3 t0 = v1 - v0;
+		glm::vec3 t1 = v2 - v0;
+		glm::vec3 n = glm::cross(t0,t1);
+				
+		float range = 3.0;
+		GLuint idx = 0;
+		for (GLuint j=0; j < normals.size(); j++){
+			
+			glm::vec3 nn = normals[j];
+						
+			float angle =  acosf( glm::dot(n,nn)) ;
+			if (fabs(angle) < range){
+				idx = j;
+				range = fabs(angle);
+			}
+		}
+		temptex.insert(pair<WEP_Face, GLuint>(sf,idx) );
+	}
+	
+	// Now we have texids - check winged edge for these we need to change
+	// Assume a maximum choice of 8 textures
+	
+	/*for (size_t i = 0; i < w.getFaces().size(); ++i) {	
+		shared_ptr<WE_Face> sf = w.getFaces()[i];
+		
+		int counts[] = {0,0,0,0,0,0,0,0};
+		// Nasty bit of code! :S
+		if (sf->edge->sym != boost::shared_ptr<WE_Edge>()) counts[temptex[sf->edge->sym->face] ]+=1;
+		if (sf->edge->next->sym != boost::shared_ptr<WE_Edge>()) counts[temptex[sf->edge->next->sym->face]]+=1;
+		if (sf->edge->next->next->sym != boost::shared_ptr<WE_Edge>()) counts[temptex[sf->edge->next->next->sym->face]]+=1;
+		
+		int tc = 0;
+		for (size_t j=0; j < 8; j++){
+			if (counts[j] > tc){
+				temptex[sf] = j;
+				tc = counts[j];
+			}
+		}
+	}
+	*/
+	// now generate texture coordinate and set the IDs
+	
+	p.bind();
+	/*for (size_t i = 0; i < w.getFaces().size(); ++i) {	
+		shared_ptr<WE_Face> sf = w.getFaces()[i];
+		for (size_t j =0; j < 6; ++j) {
+			p.getVBO().vTexIDs[i*6 + j] = temptex[sf];
+		}
+	}*/
+		
+	for (size_t i =0; i < p.getVBO().vVertices.size() / 3; ++i){
+		
+		glm::vec3 vert( p.getVBO().vVertices[i*3], 
+					p.getVBO().vVertices[i*3+1],
+					p.getVBO().vVertices[i*3+2]);
+		
+		vector<cv::Point3f> tOPoints;
+		tOPoints.push_back(cv::Point3f(vert.x, vert.y, vert.z));
+		vector<cv::Point2f> results;
+				
+		CVVidCam cam = vCVCameras[sModelTextured.getVBO().vTexIDs[i]];
+		CameraParameters in = cam.getParams();
+		cv::projectPoints(tOPoints, in.R, in.T, in.M, in.D, results );
+	
+		// We need to mirror the co-ordinates here but only in the X plane
+		
+		p.getVBO().vTexCoords[i*2] = results[0].x;
+		p.getVBO().vTexCoords[i*2] = results[0].y;
+	}
+	
+	p.getVBO().allocateTexIDs();
+	//p.getVBO().allocateTexCoords();
+	
+	p.unbind();
+	return p;
+}
 
 /*
  * display the stuff in this window
@@ -155,7 +313,7 @@ void GLApp::display(GLFWwindow window){
 	sRefQuad.draw();
 	sShaderQuad.unbind();
 	
-	drawMesh(sCam);
+	if (sModelTextured) drawLeedsMesh(sCam); else drawMesh(sCam);
 	drawGripper(sCam); 
 	
 	// Render to FBO
@@ -163,8 +321,8 @@ void GLApp::display(GLFWwindow window){
 	sFBO.bind();
 
 	sGripperCam.align(sGripper);
-	sGripperCam.pitch(M_PI);
-	sGripperCam.move(glm::vec3(0.5,0,2.0));
+	sGripperCam.move(glm::vec3(5.0,0.0,2.0));
+	sGripperCam.yaw(90.0);
 
 	glClearBufferfv(GL_COLOR, 0, &glm::vec4(0.8f, 0.8f, 0.83f, 1.0f)[0]);
 	glClearBufferfv(GL_DEPTH, 0, &depth );
@@ -176,7 +334,7 @@ void GLApp::display(GLFWwindow window){
 	sRefQuad.draw();
 	sShaderQuad.unbind();
 	
-	drawMesh(sGripperCam);
+	if (sModelTextured) drawLeedsMesh(sGripperCam); else drawMesh(sGripperCam);
 	drawGripper(sGripperCam);
 	sFBO.unbind();
 
@@ -202,6 +360,30 @@ void GLApp::display(GLFWwindow window){
 	sHUDQuad.draw();
 	sFBO.unbindColour();
 	sShaderTexQuad.unbind();
+	
+	
+	// Draw Cameras
+	
+	
+	float_t step = static_cast<float_t>(w) / 8.0; // assume 8 cameras for now
+	float_t factor = static_cast<float_t>(w) / ( vCameras[0].getSize().x * 8.0);
+	float_t t =0 ;
+	glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(factor,factor,1.0));
+	sShaderTexQuad.bind();
+	BOOST_FOREACH(CVVidCam p, vCVCameras){
+		p.update();
+		p.bindRectified();
+		glm::mat4 trans = glm::translate(glm::mat4(1.0f), glm::vec3(t, h - (p.getSize().y * factor) ,0));
+		
+		mvp = sHUDCam.getMatrix();
+		mvp =  mvp * trans * scale;
+		glUniformMatrix4fv(sShaderTexQuad.location("uMVPMatrix"), 1, GL_FALSE, glm::value_ptr(mvp));
+		sCamQuad.draw();
+		p.unbind();
+		t+= step;
+	}
+	sShaderTexQuad.unbind();
+	
 	
 	CXGLERROR
 }
@@ -238,6 +420,7 @@ void GLApp::mainLoop() {
 		BOOST_FOREACH ( GLFWwindow b, vWindows) {	
 			glfwMakeContextCurrent(b);
 			display(b);
+			TwDraw(); // On all windows for now
 			glfwSwapBuffers();
 		}
 	
@@ -254,6 +437,12 @@ void GLApp::mainLoop() {
 				mRunning = GL_FALSE;
 		}
     }
+    
+    
+    // Cleanup
+    BOOST_FOREACH(S9VidCam p, vCameras){
+		p.stop();
+	}
     
 }
 
@@ -385,6 +574,38 @@ void GLApp::mousePositionCallback(GLFWwindow window, int x, int y) {
 
 }
 
+
+void GLApp::parseXML() {
+	if (mSettings.loadFile("../../../data/Leeds/settings.xml")){
+		
+		size_t w = fromStringS9<size_t> ( mSettings["leeds/cameras/width"]);
+		size_t h = fromStringS9<size_t> ( mSettings["leeds/cameras/height"]);
+		size_t f = fromStringS9<size_t> ( mSettings["leeds/cameras/fps"]);
+		
+		makeQuad(sCamQuad,w,h);
+
+		
+		XMLIterator i = mSettings.iterator("leeds/cameras/cam");
+		while (i){
+			
+			string dev = i["dev"];
+			
+			S9VidCam p;
+			p.open(dev,w,h,f);
+			vCameras.push_back(p);
+			
+			CVVidCam c(vCameras.back());
+			c.loadParameters("../../../data/Leeds/" + i["in"]);
+			
+			vCVCameras.push_back(c);
+					
+			i.next();
+		}
+		
+	}
+}
+
+
 /*
  * Mouse Wheel Callback
  */
@@ -420,7 +641,8 @@ void GLApp::loadFile() {
 	switch(result) {
 		case(Gtk::RESPONSE_OK): {		
 			AssetGenerator::loadAsset(dialog.get_filename(),sModel);
-			
+			mWE.make(sModel);
+					
 			break;
 		}
 		case(Gtk::RESPONSE_CANCEL): {
@@ -450,6 +672,7 @@ void GLApp::reshape(GLFWwindow window, int w, int h ) {
 	sFBO.resize(w,h);
 	sFBOPick.resize(w,h);
 	resizeHUD(w,h);
+	TwWindowSize(w, h);
 }
 
 void GLApp::resizeHUD(int w, int h){
@@ -458,22 +681,38 @@ void GLApp::resizeHUD(int w, int h){
 	// Resize the hud quad and also resize the texture coordinates
 	if (sHUDQuad) {
 		sHUDQuad.bind();
-		sHUDQuad.getVBO().mTexCoords[1] = static_cast<float_t>(h);
-		sHUDQuad.getVBO().mTexCoords[2] = static_cast<float_t>(w);
-		sHUDQuad.getVBO().mTexCoords[3] = static_cast<float_t>(h);
-		sHUDQuad.getVBO().mTexCoords[4] = static_cast<float_t>(w);
+		sHUDQuad.getVBO().vTexCoords[1] = static_cast<float_t>(h);
+		sHUDQuad.getVBO().vTexCoords[2] = static_cast<float_t>(w);
+		sHUDQuad.getVBO().vTexCoords[3] = static_cast<float_t>(h);
+		sHUDQuad.getVBO().vTexCoords[4] = static_cast<float_t>(w);
 		sHUDQuad.getVBO().allocateTexCoords();
 		
-		sHUDQuad.getVBO().mTexCoords[1] = static_cast<float_t>(h);
-		sHUDQuad.getVBO().mTexCoords[2] = static_cast<float_t>(w);
-		sHUDQuad.getVBO().mTexCoords[3] = static_cast<float_t>(h);
-		sHUDQuad.getVBO().mTexCoords[4] = static_cast<float_t>(w);
+		sHUDQuad.getVBO().vTexCoords[1] = static_cast<float_t>(h);
+		sHUDQuad.getVBO().vTexCoords[2] = static_cast<float_t>(w);
+		sHUDQuad.getVBO().vTexCoords[3] = static_cast<float_t>(h);
+		sHUDQuad.getVBO().vTexCoords[4] = static_cast<float_t>(w);
 		sHUDQuad.getVBO().allocateTexCoords();
 		
 		sHUDQuad.unbind();
 	}
+}
+
+/*
+ * Add basic Tweakbar - assume context for window is set
+ */
+
+void TW_CALL GLApp::generateTexturedCallback(void * ){
+	sModelTextured = generateTextured(mWE);
+}
+ 
+void GLApp::addTweakBar() {
+	pBar = TwNewBar("TweakBar");
+    TwDefine(" GLOBAL help='Basic Leeds viewer application for scanned meshes.' "); // Message added to the help bar.  
+
+	TwAddButton(pBar, "Generate Texture",  generateTexturedCallback, NULL, " label='Generate Textures for the mesh' ");
 
 }
+
 
 /*
  * Init the applications now we have a GL Context
@@ -504,7 +743,6 @@ void GLApp::init() {
 
     glfwSwapInterval(1);
 	
-
 	if( !w ) {
 		fprintf( stderr, "Failed to open GLFW window\n" );
 		glfwTerminate();
@@ -546,6 +784,7 @@ void GLApp::init() {
 	sShaderMesh.load("../../../shaders/lighting.vert", "../../../shaders/lighting.frag");
 	sShaderGripper.load("../../../shaders/gripper.vert", "../../../shaders/gripper.frag");
 	sShaderPick.load("../../../shaders/picker.vert","../../../shaders/picker.frag");
+	sShaderLeedsMesh.load("../../../shaders/leedsmesh.vert", "../../../shaders/leedsmesh.frag");
 
 	// Load Objects
 	AssetGenerator::loadAsset("../../../data/gripper.stl",sGripper);
@@ -567,6 +806,10 @@ void GLApp::init() {
 	// OpenGL Constants
 	glEnable(GL_TEXTURE_RECTANGLE);
 	glEnable(GL_DEPTH_TEST);
+	
+	parseXML();
+	
+	addTweakBar();
 	
 }
 

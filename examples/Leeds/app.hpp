@@ -52,12 +52,15 @@ namespace s9 {
 		
 		static void resizeHUD(int w, int h);
 		static void drawMesh(Camera &c);
+		static void drawLeedsMesh(Camera &c);
 		static void drawGripper(Camera &c);
 		
 		static void picked(glm::vec2 m, glm::vec4 &c);
 		static void movePicked(glm::vec2 d);
 		
 		static glm::mat4 getMatrix(Camera &c, Primitive p) { return c.getMatrix() * p.getMatrix(); }
+		
+		static void parseXML();
 		
 		static PrimPtr pPicked;
 
@@ -69,14 +72,24 @@ namespace s9 {
 		static void mousePositionCallback(GLFWwindow window, int x, int y);
 		static void mouseWheelCallback(GLFWwindow window, int xpos, int ypos);
 		static void monitorCallback( GLFWmonitor m, int p);
+		static int closeCallback(GLFWwindow window);
+		
+		static void addTweakBar();
+		static Primitive generateTextured(WingedEdge &w);
+		static void TW_CALL generateTexturedCallback(void * );
 		
 	protected:
-
+		
+		static XMLSettings mSettings;
 		static std::vector<GLFWwindow> vWindows;
 		static GLboolean mRunning;
 		
+		static std::vector<S9VidCam> vCameras;
+		static std::vector<CVVidCam> vCVCameras;
+		
 		static MouseStatus mMouseStatus;
-			
+		static WingedEdge mWE;
+		static TwBar *pBar; 
 	};
 }
 

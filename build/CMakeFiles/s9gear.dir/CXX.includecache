@@ -714,16 +714,6 @@ cstdarg
 cstdio
 -
 
-/home/oni/Projects/S9Gear/src/camera.cpp
-camera.hpp
-/home/oni/Projects/S9Gear/src/camera.hpp
-
-/home/oni/Projects/S9Gear/src/camera.hpp
-common.hpp
-/home/oni/Projects/S9Gear/src/common.hpp
-primitive.hpp
-/home/oni/Projects/S9Gear/src/primitive.hpp
-
 /home/oni/Projects/S9Gear/src/common.hpp
 iostream
 -
@@ -815,6 +805,18 @@ glm/gtc/matrix_transform.hpp
 -
 glm/gtc/type_ptr.hpp
 -
+
+/home/oni/Projects/S9Gear/src/wingedge.cpp
+wingedge.hpp
+/home/oni/Projects/S9Gear/src/wingedge.hpp
+
+/home/oni/Projects/S9Gear/src/wingedge.hpp
+common.hpp
+/home/oni/Projects/S9Gear/src/common.hpp
+primitive.hpp
+/home/oni/Projects/S9Gear/src/primitive.hpp
+vbo.hpp
+/home/oni/Projects/S9Gear/src/vbo.hpp
 
 /usr/local/include/GL/freeglut_std.h
 windows.h

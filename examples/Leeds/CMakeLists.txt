@@ -204,9 +204,10 @@ message(STATUS "Looking for libraries in : ${LIBRARIES_SEARCH_PATHS}")
 message(STATUS "Looking for includes in  : ${INCLUDES_SEARCH_PATHS}")
 
 
-option(USEOPENCV "useopencv" OFF)
+option(USEOPENCV "useopencv" ON)
 
 if (USEOPENCV)
+	add_definitions(-D_GEAR_OPENCV)
 	gear_find_library(opencv_calib3d)
 	gear_find_library(opencv_contrib)
 	gear_find_library(opencv_core)

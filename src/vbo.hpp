@@ -60,11 +60,11 @@ namespace s9 {
 		GLuint mNumIndices;					// Different to the above remmeber
 		
 		GLuint vao, *vbo;
-		std::vector<GLfloat> mVertices;		// Vertices as 3 floats
-		std::vector<GLuint> mIndices; 		// Indicies into the above array. Multiply by 3
-		std::vector<GLfloat> mTexCoords;	// texture coordinates in u,v or pixel coords
-		std::vector<GLfloat> mNormals;		// normals as 3 floats
-		std::vector<GLfloat> mColours;		// colours as 3 or 4 floats
+		std::vector<GLfloat> vVertices;		// Vertices as 3 floats
+		std::vector<GLuint> vIndices; 		// Indicies into the above array. Multiply by 3
+		std::vector<GLfloat> vTexCoords;	// texture coordinates in u,v or pixel coords
+		std::vector<GLfloat> vNormals;		// normals as 3 floats
+		std::vector<GLfloat> vColours;		// colours as 3 or 4 floats
 		std::vector<GLuint> vTexIDs;		// texids as indicies to textures per vertex - samplers basically
 		
 	}; 

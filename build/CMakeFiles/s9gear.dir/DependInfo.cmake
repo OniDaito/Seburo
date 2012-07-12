@@ -14,6 +14,7 @@ SET(CMAKE_DEPENDS_CHECK_CXX
   "/home/oni/Projects/S9Gear/src/fbo.cpp" "/home/oni/Projects/S9Gear/build/CMakeFiles/s9gear.dir/src/fbo.cpp.o"
   "/home/oni/Projects/S9Gear/src/pclmesh.cpp" "/home/oni/Projects/S9Gear/build/CMakeFiles/s9gear.dir/src/pclmesh.cpp.o"
   "/home/oni/Projects/S9Gear/src/primitive.cpp" "/home/oni/Projects/S9Gear/build/CMakeFiles/s9gear.dir/src/primitive.cpp.o"
+  "/home/oni/Projects/S9Gear/src/s9xml.cpp" "/home/oni/Projects/S9Gear/build/CMakeFiles/s9gear.dir/src/s9xml.cpp.o"
   "/home/oni/Projects/S9Gear/src/shader.cpp" "/home/oni/Projects/S9Gear/build/CMakeFiles/s9gear.dir/src/shader.cpp.o"
   "/home/oni/Projects/S9Gear/src/shapes.cpp" "/home/oni/Projects/S9Gear/build/CMakeFiles/s9gear.dir/src/shapes.cpp.o"
   "/home/oni/Projects/S9Gear/src/tinystr.cpp" "/home/oni/Projects/S9Gear/build/CMakeFiles/s9gear.dir/src/tinystr.cpp.o"
@@ -22,17 +23,21 @@ SET(CMAKE_DEPENDS_CHECK_CXX
   "/home/oni/Projects/S9Gear/src/tinyxmlparser.cpp" "/home/oni/Projects/S9Gear/build/CMakeFiles/s9gear.dir/src/tinyxmlparser.cpp.o"
   "/home/oni/Projects/S9Gear/src/uvc_camera.cpp" "/home/oni/Projects/S9Gear/build/CMakeFiles/s9gear.dir/src/uvc_camera.cpp.o"
   "/home/oni/Projects/S9Gear/src/vbo.cpp" "/home/oni/Projects/S9Gear/build/CMakeFiles/s9gear.dir/src/vbo.cpp.o"
+  "/home/oni/Projects/S9Gear/src/video.cpp" "/home/oni/Projects/S9Gear/build/CMakeFiles/s9gear.dir/src/video.cpp.o"
   "/home/oni/Projects/S9Gear/src/wingedge.cpp" "/home/oni/Projects/S9Gear/build/CMakeFiles/s9gear.dir/src/wingedge.cpp.o"
   )
 SET(CMAKE_CXX_COMPILER_ID "GNU")
 
 # Preprocessor definitions for this target.
 SET(CMAKE_TARGET_DEFINITIONS
+  "_GEAR_X11_GLX"
+  "_GEAR_PCL"
   "EIGEN_USE_NEW_STDVECTOR"
   "EIGEN_YES_I_KNOW_SPARSE_MODULE_IS_NOT_STABLE_YET"
   "FLANN_STATIC"
   "qh_QHpointer"
   "DEBUG"
+  "_GEAR_OPENCV"
   )
 
 # Targets to which this target links.

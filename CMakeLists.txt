@@ -13,12 +13,14 @@ set(SOURCE_FILES
 	src/tinyxml.cpp
 	src/tinyxmlerror.cpp
 	src/tinyxmlparser.cpp
+	src/s9xml.cpp
 	src/vbo.cpp
 	src/fbo.cpp
 	src/shader.cpp
 	src/primitive.cpp
 	src/shapes.cpp
 	src/camera.cpp
+	src/video.cpp
 	src/wingedge.cpp
 	src/pclmesh.cpp
 )
@@ -34,23 +36,25 @@ endif()
 if (WIN32)
     set(_GEAR_WIN32_WGL 1)
     message(STATUS "Building Gear for WGL on a Win32 system") 
+    add_definitions(-D_GEAR_WIN32_WGL)
 elseif (UNIX AND APPLE)
     set(_GEAR_COCOA_NSGL 1)
+    add_definitions(-D_GEAR_COCOA_NSGL)
     message(STATUS "Building Gear for Cocoa and NSOpenGL on Mac OS X")
 elseif (UNIX AND NOT APPLE)
     set(_GEAR_X11_GLX 1)
+    add_definitions(-D_GEAR_X11_GLX)
     message(STATUS "Building Gear for X11 and GLX on a Unix-like system")
 else()
     message(FATAL_ERROR "No supported platform was detected")
 endif()
-
 
 option(USEPCL "usepcl" ON)
 
 ################################################################
 # PCL Libs - included in the way mentioned on their FAQ
 if (USEPCL)
-
+	add_definitions(-D_GEAR_PCL)
 	find_package(PCL 1.2 REQUIRED)
 	include_directories(${PCL_INCLUDE_DIRS})
 	link_directories(${PCL_LIBRARY_DIRS})
@@ -220,9 +224,10 @@ message(STATUS "Looking for libraries in : ${LIBRARIES_SEARCH_PATHS}")
 message(STATUS "Looking for includes in  : ${INCLUDES_SEARCH_PATHS}")
 
 
-option(USEOPENCV "useopencv" OFF)
+option(USEOPENCV "useopencv" ON)
 
 if (USEOPENCV)
+	add_definitions(-D_GEAR_OPENCV)
 	gear_find_library(opencv_calib3d)
 	gear_find_library(opencv_contrib)
 	gear_find_library(opencv_core)

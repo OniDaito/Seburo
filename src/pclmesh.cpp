@@ -40,7 +40,7 @@ void PCLMesh::make() {
 	
 	// Allocate Buffers for points VBO
 	for (int i=0; i < sBufferSize * 3; i ++)
-		mObj->mPointsVBO.mVertices.push_back(0.0f);
+		mObj->mPointsVBO.vVertices.push_back(0.0f);
 		
 	mObj->mPointsVBO.compile(VBO_VERT);
 
@@ -79,15 +79,15 @@ void PCLMesh::addPoint(glm::vec3 p){
 	pcl::PointXYZ pos(p.x,p.y,p.z);
 	mObj->pCloud->points.push_back(pos);
 
-	mObj->mPointsVBO.mVertices[mObj->mPointsVBO.mNumElements * 3] = static_cast<GLfloat>(p.x);
-	mObj->mPointsVBO.mVertices[mObj->mPointsVBO.mNumElements * 3 + 1] = static_cast<GLfloat>(p.y);
-	mObj->mPointsVBO.mVertices[mObj->mPointsVBO.mNumElements * 3 + 2] = static_cast<GLfloat>(p.z);
+	mObj->mPointsVBO.vVertices[mObj->mPointsVBO.mNumElements * 3] = static_cast<GLfloat>(p.x);
+	mObj->mPointsVBO.vVertices[mObj->mPointsVBO.mNumElements * 3 + 1] = static_cast<GLfloat>(p.y);
+	mObj->mPointsVBO.vVertices[mObj->mPointsVBO.mNumElements * 3 + 2] = static_cast<GLfloat>(p.z);
 
 	// update the buffer on the card
 	mObj->mPointsVBO.bind();
 	glBindBuffer(GL_ARRAY_BUFFER, mObj->mPointsVBO.mVID);
 	glBufferSubData(GL_ARRAY_BUFFER, mObj->mPointsVBO.mNumElements * 3 * sizeof(GLfloat),
-				3 * sizeof(GLfloat), &mObj->mPointsVBO.mVertices[mObj->mPointsVBO.mNumElements * 3]);
+				3 * sizeof(GLfloat), &mObj->mPointsVBO.vVertices[mObj->mPointsVBO.mNumElements * 3]);
 	
 	mObj->mPointsVBO.unbind();
 	
@@ -96,10 +96,10 @@ void PCLMesh::addPoint(glm::vec3 p){
 	CXGLERROR
 	
 	// at this point test to see if the size of the VBO needs to be increased - Do this when its 2/3rds full
-	if (mObj->mPointsVBO.mNumElements * 3  > static_cast<GLfloat>(mObj->mPointsVBO.mVertices.size() ) * 0.6){
+	if (mObj->mPointsVBO.mNumElements * 3  > static_cast<GLfloat>(mObj->mPointsVBO.vVertices.size() ) * 0.6){
 		
 		for (int i=0; i < sBufferSize * 3; i ++)
-			mObj->mPointsVBO.mVertices.push_back(0.0f);
+			mObj->mPointsVBO.vVertices.push_back(0.0f);
 		
 		mObj->mPointsVBO.bind();
 		mObj->mPointsVBO.allocateVertices();
@@ -135,11 +135,11 @@ void PCLMesh::generate() {
 			
 			// now setup the points VBO for filtered points
 			
-			mObj->mPointsFilteredVBO.mVertices.clear();
+			mObj->mPointsFilteredVBO.vVertices.clear();
 			for (pcl::PointCloud<pcl::PointXYZ>::iterator it = mObj->pCloudFiltered->begin(); it != mObj->pCloudFiltered->end(); it++){
-				mObj->mPointsFilteredVBO.mVertices.push_back( it->x);
-				mObj->mPointsFilteredVBO.mVertices.push_back( it->y);
-				mObj->mPointsFilteredVBO.mVertices.push_back( it->z);
+				mObj->mPointsFilteredVBO.vVertices.push_back( it->x);
+				mObj->mPointsFilteredVBO.vVertices.push_back( it->y);
+				mObj->mPointsFilteredVBO.vVertices.push_back( it->z);
 			}
 			mObj->mPointsFilteredVBO.compile(VBO_VERT);
 			
@@ -180,26 +180,26 @@ void PCLMesh::generate() {
 			concatenateFields (*cloud_smoothed, *cloud_normals, *cloud_smoothed_normals);
 			
 			// Setup the computed normals VBO
-			mObj->mComputedNormalsVBO.mVertices.clear();
+			mObj->mComputedNormalsVBO.vVertices.clear();
 			for (size_t i = 0; i < cloud_smoothed_normals->size (); ++i) {
 				
-				mObj->mComputedNormalsVBO.mVertices.push_back( cloud_smoothed_normals->points[i].x);
-				mObj->mComputedNormalsVBO.mVertices.push_back( cloud_smoothed_normals->points[i].y);
-				mObj->mComputedNormalsVBO.mVertices.push_back( cloud_smoothed_normals->points[i].z);
+				mObj->mComputedNormalsVBO.vVertices.push_back( cloud_smoothed_normals->points[i].x);
+				mObj->mComputedNormalsVBO.vVertices.push_back( cloud_smoothed_normals->points[i].y);
+				mObj->mComputedNormalsVBO.vVertices.push_back( cloud_smoothed_normals->points[i].z);
 				
-				mObj->mComputedNormalsVBO.mColours.push_back(0.0);
-				mObj->mComputedNormalsVBO.mColours.push_back(1.0);
-				mObj->mComputedNormalsVBO.mColours.push_back(0.0);
-				mObj->mComputedNormalsVBO.mColours.push_back(1.0);
+				mObj->mComputedNormalsVBO.vColours.push_back(0.0);
+				mObj->mComputedNormalsVBO.vColours.push_back(1.0);
+				mObj->mComputedNormalsVBO.vColours.push_back(0.0);
+				mObj->mComputedNormalsVBO.vColours.push_back(1.0);
 				
-				mObj->mComputedNormalsVBO.mVertices.push_back( cloud_smoothed_normals->points[i].x + cloud_smoothed_normals->points[i].normal_x);
-				mObj->mComputedNormalsVBO.mVertices.push_back( cloud_smoothed_normals->points[i].y + cloud_smoothed_normals->points[i].normal_y );
-				mObj->mComputedNormalsVBO.mVertices.push_back( cloud_smoothed_normals->points[i].z + cloud_smoothed_normals->points[i].normal_z);
+				mObj->mComputedNormalsVBO.vVertices.push_back( cloud_smoothed_normals->points[i].x + cloud_smoothed_normals->points[i].normal_x);
+				mObj->mComputedNormalsVBO.vVertices.push_back( cloud_smoothed_normals->points[i].y + cloud_smoothed_normals->points[i].normal_y );
+				mObj->mComputedNormalsVBO.vVertices.push_back( cloud_smoothed_normals->points[i].z + cloud_smoothed_normals->points[i].normal_z);
 			
-				mObj->mComputedNormalsVBO.mColours.push_back(0.0);
-				mObj->mComputedNormalsVBO.mColours.push_back(0.0);
-				mObj->mComputedNormalsVBO.mColours.push_back(1.0);
-				mObj->mComputedNormalsVBO.mColours.push_back(1.0);
+				mObj->mComputedNormalsVBO.vColours.push_back(0.0);
+				mObj->mComputedNormalsVBO.vColours.push_back(0.0);
+				mObj->mComputedNormalsVBO.vColours.push_back(1.0);
+				mObj->mComputedNormalsVBO.vColours.push_back(1.0);
 			
 			}
 			mObj->mComputedNormalsVBO.compile(VBO_VERT | VBO_COLR);
@@ -250,17 +250,17 @@ void PCLMesh::clearMesh() {
 	
 	// Clear the VBOs
 	
-	mObj->mPointsVBO.mVertices.clear();
+	mObj->mPointsVBO.vVertices.clear();
 	mObj->mPointsVBO.mNumElements = 0;
 	
-	mObj->mNormalsVBO.mVertices.clear();
+	mObj->mNormalsVBO.vVertices.clear();
 	mObj->mNormalsVBO.mNumElements = 0;
 	
 	
-	mObj->mVBO.mVertices.clear();
-	mObj->mVBO.mNormals.clear();
-	mObj->mVBO.mTexCoords.clear();
-	mObj->mVBO.mIndices.clear();
+	mObj->mVBO.vVertices.clear();
+	mObj->mVBO.vNormals.clear();
+	mObj->mVBO.vTexCoords.clear();
+	mObj->mVBO.vIndices.clear();
 	
 	mObj->mMeshVBO.vTexIDs.clear();
 	mObj->mMeshVBO.mNumElements = 0;
@@ -280,15 +280,15 @@ void PCLMesh::clearMesh() {
 	
 	// Run through and add the points to the VBO
 	
-	mObj->mPointsVBO.mVertices.clear();
+	mObj->mPointsVBO.vVertices.clear();
 	mObj->mPointsVBO.mNumElements = 0;
 	
 	for ( pcl::PointCloud<pcl::PointXYZ>::iterator it = mObj->pCloud->begin(); it != mObj->pCloud->end(); it++) {
 		pcl::PointXYZ pos = *it;
 		
-		mObj->mPointsVBO.mVertices.push_back(static_cast<GLfloat>(pos.x));
-		mObj->mPointsVBO.mVertices.push_back(static_cast<GLfloat>(pos.y));
-		mObj->mPointsVBO.mVertices.push_back(static_cast<GLfloat>(pos.z));
+		mObj->mPointsVBO.vVertices.push_back(static_cast<GLfloat>(pos.x));
+		mObj->mPointsVBO.vVertices.push_back(static_cast<GLfloat>(pos.y));
+		mObj->mPointsVBO.vVertices.push_back(static_cast<GLfloat>(pos.z));
 		mObj->mPointsVBO.mNumElements++;
 		
 	}

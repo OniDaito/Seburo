@@ -281,6 +281,30 @@ src/primitive.cpp.s:
 	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/primitive.cpp.s
 .PHONY : src/primitive.cpp.s
 
+src/s9xml.o: src/s9xml.cpp.o
+.PHONY : src/s9xml.o
+
+# target to build an object file
+src/s9xml.cpp.o:
+	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/s9xml.cpp.o
+.PHONY : src/s9xml.cpp.o
+
+src/s9xml.i: src/s9xml.cpp.i
+.PHONY : src/s9xml.i
+
+# target to preprocess a source file
+src/s9xml.cpp.i:
+	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/s9xml.cpp.i
+.PHONY : src/s9xml.cpp.i
+
+src/s9xml.s: src/s9xml.cpp.s
+.PHONY : src/s9xml.s
+
+# target to generate assembly for a file
+src/s9xml.cpp.s:
+	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/s9xml.cpp.s
+.PHONY : src/s9xml.cpp.s
+
 src/shader.o: src/shader.cpp.o
 .PHONY : src/shader.o
 
@@ -473,6 +497,30 @@ src/vbo.cpp.s:
 	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/vbo.cpp.s
 .PHONY : src/vbo.cpp.s
 
+src/video.o: src/video.cpp.o
+.PHONY : src/video.o
+
+# target to build an object file
+src/video.cpp.o:
+	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/video.cpp.o
+.PHONY : src/video.cpp.o
+
+src/video.i: src/video.cpp.i
+.PHONY : src/video.i
+
+# target to preprocess a source file
+src/video.cpp.i:
+	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/video.cpp.i
+.PHONY : src/video.cpp.i
+
+src/video.s: src/video.cpp.s
+.PHONY : src/video.s
+
+# target to generate assembly for a file
+src/video.cpp.s:
+	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/video.cpp.s
+.PHONY : src/video.cpp.s
+
 src/wingedge.o: src/wingedge.cpp.o
 .PHONY : src/wingedge.o
 
@@ -526,6 +574,9 @@ help:
 	@echo "... src/primitive.o"
 	@echo "... src/primitive.i"
 	@echo "... src/primitive.s"
+	@echo "... src/s9xml.o"
+	@echo "... src/s9xml.i"
+	@echo "... src/s9xml.s"
 	@echo "... src/shader.o"
 	@echo "... src/shader.i"
 	@echo "... src/shader.s"
@@ -550,6 +601,9 @@ help:
 	@echo "... src/vbo.o"
 	@echo "... src/vbo.i"
 	@echo "... src/vbo.s"
+	@echo "... src/video.o"
+	@echo "... src/video.i"
+	@echo "... src/video.s"
 	@echo "... src/wingedge.o"
 	@echo "... src/wingedge.i"
 	@echo "... src/wingedge.s"

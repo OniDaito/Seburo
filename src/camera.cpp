@@ -35,7 +35,6 @@ void Camera::yaw(float_t a){
 	q_rotate = glm::rotate( q_rotate, a, mUp );
 	mLook = q_rotate * mLook;
 	mUp = q_rotate * mUp;
-	
 	compute();
 }
 

@@ -89,14 +89,14 @@ void VBOData::compile(size_t buffers) {
 		glEnableVertexAttribArray(s);
 		glBindBuffer(GL_ARRAY_BUFFER, mVID);
 		glVertexAttribPointer(s,3,GL_FLOAT,GL_FALSE,0, (GLubyte*) NULL);
-		mNumElements = mVertices.size() / 3;
+		mNumElements = vVertices.size() / 3;
 		s++;
 	} 
 	if (mUsed & VBO_IDCE){
 		glEnableVertexAttribArray(s);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mIID);
 		glVertexAttribPointer(s,1,GL_UNSIGNED_INT,GL_FALSE,0, (GLubyte*) NULL);
-		mNumIndices = mIndices.size();
+		mNumIndices = vIndices.size();
 		s++;
 	} 
 	if (mUsed & VBO_COLR){
@@ -149,35 +149,35 @@ void VBOData::compile(size_t buffers) {
 void VBOData::allocateVertices() {
 	if (mUsed & VBO_VERT){
 		glBindBuffer(GL_ARRAY_BUFFER, mVID);
-		glBufferData(GL_ARRAY_BUFFER, mVertices.size() * sizeof(GLfloat), &mVertices[0], GL_DYNAMIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, vVertices.size() * sizeof(GLfloat), &vVertices[0], GL_DYNAMIC_DRAW);
 	}
 }
 
 void VBOData::allocateIndices() {
 	if (mUsed & VBO_IDCE){
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mIID);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, mIndices.size() * sizeof(GLuint), &mIndices[0], GL_DYNAMIC_DRAW);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, vIndices.size() * sizeof(GLuint), &vIndices[0], GL_DYNAMIC_DRAW);
 	}
 }
 
 void VBOData::allocateTexCoords() {
 	if (mUsed & VBO_TEXC){
 		glBindBuffer(GL_ARRAY_BUFFER, mTID);
-		glBufferData(GL_ARRAY_BUFFER, mTexCoords.size()  * sizeof(GLfloat), &mTexCoords[0], GL_DYNAMIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, vTexCoords.size()  * sizeof(GLfloat), &vTexCoords[0], GL_DYNAMIC_DRAW);
 	}
 }
 
 void VBOData::allocateNormals() {
 	if (mUsed & VBO_NORM){
 		glBindBuffer(GL_ARRAY_BUFFER, mNID);
-		glBufferData(GL_ARRAY_BUFFER, mNormals.size() * sizeof(GLfloat), &mNormals[0], GL_DYNAMIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, vNormals.size() * sizeof(GLfloat), &vNormals[0], GL_DYNAMIC_DRAW);
 	}
 }
 
 void VBOData::allocateColours() {
 	if (mUsed & VBO_COLR){
 		glBindBuffer(GL_ARRAY_BUFFER, mCID);
-		glBufferData(GL_ARRAY_BUFFER, mColours.size() * sizeof(GLfloat), &mColours[0], GL_DYNAMIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, vColours.size() * sizeof(GLfloat), &vColours[0], GL_DYNAMIC_DRAW);
 	}
 }
 

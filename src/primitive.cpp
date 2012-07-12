@@ -118,13 +118,13 @@ void AssetGenerator::recursiveCreate (const struct aiScene *sc, const struct aiN
 
 		// Allocate vertices
 		for (size_t k = 0; k < mesh->mNumVertices; k++){
-			p->getVBO().mVertices.push_back(0.0f);
-			p->getVBO().mVertices.push_back(0.0f);
-			p->getVBO().mVertices.push_back(0.0f);
+			p->getVBO().vVertices.push_back(0.0f);
+			p->getVBO().vVertices.push_back(0.0f);
+			p->getVBO().vVertices.push_back(0.0f);
 			
-			p->getVBO().mNormals.push_back(0.0f);
-			p->getVBO().mNormals.push_back(0.0f);
-			p->getVBO().mNormals.push_back(0.0f);
+			p->getVBO().vNormals.push_back(0.0f);
+			p->getVBO().vNormals.push_back(0.0f);
+			p->getVBO().vNormals.push_back(0.0f);
 		}
 	
 
@@ -134,20 +134,20 @@ void AssetGenerator::recursiveCreate (const struct aiScene *sc, const struct aiN
 			if ( face->mNumIndices == 3) {
 				for(size_t i = 0; i < face->mNumIndices; ++i) {
 					int index = face->mIndices[i];
-					p->getVBO().mIndices.push_back(index);
+					p->getVBO().vIndices.push_back(index);
 					
 				//	if(mesh->mColors[0] != NULL)
 				//		glColor4fv((GLfloat*)&mesh->mColors[0][index]);
 					
 					if(mesh->mNormals != NULL) {
-						p->getVBO().mNormals[index * 3 ] = mesh->mNormals[index].x;
-						p->getVBO().mNormals[index * 3 + 1] =  mesh->mNormals[index].y;
-						p->getVBO().mNormals[index * 3 + 2] =  mesh->mNormals[index].z;
+						p->getVBO().vNormals[index * 3 ] = mesh->mNormals[index].x;
+						p->getVBO().vNormals[index * 3 + 1] =  mesh->mNormals[index].y;
+						p->getVBO().vNormals[index * 3 + 2] =  mesh->mNormals[index].z;
 					}
 					
-					p->getVBO().mVertices[index * 3 ] =  mesh->mVertices[index].x;
-					p->getVBO().mVertices[index * 3 + 1] =  mesh->mVertices[index].y;
-					p->getVBO().mVertices[index * 3 + 2] =  mesh->mVertices[index].z;	
+					p->getVBO().vVertices[index * 3 ] =  mesh->mVertices[index].x;
+					p->getVBO().vVertices[index * 3 + 1] =  mesh->mVertices[index].y;
+					p->getVBO().vVertices[index * 3 + 2] =  mesh->mVertices[index].z;	
 
 				}
 			}
@@ -155,8 +155,8 @@ void AssetGenerator::recursiveCreate (const struct aiScene *sc, const struct aiN
 	}
 	
 	
-	p->getVBO().mNumElements = p->getVBO().mVertices.size() / 3;
-	p->getVBO().mNumIndices = p->getVBO().mIndices.size();
+	p->getVBO().mNumElements = p->getVBO().vVertices.size() / 3;
+	p->getVBO().mNumIndices = p->getVBO().vIndices.size();
 	p->getVBO().compile(VBO_IDCE | VBO_VERT | VBO_NORM);
 	CXGLERROR
 

@@ -19,18 +19,18 @@ namespace s9{
 		p.make();
 		
 		// Quad for Camera drawing
-		p.getVBO().mIndices += 0,3,1,3,2,1;
-		p.getVBO().mVertices += 0.0f,0.0f,0.0f,
+		p.getVBO().vIndices += 0,3,1,3,2,1;
+		p.getVBO().vVertices += 0.0f,0.0f,0.0f,
 			w, 0.0f,0.0f, 
 			w, h,0.0f,
 			0.0f, h,0.0f;
 		
-		p.getVBO().mTexCoords += 0.0, h,
+		p.getVBO().vTexCoords += 0.0, h,
 			w, h,
 			w, 0.0,
 			0.0,0.0;
 		
-		p.getVBO().mColours += 1.0f,1.0f,1.0f,1.0f,
+		p.getVBO().vColours += 1.0f,1.0f,1.0f,1.0f,
 			1.0f,1.0f,1.0f,1.0f,
 			1.0f,1.0f,1.0f,1.0f,
 			1.0f,1.0f,1.0f,1.0f;
@@ -42,18 +42,18 @@ namespace s9{
 		p.make();
 		
 		// Quad for Camera drawing
-		p.getVBO().mIndices += 0,3,1,3,2,1;
-		p.getVBO().mVertices += 0.0f,0.0f,0.0f,
+		p.getVBO().vIndices += 0,3,1,3,2,1;
+		p.getVBO().vVertices += 0.0f,0.0f,0.0f,
 			w, 0.0f,0.0f, 
 			w, h,0.0f,
 			0.0f, h,0.0f;
 		
-		p.getVBO().mTexCoords += 0.0, h,
+		p.getVBO().vTexCoords += 0.0, h,
 			w, h,
 			w, 0.0,
 			0.0,0.0;
 		
-		p.getVBO().mColours += 0.0f,0.0f,0.0f,1.0f,
+		p.getVBO().vColours += 0.0f,0.0f,0.0f,1.0f,
 			0.0f,0.0f,1.0f,1.0f,
 			0.0f,1.0f,0.0f,1.0f,
 			1.0f,0.0f,0.0f,1.0f;
@@ -68,12 +68,12 @@ namespace s9{
 		p.make();
 		
 		// Quad for Camera drawing
-		p.getVBO().mIndices += 0,1,2;
-		p.getVBO().mVertices += 0.0f,0.0f,0.0f,
+		p.getVBO().vIndices += 0,1,2;
+		p.getVBO().vVertices += 0.0f,0.0f,0.0f,
 			w, 0.0f,0.0f, 
 			w/2, h,0.0f;
 
-		p.getVBO().mColours += 0.0f,0.0f,0.0f,1.0f,
+		p.getVBO().vColours += 0.0f,0.0f,0.0f,1.0f,
 			0.0f,0.0f,1.0f,1.0f,
 			0.0f,1.0f,0.0f,1.0f;
 			
@@ -100,7 +100,7 @@ namespace s9{
 		corners[7] = glm::vec3(w/2.0, -h/2.0, d/2.0);
 		
 		for (int i=0; i < 8; i++){
-			p.getVBO().mVertices += corners[i].x, corners[i].y, corners[i].z; 
+			p.getVBO().vVertices += corners[i].x, corners[i].y, corners[i].z; 
 			
 			glm::vec3 m = glm::vec3(corners[i].x + s, corners[i].y + s, corners[i].z + s); 
 			glm::vec3 n = glm::vec3(corners[i].x + s, corners[i].y + s, corners[i].z + s);
@@ -126,11 +126,9 @@ namespace s9{
 			
 		}
 				
-		p.getVBO().mVertices += 0.0f,0.0f,0.0f,
+		p.getVBO().vVertices += 0.0f,0.0f,0.0f,
 			w, 0.0f,0.0f, 
 			w/2, h,0.0f;
-		
 	
-	}
-	
+	}	
 }
