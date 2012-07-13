@@ -34,6 +34,7 @@ namespace s9 {
 	public:
 	
 		Primitive();
+		Primitive(VBOData v);
 		virtual void make();
 		
 		virtual operator int() const { return mObj.use_count() > 0; };
@@ -68,11 +69,12 @@ namespace s9 {
 				
 		void bind() { mObj->mVBO.bind(); };
 		void unbind() {mObj->mVBO.unbind(); };
-		GLuint getNumElements() { return mObj->mVBO.mNumElements; };
+		GLuint getNumElements() { return mObj->mVBO.getNumElements(); };
 		
 		PrimPtr getParent(){return mObj->pParent; };
 		
-		VBOData& getVBO() {return mObj->mVBO;};
+		VBOData getVBO() {return mObj->mVBO;};
+		void setVBO(VBOData b) {mObj->mVBO = b;};
 		
 	protected:
 	
@@ -112,7 +114,7 @@ namespace s9 {
 	class AssetGenerator{
 	public:
 		~AssetGenerator();
-		static void loadAsset(std::string filename, Primitive &p);
+		static Primitive loadAsset(std::string filename);
 
 	protected:
 		

@@ -50,7 +50,7 @@ namespace s9 {
 		WingedEdge(){};
 		void make(Primitive p);
 		std::vector<WEP_Face> getFaces() {return mObj->mWE; };
-		VBOData& getVBO() { return mObj->mPrimitive.getVBO(); };
+		VBOData getVBO() { return mObj->mPrimitive.getVBO(); };
 		
 		Primitive flatten(); 
 	

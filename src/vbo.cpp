@@ -11,123 +11,45 @@
 using namespace std;
 using namespace boost;
 using namespace boost::assign; 
-using namespace s9;
+
+/*
+ * VBO Buffer
+ */
+
+namespace s9 {
 
 
 /*
- * VBO Constructor
+ * VBO and VAO wrapper
  */
 
-VBOData::VBOData() {
-   
-}
-
-/*
- * VBO Destructor
- */
-
-VBOData::~VBOData() {
-	glDeleteBuffers(mNumBufs, vbo);
-    glDeleteVertexArrays(1, &vao);
-}
-
-/*
- * Bind this VBO/VAO and set the shader attribs
- * Using the layout directive in shaders to map attribs to numbers
- */
-
-void VBOData::bind() {
-	glBindVertexArray(vao);
-}
-
-void VBOData::unbind() {
-	glBindVertexArray(0);
+void VBOData::compile(){
 	
-	for (int id = 0; id < mNumBufs; ++ id){
-		glDisableVertexAttribArray(id);
-	}
-}
-
-
-void VBOData::compile(size_t buffers) {
-	// Find out how many buffers we need
-	int s = 0;
-	mUsed = buffers;
+/*	mObj->vVBO = new GLuint[mObj->vBuffers.size()];
+	glGenBuffers(mObj->vBuffers.size(),mObj->vVBO);
 	
-	if (mUsed & VBO_VERT) s++;
-	if (mUsed & VBO_IDCE) s++;
-	if (mUsed & VBO_COLR) s++;
-	if (mUsed & VBO_NORM) s++;
-	if (mUsed & VBO_TEXC) s++;
-	if (mUsed & VBO_TEXI) s++;
+	for (size_t i = 0; i < mObj->vBuffers.size(); ++i)
+		mObj->vBuffers[i]->setID(mObj->vVBO[i]);
 	
-	vbo = new GLuint[s];
-	glGenBuffers(s,vbo);
-	s = 0;
-	if (mUsed & VBO_VERT) { mVID = vbo[s]; s++;}
-	if (mUsed & VBO_IDCE) { mIID = vbo[s]; s++;}
-	if (mUsed & VBO_COLR) { mCID = vbo[s]; s++;}
-	if (mUsed & VBO_NORM) { mNID = vbo[s]; s++;}
-	if (mUsed & VBO_TEXC) { mTID = vbo[s]; s++;}
-	if (mUsed & VBO_TEXI) { mTTD = vbo[s]; s++;}
+	glGenVertexArrays(1,&(mObj->mVAO));
+	glBindVertexArray(mObj->mVAO);
+		
+	for (size_t i = 0; i < mObj->vBuffers.size(); ++i)
+		mObj->vBuffers[i]->allocate();
 	
-	// Create and bind the VAO
-	glGenVertexArrays(1,&vao);
-	glBindVertexArray(vao);
+	for (size_t i = 0; i < mObj->vBuffers.size(); ++i)
+		mObj->vBuffers[i]->attach(i);
 	
-	// Populate buffers
+	mObj->mNumBufs =  mObj->vBuffers.size();
+	mObj->mNumIndices = 0;
 	
-	allocateVertices();
-	allocateIndices();
-	allocateColours();
-	allocateNormals();
-	allocateTexCoords();
-	allocateTexIDs();
-	s = 0;
+	// Default behaviour - set the first buffer to num elements, second to num indicies
+	///\todo find a better way
 	
-	if (mUsed & VBO_VERT){
-		glEnableVertexAttribArray(s);
-		glBindBuffer(GL_ARRAY_BUFFER, mVID);
-		glVertexAttribPointer(s,3,GL_FLOAT,GL_FALSE,0, (GLubyte*) NULL);
-		mNumElements = vVertices.size() / 3;
-		s++;
-	} 
-	if (mUsed & VBO_IDCE){
-		glEnableVertexAttribArray(s);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mIID);
-		glVertexAttribPointer(s,1,GL_UNSIGNED_INT,GL_FALSE,0, (GLubyte*) NULL);
-		mNumIndices = vIndices.size();
-		s++;
-	} 
-	if (mUsed & VBO_COLR){
-		glEnableVertexAttribArray(s);
-		glBindBuffer(GL_ARRAY_BUFFER, mCID);
-		glVertexAttribPointer(s,4,GL_FLOAT,GL_FALSE,0, (GLubyte*) NULL);
-		s++;
-	} 
-	if (mUsed & VBO_NORM){
-		glEnableVertexAttribArray(s);
-		glBindBuffer(GL_ARRAY_BUFFER, mNID);
-		glVertexAttribPointer(s,3,GL_FLOAT,GL_FALSE,0, (GLubyte*) NULL);
-		s++;
-	}
-	if (mUsed & VBO_TEXC){
-		glEnableVertexAttribArray(s);
-		glBindBuffer(GL_ARRAY_BUFFER, mTID);
-		glVertexAttribPointer(s,2,GL_FLOAT,GL_FALSE,0, (GLubyte*) NULL);
-		s++;
-	} 
-	
-	if (mUsed & VBO_TEXI){
-		glEnableVertexAttribArray(s);
-		glBindBuffer(GL_ARRAY_BUFFER, mTTD);
-		///\todo NOTE THE I in the function below!
-		glVertexAttribIPointer(s,1,GL_UNSIGNED_INT,0, (GLubyte*) NULL);
-		s++;
-	} 
-	
-	mNumBufs = s;
-
+	mObj->mNumElements =  mObj->vBuffers[0]->size() / 3;
+	if (mObj->mNumBufs > 1)
+		mObj->mNumIndices =  mObj->vBuffers[1]->size();
+		
 	glBindVertexArray(0);
 	
 	///\todo - Not sure why the below is needed but it stops things breaking
@@ -136,54 +58,50 @@ void VBOData::compile(size_t buffers) {
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	
-	for (int id = 0; id < mNumBufs; ++id){
+	for (int id = 0; id < mObj->mNumBufs; ++id){
 		glDisableVertexAttribArray(id);
-	}
-	
+	}*/
 }
 
+
+		
+size_t VBOData::getNumIndices() {
+	return mObj->mNumIndices;
+}
+
+size_t VBOData::getNumElements(){
+	return mObj->mNumElements;
+}
+
+size_t VBOData::getNumBuffers(){
+	return mObj->mNumBufs;
+}
+		
+
+		
+VBOData::~VBOData() {
+	glDeleteBuffers(mObj->mNumBufs, &(mObj->vVBO[0]));
+    glDeleteVertexArrays(1, &(mObj->mVAO));
+}
+		
+		
 /*
- * Allocate based on the current size of the arrays
+ * Bind this VBO/VAO and set the shader attribs
+ * Using the layout directive in shaders to map attribs to numbers
  */
 
-void VBOData::allocateVertices() {
-	if (mUsed & VBO_VERT){
-		glBindBuffer(GL_ARRAY_BUFFER, mVID);
-		glBufferData(GL_ARRAY_BUFFER, vVertices.size() * sizeof(GLfloat), &vVertices[0], GL_DYNAMIC_DRAW);
+void VBOData::bind() {
+	glBindVertexArray(mObj->mVAO);
+}
+
+void VBOData::unbind() {
+	glBindVertexArray(0);
+	
+	for (int id = 0; id < mObj->mNumBufs; ++ id){
+		glDisableVertexAttribArray(id);
 	}
 }
 
-void VBOData::allocateIndices() {
-	if (mUsed & VBO_IDCE){
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mIID);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, vIndices.size() * sizeof(GLuint), &vIndices[0], GL_DYNAMIC_DRAW);
-	}
 }
 
-void VBOData::allocateTexCoords() {
-	if (mUsed & VBO_TEXC){
-		glBindBuffer(GL_ARRAY_BUFFER, mTID);
-		glBufferData(GL_ARRAY_BUFFER, vTexCoords.size()  * sizeof(GLfloat), &vTexCoords[0], GL_DYNAMIC_DRAW);
-	}
-}
 
-void VBOData::allocateNormals() {
-	if (mUsed & VBO_NORM){
-		glBindBuffer(GL_ARRAY_BUFFER, mNID);
-		glBufferData(GL_ARRAY_BUFFER, vNormals.size() * sizeof(GLfloat), &vNormals[0], GL_DYNAMIC_DRAW);
-	}
-}
-
-void VBOData::allocateColours() {
-	if (mUsed & VBO_COLR){
-		glBindBuffer(GL_ARRAY_BUFFER, mCID);
-		glBufferData(GL_ARRAY_BUFFER, vColours.size() * sizeof(GLfloat), &vColours[0], GL_DYNAMIC_DRAW);
-	}
-}
-
-void VBOData::allocateTexIDs() {
-	if (mUsed & VBO_TEXI){
-		glBindBuffer(GL_ARRAY_BUFFER, mTTD);
-		glBufferData(GL_ARRAY_BUFFER, vTexIDs.size() * sizeof(GLuint), &vTexIDs[0], GL_DYNAMIC_DRAW);
-	}
-}

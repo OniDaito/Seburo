@@ -22,7 +22,7 @@ set(SOURCE_FILES
 	src/camera.cpp
 	src/video.cpp
 	src/wingedge.cpp
-	src/pclmesh.cpp
+	#src/pclmesh.cpp
 )
 
 if (CMAKE_COMPILER_IS_GNUCC)

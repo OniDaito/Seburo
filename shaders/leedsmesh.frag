@@ -3,11 +3,29 @@
 in vec4 vLightPos;
 in vec4 vVertexNormal;
 in vec4 vVertexPosition;
-in vec2 vTexCoord;
+out vec2 vTexCoord0;
+out vec2 vTexCoord1;
+out vec2 vTexCoord2;
+out vec2 vTexCoord3;
+out vec2 vTexCoord4;
+out vec2 vTexCoord5;
+out vec2 vTexCoord6;
+out vec2 vTexCoord7;
+
 flat in uint vTexID;
 
 uniform sampler2DRect uBaseTex;
 uniform float uShininess;
+
+uniform vec4 uCamNorm0;
+uniform vec4 uCamNorm1;
+uniform vec4 uCamNorm2;
+uniform vec4 uCamNorm3;
+uniform vec4 uCamNorm4;
+uniform vec4 uCamNorm5;
+uniform vec4 uCamNorm6;
+uniform vec4 uCamNorm7;
+
 
 ///\todo pass in face normals so we can work out the best texture to use based in the shader
 
@@ -31,35 +49,53 @@ void main() {
 	vec4 mat_ambient = vec4(1.0, 1.0, 1.0, 1.0);
 	vec4 mat_diffuse = vec4(0.0, 0.0, 1.0, 0.0);
 	
+	float angle = abs(dot(uCamNorm0, vVertexNormal));
+	mat_diffuse = texture(mCamTex0,vTexCoord0);
+	
 	///\todo fix this because it sucks
-	if (vTexID == 0){
-		mat_diffuse = texture(mCamTex0,vTexCoord);
+	float tangle = abs(dot(uCamNorm1, vVertexNormal));
+	if ( tangle < angle){
+		angle = tangle;
+		mat_diffuse = texture(mCamTex1,vTexCoord1);
 	}
-	else if (vTexID == 1){
-		mat_diffuse = texture(mCamTex1,vTexCoord);
+	tangle = abs(dot(uCamNorm2, vVertexNormal));
+	if ( tangle < angle){
+		angle = tangle;
+		mat_diffuse = texture(mCamTex2,vTexCoord2);
 	}
-	else if (vTexID == 2){
-		mat_diffuse = texture(mCamTex2,vTexCoord);
+	
+	tangle = abs(dot(uCamNorm3, vVertexNormal));
+	if ( tangle < angle){
+		angle = tangle;
+		mat_diffuse = texture(mCamTex3,vTexCoord3);
 	}
-	else if (vTexID == 3){
-		mat_diffuse = texture(mCamTex3,vTexCoord);
+	
+	tangle = abs(dot(uCamNorm4, vVertexNormal));
+	if ( tangle < angle){
+		angle = tangle;
+		mat_diffuse = texture(mCamTex4,vTexCoord4);
 	}
-	else if (vTexID == 4){
-		mat_diffuse = texture(mCamTex4,vTexCoord);
+	
+	tangle = abs(dot(uCamNorm5, vVertexNormal));
+	if ( tangle < angle){
+		angle = tangle;
+		mat_diffuse = texture(mCamTex5,vTexCoord5);
 	}
-	else if (vTexID == 5){
-		mat_diffuse = texture(mCamTex5,vTexCoord);
+	
+	tangle = abs(dot(uCamNorm6, vVertexNormal));
+	if ( tangle < angle){
+		angle = tangle;
+		mat_diffuse = texture(mCamTex6,vTexCoord6);
 	}
-	else if (vTexID == 6){
-		mat_diffuse = texture(mCamTex6,vTexCoord);
-	}
-	else if (vTexID == 7){
-		mat_diffuse = texture(mCamTex7,vTexCoord);
+	
+	tangle = abs(dot(uCamNorm7, vVertexNormal));
+	if ( tangle < angle){
+		angle = tangle;
+		mat_diffuse = texture(mCamTex7,vTexCoord7);
 	}
 	
 	if (length(mat_diffuse) == 0)
 		mat_diffuse = vec4(1.0, 0.0, 1.0, 1.0);
-	
 	
 	vec4 mat_specular = vec4(1.0, 1.0, 1.0, 1.0);
 	

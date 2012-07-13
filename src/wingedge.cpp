@@ -14,15 +14,23 @@ using namespace boost::assign;
 using namespace s9;
 
 
+/*
+ * Given a primtive, create a winged edge structure
+ * This assumes that primitives have buffer 0 as vertices and buffer 1 as indices
+ */
+
 void WingedEdge::make(Primitive p) {
 	
 	mObj.reset(new SharedObj());
 	mObj->mPrimitive = p;
 	
+	VBOBuffer<GLuint> indices = p.getVBO().getBuffer<GLuint>(1);
+	VBOBuffer<GLfloat> vertices = p.getVBO().getBuffer<GLfloat>(0);
+	
 	// Create a temporary array of vertices for now. 
 	std::vector< boost::shared_ptr<WE_Vertex> > vs;
 
-	for (size_t i=0; i < p.getVBO().vVertices.size(); i+=3){
+	for (size_t i=0; i < vertices.size(); i+=3){
 		shared_ptr<WE_Vertex> sv (new WE_Vertex);
 		vs.push_back(sv);
 		sv->idc = i; // Copy the indices
@@ -38,14 +46,14 @@ void WingedEdge::make(Primitive p) {
 	
 	size_t bw = 0;
 
-	for (size_t i = 0; i < p.getVBO().vIndices.size(); i+=3) {
+	for (size_t i = 0; i < indices.size(); i+=3) {
 
 		shared_ptr<WE_Face>  f (new WE_Face());
 		bool bf = false;
 		uint32_t idcs[3];
-		idcs[0] = p.getVBO().vIndices[i];
-		idcs[1] = p.getVBO().vIndices[i+1];
-		idcs[2] = p.getVBO().vIndices[i+2]; 
+		idcs[0] = indices[i];
+		idcs[1] = indices[i+1];
+		idcs[2] = indices[i+2]; 
 
 		// Find Edges to add to face
 		map< uint64_t, shared_ptr<WE_Edge> >::iterator pi = es.end();
@@ -133,9 +141,13 @@ void WingedEdge::make(Primitive p) {
  */
 
 Primitive WingedEdge::flatten() { 
-
-	Primitive p;
-	p.make();
+	
+	VBOData v;
+	
+	VBOBuffer<GLfloat> verts(3);
+	VBOBuffer<GLfloat> texs(2);
+	VBOBuffer<GLfloat> norms(3);
+	VBOBuffer<GLuint> tids(1);
 	
 	for (size_t i = 0; i < mObj->mWE.size(); ++i) {
 	
@@ -145,24 +157,15 @@ Primitive WingedEdge::flatten() {
 		size_t i1 = sf->edge->next->v0->idc;
 		size_t i2 = sf->edge->next->next->v0->idc;
 		
-		glm::vec3 v0 (mObj->mPrimitive.getVBO().vVertices[i0], mObj->mPrimitive.getVBO().vVertices[i0+1], mObj->mPrimitive.getVBO().vVertices[i0+2]);
-		glm::vec3 v1 (mObj->mPrimitive.getVBO().vVertices[i1], mObj->mPrimitive.getVBO().vVertices[i1+1], mObj->mPrimitive.getVBO().vVertices[i1+2]);
-		glm::vec3 v2 (mObj->mPrimitive.getVBO().vVertices[i2], mObj->mPrimitive.getVBO().vVertices[i2+1], mObj->mPrimitive.getVBO().vVertices[i2+2]);
-			
+		VBOBuffer<GLfloat> vv = mObj->mPrimitive.getVBO().getBuffer<GLfloat>(0);
+		
+		glm::vec3 v0 (vv[i0], vv[i0+1], vv[i0+2]);
+		glm::vec3 v1 (vv[i1], vv[i1+1], vv[i1+2]);
+		glm::vec3 v2 (vv[i2], vv[i2+1], vv[i2+2]);
+			 
 		// Vertices
-		
-		p.getVBO().vVertices.push_back(v0.x);
-		p.getVBO().vVertices.push_back(v0.y);
-		p.getVBO().vVertices.push_back(v0.z);
-		
-		p.getVBO().vVertices.push_back(v1.x);
-		p.getVBO().vVertices.push_back(v1.y);
-		p.getVBO().vVertices.push_back(v1.z);
-		
-		p.getVBO().vVertices.push_back(v2.x);
-		p.getVBO().vVertices.push_back(v2.y);
-		p.getVBO().vVertices.push_back(v2.z);
-		
+		verts += v0.x,v0.y,v0.z, v1.x,v1.y,v1.z,v2.x,v2.y,v2.z;
+	
 		glm::vec3 t0 = v1 - v0;
 		glm::vec3 t1 = v2 - v0;
 		glm::vec3 n = glm::cross(t0,t1);
@@ -170,20 +173,18 @@ Primitive WingedEdge::flatten() {
 		// TexCoords, normals and ids
 		
 		for (size_t j =0; j < 3; j++){
-			p.getVBO().vTexCoords.push_back(0);
-			p.getVBO().vTexCoords.push_back(0);
-			
-			p.getVBO().vNormals.push_back(n.x);
-			p.getVBO().vNormals.push_back(n.y);
-			p.getVBO().vNormals.push_back(n.z);
-			
-			
-			p.getVBO().vTexIDs.push_back(0);
+			texs += 0,0;
+			norms += n.x, n.y, n.z;			
 		}
 	}
 			
 	// Finally, compile the VBO
-	p.getVBO().compile(VBO_VERT | VBO_TEXC | VBO_NORM | VBO_TEXI);
+	v.push_back(verts);
+	v.push_back(norms);
+	v.push_back(texs);
+	v.compile();
+	
+	Primitive p(v);
 	
 	return p;
 }

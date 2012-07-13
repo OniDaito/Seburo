@@ -233,30 +233,6 @@ src/jpeg.c.s:
 	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/jpeg.c.s
 .PHONY : src/jpeg.c.s
 
-src/pclmesh.o: src/pclmesh.cpp.o
-.PHONY : src/pclmesh.o
-
-# target to build an object file
-src/pclmesh.cpp.o:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/pclmesh.cpp.o
-.PHONY : src/pclmesh.cpp.o
-
-src/pclmesh.i: src/pclmesh.cpp.i
-.PHONY : src/pclmesh.i
-
-# target to preprocess a source file
-src/pclmesh.cpp.i:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/pclmesh.cpp.i
-.PHONY : src/pclmesh.cpp.i
-
-src/pclmesh.s: src/pclmesh.cpp.s
-.PHONY : src/pclmesh.s
-
-# target to generate assembly for a file
-src/pclmesh.cpp.s:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/pclmesh.cpp.s
-.PHONY : src/pclmesh.cpp.s
-
 src/primitive.o: src/primitive.cpp.o
 .PHONY : src/primitive.o
 
@@ -568,9 +544,6 @@ help:
 	@echo "... src/jpeg.o"
 	@echo "... src/jpeg.i"
 	@echo "... src/jpeg.s"
-	@echo "... src/pclmesh.o"
-	@echo "... src/pclmesh.i"
-	@echo "... src/pclmesh.s"
 	@echo "... src/primitive.o"
 	@echo "... src/primitive.i"
 	@echo "... src/primitive.s"

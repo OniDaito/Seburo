@@ -121,6 +121,16 @@ void GLApp::drawLeedsMesh(Camera &c) {
 			vCVCameras[i].bind();
 		}
 		
+		for (size_t i = 0; i < 8; i ++) {
+			cv::Mat n = vCVCameras[i].getNormal();
+			std::stringstream Num;
+			Num << i;
+			string str = Num.str();
+			glm::vec3 nn (n.at<double_t>(0,0),n.at<double_t>(1,0),n.at<double_t>(2,0));
+			glUniform4f(sShaderLeedsMesh.location( string("uCamNorm" + str).c_str() ),nn.x,nn.y,nn.z,0.0);
+		}
+
+		
 		glUniform1f(sShaderLeedsMesh.location("uShininess"), 20.0f);
 		glm::vec3 l = sCam.getPos() + sCam.getLook();
 		glUniform3f(sShaderLeedsMesh.location("uLight0"),l.x,l.y,l.z);
@@ -190,102 +200,59 @@ Primitive GLApp::generateTextured( WingedEdge &w){
 	vector<glm::vec3> normals;
 	Primitive p = mWE.flatten();
 	
-	for (size_t i =0; i < vCVCameras.size(); i++){
-		CVVidCam cam = vCVCameras[i];
-		cv::Mat n = cam.getNormal();
-		glm::vec3 nn (n.at<double_t>(0,0),n.at<double_t>(1,0),n.at<double_t>(2,0));
-		nn  = glm::normalize(nn);
-		normals.push_back(nn);
-	}
-	
-	map<WEP_Face, GLuint> temptex;
-	
-	for (size_t i = 0; i < w.getFaces().size(); ++i) {
-		
-		shared_ptr<WE_Face> sf = w.getFaces()[i];
-		
-		// Generate a face normal
-		size_t i0 = sf->edge->v0->idc;
-		size_t i1 = sf->edge->next->v0->idc;
-		size_t i2 = sf->edge->next->next->v0->idc;
-		
-		glm::vec3 v0 (w.getVBO().vVertices[i0], w.getVBO().vVertices[i0+1], w.getVBO().vVertices[i0+2]);
-		glm::vec3 v1 (w.getVBO().vVertices[i1], w.getVBO().vVertices[i1+1], w.getVBO().vVertices[i1+2]);
-		glm::vec3 v2 (w.getVBO().vVertices[i2], w.getVBO().vVertices[i2+1], w.getVBO().vVertices[i2+2]);
-		
-		glm::vec3 t0 = v1 - v0;
-		glm::vec3 t1 = v2 - v0;
-		glm::vec3 n = glm::cross(t0,t1);
-				
-		float range = 3.0;
-		GLuint idx = 0;
-		for (GLuint j=0; j < normals.size(); j++){
-			
-			glm::vec3 nn = normals[j];
-						
-			float angle =  acosf( glm::dot(n,nn)) ;
-			if (fabs(angle) < range){
-				idx = j;
-				range = fabs(angle);
-			}
-		}
-		temptex.insert(pair<WEP_Face, GLuint>(sf,idx) );
-	}
-	
-	// Now we have texids - check winged edge for these we need to change
-	// Assume a maximum choice of 8 textures
-	
-	/*for (size_t i = 0; i < w.getFaces().size(); ++i) {	
-		shared_ptr<WE_Face> sf = w.getFaces()[i];
-		
-		int counts[] = {0,0,0,0,0,0,0,0};
-		// Nasty bit of code! :S
-		if (sf->edge->sym != boost::shared_ptr<WE_Edge>()) counts[temptex[sf->edge->sym->face] ]+=1;
-		if (sf->edge->next->sym != boost::shared_ptr<WE_Edge>()) counts[temptex[sf->edge->next->sym->face]]+=1;
-		if (sf->edge->next->next->sym != boost::shared_ptr<WE_Edge>()) counts[temptex[sf->edge->next->next->sym->face]]+=1;
-		
-		int tc = 0;
-		for (size_t j=0; j < 8; j++){
-			if (counts[j] > tc){
-				temptex[sf] = j;
-				tc = counts[j];
-			}
-		}
-	}
-	*/
-	// now generate texture coordinate and set the IDs
-	
 	p.bind();
-	/*for (size_t i = 0; i < w.getFaces().size(); ++i) {	
-		shared_ptr<WE_Face> sf = w.getFaces()[i];
-		for (size_t j =0; j < 6; ++j) {
-			p.getVBO().vTexIDs[i*6 + j] = temptex[sf];
-		}
-	}*/
-		
-	for (size_t i =0; i < p.getVBO().vVertices.size() / 3; ++i){
-		
-		glm::vec3 vert( p.getVBO().vVertices[i*3], 
-					p.getVBO().vVertices[i*3+1],
-					p.getVBO().vVertices[i*3+2]);
-		
-		vector<cv::Point3f> tOPoints;
-		tOPoints.push_back(cv::Point3f(vert.x, vert.y, vert.z));
-		vector<cv::Point2f> results;
-				
-		CVVidCam cam = vCVCameras[sModelTextured.getVBO().vTexIDs[i]];
+	
+	VBOBuffer<GLfloat> verts = p.getVBO().getBuffer<GLfloat>(0); 
+	
+	// Now create and add 7 more buffers for textures
+	VBOBuffer<GLfloat> tex0 = p.getVBO().getBuffer<GLfloat>(2); 
+	
+	VBOBuffer<GLfloat> tex1(2);
+	VBOBuffer<GLfloat> tex2(2);
+	VBOBuffer<GLfloat> tex3(2);
+	VBOBuffer<GLfloat> tex4(2);
+	VBOBuffer<GLfloat> tex5(2);
+	VBOBuffer<GLfloat> tex6(2);
+	VBOBuffer<GLfloat> tex7(2);
+	
+	p.getVBO().push_back(tex1);
+	p.getVBO().push_back(tex2);
+	p.getVBO().push_back(tex3);
+	p.getVBO().push_back(tex4);
+	p.getVBO().push_back(tex5);
+	p.getVBO().push_back(tex6);
+	p.getVBO().push_back(tex7);
+			
+	for (size_t i=0; i < 8; ++i){
+		CVVidCam cam = vCVCameras[i];
 		CameraParameters in = cam.getParams();
+		vector<cv::Point3f> tOPoints;
+		
+		///\todo anyway to cast existing array to cv::point3f?
+		for (size_t j =0; j < verts.size();){
+			tOPoints.push_back(cv::Point3f( verts[j++], 
+				verts[j++],
+				verts[j++]));
+		}	
+		
+		vector<cv::Point2f> results;	
 		cv::projectPoints(tOPoints, in.R, in.T, in.M, in.D, results );
 	
-		// We need to mirror the co-ordinates here but only in the X plane
 		
-		p.getVBO().vTexCoords[i*2] = results[0].x;
-		p.getVBO().vTexCoords[i*2] = results[0].y;
+	
+		// We need to mirror the co-ordinates here but only in the X plane
+		for (size_t j =0; j < results.size(); ++j){
+		
+			VBOBuffer<GLfloat> ctex = p.getVBO().getBuffer<GLfloat>(2 + i); 
+		
+			ctex.set(j*2, results[j].x);
+			ctex.set(j*2+1, results[j].y);
+			
+			ctex.allocate();
+		}	
 	}
 	
-	p.getVBO().allocateTexIDs();
-	//p.getVBO().allocateTexCoords();
-	
+
 	p.unbind();
 	return p;
 }
@@ -582,7 +549,7 @@ void GLApp::parseXML() {
 		size_t h = fromStringS9<size_t> ( mSettings["leeds/cameras/height"]);
 		size_t f = fromStringS9<size_t> ( mSettings["leeds/cameras/fps"]);
 		
-		makeQuad(sCamQuad,w,h);
+		sCamQuad = makeQuad(w,h);
 
 		
 		XMLIterator i = mSettings.iterator("leeds/cameras/cam");
@@ -640,7 +607,7 @@ void GLApp::loadFile() {
 	//Handle the response:
 	switch(result) {
 		case(Gtk::RESPONSE_OK): {		
-			AssetGenerator::loadAsset(dialog.get_filename(),sModel);
+			sModel = AssetGenerator::loadAsset(dialog.get_filename());
 			mWE.make(sModel);
 					
 			break;
@@ -681,17 +648,15 @@ void GLApp::resizeHUD(int w, int h){
 	// Resize the hud quad and also resize the texture coordinates
 	if (sHUDQuad) {
 		sHUDQuad.bind();
-		sHUDQuad.getVBO().vTexCoords[1] = static_cast<float_t>(h);
-		sHUDQuad.getVBO().vTexCoords[2] = static_cast<float_t>(w);
-		sHUDQuad.getVBO().vTexCoords[3] = static_cast<float_t>(h);
-		sHUDQuad.getVBO().vTexCoords[4] = static_cast<float_t>(w);
-		sHUDQuad.getVBO().allocateTexCoords();
 		
-		sHUDQuad.getVBO().vTexCoords[1] = static_cast<float_t>(h);
-		sHUDQuad.getVBO().vTexCoords[2] = static_cast<float_t>(w);
-		sHUDQuad.getVBO().vTexCoords[3] = static_cast<float_t>(h);
-		sHUDQuad.getVBO().vTexCoords[4] = static_cast<float_t>(w);
-		sHUDQuad.getVBO().allocateTexCoords();
+		VBOBuffer<GLfloat> tex = sHUDQuad.getVBO().getBuffer<GLfloat>(3);
+		
+		tex.set(1,static_cast<float_t>(h));
+		tex.set(2,static_cast<float_t>(w));
+		tex.set(3,static_cast<float_t>(h));
+		tex.set(4,static_cast<float_t>(w));
+		
+		tex.allocate();
 		
 		sHUDQuad.unbind();
 	}
@@ -770,8 +735,8 @@ void GLApp::init() {
 	
 	// Create basic references
 
-	makeReferenceQuad(sRefQuad,1.0,1.0);
-	makeReferenceQuad(sHUDQuad,400.0,300.0);
+	sRefQuad = makeReferenceQuad(1.0,1.0);
+	sHUDQuad = makeReferenceQuad(400.0,300.0);
 
 
 	// Move the Camera
@@ -787,7 +752,7 @@ void GLApp::init() {
 	sShaderLeedsMesh.load("../../../shaders/leedsmesh.vert", "../../../shaders/leedsmesh.frag");
 
 	// Load Objects
-	AssetGenerator::loadAsset("../../../data/gripper.stl",sGripper);
+	sGripper = AssetGenerator::loadAsset("../../../data/gripper.stl");
 	sGripper.setScale(glm::vec3(0.2,0.2,0.2));
 	sGripper.setPos(glm::vec3(-0.1,-0.5,-2.0));
 	sGripper.setColour(glm::vec4(1.0f,0.0f,0.0f,1.0f));

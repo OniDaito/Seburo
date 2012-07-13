@@ -15,9 +15,9 @@
 
 namespace s9 {
 	
-	void makeQuad(Primitive &p, float_t w, float_t h);
-	void makeReferenceQuad(Primitive &p, float_t w, float_t h);
-	void makeReferenceTriangle(Primitive &p, float_t w, float_t h);
+	Primitive makeQuad(float_t w, float_t h);
+	Primitive makeReferenceQuad(float_t w, float_t h);
+	Primitive makeReferenceTriangle(float_t w, float_t h);
 }
 
 

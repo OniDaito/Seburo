@@ -14,80 +14,120 @@ using namespace boost::assign;
 
 namespace s9{
 
-	void makeQuad(Primitive &p, float_t w, float_t h) {
+	Primitive makeQuad(float_t w, float_t h) {
 		
-		p.make();
+		VBOBuffer<GLuint> indices(1);
+		VBOBuffer<GLfloat> verts(3);
+		VBOBuffer<GLfloat> texcoords(2);
+		VBOBuffer<GLfloat> colours(4);
 		
 		// Quad for Camera drawing
-		p.getVBO().vIndices += 0,3,1,3,2,1;
-		p.getVBO().vVertices += 0.0f,0.0f,0.0f,
+		indices += 0,3,1,3,2,1;
+		verts += 0.0f,0.0f,0.0f,
 			w, 0.0f,0.0f, 
 			w, h,0.0f,
 			0.0f, h,0.0f;
 		
-		p.getVBO().vTexCoords += 0.0, h,
+		texcoords += 0.0, h,
 			w, h,
 			w, 0.0,
 			0.0,0.0;
 		
-		p.getVBO().vColours += 1.0f,1.0f,1.0f,1.0f,
+		colours += 1.0f,1.0f,1.0f,1.0f,
 			1.0f,1.0f,1.0f,1.0f,
 			1.0f,1.0f,1.0f,1.0f,
 			1.0f,1.0f,1.0f,1.0f;
-			
-		p.getVBO().compile(VBO_VERT | VBO_IDCE | VBO_TEXC | VBO_COLR );
+		
+		
+		VBOData v;
+		v.push_back(verts);
+		v.push_back(indices);
+		v.push_back(texcoords);
+		v.push_back(colours);
+		v.compile();
+		
+		Primitive p(v);
+	
+		return p;
 	}
 
-	void makeReferenceQuad(Primitive &p, float_t w, float_t h) {
-		p.make();
+	Primitive makeReferenceQuad(float_t w, float_t h) {
+		
+		VBOBuffer<GLuint> indices(1);
+		VBOBuffer<GLfloat> verts(3);
+		VBOBuffer<GLfloat> texcoords(2);
+		VBOBuffer<GLfloat> colours(4);
+		
 		
 		// Quad for Camera drawing
-		p.getVBO().vIndices += 0,3,1,3,2,1;
-		p.getVBO().vVertices += 0.0f,0.0f,0.0f,
+		indices += 0,3,1,3,2,1;
+		verts += 0.0f,0.0f,0.0f,
 			w, 0.0f,0.0f, 
 			w, h,0.0f,
 			0.0f, h,0.0f;
 		
-		p.getVBO().vTexCoords += 0.0, h,
+		texcoords += 0.0, h,
 			w, h,
 			w, 0.0,
 			0.0,0.0;
 		
-		p.getVBO().vColours += 0.0f,0.0f,0.0f,1.0f,
+		colours += 0.0f,0.0f,0.0f,1.0f,
 			0.0f,0.0f,1.0f,1.0f,
 			0.0f,1.0f,0.0f,1.0f,
 			1.0f,0.0f,0.0f,1.0f;
 			
-		p.getVBO().compile(VBO_VERT | VBO_IDCE | VBO_TEXC | VBO_COLR );
+			
+		VBOData v;
+		v.push_back(verts);
+		v.push_back(indices);
+		v.push_back(texcoords);
+		v.push_back(colours);
+		v.compile();
+		
+		Primitive p(v);
 		
 		CXGLERROR
+		
+		return p;
 	}
 	
-	void makeReferenceTriangle(Primitive &p, float_t w, float_t h){
+	Primitive makeReferenceTriangle(float_t w, float_t h){
 		
-		p.make();
+		VBOBuffer<GLuint> indices(1);
+		VBOBuffer<GLfloat> verts(3);
+		VBOBuffer<GLfloat> texcoords(2);
+		VBOBuffer<GLfloat> colours(4);
 		
 		// Quad for Camera drawing
-		p.getVBO().vIndices += 0,1,2;
-		p.getVBO().vVertices += 0.0f,0.0f,0.0f,
+		indices += 0,1,2;
+		verts += 0.0f,0.0f,0.0f,
 			w, 0.0f,0.0f, 
 			w/2, h,0.0f;
 
-		p.getVBO().vColours += 0.0f,0.0f,0.0f,1.0f,
+		colours += 0.0f,0.0f,0.0f,1.0f,
 			0.0f,0.0f,1.0f,1.0f,
 			0.0f,1.0f,0.0f,1.0f;
 			
-		p.getVBO().compile(VBO_VERT | VBO_IDCE | VBO_COLR );
+		VBOData v;
+		v.push_back(verts);
+		v.push_back(indices);
+		v.push_back(colours);
+		v.compile();
+		
+		Primitive p(v);
 		
 		CXGLERROR
+		
+		return p;
 	}
 	
 	/*
 	 * Create a bounding box, centrered around 0,0,0
 	 */
 	
-	void makeBoundingBox(Primitive &p, float_t w, float_t h, float_t d, float_t s){
-		p.make();
+	Primitive makeBoundingBox(float_t w, float_t h, float_t d, float_t s){
+		
+		VBOBuffer<GLfloat> verts(3);
 		
 		glm::vec3 corners[8];
 		corners[0] = glm::vec3(-w/2.0, h/2.0, -d/2.0);
@@ -100,7 +140,7 @@ namespace s9{
 		corners[7] = glm::vec3(w/2.0, -h/2.0, d/2.0);
 		
 		for (int i=0; i < 8; i++){
-			p.getVBO().vVertices += corners[i].x, corners[i].y, corners[i].z; 
+			verts += corners[i].x, corners[i].y, corners[i].z; 
 			
 			glm::vec3 m = glm::vec3(corners[i].x + s, corners[i].y + s, corners[i].z + s); 
 			glm::vec3 n = glm::vec3(corners[i].x + s, corners[i].y + s, corners[i].z + s);
@@ -123,12 +163,20 @@ namespace s9{
 				n.z = corners[i].z - s;
 				o.z = corners[i].z - s;
 			}
-			
 		}
 				
-		p.getVBO().vVertices += 0.0f,0.0f,0.0f,
+		verts += 0.0f,0.0f,0.0f,
 			w, 0.0f,0.0f, 
 			w/2, h,0.0f;
+			
+		VBOData v;
+		v.push_back(verts);
+
+		Primitive p(v);
+		
+		CXGLERROR
+		
+		return p;
 	
 	}	
 }

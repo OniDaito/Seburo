@@ -417,29 +417,6 @@ CMakeFiles/s9gear.dir/src/wingedge.cpp.o.provides: CMakeFiles/s9gear.dir/src/win
 
 CMakeFiles/s9gear.dir/src/wingedge.cpp.o.provides.build: CMakeFiles/s9gear.dir/src/wingedge.cpp.o
 
-CMakeFiles/s9gear.dir/src/pclmesh.cpp.o: CMakeFiles/s9gear.dir/flags.make
-CMakeFiles/s9gear.dir/src/pclmesh.cpp.o: ../src/pclmesh.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/oni/Projects/S9Gear/build/CMakeFiles $(CMAKE_PROGRESS_17)
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object CMakeFiles/s9gear.dir/src/pclmesh.cpp.o"
-	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/s9gear.dir/src/pclmesh.cpp.o -c /home/oni/Projects/S9Gear/src/pclmesh.cpp
-
-CMakeFiles/s9gear.dir/src/pclmesh.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/s9gear.dir/src/pclmesh.cpp.i"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/oni/Projects/S9Gear/src/pclmesh.cpp > CMakeFiles/s9gear.dir/src/pclmesh.cpp.i
-
-CMakeFiles/s9gear.dir/src/pclmesh.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/s9gear.dir/src/pclmesh.cpp.s"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/oni/Projects/S9Gear/src/pclmesh.cpp -o CMakeFiles/s9gear.dir/src/pclmesh.cpp.s
-
-CMakeFiles/s9gear.dir/src/pclmesh.cpp.o.requires:
-.PHONY : CMakeFiles/s9gear.dir/src/pclmesh.cpp.o.requires
-
-CMakeFiles/s9gear.dir/src/pclmesh.cpp.o.provides: CMakeFiles/s9gear.dir/src/pclmesh.cpp.o.requires
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/pclmesh.cpp.o.provides.build
-.PHONY : CMakeFiles/s9gear.dir/src/pclmesh.cpp.o.provides
-
-CMakeFiles/s9gear.dir/src/pclmesh.cpp.o.provides.build: CMakeFiles/s9gear.dir/src/pclmesh.cpp.o
-
 # Object files for target s9gear
 s9gear_OBJECTS = \
 "CMakeFiles/s9gear.dir/src/uvc_camera.cpp.o" \
@@ -457,8 +434,7 @@ s9gear_OBJECTS = \
 "CMakeFiles/s9gear.dir/src/shapes.cpp.o" \
 "CMakeFiles/s9gear.dir/src/camera.cpp.o" \
 "CMakeFiles/s9gear.dir/src/video.cpp.o" \
-"CMakeFiles/s9gear.dir/src/wingedge.cpp.o" \
-"CMakeFiles/s9gear.dir/src/pclmesh.cpp.o"
+"CMakeFiles/s9gear.dir/src/wingedge.cpp.o"
 
 # External object files for target s9gear
 s9gear_EXTERNAL_OBJECTS =
@@ -479,7 +455,6 @@ libs9gear.a: CMakeFiles/s9gear.dir/src/shapes.cpp.o
 libs9gear.a: CMakeFiles/s9gear.dir/src/camera.cpp.o
 libs9gear.a: CMakeFiles/s9gear.dir/src/video.cpp.o
 libs9gear.a: CMakeFiles/s9gear.dir/src/wingedge.cpp.o
-libs9gear.a: CMakeFiles/s9gear.dir/src/pclmesh.cpp.o
 libs9gear.a: CMakeFiles/s9gear.dir/build.make
 libs9gear.a: CMakeFiles/s9gear.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --red --bold "Linking CXX static library libs9gear.a"
@@ -506,7 +481,6 @@ CMakeFiles/s9gear.dir/requires: CMakeFiles/s9gear.dir/src/shapes.cpp.o.requires
 CMakeFiles/s9gear.dir/requires: CMakeFiles/s9gear.dir/src/camera.cpp.o.requires
 CMakeFiles/s9gear.dir/requires: CMakeFiles/s9gear.dir/src/video.cpp.o.requires
 CMakeFiles/s9gear.dir/requires: CMakeFiles/s9gear.dir/src/wingedge.cpp.o.requires
-CMakeFiles/s9gear.dir/requires: CMakeFiles/s9gear.dir/src/pclmesh.cpp.o.requires
 .PHONY : CMakeFiles/s9gear.dir/requires
 
 CMakeFiles/s9gear.dir/clean:
