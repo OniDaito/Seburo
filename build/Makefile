@@ -449,30 +449,6 @@ src/uvc_camera.cpp.s:
 	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/uvc_camera.cpp.s
 .PHONY : src/uvc_camera.cpp.s
 
-src/vbo.o: src/vbo.cpp.o
-.PHONY : src/vbo.o
-
-# target to build an object file
-src/vbo.cpp.o:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/vbo.cpp.o
-.PHONY : src/vbo.cpp.o
-
-src/vbo.i: src/vbo.cpp.i
-.PHONY : src/vbo.i
-
-# target to preprocess a source file
-src/vbo.cpp.i:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/vbo.cpp.i
-.PHONY : src/vbo.cpp.i
-
-src/vbo.s: src/vbo.cpp.s
-.PHONY : src/vbo.s
-
-# target to generate assembly for a file
-src/vbo.cpp.s:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/vbo.cpp.s
-.PHONY : src/vbo.cpp.s
-
 src/video.o: src/video.cpp.o
 .PHONY : src/video.o
 
@@ -571,9 +547,6 @@ help:
 	@echo "... src/uvc_camera.o"
 	@echo "... src/uvc_camera.i"
 	@echo "... src/uvc_camera.s"
-	@echo "... src/vbo.o"
-	@echo "... src/vbo.i"
-	@echo "... src/vbo.s"
 	@echo "... src/video.o"
 	@echo "... src/video.i"
 	@echo "... src/video.s"

@@ -288,32 +288,28 @@ void GLApp::monitorCallback( GLFWmonitor m, int p){
  
 void GLApp::reshape(GLFWwindow window, int w, int h ) {
 	sFBO.resize(w,h);
-
-	
 	resizeHUD(w,h);
 }
 
 void GLApp::resizeHUD(int w, int h){
 	sHUDCam.setDim(w,h);
 	
+	// Resize the hud quad and also resize the texture coordinates
 	if (sHUDQuad) {
-		// Resize the hud quad and also resize the texture coordinates
 		sHUDQuad.bind();
-		sHUDQuad.getVBO().mTexCoords[1] = static_cast<float_t>(h);
-		sHUDQuad.getVBO().mTexCoords[2] = static_cast<float_t>(w);
-		sHUDQuad.getVBO().mTexCoords[3] = static_cast<float_t>(h);
-		sHUDQuad.getVBO().mTexCoords[4] = static_cast<float_t>(w);
-		sHUDQuad.getVBO().allocateTexCoords();
 		
-		sHUDQuad.getVBO().mTexCoords[1] = static_cast<float_t>(h);
-		sHUDQuad.getVBO().mTexCoords[2] = static_cast<float_t>(w);
-		sHUDQuad.getVBO().mTexCoords[3] = static_cast<float_t>(h);
-		sHUDQuad.getVBO().mTexCoords[4] = static_cast<float_t>(w);
-		sHUDQuad.getVBO().allocateTexCoords();
+		VBOBuffer<GLfloat> tex = sHUDQuad.getVBO().getBuffer<GLfloat>(3);
+		
+		tex.set(1,static_cast<float_t>(h));
+		tex.set(2,static_cast<float_t>(w));
+		tex.set(3,static_cast<float_t>(h));
+		tex.set(4,static_cast<float_t>(w));
+		
+		tex.allocate();
 		
 		sHUDQuad.unbind();
 	}
-
+	CXGLERROR
 
 }
 
@@ -374,8 +370,8 @@ void GLApp::init() {
 	
 	// Create basic references
 
-	makeReferenceQuad(sRefQuad,1.0,1.0);
-	makeReferenceQuad(sHUDQuad,400.0,300.0);
+	sRefQuad = makeReferenceQuad(1.0,1.0);
+	sHUDQuad = makeReferenceQuad(400.0,300.0);
 
 
 	// Move the Camera

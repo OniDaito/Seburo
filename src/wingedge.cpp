@@ -182,7 +182,7 @@ Primitive WingedEdge::flatten() {
 	v.push_back(verts);
 	v.push_back(norms);
 	v.push_back(texs);
-	v.compile();
+	v.setNumElements(verts.size());
 	
 	Primitive p(v);
 	

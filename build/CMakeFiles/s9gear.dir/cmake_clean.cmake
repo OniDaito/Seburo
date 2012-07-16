@@ -7,7 +7,6 @@ FILE(REMOVE_RECURSE
   "CMakeFiles/s9gear.dir/src/tinyxmlerror.cpp.o"
   "CMakeFiles/s9gear.dir/src/tinyxmlparser.cpp.o"
   "CMakeFiles/s9gear.dir/src/s9xml.cpp.o"
-  "CMakeFiles/s9gear.dir/src/vbo.cpp.o"
   "CMakeFiles/s9gear.dir/src/fbo.cpp.o"
   "CMakeFiles/s9gear.dir/src/shader.cpp.o"
   "CMakeFiles/s9gear.dir/src/primitive.cpp.o"

@@ -14,7 +14,6 @@ set(SOURCE_FILES
 	src/tinyxmlerror.cpp
 	src/tinyxmlparser.cpp
 	src/s9xml.cpp
-	src/vbo.cpp
 	src/fbo.cpp
 	src/shader.cpp
 	src/primitive.cpp

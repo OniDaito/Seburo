@@ -41,10 +41,10 @@ namespace s9{
 		
 		VBOData v;
 		v.push_back(verts);
-		v.push_back(indices);
+		v.push_back(indices,true);
+		v.setNumIndices(indices.size());
 		v.push_back(texcoords);
 		v.push_back(colours);
-		v.compile();
 		
 		Primitive p(v);
 	
@@ -79,10 +79,10 @@ namespace s9{
 			
 		VBOData v;
 		v.push_back(verts);
-		v.push_back(indices);
+		v.push_back(indices,true);
 		v.push_back(texcoords);
 		v.push_back(colours);
-		v.compile();
+		v.setNumIndices(indices.size());
 		
 		Primitive p(v);
 		
@@ -110,9 +110,9 @@ namespace s9{
 			
 		VBOData v;
 		v.push_back(verts);
-		v.push_back(indices);
+		v.push_back(indices,true);
+		v.setNumIndices(indices.size());
 		v.push_back(colours);
-		v.compile();
 		
 		Primitive p(v);
 		

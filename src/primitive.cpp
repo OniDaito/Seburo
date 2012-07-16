@@ -62,7 +62,6 @@ void Primitive::rotate(glm::vec3 r){
  */
  
 void Primitive::compute() {
-
 	mObj->mTransMatrix = glm::translate(glm::mat4(1.0f), mObj->mPos);
 	mObj->mScaleMatrix = glm::scale(glm::mat4(1.0f), mObj->mScale);
 }
@@ -75,11 +74,18 @@ void Primitive::compute() {
 void Primitive::draw(GLuint type) {
 	mObj->mVBO.bind();
 	
+//	for (int i=0; i <  mObj->mVBO.getBuffer<GLuint>(2).size(); ++i)
+//	cout << mObj->mVBO.getBuffer<GLuint>(2) << endl;
+	
+	VBOBuffer<GLuint> p =  mObj->mVBO.getBuffer<GLuint>(2);
+
+	cout << &(p.mObj->vBuffer[0])<< endl;
+	
 	if (mObj->mVBO.getNumIndices() > 0)
 		glDrawElements(type, mObj->mVBO.getNumIndices(), GL_UNSIGNED_INT, 0);
 	else if (mObj->mVBO.getNumElements() > 0)
 		glDrawArrays(type, 0, mObj->mVBO.getNumElements());
-	
+
 	CXGLERROR
 	mObj->mVBO.unbind();
 	
@@ -162,13 +168,12 @@ void AssetGenerator::recursiveCreate (const struct aiScene *sc, const struct aiN
 		}
 	}
 	
-
-	VBOData v;
 	
+	VBOData v;
 	v.push_back(verts);
-	v.push_back(indices);
+	v.push_back(indices,true);
 	v.push_back(normals);
-
+	v.setNumIndices(indices.size());
 	p->setVBO(v);
 	
 	CXGLERROR

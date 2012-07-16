@@ -238,7 +238,6 @@ Primitive GLApp::generateTextured( WingedEdge &w){
 		vector<cv::Point2f> results;	
 		cv::projectPoints(tOPoints, in.R, in.T, in.M, in.D, results );
 	
-		
 	
 		// We need to mirror the co-ordinates here but only in the X plane
 		for (size_t j =0; j < results.size(); ++j){
@@ -265,20 +264,27 @@ void GLApp::display(GLFWwindow window){
 	int w,h;
 	glfwGetWindowSize(window, &w,&h);
 	glViewport(0,0,w,h);
-	
+	CXGLERROR
 	sCam.setRatio(static_cast<float_t>(w) / static_cast<float_t>(h));
 	sGripperCam.setRatio(static_cast<float_t>(w) / static_cast<float_t>(h));
-	
+	CXGLERROR
 	glClearBufferfv(GL_COLOR, 0, &glm::vec4(0.9f, 0.9f, 0.93f, 1.0f)[0]);
 	GLfloat depth = 1.0f;
 	glClearBufferfv(GL_DEPTH, 0, &depth );
 	
-	glm::mat4 mvp = getMatrix(sCam, sRefQuad);
+	CXGLERROR
 	
+	glm::mat4 mvp = getMatrix(sCam, sRefQuad);
+	CXGLERROR
 	sShaderQuad.bind();
+	CXGLERROR
 	glUniformMatrix4fv(sShaderQuad.location("uMVPMatrix"), 1, GL_FALSE, glm::value_ptr(mvp));
+	CXGLERROR
 	sRefQuad.draw();
+	
 	sShaderQuad.unbind();
+	
+	
 	
 	if (sModelTextured) drawLeedsMesh(sCam); else drawMesh(sCam);
 	drawGripper(sCam); 
@@ -330,8 +336,7 @@ void GLApp::display(GLFWwindow window){
 	
 	
 	// Draw Cameras
-	
-	
+
 	float_t step = static_cast<float_t>(w) / 8.0; // assume 8 cameras for now
 	float_t factor = static_cast<float_t>(w) / ( vCameras[0].getSize().x * 8.0);
 	float_t t =0 ;
@@ -550,22 +555,19 @@ void GLApp::parseXML() {
 		size_t f = fromStringS9<size_t> ( mSettings["leeds/cameras/fps"]);
 		
 		sCamQuad = makeQuad(w,h);
-
 		
 		XMLIterator i = mSettings.iterator("leeds/cameras/cam");
 		while (i){
 			
 			string dev = i["dev"];
-			
 			S9VidCam p;
 			p.open(dev,w,h,f);
 			vCameras.push_back(p);
-			
+
 			CVVidCam c(vCameras.back());
 			c.loadParameters("../../../data/Leeds/" + i["in"]);
-			
 			vCVCameras.push_back(c);
-					
+			CXGLERROR	
 			i.next();
 		}
 		
@@ -725,7 +727,6 @@ void GLApp::init() {
 		exit( EXIT_FAILURE );
 	}
 	
-	CXGLERROR
 	
 	TwInit(TW_OPENGL, NULL);
 	
@@ -737,12 +738,12 @@ void GLApp::init() {
 
 	sRefQuad = makeReferenceQuad(1.0,1.0);
 	sHUDQuad = makeReferenceQuad(400.0,300.0);
-
+	
 
 	// Move the Camera
 	sCam.move(glm::vec3(0,0,20));
 	resizeHUD(800,600);
-	
+		
 	// Load Basic Shader
 	sShaderQuad.load("../../../shaders/quad.vert", "../../../shaders/quad.frag");
 	sShaderTexQuad.load("../../../shaders/quad_texture.vert", "../../../shaders/quad_texture.frag");
@@ -772,9 +773,11 @@ void GLApp::init() {
 	glEnable(GL_TEXTURE_RECTANGLE);
 	glEnable(GL_DEPTH_TEST);
 	
-	parseXML();
+	//parseXML();
+	CXGLERROR
 	
 	addTweakBar();
+	
 	
 }
 

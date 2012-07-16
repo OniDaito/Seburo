@@ -26,10 +26,10 @@ bool S9VidCam::open(std::string dev, size_t w, size_t h, size_t fps) {
 #endif
 	
 	mObj->mW = w; mObj->mH = h; mObj->mFPS = fps; 
-	
+
 	// Initialise texture - using GL_TEXTURE_RECTANGLE
 	glGenTextures(1, &(mObj->mTexID));
-	glBindTexture(GL_TEXTURE_RECTANGLE, mObj->mTexID);               
+	glBindTexture(GL_TEXTURE_RECTANGLE, mObj->mTexID);              
 	glTexParameterf(GL_TEXTURE_RECTANGLE,GL_TEXTURE_MIN_FILTER,GL_LINEAR); 
 	glTexParameterf(GL_TEXTURE_RECTANGLE,GL_TEXTURE_MAG_FILTER,GL_LINEAR); 
 	glTexParameterf( GL_TEXTURE_RECTANGLE, GL_TEXTURE_WRAP_S, GL_REPEAT );
@@ -78,16 +78,14 @@ CVVidCam::CVVidCam(S9VidCam &cam){
 	mObj->mImage = Mat(size, CV_8UC3);
 	mObj->mImageRectified = Mat(size, CV_8UC3);
 	mObj->mResult = Mat(size,CV_8UC3);
-	
 	glGenTextures(1, &(mObj->mTexResultID));
-	glBindTexture(GL_TEXTURE_RECTANGLE, mObj->mTexResultID);               
+	glBindTexture(GL_TEXTURE_RECTANGLE, mObj->mTexResultID);
 	glTexParameterf(GL_TEXTURE_RECTANGLE,GL_TEXTURE_MIN_FILTER,GL_LINEAR); 
 	glTexParameterf(GL_TEXTURE_RECTANGLE,GL_TEXTURE_MAG_FILTER,GL_LINEAR); 
 	glTexParameterf( GL_TEXTURE_RECTANGLE, GL_TEXTURE_WRAP_S, GL_REPEAT );
 	glTexParameterf( GL_TEXTURE_RECTANGLE, GL_TEXTURE_WRAP_T, GL_REPEAT );
 	glTexImage2D(GL_TEXTURE_RECTANGLE, 0, 3, mObj->mCam.getSize().x,  mObj->mCam.getSize().y,
 		0, GL_RGB, GL_UNSIGNED_BYTE, (unsigned char *) IplImage(mObj->mResult).imageData);
-
 	glGenTextures(1, &(mObj->mRectifiedTexID));
 	glBindTexture(GL_TEXTURE_RECTANGLE, mObj->mRectifiedTexID);               
 	glTexParameterf(GL_TEXTURE_RECTANGLE,GL_TEXTURE_MIN_FILTER,GL_LINEAR); 
@@ -96,11 +94,12 @@ CVVidCam::CVVidCam(S9VidCam &cam){
 	glTexParameterf( GL_TEXTURE_RECTANGLE, GL_TEXTURE_WRAP_T, GL_REPEAT );
 	glTexImage2D(GL_TEXTURE_RECTANGLE, 0, 3,  mObj->mCam.getSize().x,  mObj->mCam.getSize().y,
 	 0, GL_RGB, GL_UNSIGNED_BYTE, (unsigned char *) IplImage(mObj->mImageRectified).imageData);
-	 
+
 	mObj->mPlaneNormal = Mat(Size(1,3), CV_64FC1);
 	mObj->mPlaneNormal.at<double_t>(0,0) = 0.0;
 	mObj->mPlaneNormal.at<double_t>(1,0) = 0.0;	
 	mObj->mPlaneNormal.at<double_t>(2,0) = 1.0;
+	
 
 }
 
