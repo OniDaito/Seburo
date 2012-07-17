@@ -18,6 +18,7 @@
 #include "utils.hpp"
 #include "glutils.hpp"
 #include "video.hpp"
-#include "wingedge.hpp"
+//#include "wingedge.hpp"
 #include "s9xml.hpp"
+#include "s9globject.hpp"
 #endif

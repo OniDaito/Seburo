@@ -13,7 +13,6 @@ FILE(REMOVE_RECURSE
   "CMakeFiles/s9gear.dir/src/shapes.cpp.o"
   "CMakeFiles/s9gear.dir/src/camera.cpp.o"
   "CMakeFiles/s9gear.dir/src/video.cpp.o"
-  "CMakeFiles/s9gear.dir/src/wingedge.cpp.o"
   "libs9gear.pdb"
   "libs9gear.a"
 )

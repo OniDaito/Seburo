@@ -20,7 +20,7 @@ set(SOURCE_FILES
 	src/shapes.cpp
 	src/camera.cpp
 	src/video.cpp
-	src/wingedge.cpp
+	#src/wingedge.cpp
 	#src/pclmesh.cpp
 )
 

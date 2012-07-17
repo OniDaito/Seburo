@@ -15,94 +15,85 @@
 #include <assimp/postprocess.h>
 
 #include "common.hpp"
-#include "vbo.hpp"
+#include "geom.hpp"
 
 /*
- * Struct for primitive objects with their own co-ordinates
- * \todo add functions for recursive nature of primitives - primtives can contain groups of primitives
- * \todo add static colour function that ensures unique colours
- * \todo copy, copy constructor and == operators
+ * Primitive represents a *thing* that has a position in space and time (though not a size)
+ * it also has a colour for picking and several subclasses
+ * SharedObj is not needed here as the parameters can be copied with no real loss
  */
  
 namespace s9 {
 
+	
 	class Primitive;
 	
 	typedef boost::shared_ptr<Primitive> PrimPtr;
-		
-	class Primitive {
-	public:
-	
-		Primitive();
-		Primitive(VBOData v);
-		virtual void make();
-		
-		virtual operator int() const { return mObj.use_count() > 0; };
 
-		virtual ~Primitive(); 
-		
-		void move(glm::vec3 p) { mObj->mPos += p; compute(); };
-		void rotate(glm::vec3 r);
-		glm::mat4 getMatrix();
-		glm::mat4 getLocalMatrix() { return mObj->mTransMatrix * mObj->mRotMatrix * mObj->mScaleMatrix; };
-		
-		glm::mat4 getTransMatrix() { return mObj->mTransMatrix; };
-		glm::mat4 getRotMatrix() { return mObj->mRotMatrix; };
-		glm::mat4 getScaleMatrix() { return mObj->mScaleMatrix; };
-		
-		void setLook(glm::vec3 v) {mObj->mLook = v; glm::normalize(v); compute(); };
-		void setPos(glm::vec3 v) {mObj->mPos = v;compute(); };
-		void setScale(glm::vec3 v) {mObj->mScale = v; compute(); };
-		void setColour(glm::vec4 v) {mObj->mColour = v; };
-		
-		int addChild(PrimPtr p) { mObj->vChildren.push_back(p); p->mObj->pParent = PrimPtr(this); return mObj->vChildren.size()-1; };
-		void removeChild(PrimPtr p){};
-		
-		void compute();
-		void draw(GLuint type = GL_TRIANGLES);
-	
-		glm::vec3 getPos() { return mObj->mPos;};
-		glm::vec3 getLook() { return mObj->mLook;};
-		glm::vec3 getScale() { return mObj->mScale;};
-		glm::vec3 getUp() { return mObj->mUp;};
-		glm::vec4 getColour() { return mObj->mColour;};
-				
-		void bind() { mObj->mVBO.bind(); };
-		void unbind() {mObj->mVBO.unbind(); };
-		GLuint getNumElements() { return mObj->mVBO.getNumElements(); };
-		
-		PrimPtr getParent(){return mObj->pParent; };
-		
-		VBOData getVBO() {return mObj->mVBO;};
-		void setVBO(VBOData b) {mObj->mVBO = b;};
+	class Primitive  {
 		
 	protected:
 	
 		glm::mat4 _getMatrix(PrimPtr p, glm::mat4 m);
-		
-		class SharedObj {
-		public:
-			SharedObj();
-			
-			std::vector<PrimPtr> vChildren;
-			PrimPtr pParent;
-			
-			VBOData mVBO;
-			glm::vec3 mPos;
-			glm::vec3 mUp;
-			glm::vec3 mLook;
-			glm::vec3 mScale;
-			
-			glm::vec4 mColour;
-		
-			glm::mat4 mTransMatrix;
-			glm::mat4 mRotMatrix;
-			glm::mat4 mScaleMatrix;
-		};
-		
 	
-		boost::shared_ptr<SharedObj> mObj; 
+		PrimPtr pParent;
+		std::vector<PrimPtr> vChildren;
+		glm::vec3 mPos;
+		glm::vec3 mUp;
+		glm::vec3 mLook;
+		glm::vec3 mScale;
+		
+		glm::vec4 mColour; // for picking
+	
+		glm::mat4 mTransMatrix;
+		glm::mat4 mRotMatrix;
+		glm::mat4 mScaleMatrix;
 
+		
+	public:
+		Primitive() {
+			// Initial state of the world
+			mPos = glm::vec3(0,0,0);
+			mLook = glm::vec3(0,0,-1);
+			mUp = glm::vec3(0,1,0);
+			
+			mRotMatrix = glm::mat4(1.0f);
+			mTransMatrix = glm::mat4(1.0f);
+			mScaleMatrix = glm::mat4(1.0f);
+		}
+
+	//	virtual operator int() const { return mObj.use_count() > 0; };
+
+		virtual ~Primitive(); 
+		
+		void move(glm::vec3 p) { mPos += p; compute(); };
+		void rotate(glm::vec3 r);
+		glm::mat4 getMatrix();
+		glm::mat4 getLocalMatrix() { return mTransMatrix * mRotMatrix * mScaleMatrix; };
+		
+		glm::mat4 getTransMatrix() { return mTransMatrix; };
+		glm::mat4 getRotMatrix() { return mRotMatrix; };
+		glm::mat4 getScaleMatrix() { return mScaleMatrix; };
+		
+		void setLook(glm::vec3 v) {mLook = v; glm::normalize(v); compute(); };
+		void setPos(glm::vec3 v) {mPos = v;compute(); };
+		void setScale(glm::vec3 v) {mScale = v; compute(); };
+		void setColour(glm::vec4 v) {mColour = v; };
+		
+		int addChild(PrimPtr p) { vChildren.push_back(p); p->pParent = PrimPtr(this); return vChildren.size()-1; };
+		void removeChild(PrimPtr p){};
+		
+		void compute();
+		
+		glm::vec3 getPos() { return mPos;};
+		glm::vec3 getLook() { return mLook;};
+		glm::vec3 getScale() { return mScale;};
+		glm::vec3 getUp() { return mUp;};
+		glm::vec4 getColour() { return mColour;};
+				
+	
+		PrimPtr getParent(){return pParent; };
+			
 	};
 	
 

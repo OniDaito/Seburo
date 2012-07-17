@@ -473,30 +473,6 @@ src/video.cpp.s:
 	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/video.cpp.s
 .PHONY : src/video.cpp.s
 
-src/wingedge.o: src/wingedge.cpp.o
-.PHONY : src/wingedge.o
-
-# target to build an object file
-src/wingedge.cpp.o:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/wingedge.cpp.o
-.PHONY : src/wingedge.cpp.o
-
-src/wingedge.i: src/wingedge.cpp.i
-.PHONY : src/wingedge.i
-
-# target to preprocess a source file
-src/wingedge.cpp.i:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/wingedge.cpp.i
-.PHONY : src/wingedge.cpp.i
-
-src/wingedge.s: src/wingedge.cpp.s
-.PHONY : src/wingedge.s
-
-# target to generate assembly for a file
-src/wingedge.cpp.s:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/wingedge.cpp.s
-.PHONY : src/wingedge.cpp.s
-
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -550,9 +526,6 @@ help:
 	@echo "... src/video.o"
 	@echo "... src/video.i"
 	@echo "... src/video.s"
-	@echo "... src/wingedge.o"
-	@echo "... src/wingedge.i"
-	@echo "... src/wingedge.s"
 .PHONY : help
 
 

@@ -14,19 +14,18 @@ using namespace boost;
 using namespace boost::assign;
 using namespace s9;
 
-
-
 /*
  * Test App Variables - global for now
  */
  
-FBO sFBO;
 OrbitCamera sCam;
-ScreenCamera sHUDCam;
+GeometryFullFloat sRefQuadGeom;
 Primitive sRefQuad;
-Primitive sHUDQuad;
+
+S9GLObject<GeometryFullFloat> s9GL;
+
 Shader sShaderQuad;
-Shader sShaderTexQuad;
+
 /*
  * GLApp Static variables
  */
@@ -67,35 +66,12 @@ void GLApp::display(GLFWwindow window){
 	glm::mat4 mvp = getMatrix(sCam, sRefQuad);
 	
 	sShaderQuad.bind();
+	
 	glUniformMatrix4fv(sShaderQuad.location("uMVPMatrix"), 1, GL_FALSE, glm::value_ptr(mvp));
-	sRefQuad.draw();
+
+	s9GL.draw();
+
 	sShaderQuad.unbind();
-	
-	// Render to FBO
-	
-	sFBO.bind();
-	glClearBufferfv(GL_COLOR, 0, &glm::vec4(0.8f, 0.8f, 0.83f, 1.0f)[0]);
-	glClearBufferfv(GL_DEPTH, 0, &depth );
-	
-	sShaderQuad.bind();
-	glUniformMatrix4fv(sShaderQuad.location("uMVPMatrix"), 1, GL_FALSE, glm::value_ptr(mvp));
-	sRefQuad.draw();
-	sShaderQuad.unbind();
-	sFBO.unbind();
-	
-	// Draw FBO
-	glActiveTexture(GL_TEXTURE0);
-	mvp = sHUDCam.getMatrix();
-	sShaderTexQuad.bind();
-	sFBO.bindColour();
-	glUniformMatrix4fv(sShaderTexQuad.location("uMVPMatrix"), 1, GL_FALSE, glm::value_ptr(mvp));
-	sHUDQuad.draw();
-	sFBO.unbindColour();
-	sShaderTexQuad.unbind();
-	
-#ifdef DEBUG
-	cout << "Final Matrix: " << glm::to_string(mvp) << endl;
-#endif	
 	
 	CXGLERROR
 }
@@ -148,7 +124,6 @@ void GLApp::mainLoop() {
 				mRunning = GL_FALSE;
 		}
     }
-    
 }
 
 /*
@@ -250,11 +225,6 @@ void GLApp::loadFile() {
 	dialog.add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
 	dialog.add_button("Select", Gtk::RESPONSE_OK);
 	
-	/*Glib::RefPtr<Gtk::FileFilter> filter_text = Gtk::FileFilter::create();
-	filter_text->set_name("PCD Files");
-	filter_text->add_mime_type("text/plain");
-	dialog.add_filter(filter_text);*/
-
 	int result = dialog.run();
 
 	//Handle the response:
@@ -287,29 +257,6 @@ void GLApp::monitorCallback( GLFWmonitor m, int p){
  */
  
 void GLApp::reshape(GLFWwindow window, int w, int h ) {
-	sFBO.resize(w,h);
-	resizeHUD(w,h);
-}
-
-void GLApp::resizeHUD(int w, int h){
-	sHUDCam.setDim(w,h);
-	
-	// Resize the hud quad and also resize the texture coordinates
-	if (sHUDQuad) {
-		sHUDQuad.bind();
-		
-		VBOBuffer<GLfloat> tex = sHUDQuad.getVBO().getBuffer<GLfloat>(3);
-		
-		tex.set(1,static_cast<float_t>(h));
-		tex.set(2,static_cast<float_t>(w));
-		tex.set(3,static_cast<float_t>(h));
-		tex.set(4,static_cast<float_t>(w));
-		
-		tex.allocate();
-		
-		sHUDQuad.unbind();
-	}
-	CXGLERROR
 
 }
 
@@ -370,22 +317,15 @@ void GLApp::init() {
 	
 	// Create basic references
 
-	sRefQuad = makeReferenceQuad(1.0,1.0);
-	sHUDQuad = makeReferenceQuad(400.0,300.0);
-
+	sRefQuadGeom = makeTriangle(1.0,1.0);
 
 	// Move the Camera
 	sCam.move(glm::vec3(0,0,20));
-	resizeHUD(800,600);
-	
+
 	// Load Basic Shader
 	sShaderQuad.load("../../../shaders/quad.vert", "../../../shaders/quad.frag");
-	sShaderTexQuad.load("../../../shaders/quad_texture.vert", "../../../shaders/quad_texture.frag");
 	
-	// Setup FBO
-	
-	sFBO.setup(800,600);
-	//sFBO.printFramebufferInfo();
+	s9GL = S9GLObject<GeometryFullFloat>(sRefQuadGeom,sRefQuad);
 	
 	CXGLERROR
 	

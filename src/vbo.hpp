@@ -86,7 +86,6 @@ namespace s9 {
 				glBindBuffer(GL_ARRAY_BUFFER, mObj->mID);
 				glVertexAttribPointer(pos, mObj->mW, GL_FLOAT, GL_FALSE,0, (GLubyte*) NULL);
 			}
-		
 		};
 
 		inline GLuint getID() {
@@ -206,9 +205,9 @@ namespace s9 {
 			GLint p = mObj->vVBO.size()-1;
 			glGenBuffers(1, &(mObj->vVBO[p]) );
 			a.setID(mObj->vVBO[p]);
-					
-			glBindVertexArray(mObj->mVAO);
 			a.allocate(indices);
+			
+			glBindVertexArray(mObj->mVAO);
 			a.attach(p,indices);
 			
 			mObj->mNumBufs =  mObj->vBuffers.size();

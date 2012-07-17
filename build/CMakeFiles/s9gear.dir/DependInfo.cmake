@@ -22,7 +22,6 @@ SET(CMAKE_DEPENDS_CHECK_CXX
   "/home/oni/Projects/S9Gear/src/tinyxmlparser.cpp" "/home/oni/Projects/S9Gear/build/CMakeFiles/s9gear.dir/src/tinyxmlparser.cpp.o"
   "/home/oni/Projects/S9Gear/src/uvc_camera.cpp" "/home/oni/Projects/S9Gear/build/CMakeFiles/s9gear.dir/src/uvc_camera.cpp.o"
   "/home/oni/Projects/S9Gear/src/video.cpp" "/home/oni/Projects/S9Gear/build/CMakeFiles/s9gear.dir/src/video.cpp.o"
-  "/home/oni/Projects/S9Gear/src/wingedge.cpp" "/home/oni/Projects/S9Gear/build/CMakeFiles/s9gear.dir/src/wingedge.cpp.o"
   )
 SET(CMAKE_CXX_COMPILER_ID "GNU")
 
