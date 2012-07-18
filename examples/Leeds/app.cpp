@@ -51,6 +51,8 @@ std::vector<S9VidCam> GLApp::vCameras;
 std::vector<CVVidCam> GLApp::vCVCameras;
 WingedEdge GLApp::mWE;
 TwBar* GLApp::pBar; 
+std::vector< std::vector<float_t> > GLApp::vExtra;
+		
 
 /*
  * Create our Windows and contexts
@@ -119,6 +121,18 @@ void GLApp::drawLeedsMesh(Camera &c) {
 		for (int i=0; i < vCVCameras.size(); i++){
 			glActiveTexture(GL_TEXTURE0 + i);
 			vCVCameras[i].bind();
+			
+			std::stringstream Num;
+			std::string str;
+			Num << i;
+			str = "uCam" + Num.str();
+			
+			cv::Mat n = vCVCameras[i].getNormal();
+			glm::vec3 nn (n.at<double_t>(0,0),n.at<double_t>(1,0),n.at<double_t>(2,0));
+			nn  = glm::normalize(nn);
+			
+			glUniform3f(sShaderLeedsMesh.location(str.c_str()),nn.x,nn.y,nn.z);
+			
 		}
 		
 		glUniform1f(sShaderLeedsMesh.location("uShininess"), 20.0f);
@@ -190,103 +204,72 @@ Primitive GLApp::generateTextured( WingedEdge &w){
 	vector<glm::vec3> normals;
 	Primitive p = mWE.flatten();
 	
-	for (size_t i =0; i < vCVCameras.size(); i++){
-		CVVidCam cam = vCVCameras[i];
-		cv::Mat n = cam.getNormal();
-		glm::vec3 nn (n.at<double_t>(0,0),n.at<double_t>(1,0),n.at<double_t>(2,0));
-		nn  = glm::normalize(nn);
-		normals.push_back(nn);
+	// An extra 7 buffers please
+	GLuint *vbo = new GLuint[7];
+	glGenBuffers(7,vbo);
+	for (int i =0; i < 7; i ++){
+		vector<float_t> b;
+		vExtra.push_back( b );
 	}
-	
-	map<WEP_Face, GLuint> temptex;
-	
-	for (size_t i = 0; i < w.getFaces().size(); ++i) {
-		
-		shared_ptr<WE_Face> sf = w.getFaces()[i];
-		
-		// Generate a face normal
-		size_t i0 = sf->edge->v0->idc;
-		size_t i1 = sf->edge->next->v0->idc;
-		size_t i2 = sf->edge->next->next->v0->idc;
-		
-		glm::vec3 v0 (w.getVBO().vVertices[i0], w.getVBO().vVertices[i0+1], w.getVBO().vVertices[i0+2]);
-		glm::vec3 v1 (w.getVBO().vVertices[i1], w.getVBO().vVertices[i1+1], w.getVBO().vVertices[i1+2]);
-		glm::vec3 v2 (w.getVBO().vVertices[i2], w.getVBO().vVertices[i2+1], w.getVBO().vVertices[i2+2]);
-		
-		glm::vec3 t0 = v1 - v0;
-		glm::vec3 t1 = v2 - v0;
-		glm::vec3 n = glm::cross(t0,t1);
-				
-		float range = 3.0;
-		GLuint idx = 0;
-		for (GLuint j=0; j < normals.size(); j++){
-			
-			glm::vec3 nn = normals[j];
-						
-			float angle =  acosf( glm::dot(n,nn)) ;
-			if (fabs(angle) < range){
-				idx = j;
-				range = fabs(angle);
-			}
-		}
-		temptex.insert(pair<WEP_Face, GLuint>(sf,idx) );
-	}
-	
-	// Now we have texids - check winged edge for these we need to change
-	// Assume a maximum choice of 8 textures
-	
-	/*for (size_t i = 0; i < w.getFaces().size(); ++i) {	
-		shared_ptr<WE_Face> sf = w.getFaces()[i];
-		
-		int counts[] = {0,0,0,0,0,0,0,0};
-		// Nasty bit of code! :S
-		if (sf->edge->sym != boost::shared_ptr<WE_Edge>()) counts[temptex[sf->edge->sym->face] ]+=1;
-		if (sf->edge->next->sym != boost::shared_ptr<WE_Edge>()) counts[temptex[sf->edge->next->sym->face]]+=1;
-		if (sf->edge->next->next->sym != boost::shared_ptr<WE_Edge>()) counts[temptex[sf->edge->next->next->sym->face]]+=1;
-		
-		int tc = 0;
-		for (size_t j=0; j < 8; j++){
-			if (counts[j] > tc){
-				temptex[sf] = j;
-				tc = counts[j];
-			}
-		}
-	}
-	*/
-	// now generate texture coordinate and set the IDs
-	
+
 	p.bind();
-	/*for (size_t i = 0; i < w.getFaces().size(); ++i) {	
-		shared_ptr<WE_Face> sf = w.getFaces()[i];
-		for (size_t j =0; j < 6; ++j) {
-			p.getVBO().vTexIDs[i*6 + j] = temptex[sf];
-		}
-	}*/
-		
-	for (size_t i =0; i < p.getVBO().vVertices.size() / 3; ++i){
-		
-		glm::vec3 vert( p.getVBO().vVertices[i*3], 
-					p.getVBO().vVertices[i*3+1],
-					p.getVBO().vVertices[i*3+2]);
-		
-		vector<cv::Point3f> tOPoints;
-		tOPoints.push_back(cv::Point3f(vert.x, vert.y, vert.z));
-		vector<cv::Point2f> results;
-				
-		CVVidCam cam = vCVCameras[sModelTextured.getVBO().vTexIDs[i]];
-		CameraParameters in = cam.getParams();
-		cv::projectPoints(tOPoints, in.R, in.T, in.M, in.D, results );
 	
-		// We need to mirror the co-ordinates here but only in the X plane
+	for (size_t j=0; j < vCVCameras.size(); j++){
 		
-		p.getVBO().vTexCoords[i*2] = results[0].x;
-		p.getVBO().vTexCoords[i*2] = results[0].y;
+		vector<cv::Point2f> results;
+		CVVidCam cam = vCVCameras[j];
+		CameraParameters in = cam.getParams();
+		vector<cv::Point3f> tOPoints;
+		
+		for (size_t i =0; i < p.getVBO().vVertices.size() / 3; ++i){
+			if (j != 0) {
+				vExtra[j-1].push_back(0.0);
+				vExtra[j-1].push_back(0.0);
+			}
+			
+			glm::vec3 vert( p.getVBO().vVertices[i*3], 
+						p.getVBO().vVertices[i*3+1],
+						p.getVBO().vVertices[i*3+2]);
+			
+			
+			tOPoints.push_back(cv::Point3f(vert.x, vert.y, vert.z));
+			
+			// We need to mirror the co-ordinates here but only in the X plane
+			
+		}
+		cv::projectPoints(tOPoints, in.R, in.T, in.M, in.D, results );
+		
+		for (size_t i =0; i < p.getVBO().vVertices.size() / 3; ++i){
+			if (j == 0){
+				p.getVBO().vTexCoords[i*2] = cam.getSize().x - results[i].x;
+				p.getVBO().vTexCoords[i*2+1] = results[i].y;
+			}
+			else{
+				vExtra[j-1][i*2] = cam.getSize().x - results[i].x;
+				vExtra[j-1][i*2+1] = results[i].y;
+			}
+		}
 	}
 	
-	p.getVBO().allocateTexIDs();
-	//p.getVBO().allocateTexCoords();
+	p.getVBO().allocateTexCoords();
+	
+	for (int i =0; i < 7; i ++){
+		glBindBuffer(GL_ARRAY_BUFFER, vbo[i]);
+		glBufferData(GL_ARRAY_BUFFER, vExtra[i].size() * sizeof(GLfloat), &(vExtra[i][0]), GL_DYNAMIC_DRAW);
+		
+		glEnableVertexAttribArray(p.getVBO().mNumBufs + i);
+		glBindBuffer(GL_ARRAY_BUFFER, vbo[i]);
+		
+		glVertexAttribPointer(p.getVBO().mNumBufs + i,2,GL_FLOAT,GL_FALSE,0, (GLubyte*) NULL);
+	
+	}
+	
+
 	
 	p.unbind();
+	
+	delete vbo;
+	
 	return p;
 }
 
@@ -363,7 +346,6 @@ void GLApp::display(GLFWwindow window){
 	
 	
 	// Draw Cameras
-	
 	
 	float_t step = static_cast<float_t>(w) / 8.0; // assume 8 cameras for now
 	float_t factor = static_cast<float_t>(w) / ( vCameras[0].getSize().x * 8.0);

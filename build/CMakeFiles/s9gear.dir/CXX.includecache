@@ -714,7 +714,7 @@ cstdarg
 cstdio
 -
 
-/home/oni/Projects/S9Gear/src/common.hpp
+/home/oni/Projects/S9GearOld/src/common.hpp
 iostream
 -
 string
@@ -778,13 +778,13 @@ GL/glew.h
 GL/glut.h
 -
 glutils.hpp
-/home/oni/Projects/S9Gear/src/glutils.hpp
+/home/oni/Projects/S9GearOld/src/glutils.hpp
 
-/home/oni/Projects/S9Gear/src/glutils.hpp
+/home/oni/Projects/S9GearOld/src/glutils.hpp
 common.hpp
-/home/oni/Projects/S9Gear/src/common.hpp
+/home/oni/Projects/S9GearOld/src/common.hpp
 
-/home/oni/Projects/S9Gear/src/primitive.hpp
+/home/oni/Projects/S9GearOld/src/primitive.hpp
 assimp/cimport.h
 -
 assimp/scene.h
@@ -792,13 +792,13 @@ assimp/scene.h
 assimp/postprocess.h
 -
 common.hpp
-/home/oni/Projects/S9Gear/src/common.hpp
+/home/oni/Projects/S9GearOld/src/common.hpp
 vbo.hpp
-/home/oni/Projects/S9Gear/src/vbo.hpp
+/home/oni/Projects/S9GearOld/src/vbo.hpp
 
-/home/oni/Projects/S9Gear/src/vbo.hpp
+/home/oni/Projects/S9GearOld/src/vbo.hpp
 common.hpp
-/home/oni/Projects/S9Gear/src/common.hpp
+/home/oni/Projects/S9GearOld/src/common.hpp
 glm/glm.hpp
 -
 glm/gtc/matrix_transform.hpp
@@ -806,17 +806,17 @@ glm/gtc/matrix_transform.hpp
 glm/gtc/type_ptr.hpp
 -
 
-/home/oni/Projects/S9Gear/src/wingedge.cpp
+/home/oni/Projects/S9GearOld/src/wingedge.cpp
 wingedge.hpp
-/home/oni/Projects/S9Gear/src/wingedge.hpp
+/home/oni/Projects/S9GearOld/src/wingedge.hpp
 
-/home/oni/Projects/S9Gear/src/wingedge.hpp
+/home/oni/Projects/S9GearOld/src/wingedge.hpp
 common.hpp
-/home/oni/Projects/S9Gear/src/common.hpp
+/home/oni/Projects/S9GearOld/src/common.hpp
 primitive.hpp
-/home/oni/Projects/S9Gear/src/primitive.hpp
+/home/oni/Projects/S9GearOld/src/primitive.hpp
 vbo.hpp
-/home/oni/Projects/S9Gear/src/vbo.hpp
+/home/oni/Projects/S9GearOld/src/vbo.hpp
 
 /usr/local/include/GL/freeglut_std.h
 windows.h

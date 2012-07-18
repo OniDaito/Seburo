@@ -3,11 +3,27 @@
 in vec4 vLightPos;
 in vec4 vVertexNormal;
 in vec4 vVertexPosition;
-in vec2 vTexCoord;
-flat in uint vTexID;
+in vec2 vTexCoord0;
+in vec2 vTexCoord1;
+in vec2 vTexCoord2;
+in vec2 vTexCoord3;
+in vec2 vTexCoord4;
+in vec2 vTexCoord5;
+in vec2 vTexCoord6;
+in vec2 vTexCoord7;
 
 uniform sampler2DRect uBaseTex;
 uniform float uShininess;
+uniform bool uShowPos; 
+
+uniform vec3 uCam0;
+uniform vec3 uCam1;
+uniform vec3 uCam2;
+uniform vec3 uCam3;
+uniform vec3 uCam4;
+uniform vec3 uCam5;
+uniform vec3 uCam6;
+uniform vec3 uCam7;
 
 ///\todo pass in face normals so we can work out the best texture to use based in the shader
 
@@ -31,31 +47,77 @@ void main() {
 	vec4 mat_ambient = vec4(1.0, 1.0, 1.0, 1.0);
 	vec4 mat_diffuse = vec4(0.0, 0.0, 1.0, 0.0);
 	
-	///\todo fix this because it sucks
-	if (vTexID == 0){
-		mat_diffuse = texture(mCamTex0,vTexCoord);
+	float angle = abs(dot(uCam0,n));
+	float max  = angle;
+	if (!uShowPos)
+		mat_diffuse = texture(mCamTex0,vTexCoord0);
+	else
+		mat_diffuse = vec4(0.25,0.0,0.0,1.0);
+
+
+	angle = abs(dot(uCam1,n));
+	if (angle < max){
+		max = angle;
+		if (!uShowPos)
+			mat_diffuse = texture(mCamTex1,vTexCoord1);
+		else
+			mat_diffuse = vec4(0.75,0.0,0.0,1.0);
 	}
-	else if (vTexID == 1){
-		mat_diffuse = texture(mCamTex1,vTexCoord);
+	
+	angle = abs(dot(uCam2,n));
+	if (angle < max){
+		max = angle;
+		if (!uShowPos)
+			mat_diffuse = texture(mCamTex2,vTexCoord2);
+		else
+			mat_diffuse = vec4(0.25,0.25,0.0,1.0);
 	}
-	else if (vTexID == 2){
-		mat_diffuse = texture(mCamTex2,vTexCoord);
+		
+	angle = abs(dot(uCam3,n));
+	if (angle < max){
+		max = angle;
+		if (!uShowPos)
+			mat_diffuse = texture(mCamTex3,vTexCoord3);
+		else
+			mat_diffuse = vec4(0.25,0.25,0.25,1.0);
 	}
-	else if (vTexID == 3){
-		mat_diffuse = texture(mCamTex3,vTexCoord);
+	
+	angle = abs(dot(uCam4,n));
+	if (angle < max){
+		max = angle;
+		if (!uShowPos)
+			mat_diffuse = texture(mCamTex4,vTexCoord4);
+		else
+			mat_diffuse = vec4(0.5,0.75,0.0,1.0);
 	}
-	else if (vTexID == 4){
-		mat_diffuse = texture(mCamTex4,vTexCoord);
+	
+	angle = abs(dot(uCam5,n));
+	if (angle < max){
+		max = angle;
+		if (!uShowPos)
+			mat_diffuse = texture(mCamTex5,vTexCoord5);
+		else
+			mat_diffuse = vec4(0.0,0.0,0.75,1.0);
 	}
-	else if (vTexID == 5){
-		mat_diffuse = texture(mCamTex5,vTexCoord);
+	
+	angle = abs(dot(uCam6,n));
+	if (angle < max){
+		max = angle;
+		if (!uShowPos)
+			mat_diffuse = texture(mCamTex6,vTexCoord6);
+		else
+			mat_diffuse = vec4(0.0,0.75,0.0,1.0);
 	}
-	else if (vTexID == 6){
-		mat_diffuse = texture(mCamTex6,vTexCoord);
+	
+	angle = abs(dot(uCam7,n));
+	if (angle < max){
+		max = angle;
+		if (!uShowPos)
+			mat_diffuse = texture(mCamTex7,vTexCoord7);
+		else
+			mat_diffuse = vec4(0.75,0.75,0.75,1.0);
 	}
-	else if (vTexID == 7){
-		mat_diffuse = texture(mCamTex7,vTexCoord);
-	}
+	
 	
 	if (length(mat_diffuse) == 0)
 		mat_diffuse = vec4(1.0, 0.0, 1.0, 1.0);

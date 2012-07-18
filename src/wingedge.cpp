@@ -183,7 +183,7 @@ Primitive WingedEdge::flatten() {
 	}
 			
 	// Finally, compile the VBO
-	p.getVBO().compile(VBO_VERT | VBO_TEXC | VBO_NORM | VBO_TEXI);
+	p.getVBO().compile(VBO_VERT | VBO_TEXC | VBO_NORM );
 	
 	return p;
 }

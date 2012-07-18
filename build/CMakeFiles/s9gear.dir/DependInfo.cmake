@@ -5,26 +5,26 @@ SET(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 SET(CMAKE_DEPENDS_CHECK_C
-  "/home/oni/Projects/S9Gear/src/colorspaces.c" "/home/oni/Projects/S9Gear/build/CMakeFiles/s9gear.dir/src/colorspaces.c.o"
-  "/home/oni/Projects/S9Gear/src/jpeg.c" "/home/oni/Projects/S9Gear/build/CMakeFiles/s9gear.dir/src/jpeg.c.o"
+  "/home/oni/Projects/S9GearOld/src/colorspaces.c" "/home/oni/Projects/S9GearOld/build/CMakeFiles/s9gear.dir/src/colorspaces.c.o"
+  "/home/oni/Projects/S9GearOld/src/jpeg.c" "/home/oni/Projects/S9GearOld/build/CMakeFiles/s9gear.dir/src/jpeg.c.o"
   )
 SET(CMAKE_C_COMPILER_ID "GNU")
 SET(CMAKE_DEPENDS_CHECK_CXX
-  "/home/oni/Projects/S9Gear/src/camera.cpp" "/home/oni/Projects/S9Gear/build/CMakeFiles/s9gear.dir/src/camera.cpp.o"
-  "/home/oni/Projects/S9Gear/src/fbo.cpp" "/home/oni/Projects/S9Gear/build/CMakeFiles/s9gear.dir/src/fbo.cpp.o"
-  "/home/oni/Projects/S9Gear/src/pclmesh.cpp" "/home/oni/Projects/S9Gear/build/CMakeFiles/s9gear.dir/src/pclmesh.cpp.o"
-  "/home/oni/Projects/S9Gear/src/primitive.cpp" "/home/oni/Projects/S9Gear/build/CMakeFiles/s9gear.dir/src/primitive.cpp.o"
-  "/home/oni/Projects/S9Gear/src/s9xml.cpp" "/home/oni/Projects/S9Gear/build/CMakeFiles/s9gear.dir/src/s9xml.cpp.o"
-  "/home/oni/Projects/S9Gear/src/shader.cpp" "/home/oni/Projects/S9Gear/build/CMakeFiles/s9gear.dir/src/shader.cpp.o"
-  "/home/oni/Projects/S9Gear/src/shapes.cpp" "/home/oni/Projects/S9Gear/build/CMakeFiles/s9gear.dir/src/shapes.cpp.o"
-  "/home/oni/Projects/S9Gear/src/tinystr.cpp" "/home/oni/Projects/S9Gear/build/CMakeFiles/s9gear.dir/src/tinystr.cpp.o"
-  "/home/oni/Projects/S9Gear/src/tinyxml.cpp" "/home/oni/Projects/S9Gear/build/CMakeFiles/s9gear.dir/src/tinyxml.cpp.o"
-  "/home/oni/Projects/S9Gear/src/tinyxmlerror.cpp" "/home/oni/Projects/S9Gear/build/CMakeFiles/s9gear.dir/src/tinyxmlerror.cpp.o"
-  "/home/oni/Projects/S9Gear/src/tinyxmlparser.cpp" "/home/oni/Projects/S9Gear/build/CMakeFiles/s9gear.dir/src/tinyxmlparser.cpp.o"
-  "/home/oni/Projects/S9Gear/src/uvc_camera.cpp" "/home/oni/Projects/S9Gear/build/CMakeFiles/s9gear.dir/src/uvc_camera.cpp.o"
-  "/home/oni/Projects/S9Gear/src/vbo.cpp" "/home/oni/Projects/S9Gear/build/CMakeFiles/s9gear.dir/src/vbo.cpp.o"
-  "/home/oni/Projects/S9Gear/src/video.cpp" "/home/oni/Projects/S9Gear/build/CMakeFiles/s9gear.dir/src/video.cpp.o"
-  "/home/oni/Projects/S9Gear/src/wingedge.cpp" "/home/oni/Projects/S9Gear/build/CMakeFiles/s9gear.dir/src/wingedge.cpp.o"
+  "/home/oni/Projects/S9GearOld/src/camera.cpp" "/home/oni/Projects/S9GearOld/build/CMakeFiles/s9gear.dir/src/camera.cpp.o"
+  "/home/oni/Projects/S9GearOld/src/fbo.cpp" "/home/oni/Projects/S9GearOld/build/CMakeFiles/s9gear.dir/src/fbo.cpp.o"
+  "/home/oni/Projects/S9GearOld/src/pclmesh.cpp" "/home/oni/Projects/S9GearOld/build/CMakeFiles/s9gear.dir/src/pclmesh.cpp.o"
+  "/home/oni/Projects/S9GearOld/src/primitive.cpp" "/home/oni/Projects/S9GearOld/build/CMakeFiles/s9gear.dir/src/primitive.cpp.o"
+  "/home/oni/Projects/S9GearOld/src/s9xml.cpp" "/home/oni/Projects/S9GearOld/build/CMakeFiles/s9gear.dir/src/s9xml.cpp.o"
+  "/home/oni/Projects/S9GearOld/src/shader.cpp" "/home/oni/Projects/S9GearOld/build/CMakeFiles/s9gear.dir/src/shader.cpp.o"
+  "/home/oni/Projects/S9GearOld/src/shapes.cpp" "/home/oni/Projects/S9GearOld/build/CMakeFiles/s9gear.dir/src/shapes.cpp.o"
+  "/home/oni/Projects/S9GearOld/src/tinystr.cpp" "/home/oni/Projects/S9GearOld/build/CMakeFiles/s9gear.dir/src/tinystr.cpp.o"
+  "/home/oni/Projects/S9GearOld/src/tinyxml.cpp" "/home/oni/Projects/S9GearOld/build/CMakeFiles/s9gear.dir/src/tinyxml.cpp.o"
+  "/home/oni/Projects/S9GearOld/src/tinyxmlerror.cpp" "/home/oni/Projects/S9GearOld/build/CMakeFiles/s9gear.dir/src/tinyxmlerror.cpp.o"
+  "/home/oni/Projects/S9GearOld/src/tinyxmlparser.cpp" "/home/oni/Projects/S9GearOld/build/CMakeFiles/s9gear.dir/src/tinyxmlparser.cpp.o"
+  "/home/oni/Projects/S9GearOld/src/uvc_camera.cpp" "/home/oni/Projects/S9GearOld/build/CMakeFiles/s9gear.dir/src/uvc_camera.cpp.o"
+  "/home/oni/Projects/S9GearOld/src/vbo.cpp" "/home/oni/Projects/S9GearOld/build/CMakeFiles/s9gear.dir/src/vbo.cpp.o"
+  "/home/oni/Projects/S9GearOld/src/video.cpp" "/home/oni/Projects/S9GearOld/build/CMakeFiles/s9gear.dir/src/video.cpp.o"
+  "/home/oni/Projects/S9GearOld/src/wingedge.cpp" "/home/oni/Projects/S9GearOld/build/CMakeFiles/s9gear.dir/src/wingedge.cpp.o"
   )
 SET(CMAKE_CXX_COMPILER_ID "GNU")
 

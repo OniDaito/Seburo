@@ -87,6 +87,8 @@ namespace s9 {
 		static std::vector<S9VidCam> vCameras;
 		static std::vector<CVVidCam> vCVCameras;
 		
+		static std::vector< std::vector<float_t> > vExtra;
+		
 		static MouseStatus mMouseStatus;
 		static WingedEdge mWE;
 		static TwBar *pBar; 
