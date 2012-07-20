@@ -14,9 +14,9 @@ using namespace boost::assign;
 
 namespace s9{
 
-	GeometryFullFloat makeQuad(float_t w, float_t h) {
+	Quad::Quad(float_t w, float_t h) {
 		
-		vector<size_t> indices;
+		vector<uint32_t> indices;
 		vector<float_t> verts;
 		vector<float_t> texcoords;
 		vector<float_t> colours;
@@ -39,22 +39,19 @@ namespace s9{
 			w, 0.0,
 			0.0,0.0;
 		
-		colours += 1.0f,1.0f,1.0f,1.0f,
-			1.0f,1.0f,1.0f,1.0f,
-			1.0f,1.0f,1.0f,1.0f,
-			1.0f,1.0f,1.0f,1.0f;
+		colours += 1.0f,0.0f,0.0f,1.0f,
+			0.0f,0.0f,1.0f,1.0f,
+			0.0f,1.0f,0.0f,1.0f,
+			0.0f,0.0f,0.0f,1.0f;
 		
-		GeometryFullFloat geom(verts,normals,texcoords,colours);
+		mGeom = GeometryFullFloat(verts,normals,texcoords,colours);
 		
-		geom.addIndex(indices);
-
-		return geom;
+		mGeom.addIndex(indices);
 	}
 
 	
-	GeometryFullFloat makeTriangle(float_t w, float_t h){
+	Triangle::Triangle(float_t w, float_t h){
 		
-		vector<size_t> indices;
 		vector<float_t> verts;
 		vector<float_t> texcoords;
 		vector<float_t> colours;
@@ -77,9 +74,8 @@ namespace s9{
 			0.0f,0.0f,1.0f,1.0f,
 			0.0f,1.0f,0.0f,1.0f;
 			
-		GeometryFullFloat geom(verts,normals,texcoords,colours);
+		mGeom = GeometryFullFloat(verts,normals,texcoords,colours);
 		
-		return geom;
 	}
 	
 }

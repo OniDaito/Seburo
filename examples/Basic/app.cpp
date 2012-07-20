@@ -19,10 +19,7 @@ using namespace s9;
  */
  
 OrbitCamera sCam;
-GeometryFullFloat sRefQuadGeom;
-Primitive sRefQuad;
-
-S9GLObject<GeometryFullFloat> s9GL;
+gl::Quad sRefQuad(1.0,1.0);
 
 Shader sShaderQuad;
 
@@ -69,7 +66,7 @@ void GLApp::display(GLFWwindow window){
 	
 	glUniformMatrix4fv(sShaderQuad.location("uMVPMatrix"), 1, GL_FALSE, glm::value_ptr(mvp));
 
-	s9GL.draw();
+	sRefQuad.draw();
 
 	sShaderQuad.unbind();
 	
@@ -317,7 +314,6 @@ void GLApp::init() {
 	
 	// Create basic references
 
-	sRefQuadGeom = makeTriangle(1.0,1.0);
 
 	// Move the Camera
 	sCam.move(glm::vec3(0,0,20));
@@ -325,7 +321,6 @@ void GLApp::init() {
 	// Load Basic Shader
 	sShaderQuad.load("../../../shaders/quad.vert", "../../../shaders/quad.frag");
 	
-	s9GL = S9GLObject<GeometryFullFloat>(sRefQuadGeom,sRefQuad);
 	
 	CXGLERROR
 	

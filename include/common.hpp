@@ -22,6 +22,7 @@
 #include <time.h>
 #include <unistd.h>
 #include <fstream>
+#include <stddef.h>
 
 #include <stdint.h> 
 #include <boost/program_options.hpp>

@@ -39,7 +39,6 @@ namespace s9 {
 	
 	///\todo uint
 	
-
 	template <class T>
 	struct VertexP {
 		T mP;
@@ -117,6 +116,7 @@ namespace s9 {
 	typedef VertexPCT<glm::vec3, glm::vec4, glm::vec2> VertPCTG;
 	typedef VertexPCT<Float3, Float4, Float2> VertPCTF;
 	typedef VertexPCT<Double3, Double4, Double2> VertPCTD;
+
 
 #pragma pack(pop)  
 

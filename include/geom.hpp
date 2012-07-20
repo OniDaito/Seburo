@@ -55,7 +55,7 @@ namespace s9 {
 	
 		struct SharedObj {
 			std::vector<T> vBuffer;
-			std::vector<size_t> vIndices;
+			std::vector<uint32_t> vIndices;
 			bool mDirty;
 		};
 		
@@ -73,17 +73,17 @@ namespace s9 {
 		void* addr() { return &(mObj->vBuffer[0]); };
 		void* indexaddr() { return &(mObj->vIndices[0]); };
 		
-		size_t size() { return mObj->vBuffer.size(); };
-		size_t indexsize() { return mObj->vIndices.size(); };
+		uint32_t size() { return mObj->vBuffer.size(); };
+		uint32_t indexsize() { return mObj->vIndices.size(); };
 		
 		bool isIndexed() {return mObj->vIndices.size() > 0; };
 		bool isDirty() {return mObj->mDirty;};
 		void setDirty(bool b) {mObj->mDirty = b; };
-		std::vector<size_t>&  getIndices() {return mObj->vIndices(); };
+		std::vector<uint32_t>&  getIndices() {return mObj->vIndices(); };
 		void addVertex(T v) {mObj->push_back(v); setDirty(true); };
-		void setVertex(T v, size_t p) { mObj->vBuffer[p] = v; setDirty(true); };
-		void delVertex(size_t p) { mObj->vBuffer.erase( mObj->vBuffer.begin() + p); setDirty(true); };
-		void addIndex(std::vector<size_t> idx) {mObj->vIndices = idx; };
+		void setVertex(T v, uint32_t p) { mObj->vBuffer[p] = v; setDirty(true); };
+		void delVertex(uint32_t p) { mObj->vBuffer.erase( mObj->vBuffer.begin() + p); setDirty(true); };
+		void addIndex(std::vector<uint32_t> idx) {mObj->vIndices = idx; };
 	
 	};
 
@@ -96,7 +96,7 @@ namespace s9 {
 		
 		if (v.size() != n.size()) { std::cerr << "S9Gear - Counts do not match" << std::endl; throw; return; }
 		
-		for (size_t i=0; i < v.size(); ++i){
+		for (uint32_t i=0; i < v.size(); ++i){
 			VertPNG png = {v[i],n[i]};
 			mObj->vBuffer.push_back( png );
 		}
@@ -108,7 +108,7 @@ namespace s9 {
 		
 		if (v.size() != n.size()) { std::cerr << "S9Gear - Counts do not match" << std::endl; throw; return; }
 		
-		for (size_t i=0; i < v.size(); i+=3){
+		for (uint32_t i=0; i < v.size(); i+=3){
 			Float3 a = {v[i],v[i+1],v[i+2]}; 
 			Float3 b = {n[i],n[i+1],n[i+2]};
 			VertPNF p = {a,b}; 
@@ -122,7 +122,7 @@ namespace s9 {
 		mObj.reset(new SharedObj());
 		///\todo add size checking heres
 		
-		for (size_t i=0; i < v.size() / 3; i++){
+		for (uint32_t i=0; i < v.size() / 3; i++){
 			Float3 v0 = {v[i*3],v[i*3+1],v[i*3+2]};
 			Float3 v1 = {n[i*3],n[i*3+1],n[i*3+2]};
 			Float4 v2 = {c[i*4],c[i*4+1],c[i*4+2],c[i*4+3]};

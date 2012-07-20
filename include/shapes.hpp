@@ -15,8 +15,18 @@
 
 namespace s9 {
 	
-	GeometryFullFloat makeQuad(float_t w, float_t h);
-	GeometryFullFloat makeTriangle(float_t w, float_t h);
+	class Quad : public Primitive {
+	public:
+		Quad(float w, float h);
+		GeometryFullFloat mGeom;
+	};
+
+	class Triangle : public Primitive {
+	public:
+		Triangle(float w, float h);
+		GeometryFullFloat mGeom;
+	};
+
 }
 
 

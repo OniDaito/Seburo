@@ -24,6 +24,8 @@ set(SOURCE_FILES
 	#src/pclmesh.cpp
 )
 
+include_directories(include)
+
 if (CMAKE_COMPILER_IS_GNUCC)
     add_definitions(-Wall)
 endif()

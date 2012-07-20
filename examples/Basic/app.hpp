@@ -11,6 +11,7 @@
 
 #include "s9gear.hpp"
 #include "common.hpp"
+#include "gl/shapes_gl.hpp"
 
 #include <GL/glfw3.h>
 #include <anttweakbar/AntTweakBar.h>
