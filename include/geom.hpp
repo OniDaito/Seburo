@@ -7,8 +7,8 @@
 */
 
 
-#ifndef GEOM_HPP
-#define GEOM_HPP
+#ifndef S9_GEOM_HPP
+#define S9_GEOM_HPP
 
 #include "common.hpp"
 
@@ -22,13 +22,19 @@ namespace s9 {
 	
 	/*
 	 * Base Geometry. Used by the primitive
+	 * \todo rather than use a dirty flag, register a listener or similar. Make implicit!
 	 */
 	 
 	class DrawableGeometry {
 	public:
-		virtual bool isDirty() = 0;
-		virtual void setDirty(bool b) = 0;
-		virtual void* addr() =0;
+		virtual bool isDirty(){ return false;}
+		virtual void setDirty(bool b) {}
+		virtual void* addr() {return NULL; }
+		virtual bool isIndexed(){return false; }
+		virtual uint32_t* indexaddr(){return NULL; }
+		virtual uint32_t size() {return 0;}
+		virtual uint32_t indexsize() {return 0;}
+
 	};
 	
 	
@@ -71,7 +77,7 @@ namespace s9 {
 		virtual operator int() const { return mObj.use_count() > 0; };
 	
 		void* addr() { return &(mObj->vBuffer[0]); };
-		void* indexaddr() { return &(mObj->vIndices[0]); };
+		uint32_t* indexaddr() { return &(mObj->vIndices[0]); };
 		
 		uint32_t size() { return mObj->vBuffer.size(); };
 		uint32_t indexsize() { return mObj->vIndices.size(); };

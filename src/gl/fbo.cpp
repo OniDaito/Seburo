@@ -6,12 +6,12 @@
 *
 */
 
-#include "fbo.hpp"
+#include "gl/fbo.hpp"
 
 using namespace std;
 using namespace boost;
-using namespace boost::assign; 
-using namespace s9;
+using namespace boost::assign;
+using namespace s9::gl;
 
 /*
  * A Basic FBO with Rectangular textures FBO

@@ -7,15 +7,11 @@
 */
 
 
-#ifndef PRIMITIVE_HPP
-#define PRIMITIVE_HPP
-
-#include <assimp/cimport.h>
-#include <assimp/scene.h>
-#include <assimp/postprocess.h>
+#ifndef S9_PRIMITIVE_HPP
+#define S9_PRIMITIVE_HPP
 
 #include "common.hpp"
-#include "geom.hpp"
+
 
 /*
  * Primitive represents a *thing* that has a position in space and time (though not a size)
@@ -95,25 +91,7 @@ namespace s9 {
 		PrimPtr getParent(){return pParent; };
 			
 	};
-	
 
-	/*
-	 * static class to generate a primtive using the ASSIMP Library
-	 */
-	
-
-	class AssetGenerator{
-	public:
-		~AssetGenerator();
-		static Primitive loadAsset(std::string filename);
-
-	protected:
-		
-		static void recursiveCreate (const struct aiScene *sc, const struct aiNode* nd, PrimPtr p);
-		static const struct aiScene* pScene;
-	};
-	
-	
 	
 }
 

@@ -6,7 +6,7 @@
 *
 */
 
-#include "video.hpp"
+#include "gl/video.hpp"
 
 using namespace std;
 #ifdef _GEAR_OPENCV
@@ -14,6 +14,7 @@ using namespace cv;
 #endif
 using namespace boost; 
 using namespace s9;
+using namespace s9::gl;
 
 S9VidCam::S9VidCam() {}
 

@@ -19,18 +19,15 @@ using namespace s9;
  * This assumes that primitives have buffer 0 as vertices and buffer 1 as indices
  */
 
-void WingedEdge::make(Primitive p) {
+void WingedEdge::make(DrawableGeometry geom) {
 	
 	mObj.reset(new SharedObj());
-	mObj->mPrimitive = p;
-	
-	VBOBuffer<GLuint> indices = p.getVBO().getBuffer<GLuint>(1);
-	VBOBuffer<GLfloat> vertices = p.getVBO().getBuffer<GLfloat>(0);
+	mObj->mGeom = geom;
 	
 	// Create a temporary array of vertices for now. 
 	std::vector< boost::shared_ptr<WE_Vertex> > vs;
 
-	for (size_t i=0; i < vertices.size(); i+=3){
+	for (size_t i=0; i < mObj->mGeom.size(); i+=3){
 		shared_ptr<WE_Vertex> sv (new WE_Vertex);
 		vs.push_back(sv);
 		sv->idc = i; // Copy the indices
@@ -46,11 +43,16 @@ void WingedEdge::make(Primitive p) {
 	
 	size_t bw = 0;
 
-	for (size_t i = 0; i < indices.size(); i+=3) {
+	uint32_t *indices = mObj->mGeom.indexaddr();
+
+	for (size_t i = 0; i < mObj->mGeom.indexsize(); i+=3) {
 
 		shared_ptr<WE_Face>  f (new WE_Face());
 		bool bf = false;
 		uint32_t idcs[3];
+
+
+
 		idcs[0] = indices[i];
 		idcs[1] = indices[i+1];
 		idcs[2] = indices[i+2]; 
@@ -139,6 +141,7 @@ void WingedEdge::make(Primitive p) {
 /*
  * Generate a primitive from this. Essentially flatten it out
  */
+ /*
 
 Primitive WingedEdge::flatten() { 
 	
@@ -187,4 +190,4 @@ Primitive WingedEdge::flatten() {
 	Primitive p(v);
 	
 	return p;
-}
+}*/

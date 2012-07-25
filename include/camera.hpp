@@ -7,8 +7,8 @@
 */
 
 
-#ifndef CAMERA_HPP
-#define CAMERA_HPP
+#ifndef S9_CAMERA_HPP
+#define S9_CAMERA_HPP
 
 #include "common.hpp"
 #include "primitive.hpp"

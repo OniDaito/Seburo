@@ -34,8 +34,6 @@
 // videodev2 under ubuntu apparently
 #include <linux/videodev2.h>
 
-#include "config.hpp"
-
 // Include GUVCView decoding
 // http://sourceforge.net/p/guvcview/code/795/tree/trunk/src/
 

@@ -11,8 +11,7 @@
 #define WINGEDGE_HPP
 
 #include "common.hpp"
-#include "primitive.hpp"
-#include "vbo.hpp"
+#include "geom.hpp"
 
 /*
  * Given a primtive with indices, create a winged edge structure for it
@@ -48,20 +47,28 @@ namespace s9 {
 	class WingedEdge {
 	public:
 		WingedEdge(){};
-		void make(Primitive p);
+		void make(DrawableGeometry geom);
 		std::vector<WEP_Face> getFaces() {return mObj->mWE; };
-		VBOData getVBO() { return mObj->mPrimitive.getVBO(); };
-		
-		Primitive flatten(); 
+
 	
 	protected:
 		class SharedObj {
 		public:
 			std::vector<WEP_Face> mWE;
-			Primitive mPrimitive;
+			DrawableGeometry mGeom;
 		};
 		
 		boost::shared_ptr<SharedObj> mObj;
+	};
+
+
+	/*
+	 * Type safe version of the WingedEdge class for returning geometry flattened
+	 */
+
+	template <class T>
+	class WingedEdgeT : public WingedEdge {
+			Geometry<T> flatten(); 
 	};
 	
 }

@@ -36,6 +36,7 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/make_shared.hpp>
 
+///\todo check if GLM relies on OpenGL at some point
 
 #define GLM_SWIZZLE 
 #include <glm/glm.hpp>
@@ -46,11 +47,5 @@
 #include <glm/gtc/swizzle.hpp>
 #include <glm/gtx/matrix_interpolation.hpp>
 #include <glm/gtx/string_cast.hpp>
-
-#include <GL/glew.h>
-#include <GL/glut.h>
-
-#include "glutils.hpp"
-
 
 #endif

@@ -9,16 +9,14 @@
 #ifndef S9GEAR_HPP
 #define S9GEAR_HPP
 
-#include "shader.hpp"
-#include "fbo.hpp"
-#include "vbo.hpp"
 #include "primitive.hpp"
+#include "geom.hpp"
 #include "camera.hpp"
 #include "shapes.hpp"
 #include "utils.hpp"
-#include "glutils.hpp"
-#include "video.hpp"
-//#include "wingedge.hpp"
+#include "events.hpp"
 #include "s9xml.hpp"
-#include "s9globject.hpp"
+#include "visualapp.hpp"
+#include "wingedge.hpp"
+
 #endif

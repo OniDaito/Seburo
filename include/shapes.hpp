@@ -11,6 +11,7 @@
 #define SHAPES_HPP
 
 #include "common.hpp"
+#include "geom.hpp"
 #include "primitive.hpp"
 
 namespace s9 {

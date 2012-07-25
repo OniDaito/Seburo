@@ -6,14 +6,12 @@
 *
 */
 
-#include "shader.hpp"
+#include "gl/shader.hpp"
 
 using namespace std;
 using namespace boost;
 using namespace boost::assign; 
-using namespace s9;
-
-///\todo shift the scale factor and borders to globals or settings in mConfig
+using namespace s9::gl;
 
 
 std::string textFileRead(std::string filename) {
@@ -28,7 +26,7 @@ std::string textFileRead(std::string filename) {
 		myfile.close();
 	}
 
-	else cerr << "Leeds - Unable to open shader file " << filename << endl;
+	else cerr << "S9Gear - Unable to open shader file " << filename << endl;
 
 	return rval;
 }

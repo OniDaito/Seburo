@@ -7,7 +7,6 @@ project (basic)
 
 set(SOURCE_FILES 
 	app.cpp
-	../../src/gl/shapes_gl.cpp
 )
 
 if (CMAKE_COMPILER_IS_GNUCC)

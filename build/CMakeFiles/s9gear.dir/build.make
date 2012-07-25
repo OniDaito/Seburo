@@ -49,362 +49,162 @@ include CMakeFiles/s9gear.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/s9gear.dir/flags.make
 
-CMakeFiles/s9gear.dir/src/uvc_camera.cpp.o: CMakeFiles/s9gear.dir/flags.make
-CMakeFiles/s9gear.dir/src/uvc_camera.cpp.o: ../src/uvc_camera.cpp
+CMakeFiles/s9gear.dir/src/gl/video.cpp.o: CMakeFiles/s9gear.dir/flags.make
+CMakeFiles/s9gear.dir/src/gl/video.cpp.o: ../src/gl/video.cpp
 	$(CMAKE_COMMAND) -E cmake_progress_report /home/oni/Projects/S9Gear/build/CMakeFiles $(CMAKE_PROGRESS_1)
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object CMakeFiles/s9gear.dir/src/uvc_camera.cpp.o"
-	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/s9gear.dir/src/uvc_camera.cpp.o -c /home/oni/Projects/S9Gear/src/uvc_camera.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object CMakeFiles/s9gear.dir/src/gl/video.cpp.o"
+	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/s9gear.dir/src/gl/video.cpp.o -c /home/oni/Projects/S9Gear/src/gl/video.cpp
 
-CMakeFiles/s9gear.dir/src/uvc_camera.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/s9gear.dir/src/uvc_camera.cpp.i"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/oni/Projects/S9Gear/src/uvc_camera.cpp > CMakeFiles/s9gear.dir/src/uvc_camera.cpp.i
+CMakeFiles/s9gear.dir/src/gl/video.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/s9gear.dir/src/gl/video.cpp.i"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/oni/Projects/S9Gear/src/gl/video.cpp > CMakeFiles/s9gear.dir/src/gl/video.cpp.i
 
-CMakeFiles/s9gear.dir/src/uvc_camera.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/s9gear.dir/src/uvc_camera.cpp.s"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/oni/Projects/S9Gear/src/uvc_camera.cpp -o CMakeFiles/s9gear.dir/src/uvc_camera.cpp.s
+CMakeFiles/s9gear.dir/src/gl/video.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/s9gear.dir/src/gl/video.cpp.s"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/oni/Projects/S9Gear/src/gl/video.cpp -o CMakeFiles/s9gear.dir/src/gl/video.cpp.s
 
-CMakeFiles/s9gear.dir/src/uvc_camera.cpp.o.requires:
-.PHONY : CMakeFiles/s9gear.dir/src/uvc_camera.cpp.o.requires
+CMakeFiles/s9gear.dir/src/gl/video.cpp.o.requires:
+.PHONY : CMakeFiles/s9gear.dir/src/gl/video.cpp.o.requires
 
-CMakeFiles/s9gear.dir/src/uvc_camera.cpp.o.provides: CMakeFiles/s9gear.dir/src/uvc_camera.cpp.o.requires
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/uvc_camera.cpp.o.provides.build
-.PHONY : CMakeFiles/s9gear.dir/src/uvc_camera.cpp.o.provides
+CMakeFiles/s9gear.dir/src/gl/video.cpp.o.provides: CMakeFiles/s9gear.dir/src/gl/video.cpp.o.requires
+	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/gl/video.cpp.o.provides.build
+.PHONY : CMakeFiles/s9gear.dir/src/gl/video.cpp.o.provides
 
-CMakeFiles/s9gear.dir/src/uvc_camera.cpp.o.provides.build: CMakeFiles/s9gear.dir/src/uvc_camera.cpp.o
+CMakeFiles/s9gear.dir/src/gl/video.cpp.o.provides.build: CMakeFiles/s9gear.dir/src/gl/video.cpp.o
 
-CMakeFiles/s9gear.dir/src/jpeg.c.o: CMakeFiles/s9gear.dir/flags.make
-CMakeFiles/s9gear.dir/src/jpeg.c.o: ../src/jpeg.c
+CMakeFiles/s9gear.dir/src/gl/shapes_gl.cpp.o: CMakeFiles/s9gear.dir/flags.make
+CMakeFiles/s9gear.dir/src/gl/shapes_gl.cpp.o: ../src/gl/shapes_gl.cpp
 	$(CMAKE_COMMAND) -E cmake_progress_report /home/oni/Projects/S9Gear/build/CMakeFiles $(CMAKE_PROGRESS_2)
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building C object CMakeFiles/s9gear.dir/src/jpeg.c.o"
-	/usr/bin/gcc  $(C_DEFINES) $(C_FLAGS) -o CMakeFiles/s9gear.dir/src/jpeg.c.o   -c /home/oni/Projects/S9Gear/src/jpeg.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object CMakeFiles/s9gear.dir/src/gl/shapes_gl.cpp.o"
+	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/s9gear.dir/src/gl/shapes_gl.cpp.o -c /home/oni/Projects/S9Gear/src/gl/shapes_gl.cpp
 
-CMakeFiles/s9gear.dir/src/jpeg.c.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/s9gear.dir/src/jpeg.c.i"
-	/usr/bin/gcc  $(C_DEFINES) $(C_FLAGS) -E /home/oni/Projects/S9Gear/src/jpeg.c > CMakeFiles/s9gear.dir/src/jpeg.c.i
+CMakeFiles/s9gear.dir/src/gl/shapes_gl.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/s9gear.dir/src/gl/shapes_gl.cpp.i"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/oni/Projects/S9Gear/src/gl/shapes_gl.cpp > CMakeFiles/s9gear.dir/src/gl/shapes_gl.cpp.i
 
-CMakeFiles/s9gear.dir/src/jpeg.c.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/s9gear.dir/src/jpeg.c.s"
-	/usr/bin/gcc  $(C_DEFINES) $(C_FLAGS) -S /home/oni/Projects/S9Gear/src/jpeg.c -o CMakeFiles/s9gear.dir/src/jpeg.c.s
+CMakeFiles/s9gear.dir/src/gl/shapes_gl.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/s9gear.dir/src/gl/shapes_gl.cpp.s"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/oni/Projects/S9Gear/src/gl/shapes_gl.cpp -o CMakeFiles/s9gear.dir/src/gl/shapes_gl.cpp.s
 
-CMakeFiles/s9gear.dir/src/jpeg.c.o.requires:
-.PHONY : CMakeFiles/s9gear.dir/src/jpeg.c.o.requires
+CMakeFiles/s9gear.dir/src/gl/shapes_gl.cpp.o.requires:
+.PHONY : CMakeFiles/s9gear.dir/src/gl/shapes_gl.cpp.o.requires
 
-CMakeFiles/s9gear.dir/src/jpeg.c.o.provides: CMakeFiles/s9gear.dir/src/jpeg.c.o.requires
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/jpeg.c.o.provides.build
-.PHONY : CMakeFiles/s9gear.dir/src/jpeg.c.o.provides
+CMakeFiles/s9gear.dir/src/gl/shapes_gl.cpp.o.provides: CMakeFiles/s9gear.dir/src/gl/shapes_gl.cpp.o.requires
+	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/gl/shapes_gl.cpp.o.provides.build
+.PHONY : CMakeFiles/s9gear.dir/src/gl/shapes_gl.cpp.o.provides
 
-CMakeFiles/s9gear.dir/src/jpeg.c.o.provides.build: CMakeFiles/s9gear.dir/src/jpeg.c.o
+CMakeFiles/s9gear.dir/src/gl/shapes_gl.cpp.o.provides.build: CMakeFiles/s9gear.dir/src/gl/shapes_gl.cpp.o
 
-CMakeFiles/s9gear.dir/src/colorspaces.c.o: CMakeFiles/s9gear.dir/flags.make
-CMakeFiles/s9gear.dir/src/colorspaces.c.o: ../src/colorspaces.c
+CMakeFiles/s9gear.dir/src/gl/glfw_app.cpp.o: CMakeFiles/s9gear.dir/flags.make
+CMakeFiles/s9gear.dir/src/gl/glfw_app.cpp.o: ../src/gl/glfw_app.cpp
 	$(CMAKE_COMMAND) -E cmake_progress_report /home/oni/Projects/S9Gear/build/CMakeFiles $(CMAKE_PROGRESS_3)
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building C object CMakeFiles/s9gear.dir/src/colorspaces.c.o"
-	/usr/bin/gcc  $(C_DEFINES) $(C_FLAGS) -o CMakeFiles/s9gear.dir/src/colorspaces.c.o   -c /home/oni/Projects/S9Gear/src/colorspaces.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object CMakeFiles/s9gear.dir/src/gl/glfw_app.cpp.o"
+	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/s9gear.dir/src/gl/glfw_app.cpp.o -c /home/oni/Projects/S9Gear/src/gl/glfw_app.cpp
 
-CMakeFiles/s9gear.dir/src/colorspaces.c.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/s9gear.dir/src/colorspaces.c.i"
-	/usr/bin/gcc  $(C_DEFINES) $(C_FLAGS) -E /home/oni/Projects/S9Gear/src/colorspaces.c > CMakeFiles/s9gear.dir/src/colorspaces.c.i
+CMakeFiles/s9gear.dir/src/gl/glfw_app.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/s9gear.dir/src/gl/glfw_app.cpp.i"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/oni/Projects/S9Gear/src/gl/glfw_app.cpp > CMakeFiles/s9gear.dir/src/gl/glfw_app.cpp.i
 
-CMakeFiles/s9gear.dir/src/colorspaces.c.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/s9gear.dir/src/colorspaces.c.s"
-	/usr/bin/gcc  $(C_DEFINES) $(C_FLAGS) -S /home/oni/Projects/S9Gear/src/colorspaces.c -o CMakeFiles/s9gear.dir/src/colorspaces.c.s
+CMakeFiles/s9gear.dir/src/gl/glfw_app.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/s9gear.dir/src/gl/glfw_app.cpp.s"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/oni/Projects/S9Gear/src/gl/glfw_app.cpp -o CMakeFiles/s9gear.dir/src/gl/glfw_app.cpp.s
 
-CMakeFiles/s9gear.dir/src/colorspaces.c.o.requires:
-.PHONY : CMakeFiles/s9gear.dir/src/colorspaces.c.o.requires
+CMakeFiles/s9gear.dir/src/gl/glfw_app.cpp.o.requires:
+.PHONY : CMakeFiles/s9gear.dir/src/gl/glfw_app.cpp.o.requires
 
-CMakeFiles/s9gear.dir/src/colorspaces.c.o.provides: CMakeFiles/s9gear.dir/src/colorspaces.c.o.requires
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/colorspaces.c.o.provides.build
-.PHONY : CMakeFiles/s9gear.dir/src/colorspaces.c.o.provides
+CMakeFiles/s9gear.dir/src/gl/glfw_app.cpp.o.provides: CMakeFiles/s9gear.dir/src/gl/glfw_app.cpp.o.requires
+	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/gl/glfw_app.cpp.o.provides.build
+.PHONY : CMakeFiles/s9gear.dir/src/gl/glfw_app.cpp.o.provides
 
-CMakeFiles/s9gear.dir/src/colorspaces.c.o.provides.build: CMakeFiles/s9gear.dir/src/colorspaces.c.o
+CMakeFiles/s9gear.dir/src/gl/glfw_app.cpp.o.provides.build: CMakeFiles/s9gear.dir/src/gl/glfw_app.cpp.o
 
-CMakeFiles/s9gear.dir/src/tinystr.cpp.o: CMakeFiles/s9gear.dir/flags.make
-CMakeFiles/s9gear.dir/src/tinystr.cpp.o: ../src/tinystr.cpp
+CMakeFiles/s9gear.dir/src/gl/shader.cpp.o: CMakeFiles/s9gear.dir/flags.make
+CMakeFiles/s9gear.dir/src/gl/shader.cpp.o: ../src/gl/shader.cpp
 	$(CMAKE_COMMAND) -E cmake_progress_report /home/oni/Projects/S9Gear/build/CMakeFiles $(CMAKE_PROGRESS_4)
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object CMakeFiles/s9gear.dir/src/tinystr.cpp.o"
-	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/s9gear.dir/src/tinystr.cpp.o -c /home/oni/Projects/S9Gear/src/tinystr.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object CMakeFiles/s9gear.dir/src/gl/shader.cpp.o"
+	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/s9gear.dir/src/gl/shader.cpp.o -c /home/oni/Projects/S9Gear/src/gl/shader.cpp
 
-CMakeFiles/s9gear.dir/src/tinystr.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/s9gear.dir/src/tinystr.cpp.i"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/oni/Projects/S9Gear/src/tinystr.cpp > CMakeFiles/s9gear.dir/src/tinystr.cpp.i
+CMakeFiles/s9gear.dir/src/gl/shader.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/s9gear.dir/src/gl/shader.cpp.i"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/oni/Projects/S9Gear/src/gl/shader.cpp > CMakeFiles/s9gear.dir/src/gl/shader.cpp.i
 
-CMakeFiles/s9gear.dir/src/tinystr.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/s9gear.dir/src/tinystr.cpp.s"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/oni/Projects/S9Gear/src/tinystr.cpp -o CMakeFiles/s9gear.dir/src/tinystr.cpp.s
+CMakeFiles/s9gear.dir/src/gl/shader.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/s9gear.dir/src/gl/shader.cpp.s"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/oni/Projects/S9Gear/src/gl/shader.cpp -o CMakeFiles/s9gear.dir/src/gl/shader.cpp.s
 
-CMakeFiles/s9gear.dir/src/tinystr.cpp.o.requires:
-.PHONY : CMakeFiles/s9gear.dir/src/tinystr.cpp.o.requires
+CMakeFiles/s9gear.dir/src/gl/shader.cpp.o.requires:
+.PHONY : CMakeFiles/s9gear.dir/src/gl/shader.cpp.o.requires
 
-CMakeFiles/s9gear.dir/src/tinystr.cpp.o.provides: CMakeFiles/s9gear.dir/src/tinystr.cpp.o.requires
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/tinystr.cpp.o.provides.build
-.PHONY : CMakeFiles/s9gear.dir/src/tinystr.cpp.o.provides
+CMakeFiles/s9gear.dir/src/gl/shader.cpp.o.provides: CMakeFiles/s9gear.dir/src/gl/shader.cpp.o.requires
+	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/gl/shader.cpp.o.provides.build
+.PHONY : CMakeFiles/s9gear.dir/src/gl/shader.cpp.o.provides
 
-CMakeFiles/s9gear.dir/src/tinystr.cpp.o.provides.build: CMakeFiles/s9gear.dir/src/tinystr.cpp.o
+CMakeFiles/s9gear.dir/src/gl/shader.cpp.o.provides.build: CMakeFiles/s9gear.dir/src/gl/shader.cpp.o
 
-CMakeFiles/s9gear.dir/src/tinyxml.cpp.o: CMakeFiles/s9gear.dir/flags.make
-CMakeFiles/s9gear.dir/src/tinyxml.cpp.o: ../src/tinyxml.cpp
+CMakeFiles/s9gear.dir/src/gl/fbo.cpp.o: CMakeFiles/s9gear.dir/flags.make
+CMakeFiles/s9gear.dir/src/gl/fbo.cpp.o: ../src/gl/fbo.cpp
 	$(CMAKE_COMMAND) -E cmake_progress_report /home/oni/Projects/S9Gear/build/CMakeFiles $(CMAKE_PROGRESS_5)
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object CMakeFiles/s9gear.dir/src/tinyxml.cpp.o"
-	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/s9gear.dir/src/tinyxml.cpp.o -c /home/oni/Projects/S9Gear/src/tinyxml.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object CMakeFiles/s9gear.dir/src/gl/fbo.cpp.o"
+	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/s9gear.dir/src/gl/fbo.cpp.o -c /home/oni/Projects/S9Gear/src/gl/fbo.cpp
 
-CMakeFiles/s9gear.dir/src/tinyxml.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/s9gear.dir/src/tinyxml.cpp.i"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/oni/Projects/S9Gear/src/tinyxml.cpp > CMakeFiles/s9gear.dir/src/tinyxml.cpp.i
+CMakeFiles/s9gear.dir/src/gl/fbo.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/s9gear.dir/src/gl/fbo.cpp.i"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/oni/Projects/S9Gear/src/gl/fbo.cpp > CMakeFiles/s9gear.dir/src/gl/fbo.cpp.i
 
-CMakeFiles/s9gear.dir/src/tinyxml.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/s9gear.dir/src/tinyxml.cpp.s"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/oni/Projects/S9Gear/src/tinyxml.cpp -o CMakeFiles/s9gear.dir/src/tinyxml.cpp.s
+CMakeFiles/s9gear.dir/src/gl/fbo.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/s9gear.dir/src/gl/fbo.cpp.s"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/oni/Projects/S9Gear/src/gl/fbo.cpp -o CMakeFiles/s9gear.dir/src/gl/fbo.cpp.s
 
-CMakeFiles/s9gear.dir/src/tinyxml.cpp.o.requires:
-.PHONY : CMakeFiles/s9gear.dir/src/tinyxml.cpp.o.requires
+CMakeFiles/s9gear.dir/src/gl/fbo.cpp.o.requires:
+.PHONY : CMakeFiles/s9gear.dir/src/gl/fbo.cpp.o.requires
 
-CMakeFiles/s9gear.dir/src/tinyxml.cpp.o.provides: CMakeFiles/s9gear.dir/src/tinyxml.cpp.o.requires
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/tinyxml.cpp.o.provides.build
-.PHONY : CMakeFiles/s9gear.dir/src/tinyxml.cpp.o.provides
+CMakeFiles/s9gear.dir/src/gl/fbo.cpp.o.provides: CMakeFiles/s9gear.dir/src/gl/fbo.cpp.o.requires
+	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/gl/fbo.cpp.o.provides.build
+.PHONY : CMakeFiles/s9gear.dir/src/gl/fbo.cpp.o.provides
 
-CMakeFiles/s9gear.dir/src/tinyxml.cpp.o.provides.build: CMakeFiles/s9gear.dir/src/tinyxml.cpp.o
+CMakeFiles/s9gear.dir/src/gl/fbo.cpp.o.provides.build: CMakeFiles/s9gear.dir/src/gl/fbo.cpp.o
 
-CMakeFiles/s9gear.dir/src/tinyxmlerror.cpp.o: CMakeFiles/s9gear.dir/flags.make
-CMakeFiles/s9gear.dir/src/tinyxmlerror.cpp.o: ../src/tinyxmlerror.cpp
+CMakeFiles/s9gear.dir/src/linux/uvc_camera.cpp.o: CMakeFiles/s9gear.dir/flags.make
+CMakeFiles/s9gear.dir/src/linux/uvc_camera.cpp.o: ../src/linux/uvc_camera.cpp
 	$(CMAKE_COMMAND) -E cmake_progress_report /home/oni/Projects/S9Gear/build/CMakeFiles $(CMAKE_PROGRESS_6)
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object CMakeFiles/s9gear.dir/src/tinyxmlerror.cpp.o"
-	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/s9gear.dir/src/tinyxmlerror.cpp.o -c /home/oni/Projects/S9Gear/src/tinyxmlerror.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object CMakeFiles/s9gear.dir/src/linux/uvc_camera.cpp.o"
+	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/s9gear.dir/src/linux/uvc_camera.cpp.o -c /home/oni/Projects/S9Gear/src/linux/uvc_camera.cpp
 
-CMakeFiles/s9gear.dir/src/tinyxmlerror.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/s9gear.dir/src/tinyxmlerror.cpp.i"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/oni/Projects/S9Gear/src/tinyxmlerror.cpp > CMakeFiles/s9gear.dir/src/tinyxmlerror.cpp.i
+CMakeFiles/s9gear.dir/src/linux/uvc_camera.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/s9gear.dir/src/linux/uvc_camera.cpp.i"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/oni/Projects/S9Gear/src/linux/uvc_camera.cpp > CMakeFiles/s9gear.dir/src/linux/uvc_camera.cpp.i
 
-CMakeFiles/s9gear.dir/src/tinyxmlerror.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/s9gear.dir/src/tinyxmlerror.cpp.s"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/oni/Projects/S9Gear/src/tinyxmlerror.cpp -o CMakeFiles/s9gear.dir/src/tinyxmlerror.cpp.s
+CMakeFiles/s9gear.dir/src/linux/uvc_camera.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/s9gear.dir/src/linux/uvc_camera.cpp.s"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/oni/Projects/S9Gear/src/linux/uvc_camera.cpp -o CMakeFiles/s9gear.dir/src/linux/uvc_camera.cpp.s
 
-CMakeFiles/s9gear.dir/src/tinyxmlerror.cpp.o.requires:
-.PHONY : CMakeFiles/s9gear.dir/src/tinyxmlerror.cpp.o.requires
+CMakeFiles/s9gear.dir/src/linux/uvc_camera.cpp.o.requires:
+.PHONY : CMakeFiles/s9gear.dir/src/linux/uvc_camera.cpp.o.requires
 
-CMakeFiles/s9gear.dir/src/tinyxmlerror.cpp.o.provides: CMakeFiles/s9gear.dir/src/tinyxmlerror.cpp.o.requires
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/tinyxmlerror.cpp.o.provides.build
-.PHONY : CMakeFiles/s9gear.dir/src/tinyxmlerror.cpp.o.provides
+CMakeFiles/s9gear.dir/src/linux/uvc_camera.cpp.o.provides: CMakeFiles/s9gear.dir/src/linux/uvc_camera.cpp.o.requires
+	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/linux/uvc_camera.cpp.o.provides.build
+.PHONY : CMakeFiles/s9gear.dir/src/linux/uvc_camera.cpp.o.provides
 
-CMakeFiles/s9gear.dir/src/tinyxmlerror.cpp.o.provides.build: CMakeFiles/s9gear.dir/src/tinyxmlerror.cpp.o
-
-CMakeFiles/s9gear.dir/src/tinyxmlparser.cpp.o: CMakeFiles/s9gear.dir/flags.make
-CMakeFiles/s9gear.dir/src/tinyxmlparser.cpp.o: ../src/tinyxmlparser.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/oni/Projects/S9Gear/build/CMakeFiles $(CMAKE_PROGRESS_7)
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object CMakeFiles/s9gear.dir/src/tinyxmlparser.cpp.o"
-	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/s9gear.dir/src/tinyxmlparser.cpp.o -c /home/oni/Projects/S9Gear/src/tinyxmlparser.cpp
-
-CMakeFiles/s9gear.dir/src/tinyxmlparser.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/s9gear.dir/src/tinyxmlparser.cpp.i"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/oni/Projects/S9Gear/src/tinyxmlparser.cpp > CMakeFiles/s9gear.dir/src/tinyxmlparser.cpp.i
-
-CMakeFiles/s9gear.dir/src/tinyxmlparser.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/s9gear.dir/src/tinyxmlparser.cpp.s"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/oni/Projects/S9Gear/src/tinyxmlparser.cpp -o CMakeFiles/s9gear.dir/src/tinyxmlparser.cpp.s
-
-CMakeFiles/s9gear.dir/src/tinyxmlparser.cpp.o.requires:
-.PHONY : CMakeFiles/s9gear.dir/src/tinyxmlparser.cpp.o.requires
-
-CMakeFiles/s9gear.dir/src/tinyxmlparser.cpp.o.provides: CMakeFiles/s9gear.dir/src/tinyxmlparser.cpp.o.requires
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/tinyxmlparser.cpp.o.provides.build
-.PHONY : CMakeFiles/s9gear.dir/src/tinyxmlparser.cpp.o.provides
-
-CMakeFiles/s9gear.dir/src/tinyxmlparser.cpp.o.provides.build: CMakeFiles/s9gear.dir/src/tinyxmlparser.cpp.o
-
-CMakeFiles/s9gear.dir/src/s9xml.cpp.o: CMakeFiles/s9gear.dir/flags.make
-CMakeFiles/s9gear.dir/src/s9xml.cpp.o: ../src/s9xml.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/oni/Projects/S9Gear/build/CMakeFiles $(CMAKE_PROGRESS_8)
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object CMakeFiles/s9gear.dir/src/s9xml.cpp.o"
-	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/s9gear.dir/src/s9xml.cpp.o -c /home/oni/Projects/S9Gear/src/s9xml.cpp
-
-CMakeFiles/s9gear.dir/src/s9xml.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/s9gear.dir/src/s9xml.cpp.i"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/oni/Projects/S9Gear/src/s9xml.cpp > CMakeFiles/s9gear.dir/src/s9xml.cpp.i
-
-CMakeFiles/s9gear.dir/src/s9xml.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/s9gear.dir/src/s9xml.cpp.s"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/oni/Projects/S9Gear/src/s9xml.cpp -o CMakeFiles/s9gear.dir/src/s9xml.cpp.s
-
-CMakeFiles/s9gear.dir/src/s9xml.cpp.o.requires:
-.PHONY : CMakeFiles/s9gear.dir/src/s9xml.cpp.o.requires
-
-CMakeFiles/s9gear.dir/src/s9xml.cpp.o.provides: CMakeFiles/s9gear.dir/src/s9xml.cpp.o.requires
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/s9xml.cpp.o.provides.build
-.PHONY : CMakeFiles/s9gear.dir/src/s9xml.cpp.o.provides
-
-CMakeFiles/s9gear.dir/src/s9xml.cpp.o.provides.build: CMakeFiles/s9gear.dir/src/s9xml.cpp.o
-
-CMakeFiles/s9gear.dir/src/fbo.cpp.o: CMakeFiles/s9gear.dir/flags.make
-CMakeFiles/s9gear.dir/src/fbo.cpp.o: ../src/fbo.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/oni/Projects/S9Gear/build/CMakeFiles $(CMAKE_PROGRESS_9)
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object CMakeFiles/s9gear.dir/src/fbo.cpp.o"
-	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/s9gear.dir/src/fbo.cpp.o -c /home/oni/Projects/S9Gear/src/fbo.cpp
-
-CMakeFiles/s9gear.dir/src/fbo.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/s9gear.dir/src/fbo.cpp.i"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/oni/Projects/S9Gear/src/fbo.cpp > CMakeFiles/s9gear.dir/src/fbo.cpp.i
-
-CMakeFiles/s9gear.dir/src/fbo.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/s9gear.dir/src/fbo.cpp.s"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/oni/Projects/S9Gear/src/fbo.cpp -o CMakeFiles/s9gear.dir/src/fbo.cpp.s
-
-CMakeFiles/s9gear.dir/src/fbo.cpp.o.requires:
-.PHONY : CMakeFiles/s9gear.dir/src/fbo.cpp.o.requires
-
-CMakeFiles/s9gear.dir/src/fbo.cpp.o.provides: CMakeFiles/s9gear.dir/src/fbo.cpp.o.requires
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/fbo.cpp.o.provides.build
-.PHONY : CMakeFiles/s9gear.dir/src/fbo.cpp.o.provides
-
-CMakeFiles/s9gear.dir/src/fbo.cpp.o.provides.build: CMakeFiles/s9gear.dir/src/fbo.cpp.o
-
-CMakeFiles/s9gear.dir/src/shader.cpp.o: CMakeFiles/s9gear.dir/flags.make
-CMakeFiles/s9gear.dir/src/shader.cpp.o: ../src/shader.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/oni/Projects/S9Gear/build/CMakeFiles $(CMAKE_PROGRESS_10)
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object CMakeFiles/s9gear.dir/src/shader.cpp.o"
-	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/s9gear.dir/src/shader.cpp.o -c /home/oni/Projects/S9Gear/src/shader.cpp
-
-CMakeFiles/s9gear.dir/src/shader.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/s9gear.dir/src/shader.cpp.i"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/oni/Projects/S9Gear/src/shader.cpp > CMakeFiles/s9gear.dir/src/shader.cpp.i
-
-CMakeFiles/s9gear.dir/src/shader.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/s9gear.dir/src/shader.cpp.s"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/oni/Projects/S9Gear/src/shader.cpp -o CMakeFiles/s9gear.dir/src/shader.cpp.s
-
-CMakeFiles/s9gear.dir/src/shader.cpp.o.requires:
-.PHONY : CMakeFiles/s9gear.dir/src/shader.cpp.o.requires
-
-CMakeFiles/s9gear.dir/src/shader.cpp.o.provides: CMakeFiles/s9gear.dir/src/shader.cpp.o.requires
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/shader.cpp.o.provides.build
-.PHONY : CMakeFiles/s9gear.dir/src/shader.cpp.o.provides
-
-CMakeFiles/s9gear.dir/src/shader.cpp.o.provides.build: CMakeFiles/s9gear.dir/src/shader.cpp.o
-
-CMakeFiles/s9gear.dir/src/primitive.cpp.o: CMakeFiles/s9gear.dir/flags.make
-CMakeFiles/s9gear.dir/src/primitive.cpp.o: ../src/primitive.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/oni/Projects/S9Gear/build/CMakeFiles $(CMAKE_PROGRESS_11)
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object CMakeFiles/s9gear.dir/src/primitive.cpp.o"
-	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/s9gear.dir/src/primitive.cpp.o -c /home/oni/Projects/S9Gear/src/primitive.cpp
-
-CMakeFiles/s9gear.dir/src/primitive.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/s9gear.dir/src/primitive.cpp.i"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/oni/Projects/S9Gear/src/primitive.cpp > CMakeFiles/s9gear.dir/src/primitive.cpp.i
-
-CMakeFiles/s9gear.dir/src/primitive.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/s9gear.dir/src/primitive.cpp.s"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/oni/Projects/S9Gear/src/primitive.cpp -o CMakeFiles/s9gear.dir/src/primitive.cpp.s
-
-CMakeFiles/s9gear.dir/src/primitive.cpp.o.requires:
-.PHONY : CMakeFiles/s9gear.dir/src/primitive.cpp.o.requires
-
-CMakeFiles/s9gear.dir/src/primitive.cpp.o.provides: CMakeFiles/s9gear.dir/src/primitive.cpp.o.requires
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/primitive.cpp.o.provides.build
-.PHONY : CMakeFiles/s9gear.dir/src/primitive.cpp.o.provides
-
-CMakeFiles/s9gear.dir/src/primitive.cpp.o.provides.build: CMakeFiles/s9gear.dir/src/primitive.cpp.o
-
-CMakeFiles/s9gear.dir/src/shapes.cpp.o: CMakeFiles/s9gear.dir/flags.make
-CMakeFiles/s9gear.dir/src/shapes.cpp.o: ../src/shapes.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/oni/Projects/S9Gear/build/CMakeFiles $(CMAKE_PROGRESS_12)
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object CMakeFiles/s9gear.dir/src/shapes.cpp.o"
-	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/s9gear.dir/src/shapes.cpp.o -c /home/oni/Projects/S9Gear/src/shapes.cpp
-
-CMakeFiles/s9gear.dir/src/shapes.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/s9gear.dir/src/shapes.cpp.i"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/oni/Projects/S9Gear/src/shapes.cpp > CMakeFiles/s9gear.dir/src/shapes.cpp.i
-
-CMakeFiles/s9gear.dir/src/shapes.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/s9gear.dir/src/shapes.cpp.s"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/oni/Projects/S9Gear/src/shapes.cpp -o CMakeFiles/s9gear.dir/src/shapes.cpp.s
-
-CMakeFiles/s9gear.dir/src/shapes.cpp.o.requires:
-.PHONY : CMakeFiles/s9gear.dir/src/shapes.cpp.o.requires
-
-CMakeFiles/s9gear.dir/src/shapes.cpp.o.provides: CMakeFiles/s9gear.dir/src/shapes.cpp.o.requires
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/shapes.cpp.o.provides.build
-.PHONY : CMakeFiles/s9gear.dir/src/shapes.cpp.o.provides
-
-CMakeFiles/s9gear.dir/src/shapes.cpp.o.provides.build: CMakeFiles/s9gear.dir/src/shapes.cpp.o
-
-CMakeFiles/s9gear.dir/src/camera.cpp.o: CMakeFiles/s9gear.dir/flags.make
-CMakeFiles/s9gear.dir/src/camera.cpp.o: ../src/camera.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/oni/Projects/S9Gear/build/CMakeFiles $(CMAKE_PROGRESS_13)
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object CMakeFiles/s9gear.dir/src/camera.cpp.o"
-	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/s9gear.dir/src/camera.cpp.o -c /home/oni/Projects/S9Gear/src/camera.cpp
-
-CMakeFiles/s9gear.dir/src/camera.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/s9gear.dir/src/camera.cpp.i"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/oni/Projects/S9Gear/src/camera.cpp > CMakeFiles/s9gear.dir/src/camera.cpp.i
-
-CMakeFiles/s9gear.dir/src/camera.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/s9gear.dir/src/camera.cpp.s"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/oni/Projects/S9Gear/src/camera.cpp -o CMakeFiles/s9gear.dir/src/camera.cpp.s
-
-CMakeFiles/s9gear.dir/src/camera.cpp.o.requires:
-.PHONY : CMakeFiles/s9gear.dir/src/camera.cpp.o.requires
-
-CMakeFiles/s9gear.dir/src/camera.cpp.o.provides: CMakeFiles/s9gear.dir/src/camera.cpp.o.requires
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/camera.cpp.o.provides.build
-.PHONY : CMakeFiles/s9gear.dir/src/camera.cpp.o.provides
-
-CMakeFiles/s9gear.dir/src/camera.cpp.o.provides.build: CMakeFiles/s9gear.dir/src/camera.cpp.o
-
-CMakeFiles/s9gear.dir/src/video.cpp.o: CMakeFiles/s9gear.dir/flags.make
-CMakeFiles/s9gear.dir/src/video.cpp.o: ../src/video.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/oni/Projects/S9Gear/build/CMakeFiles $(CMAKE_PROGRESS_14)
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object CMakeFiles/s9gear.dir/src/video.cpp.o"
-	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/s9gear.dir/src/video.cpp.o -c /home/oni/Projects/S9Gear/src/video.cpp
-
-CMakeFiles/s9gear.dir/src/video.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/s9gear.dir/src/video.cpp.i"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/oni/Projects/S9Gear/src/video.cpp > CMakeFiles/s9gear.dir/src/video.cpp.i
-
-CMakeFiles/s9gear.dir/src/video.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/s9gear.dir/src/video.cpp.s"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/oni/Projects/S9Gear/src/video.cpp -o CMakeFiles/s9gear.dir/src/video.cpp.s
-
-CMakeFiles/s9gear.dir/src/video.cpp.o.requires:
-.PHONY : CMakeFiles/s9gear.dir/src/video.cpp.o.requires
-
-CMakeFiles/s9gear.dir/src/video.cpp.o.provides: CMakeFiles/s9gear.dir/src/video.cpp.o.requires
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/video.cpp.o.provides.build
-.PHONY : CMakeFiles/s9gear.dir/src/video.cpp.o.provides
-
-CMakeFiles/s9gear.dir/src/video.cpp.o.provides.build: CMakeFiles/s9gear.dir/src/video.cpp.o
+CMakeFiles/s9gear.dir/src/linux/uvc_camera.cpp.o.provides.build: CMakeFiles/s9gear.dir/src/linux/uvc_camera.cpp.o
 
 # Object files for target s9gear
 s9gear_OBJECTS = \
-"CMakeFiles/s9gear.dir/src/uvc_camera.cpp.o" \
-"CMakeFiles/s9gear.dir/src/jpeg.c.o" \
-"CMakeFiles/s9gear.dir/src/colorspaces.c.o" \
-"CMakeFiles/s9gear.dir/src/tinystr.cpp.o" \
-"CMakeFiles/s9gear.dir/src/tinyxml.cpp.o" \
-"CMakeFiles/s9gear.dir/src/tinyxmlerror.cpp.o" \
-"CMakeFiles/s9gear.dir/src/tinyxmlparser.cpp.o" \
-"CMakeFiles/s9gear.dir/src/s9xml.cpp.o" \
-"CMakeFiles/s9gear.dir/src/fbo.cpp.o" \
-"CMakeFiles/s9gear.dir/src/shader.cpp.o" \
-"CMakeFiles/s9gear.dir/src/primitive.cpp.o" \
-"CMakeFiles/s9gear.dir/src/shapes.cpp.o" \
-"CMakeFiles/s9gear.dir/src/camera.cpp.o" \
-"CMakeFiles/s9gear.dir/src/video.cpp.o"
+"CMakeFiles/s9gear.dir/src/gl/video.cpp.o" \
+"CMakeFiles/s9gear.dir/src/gl/shapes_gl.cpp.o" \
+"CMakeFiles/s9gear.dir/src/gl/glfw_app.cpp.o" \
+"CMakeFiles/s9gear.dir/src/gl/shader.cpp.o" \
+"CMakeFiles/s9gear.dir/src/gl/fbo.cpp.o" \
+"CMakeFiles/s9gear.dir/src/linux/uvc_camera.cpp.o"
 
 # External object files for target s9gear
 s9gear_EXTERNAL_OBJECTS =
 
-libs9gear.a: CMakeFiles/s9gear.dir/src/uvc_camera.cpp.o
-libs9gear.a: CMakeFiles/s9gear.dir/src/jpeg.c.o
-libs9gear.a: CMakeFiles/s9gear.dir/src/colorspaces.c.o
-libs9gear.a: CMakeFiles/s9gear.dir/src/tinystr.cpp.o
-libs9gear.a: CMakeFiles/s9gear.dir/src/tinyxml.cpp.o
-libs9gear.a: CMakeFiles/s9gear.dir/src/tinyxmlerror.cpp.o
-libs9gear.a: CMakeFiles/s9gear.dir/src/tinyxmlparser.cpp.o
-libs9gear.a: CMakeFiles/s9gear.dir/src/s9xml.cpp.o
-libs9gear.a: CMakeFiles/s9gear.dir/src/fbo.cpp.o
-libs9gear.a: CMakeFiles/s9gear.dir/src/shader.cpp.o
-libs9gear.a: CMakeFiles/s9gear.dir/src/primitive.cpp.o
-libs9gear.a: CMakeFiles/s9gear.dir/src/shapes.cpp.o
-libs9gear.a: CMakeFiles/s9gear.dir/src/camera.cpp.o
-libs9gear.a: CMakeFiles/s9gear.dir/src/video.cpp.o
+libs9gear.a: CMakeFiles/s9gear.dir/src/gl/video.cpp.o
+libs9gear.a: CMakeFiles/s9gear.dir/src/gl/shapes_gl.cpp.o
+libs9gear.a: CMakeFiles/s9gear.dir/src/gl/glfw_app.cpp.o
+libs9gear.a: CMakeFiles/s9gear.dir/src/gl/shader.cpp.o
+libs9gear.a: CMakeFiles/s9gear.dir/src/gl/fbo.cpp.o
+libs9gear.a: CMakeFiles/s9gear.dir/src/linux/uvc_camera.cpp.o
 libs9gear.a: CMakeFiles/s9gear.dir/build.make
 libs9gear.a: CMakeFiles/s9gear.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --red --bold "Linking CXX static library libs9gear.a"
@@ -415,20 +215,12 @@ libs9gear.a: CMakeFiles/s9gear.dir/link.txt
 CMakeFiles/s9gear.dir/build: libs9gear.a
 .PHONY : CMakeFiles/s9gear.dir/build
 
-CMakeFiles/s9gear.dir/requires: CMakeFiles/s9gear.dir/src/uvc_camera.cpp.o.requires
-CMakeFiles/s9gear.dir/requires: CMakeFiles/s9gear.dir/src/jpeg.c.o.requires
-CMakeFiles/s9gear.dir/requires: CMakeFiles/s9gear.dir/src/colorspaces.c.o.requires
-CMakeFiles/s9gear.dir/requires: CMakeFiles/s9gear.dir/src/tinystr.cpp.o.requires
-CMakeFiles/s9gear.dir/requires: CMakeFiles/s9gear.dir/src/tinyxml.cpp.o.requires
-CMakeFiles/s9gear.dir/requires: CMakeFiles/s9gear.dir/src/tinyxmlerror.cpp.o.requires
-CMakeFiles/s9gear.dir/requires: CMakeFiles/s9gear.dir/src/tinyxmlparser.cpp.o.requires
-CMakeFiles/s9gear.dir/requires: CMakeFiles/s9gear.dir/src/s9xml.cpp.o.requires
-CMakeFiles/s9gear.dir/requires: CMakeFiles/s9gear.dir/src/fbo.cpp.o.requires
-CMakeFiles/s9gear.dir/requires: CMakeFiles/s9gear.dir/src/shader.cpp.o.requires
-CMakeFiles/s9gear.dir/requires: CMakeFiles/s9gear.dir/src/primitive.cpp.o.requires
-CMakeFiles/s9gear.dir/requires: CMakeFiles/s9gear.dir/src/shapes.cpp.o.requires
-CMakeFiles/s9gear.dir/requires: CMakeFiles/s9gear.dir/src/camera.cpp.o.requires
-CMakeFiles/s9gear.dir/requires: CMakeFiles/s9gear.dir/src/video.cpp.o.requires
+CMakeFiles/s9gear.dir/requires: CMakeFiles/s9gear.dir/src/gl/video.cpp.o.requires
+CMakeFiles/s9gear.dir/requires: CMakeFiles/s9gear.dir/src/gl/shapes_gl.cpp.o.requires
+CMakeFiles/s9gear.dir/requires: CMakeFiles/s9gear.dir/src/gl/glfw_app.cpp.o.requires
+CMakeFiles/s9gear.dir/requires: CMakeFiles/s9gear.dir/src/gl/shader.cpp.o.requires
+CMakeFiles/s9gear.dir/requires: CMakeFiles/s9gear.dir/src/gl/fbo.cpp.o.requires
+CMakeFiles/s9gear.dir/requires: CMakeFiles/s9gear.dir/src/linux/uvc_camera.cpp.o.requires
 .PHONY : CMakeFiles/s9gear.dir/requires
 
 CMakeFiles/s9gear.dir/clean:

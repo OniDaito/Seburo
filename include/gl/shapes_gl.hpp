@@ -9,9 +9,11 @@
 #ifndef GL_SHAPES_HPP
 #define GL_SHAPES_HPP
 
+#include "../common.hpp"
 #include "common.hpp"
-#include "shapes.hpp"
-#include "primitive.hpp"
+#include "utils.hpp"
+#include "../shapes.hpp"
+#include "../primitive.hpp"
 
 namespace s9 {
 

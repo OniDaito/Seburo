@@ -7,14 +7,13 @@
 */
 
 
-#ifndef S9XML_HPP
-#define S9XML_HPP
+#ifndef S9_XML_HPP
+#define S9_XML_HPP
 
 #include <numeric> 
 
 #include "tinyxml.h"
 #include "common.hpp"
-#include "primitive.hpp"
 
 
 namespace s9{

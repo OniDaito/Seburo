@@ -265,12 +265,6 @@ LIBUSB_1_INCLUDE_DIR:PATH=/usr/include
 //Path to a library.
 LIBUSB_1_LIBRARY:FILEPATH=/usr/lib/x86_64-linux-gnu/libusb-1.0.so
 
-//Value Computed by CMake
-Leeds_BINARY_DIR:STATIC=/home/oni/Projects/S9Gear/build/examples/Leeds
-
-//Value Computed by CMake
-Leeds_SOURCE_DIR:STATIC=/home/oni/Projects/S9Gear/examples/Leeds
-
 //Path to a file.
 OPENGL_INCLUDE_DIR:PATH=/usr/include
 
@@ -670,12 +664,6 @@ glfw_LIB:FILEPATH=/usr/local/lib/libglfw.so
 //Path to a library.
 glut_LIB:FILEPATH=/usr/local/lib/libglut.so
 
-//Value Computed by CMake
-leeds_BINARY_DIR:STATIC=/home/oni/Projects/S9Gear/build/examples/Leeds
-
-//Value Computed by CMake
-leeds_SOURCE_DIR:STATIC=/home/oni/Projects/S9Gear/examples/Leeds
-
 //Path to a library.
 opencv_calib3d_LIB:FILEPATH=/usr/local/lib/libopencv_calib3d.so
 
@@ -892,7 +880,7 @@ CMAKE_MODULE_LINKER_FLAGS_RELWITHDEBINFO-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_NM
 CMAKE_NM-ADVANCED:INTERNAL=1
 //number of local generators
-CMAKE_NUMBER_OF_LOCAL_GENERATORS:INTERNAL=3
+CMAKE_NUMBER_OF_LOCAL_GENERATORS:INTERNAL=2
 //ADVANCED property for variable: CMAKE_OBJCOPY
 CMAKE_OBJCOPY-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_OBJDUMP

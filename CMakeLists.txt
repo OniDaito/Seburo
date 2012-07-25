@@ -5,24 +5,11 @@ project (S9Gear)
 ################################
 # Set source files
 
-set(SOURCE_FILES 
-	src/uvc_camera.cpp
-	src/jpeg.c
-	src/colorspaces.c
-	src/tinystr.cpp
-	src/tinyxml.cpp
-	src/tinyxmlerror.cpp
-	src/tinyxmlparser.cpp
-	src/s9xml.cpp
-	src/fbo.cpp
-	src/shader.cpp
-	src/primitive.cpp
-	src/shapes.cpp
-	src/camera.cpp
-	src/video.cpp
-	#src/wingedge.cpp
-	#src/pclmesh.cpp
-)
+FILE(GLOB CommonSources src/*)
+
+# For now, include OpenGL here
+FILE(GLOB CommonSources src/gl/*)
+
 
 include_directories(include)
 
@@ -46,6 +33,7 @@ elseif (UNIX AND NOT APPLE)
     set(_GEAR_X11_GLX 1)
     add_definitions(-D_GEAR_X11_GLX)
     message(STATUS "Building Gear for X11 and GLX on a Unix-like system")
+	FILE(GLOB OSSources src/linux/*)
 else()
     message(FATAL_ERROR "No supported platform was detected")
 endif()
@@ -273,7 +261,8 @@ set (CMAKE_LIBRARY_PATH ${LIBRARIES_SEARCH_PATHS} /usr/lib /usr/local/lib )
 set (CMAKE_INCLUDE_PATH ${INCLUDES_SEARCH_PATHS} /usr/include /usr/local/include )
 
 add_library(s9gear 
-	${SOURCE_FILES} 
+	${CommonSources}
+	${OSSources}
 ) 
 
 include_directories(${GEAR_INCLUDES}
@@ -306,7 +295,6 @@ endif(APPLE)
 
 if (NOT TARGET examples)
 	add_subdirectory("${CMAKE_SOURCE_DIR}/examples/Basic")
-    add_subdirectory("${CMAKE_SOURCE_DIR}/examples/Leeds")
 endif() 
 
 

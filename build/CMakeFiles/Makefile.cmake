@@ -12,7 +12,6 @@ SET(CMAKE_MAKEFILE_DEPENDS
   "CMakeFiles/CMakeCXXCompiler.cmake"
   "CMakeFiles/CMakeSystem.cmake"
   "../examples/Basic/CMakeLists.txt"
-  "../examples/Leeds/CMakeLists.txt"
   "/usr/lib/vtk-5.6/CMake/vtkMakeInstantiator.cmake"
   "/usr/lib/vtk-5.6/UseVTK.cmake"
   "/usr/lib/vtk-5.6/VTKConfig.cmake"
@@ -75,12 +74,10 @@ SET(CMAKE_MAKEFILE_OUTPUTS
 SET(CMAKE_MAKEFILE_PRODUCTS
   "CMakeFiles/CMakeDirectoryInformation.cmake"
   "examples/Basic/CMakeFiles/CMakeDirectoryInformation.cmake"
-  "examples/Leeds/CMakeFiles/CMakeDirectoryInformation.cmake"
   )
 
 # Dependency information for all targets:
 SET(CMAKE_DEPEND_INFO_FILES
   "CMakeFiles/s9gear.dir/DependInfo.cmake"
   "examples/Basic/CMakeFiles/basic.dir/DependInfo.cmake"
-  "examples/Leeds/CMakeFiles/leeds.dir/DependInfo.cmake"
   )

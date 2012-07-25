@@ -16,6 +16,8 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+///\todo is GLM dependent on OpenGL or not?
+
 namespace s9 {
 
 // Make sure there is no padding here. Can add padding later
