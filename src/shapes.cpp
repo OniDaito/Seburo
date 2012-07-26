@@ -46,7 +46,7 @@ Quad::Quad(float_t w, float_t h) {
 	
 	mGeom = GeometryFullFloat(verts,normals,texcoords,colours);
 	
-	mGeom.addIndex(indices);
+	mGeom.addIndices(indices);
 }
 
 

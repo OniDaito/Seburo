@@ -33,14 +33,16 @@ namespace s9{
 
 	struct Event {
 		EventType mType;
+		double_t mT;
 	};
 
 	struct MouseEvent : public Event {
-		MouseEvent(int x, int y, uint16_t flag ) {
+		MouseEvent(int x, int y, uint16_t flag, double_t t=0 ) {
 			mFlag = flag;
 			mX = x;
 			mY = y;
 			mType = EVENT_MOUSE;
+			mT = t;
 		}
 
 		uint16_t mFlag;
@@ -49,19 +51,21 @@ namespace s9{
 	}; 
 
 	struct KeyboardEvent : public Event {
-		KeyboardEvent(int key, int action){
+		KeyboardEvent(int key, int action, double_t t=0){
 			mKey = key;
 			mAction = action;
 			mType = EVENT_KEY;
+			mT = t;
 		}
 		int mKey;
 		int mAction;
 	};
 
 	struct ResizeEvent : public Event {
-		ResizeEvent(size_t w, size_t h){
+		ResizeEvent(size_t w, size_t h, double_t t=0){
 			mW = w;
 			mH = h;
+			mT = t;
 			mType = EVENT_RESIZE;
 		}
 

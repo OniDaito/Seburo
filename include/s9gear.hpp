@@ -10,7 +10,7 @@
 #define S9GEAR_HPP
 
 #include "primitive.hpp"
-#include "geom.hpp"
+#include "geometry.hpp"
 #include "camera.hpp"
 #include "shapes.hpp"
 #include "utils.hpp"

@@ -11,7 +11,7 @@
 #define WINGEDGE_HPP
 
 #include "common.hpp"
-#include "geom.hpp"
+#include "geometry.hpp"
 
 /*
  * Given a primtive with indices, create a winged edge structure for it

@@ -26,5 +26,26 @@ template<class T> inline T fromStringS9(const std::string& s) {
 	return t;
 }
 
+/*
+ * Basic text file reading
+ */
+
+std::string inline textFileRead(std::string filename) {
+	std::string line;
+	std::string rval;
+	std::ifstream myfile (filename.c_str());
+	if (myfile.is_open()){
+		while ( myfile.good() )	{
+			getline (myfile,line);
+			rval += line +"\n";
+		}
+		myfile.close();
+	}
+
+	else std::cerr << "S9Gear - Unable to open shader file " << filename << std::endl;
+
+	return rval;
+}
+
 
 #endif

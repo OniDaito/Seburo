@@ -8,7 +8,7 @@ project (S9Gear)
 FILE(GLOB CommonSources src/*)
 
 # For now, include OpenGL here
-FILE(GLOB CommonSources src/gl/*)
+FILE(GLOB GLSources src/gl/*)
 
 
 include_directories(include)
@@ -260,8 +260,9 @@ endif ()
 set (CMAKE_LIBRARY_PATH ${LIBRARIES_SEARCH_PATHS} /usr/lib /usr/local/lib )
 set (CMAKE_INCLUDE_PATH ${INCLUDES_SEARCH_PATHS} /usr/include /usr/local/include )
 
-add_library(s9gear 
+add_library(s9gear SHARED
 	${CommonSources}
+	${GLSources}
 	${OSSources}
 ) 
 
@@ -294,7 +295,8 @@ endif(APPLE)
 # Extra Projects to compile in
 
 if (NOT TARGET examples)
-	add_subdirectory("${CMAKE_SOURCE_DIR}/examples/Basic")
+	add_subdirectory("${CMAKE_SOURCE_DIR}/examples/basic")
+	add_subdirectory("${CMAKE_SOURCE_DIR}/examples/model")
 endif() 
 
 

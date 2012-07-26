@@ -121,8 +121,93 @@ basic: cmake_check_build_system
 
 # fast build rule for target.
 basic/fast:
-	$(MAKE) -f examples/Basic/CMakeFiles/basic.dir/build.make examples/Basic/CMakeFiles/basic.dir/build
+	$(MAKE) -f examples/basic/CMakeFiles/basic.dir/build.make examples/basic/CMakeFiles/basic.dir/build
 .PHONY : basic/fast
+
+#=============================================================================
+# Target rules for targets named model
+
+# Build rule for target.
+model: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 model
+.PHONY : model
+
+# fast build rule for target.
+model/fast:
+	$(MAKE) -f examples/model/CMakeFiles/model.dir/build.make examples/model/CMakeFiles/model.dir/build
+.PHONY : model/fast
+
+src/asset.o: src/asset.cpp.o
+.PHONY : src/asset.o
+
+# target to build an object file
+src/asset.cpp.o:
+	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/asset.cpp.o
+.PHONY : src/asset.cpp.o
+
+src/asset.i: src/asset.cpp.i
+.PHONY : src/asset.i
+
+# target to preprocess a source file
+src/asset.cpp.i:
+	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/asset.cpp.i
+.PHONY : src/asset.cpp.i
+
+src/asset.s: src/asset.cpp.s
+.PHONY : src/asset.s
+
+# target to generate assembly for a file
+src/asset.cpp.s:
+	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/asset.cpp.s
+.PHONY : src/asset.cpp.s
+
+src/camera.o: src/camera.cpp.o
+.PHONY : src/camera.o
+
+# target to build an object file
+src/camera.cpp.o:
+	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/camera.cpp.o
+.PHONY : src/camera.cpp.o
+
+src/camera.i: src/camera.cpp.i
+.PHONY : src/camera.i
+
+# target to preprocess a source file
+src/camera.cpp.i:
+	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/camera.cpp.i
+.PHONY : src/camera.cpp.i
+
+src/camera.s: src/camera.cpp.s
+.PHONY : src/camera.s
+
+# target to generate assembly for a file
+src/camera.cpp.s:
+	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/camera.cpp.s
+.PHONY : src/camera.cpp.s
+
+src/colorspaces.o: src/colorspaces.c.o
+.PHONY : src/colorspaces.o
+
+# target to build an object file
+src/colorspaces.c.o:
+	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/colorspaces.c.o
+.PHONY : src/colorspaces.c.o
+
+src/colorspaces.i: src/colorspaces.c.i
+.PHONY : src/colorspaces.i
+
+# target to preprocess a source file
+src/colorspaces.c.i:
+	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/colorspaces.c.i
+.PHONY : src/colorspaces.c.i
+
+src/colorspaces.s: src/colorspaces.c.s
+.PHONY : src/colorspaces.s
+
+# target to generate assembly for a file
+src/colorspaces.c.s:
+	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/colorspaces.c.s
+.PHONY : src/colorspaces.c.s
 
 src/gl/fbo.o: src/gl/fbo.cpp.o
 .PHONY : src/gl/fbo.o
@@ -147,6 +232,30 @@ src/gl/fbo.s: src/gl/fbo.cpp.s
 src/gl/fbo.cpp.s:
 	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/gl/fbo.cpp.s
 .PHONY : src/gl/fbo.cpp.s
+
+src/gl/geometry.o: src/gl/geometry.cpp.o
+.PHONY : src/gl/geometry.o
+
+# target to build an object file
+src/gl/geometry.cpp.o:
+	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/gl/geometry.cpp.o
+.PHONY : src/gl/geometry.cpp.o
+
+src/gl/geometry.i: src/gl/geometry.cpp.i
+.PHONY : src/gl/geometry.i
+
+# target to preprocess a source file
+src/gl/geometry.cpp.i:
+	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/gl/geometry.cpp.i
+.PHONY : src/gl/geometry.cpp.i
+
+src/gl/geometry.s: src/gl/geometry.cpp.s
+.PHONY : src/gl/geometry.s
+
+# target to generate assembly for a file
+src/gl/geometry.cpp.s:
+	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/gl/geometry.cpp.s
+.PHONY : src/gl/geometry.cpp.s
 
 src/gl/glfw_app.o: src/gl/glfw_app.cpp.o
 .PHONY : src/gl/glfw_app.o
@@ -196,29 +305,29 @@ src/gl/shader.cpp.s:
 	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/gl/shader.cpp.s
 .PHONY : src/gl/shader.cpp.s
 
-src/gl/shapes_gl.o: src/gl/shapes_gl.cpp.o
-.PHONY : src/gl/shapes_gl.o
+src/gl/shapes.o: src/gl/shapes.cpp.o
+.PHONY : src/gl/shapes.o
 
 # target to build an object file
-src/gl/shapes_gl.cpp.o:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/gl/shapes_gl.cpp.o
-.PHONY : src/gl/shapes_gl.cpp.o
+src/gl/shapes.cpp.o:
+	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/gl/shapes.cpp.o
+.PHONY : src/gl/shapes.cpp.o
 
-src/gl/shapes_gl.i: src/gl/shapes_gl.cpp.i
-.PHONY : src/gl/shapes_gl.i
+src/gl/shapes.i: src/gl/shapes.cpp.i
+.PHONY : src/gl/shapes.i
 
 # target to preprocess a source file
-src/gl/shapes_gl.cpp.i:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/gl/shapes_gl.cpp.i
-.PHONY : src/gl/shapes_gl.cpp.i
+src/gl/shapes.cpp.i:
+	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/gl/shapes.cpp.i
+.PHONY : src/gl/shapes.cpp.i
 
-src/gl/shapes_gl.s: src/gl/shapes_gl.cpp.s
-.PHONY : src/gl/shapes_gl.s
+src/gl/shapes.s: src/gl/shapes.cpp.s
+.PHONY : src/gl/shapes.s
 
 # target to generate assembly for a file
-src/gl/shapes_gl.cpp.s:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/gl/shapes_gl.cpp.s
-.PHONY : src/gl/shapes_gl.cpp.s
+src/gl/shapes.cpp.s:
+	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/gl/shapes.cpp.s
+.PHONY : src/gl/shapes.cpp.s
 
 src/gl/video.o: src/gl/video.cpp.o
 .PHONY : src/gl/video.o
@@ -244,6 +353,30 @@ src/gl/video.cpp.s:
 	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/gl/video.cpp.s
 .PHONY : src/gl/video.cpp.s
 
+src/jpeg.o: src/jpeg.c.o
+.PHONY : src/jpeg.o
+
+# target to build an object file
+src/jpeg.c.o:
+	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/jpeg.c.o
+.PHONY : src/jpeg.c.o
+
+src/jpeg.i: src/jpeg.c.i
+.PHONY : src/jpeg.i
+
+# target to preprocess a source file
+src/jpeg.c.i:
+	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/jpeg.c.i
+.PHONY : src/jpeg.c.i
+
+src/jpeg.s: src/jpeg.c.s
+.PHONY : src/jpeg.s
+
+# target to generate assembly for a file
+src/jpeg.c.s:
+	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/jpeg.c.s
+.PHONY : src/jpeg.c.s
+
 src/linux/uvc_camera.o: src/linux/uvc_camera.cpp.o
 .PHONY : src/linux/uvc_camera.o
 
@@ -268,6 +401,198 @@ src/linux/uvc_camera.cpp.s:
 	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/linux/uvc_camera.cpp.s
 .PHONY : src/linux/uvc_camera.cpp.s
 
+src/primitive.o: src/primitive.cpp.o
+.PHONY : src/primitive.o
+
+# target to build an object file
+src/primitive.cpp.o:
+	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/primitive.cpp.o
+.PHONY : src/primitive.cpp.o
+
+src/primitive.i: src/primitive.cpp.i
+.PHONY : src/primitive.i
+
+# target to preprocess a source file
+src/primitive.cpp.i:
+	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/primitive.cpp.i
+.PHONY : src/primitive.cpp.i
+
+src/primitive.s: src/primitive.cpp.s
+.PHONY : src/primitive.s
+
+# target to generate assembly for a file
+src/primitive.cpp.s:
+	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/primitive.cpp.s
+.PHONY : src/primitive.cpp.s
+
+src/s9xml.o: src/s9xml.cpp.o
+.PHONY : src/s9xml.o
+
+# target to build an object file
+src/s9xml.cpp.o:
+	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/s9xml.cpp.o
+.PHONY : src/s9xml.cpp.o
+
+src/s9xml.i: src/s9xml.cpp.i
+.PHONY : src/s9xml.i
+
+# target to preprocess a source file
+src/s9xml.cpp.i:
+	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/s9xml.cpp.i
+.PHONY : src/s9xml.cpp.i
+
+src/s9xml.s: src/s9xml.cpp.s
+.PHONY : src/s9xml.s
+
+# target to generate assembly for a file
+src/s9xml.cpp.s:
+	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/s9xml.cpp.s
+.PHONY : src/s9xml.cpp.s
+
+src/shapes.o: src/shapes.cpp.o
+.PHONY : src/shapes.o
+
+# target to build an object file
+src/shapes.cpp.o:
+	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/shapes.cpp.o
+.PHONY : src/shapes.cpp.o
+
+src/shapes.i: src/shapes.cpp.i
+.PHONY : src/shapes.i
+
+# target to preprocess a source file
+src/shapes.cpp.i:
+	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/shapes.cpp.i
+.PHONY : src/shapes.cpp.i
+
+src/shapes.s: src/shapes.cpp.s
+.PHONY : src/shapes.s
+
+# target to generate assembly for a file
+src/shapes.cpp.s:
+	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/shapes.cpp.s
+.PHONY : src/shapes.cpp.s
+
+src/tinystr.o: src/tinystr.cpp.o
+.PHONY : src/tinystr.o
+
+# target to build an object file
+src/tinystr.cpp.o:
+	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/tinystr.cpp.o
+.PHONY : src/tinystr.cpp.o
+
+src/tinystr.i: src/tinystr.cpp.i
+.PHONY : src/tinystr.i
+
+# target to preprocess a source file
+src/tinystr.cpp.i:
+	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/tinystr.cpp.i
+.PHONY : src/tinystr.cpp.i
+
+src/tinystr.s: src/tinystr.cpp.s
+.PHONY : src/tinystr.s
+
+# target to generate assembly for a file
+src/tinystr.cpp.s:
+	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/tinystr.cpp.s
+.PHONY : src/tinystr.cpp.s
+
+src/tinyxml.o: src/tinyxml.cpp.o
+.PHONY : src/tinyxml.o
+
+# target to build an object file
+src/tinyxml.cpp.o:
+	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/tinyxml.cpp.o
+.PHONY : src/tinyxml.cpp.o
+
+src/tinyxml.i: src/tinyxml.cpp.i
+.PHONY : src/tinyxml.i
+
+# target to preprocess a source file
+src/tinyxml.cpp.i:
+	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/tinyxml.cpp.i
+.PHONY : src/tinyxml.cpp.i
+
+src/tinyxml.s: src/tinyxml.cpp.s
+.PHONY : src/tinyxml.s
+
+# target to generate assembly for a file
+src/tinyxml.cpp.s:
+	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/tinyxml.cpp.s
+.PHONY : src/tinyxml.cpp.s
+
+src/tinyxmlerror.o: src/tinyxmlerror.cpp.o
+.PHONY : src/tinyxmlerror.o
+
+# target to build an object file
+src/tinyxmlerror.cpp.o:
+	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/tinyxmlerror.cpp.o
+.PHONY : src/tinyxmlerror.cpp.o
+
+src/tinyxmlerror.i: src/tinyxmlerror.cpp.i
+.PHONY : src/tinyxmlerror.i
+
+# target to preprocess a source file
+src/tinyxmlerror.cpp.i:
+	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/tinyxmlerror.cpp.i
+.PHONY : src/tinyxmlerror.cpp.i
+
+src/tinyxmlerror.s: src/tinyxmlerror.cpp.s
+.PHONY : src/tinyxmlerror.s
+
+# target to generate assembly for a file
+src/tinyxmlerror.cpp.s:
+	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/tinyxmlerror.cpp.s
+.PHONY : src/tinyxmlerror.cpp.s
+
+src/tinyxmlparser.o: src/tinyxmlparser.cpp.o
+.PHONY : src/tinyxmlparser.o
+
+# target to build an object file
+src/tinyxmlparser.cpp.o:
+	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/tinyxmlparser.cpp.o
+.PHONY : src/tinyxmlparser.cpp.o
+
+src/tinyxmlparser.i: src/tinyxmlparser.cpp.i
+.PHONY : src/tinyxmlparser.i
+
+# target to preprocess a source file
+src/tinyxmlparser.cpp.i:
+	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/tinyxmlparser.cpp.i
+.PHONY : src/tinyxmlparser.cpp.i
+
+src/tinyxmlparser.s: src/tinyxmlparser.cpp.s
+.PHONY : src/tinyxmlparser.s
+
+# target to generate assembly for a file
+src/tinyxmlparser.cpp.s:
+	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/tinyxmlparser.cpp.s
+.PHONY : src/tinyxmlparser.cpp.s
+
+src/wingedge.o: src/wingedge.cpp.o
+.PHONY : src/wingedge.o
+
+# target to build an object file
+src/wingedge.cpp.o:
+	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/wingedge.cpp.o
+.PHONY : src/wingedge.cpp.o
+
+src/wingedge.i: src/wingedge.cpp.i
+.PHONY : src/wingedge.i
+
+# target to preprocess a source file
+src/wingedge.cpp.i:
+	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/wingedge.cpp.i
+.PHONY : src/wingedge.cpp.i
+
+src/wingedge.s: src/wingedge.cpp.s
+.PHONY : src/wingedge.s
+
+# target to generate assembly for a file
+src/wingedge.cpp.s:
+	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/wingedge.cpp.s
+.PHONY : src/wingedge.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -278,24 +603,64 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... s9gear"
 	@echo "... basic"
+	@echo "... model"
+	@echo "... src/asset.o"
+	@echo "... src/asset.i"
+	@echo "... src/asset.s"
+	@echo "... src/camera.o"
+	@echo "... src/camera.i"
+	@echo "... src/camera.s"
+	@echo "... src/colorspaces.o"
+	@echo "... src/colorspaces.i"
+	@echo "... src/colorspaces.s"
 	@echo "... src/gl/fbo.o"
 	@echo "... src/gl/fbo.i"
 	@echo "... src/gl/fbo.s"
+	@echo "... src/gl/geometry.o"
+	@echo "... src/gl/geometry.i"
+	@echo "... src/gl/geometry.s"
 	@echo "... src/gl/glfw_app.o"
 	@echo "... src/gl/glfw_app.i"
 	@echo "... src/gl/glfw_app.s"
 	@echo "... src/gl/shader.o"
 	@echo "... src/gl/shader.i"
 	@echo "... src/gl/shader.s"
-	@echo "... src/gl/shapes_gl.o"
-	@echo "... src/gl/shapes_gl.i"
-	@echo "... src/gl/shapes_gl.s"
+	@echo "... src/gl/shapes.o"
+	@echo "... src/gl/shapes.i"
+	@echo "... src/gl/shapes.s"
 	@echo "... src/gl/video.o"
 	@echo "... src/gl/video.i"
 	@echo "... src/gl/video.s"
+	@echo "... src/jpeg.o"
+	@echo "... src/jpeg.i"
+	@echo "... src/jpeg.s"
 	@echo "... src/linux/uvc_camera.o"
 	@echo "... src/linux/uvc_camera.i"
 	@echo "... src/linux/uvc_camera.s"
+	@echo "... src/primitive.o"
+	@echo "... src/primitive.i"
+	@echo "... src/primitive.s"
+	@echo "... src/s9xml.o"
+	@echo "... src/s9xml.i"
+	@echo "... src/s9xml.s"
+	@echo "... src/shapes.o"
+	@echo "... src/shapes.i"
+	@echo "... src/shapes.s"
+	@echo "... src/tinystr.o"
+	@echo "... src/tinystr.i"
+	@echo "... src/tinystr.s"
+	@echo "... src/tinyxml.o"
+	@echo "... src/tinyxml.i"
+	@echo "... src/tinyxml.s"
+	@echo "... src/tinyxmlerror.o"
+	@echo "... src/tinyxmlerror.i"
+	@echo "... src/tinyxmlerror.s"
+	@echo "... src/tinyxmlparser.o"
+	@echo "... src/tinyxmlparser.i"
+	@echo "... src/tinyxmlparser.s"
+	@echo "... src/wingedge.o"
+	@echo "... src/wingedge.i"
+	@echo "... src/wingedge.s"
 .PHONY : help
 
 

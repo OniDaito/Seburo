@@ -16,7 +16,7 @@
 /*
  * Primitive represents a *thing* that has a position in space and time (though not a size)
  * it also has a colour for picking and several subclasses
- * SharedObj is not needed here as the parameters can be copied with no real loss
+ * \todo SharedObj model is not needed here as the parameters can be copied with no real loss but CX this
  */
  
 namespace s9 {
@@ -56,6 +56,8 @@ namespace s9 {
 			mRotMatrix = glm::mat4(1.0f);
 			mTransMatrix = glm::mat4(1.0f);
 			mScaleMatrix = glm::mat4(1.0f);
+
+			mScale = glm::vec3(1.0f,1.0f,1.0f);
 		}
 
 	//	virtual operator int() const { return mObj.use_count() > 0; };

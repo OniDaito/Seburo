@@ -15,6 +15,7 @@
 
 /*
  * The main Application interface that gl/directx applications serve to
+ * \todo need to pass timing information over as well I suspect
  */
  
 namespace s9 {
@@ -24,9 +25,12 @@ namespace s9 {
 	public:
 		VisualApp(){};
 
-		virtual void display() = 0;
-		virtual void fireEvent(Event e) = 0;
-	
+		virtual void init() = 0;
+		virtual void display(double_t dt) = 0;
+		virtual void fireEvent(Event &e){};
+		virtual void fireEvent(MouseEvent &e){};
+		virtual void fireEvent(ResizeEvent &e){};
+		virtual void fireEvent(KeyboardEvent &e){};
 	};
 }
 

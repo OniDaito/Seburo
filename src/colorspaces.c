@@ -27,7 +27,7 @@
 
 /*------------------------------- Color space conversions --------------------*/
 /* regular yuv (YUYV) to rgb24*/
-void 
+extern void 
 yuyv2rgb (BYTE *pyuv, BYTE *prgb, int width, int height)
 {
 	int l=0;

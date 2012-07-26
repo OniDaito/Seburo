@@ -14,23 +14,10 @@ using namespace boost::assign;
 using namespace s9::gl;
 
 
-std::string textFileRead(std::string filename) {
-	string line;
-	string rval;
-	ifstream myfile (filename.c_str());
-	if (myfile.is_open()){
-		while ( myfile.good() )	{
-			getline (myfile,line);
-			rval += line +"\n";
-		}
-		myfile.close();
-	}
 
-	else cerr << "S9Gear - Unable to open shader file " << filename << endl;
-
-	return rval;
-}
-
+/*
+ * Load a set of shaders, missing out the geometry one
+ */
 
 
 void Shader::load(std::string vert, std::string frag) {
@@ -97,4 +84,41 @@ void Shader::load(std::string vert, std::string frag) {
 		free(shaderProgramInfoLog);
 		return;
 	}
+}
+
+
+/*
+ * Fluent Style interface - Overloaded setters for uniforms
+ */
+
+Shader& Shader::s(const char * name, glm::vec3 v) {
+	GLuint l = location(name);
+	glUniform3f(l,v.x,v.y,v.z);
+	return *this;
+}
+
+Shader& Shader::s(const char * name, glm::vec4 v) {
+	GLuint l = location(name);
+	glUniform4f(l,v.x,v.y,v.z,v.w);
+	return *this;
+
+}
+
+Shader& Shader::s(const char * name, glm::mat4 v) {
+	GLuint l = location(name);
+	glUniformMatrix4fv(	l, 1, GL_FALSE, glm::value_ptr(v)); 
+	return *this;
+
+}
+
+Shader& Shader::s(const char * name, float_t f) {
+	GLuint l = location(name);
+	glUniform1f(l,f);
+	return *this;
+}
+
+Shader& Shader::s(const char * name, int i){
+	GLuint l = location(name);
+	glUniform1i(l,i);
+	return *this;
 }

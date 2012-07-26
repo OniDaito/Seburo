@@ -12,11 +12,13 @@
 
 #include "../common.hpp"
 #include "common.hpp"
+#include "../utils.hpp"
 
 /*
  * Basic Shader class - loads and binds
  * \todo fluent and shorthand interface
  * \todo geometry shader
+ * \todo compiled in shaders within the code
  */
 
 namespace s9 {
@@ -30,7 +32,14 @@ namespace s9 {
 			
 			GLint location(const char * name) {return glGetUniformLocation(mProgram, name); }
 			
-			
+			// Fluent interface for quick setting
+
+			Shader& s(const char * name, glm::vec3 v);
+			Shader& s(const char * name, glm::vec4 v);
+			Shader& s(const char * name, glm::mat4 v);
+			Shader& s(const char * name, float_t f);
+			Shader& s(const char * name, int i);
+
 			void bind() { glUseProgram(mProgram);};
 			void unbind() {glUseProgram(0);};
 			

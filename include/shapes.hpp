@@ -11,20 +11,22 @@
 #define SHAPES_HPP
 
 #include "common.hpp"
-#include "geom.hpp"
+#include "geometry.hpp"
 #include "primitive.hpp"
 
 namespace s9 {
 	
 	class Quad : public Primitive {
 	public:
-		Quad(float w, float h);
+		Quad(){};
+		Quad(float_t w, float_t h);
 		GeometryFullFloat mGeom;
 	};
 
 	class Triangle : public Primitive {
 	public:
-		Triangle(float w, float h);
+		Triangle(){};
+		Triangle(float_t w, float_t h);
 		GeometryFullFloat mGeom;
 	};
 

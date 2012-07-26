@@ -37,10 +37,10 @@
 // Include GUVCView decoding
 // http://sourceforge.net/p/guvcview/code/795/tree/trunk/src/
 
- extern "C" {
-   #include "jpeg.h"
-   #include "colorspaces.h"
- }
+extern "C" {
+    #include "jpeg.h"
+    #include "colorspaces.h"
+}
  
 
 #define V4L_BUFFERS_DEFAULT	8

@@ -10,6 +10,7 @@
 
 using namespace s9;
 using namespace s9::gl;
+using namespace std;
 
 GLFWApp* GLFWApp::pThis;
 VisualApp* GLFWApp::pApp;
@@ -60,7 +61,7 @@ void GLFWApp::mainLoop() {
  */
 
 void GLFWApp::_reshape(GLFWwindow window, int w, int h) {
-	ResizeEvent e (w,h);
+	ResizeEvent e (w,h,glfwGetTime());
 	pApp->fireEvent(e);
 }
 
@@ -69,7 +70,7 @@ void GLFWApp::_reshape(GLFWwindow window, int w, int h) {
  */
 
 void GLFWApp::_display(GLFWwindow window) {
-	pApp->display();
+	pApp->display(pThis->mDX);
 }
 
 /*
@@ -78,7 +79,7 @@ void GLFWApp::_display(GLFWwindow window) {
 
 
 void GLFWApp::_keyCallback(GLFWwindow window, int key, int action) {
-	KeyboardEvent e (key,action);
+	KeyboardEvent e (key,action,glfwGetTime());
 	pApp->fireEvent(e);
 }
 
@@ -125,7 +126,7 @@ void GLFWApp::_mouseButtonCallback(GLFWwindow window, int button, int action) {
 		}
 	}
 
-	MouseEvent e (pThis->mMX,pThis->mMY,pThis->mFlag);
+	MouseEvent e (pThis->mMX,pThis->mMY,pThis->mFlag,glfwGetTime());
 	pApp->fireEvent(e);
 }
 
@@ -133,7 +134,7 @@ void GLFWApp::_mouseButtonCallback(GLFWwindow window, int button, int action) {
 void GLFWApp::_mousePositionCallback(GLFWwindow window, int x, int y) {
 	pThis->mMX = x;
 	pThis->mMY = y;
-	MouseEvent e (pThis->mMX,pThis->mMY,pThis->mFlag);
+	MouseEvent e (pThis->mMX,pThis->mMY,pThis->mFlag,glfwGetTime());
 	pApp->fireEvent(e);
 
 }
@@ -148,7 +149,7 @@ void GLFWApp::_mouseWheelCallback(GLFWwindow window, int xpos, int ypos) {
 		pThis->mFlag |= MOUSE_WHEEL_DOWN;
 	}
 
-	MouseEvent e (pThis->mMX,pThis->mMY,pThis->mFlag);
+	MouseEvent e (pThis->mMX,pThis->mMY,pThis->mFlag,glfwGetTime());
 	pApp->fireEvent(e);
 	
 	pThis->mFlag ^= MOUSE_WHEEL_UP;
@@ -226,6 +227,8 @@ GLFWwindow GLFWApp::createWindow(const char * title ="S9Gear", size_t w=800, siz
 	
 	CXGLERROR
 	pThis->vWindows.push_back(w);
+
+	pApp->init();
 
 	mainLoop();
 

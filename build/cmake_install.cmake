@@ -34,7 +34,8 @@ ENDIF(NOT DEFINED CMAKE_INSTALL_SO_NO_EXE)
 
 IF(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
-  INCLUDE("/home/oni/Projects/S9Gear/build/examples/Basic/cmake_install.cmake")
+  INCLUDE("/home/oni/Projects/S9Gear/build/examples/basic/cmake_install.cmake")
+  INCLUDE("/home/oni/Projects/S9Gear/build/examples/model/cmake_install.cmake")
 
 ENDIF(NOT CMAKE_INSTALL_LOCAL_ONLY)
 

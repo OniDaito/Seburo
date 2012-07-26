@@ -12,9 +12,13 @@
 
 #include "common.hpp"
 #include "primitive.hpp"
+#include "events.hpp"
 
 /* 
  * Camera Class for a camera that pitches and yaws whilst keeping up always parallel with y
+ * \todo certain camera classes could listen for events but we need to set a precidence (as sometimes we want
+ * \todo  * Camera can extend primitve! *
+ * camera movement and othertimes we want selection for example) - bubbling
  */
  
 namespace s9{
@@ -97,6 +101,75 @@ namespace s9{
 		void compute();
 		size_t mW, mH;
 	};
+
+	/*
+	 * A template that adds inertia and mouse drag movements
+	 * \todo make implicit in the visual app somehow?
+	 * \todo zooming
+	 */
+
+	template <class T>
+	class InertiaCam : public T {
+
+	protected:
+		glm::vec3 mNow;
+		glm::vec3 mPrev;
+		float_t mAngle, mDegrade;
+		glm::vec3 mP;
+		double_t mDT;
+		bool mHeld;
+
+	public:
+
+		InertiaCam() { 
+			mNow = glm::vec3(0.0f,0.0f,0.0f); 
+		 	mAngle = 50.0;
+			mDegrade = 2.0;
+			mDT = 0;
+			mHeld = false;
+
+		}
+
+		void update(double_t dt){ }
+
+		void passEvent(MouseEvent &e){
+
+			if (e.mFlag & MOUSE_LEFT_DOWN){
+
+				if (glm::length(mP) > 0){
+
+					mNow = glm::vec3(static_cast<float_t>(e.mX - mP.x), static_cast<float_t>(e.mY - mP.y),0.0f);
+					mHeld = true;
+				}
+			
+				mP = glm::vec3(static_cast<float_t>(e.mX), static_cast<float_t>(e.mY),0.0f);
+
+			}
+			else if (e.mFlag & MOUSE_LEFT_UP ){
+				mP = glm::vec3(0.0f,0.0f,0.0f);
+				mHeld = false;
+			}
+		}
+	};
+
+
+	template <>	
+	inline void InertiaCam<OrbitCamera>::update(double_t dt){
+		
+		double_t ds = mAngle * dt;
+
+		if (glm::length(mNow) < 0.01){
+			 mNow = glm::vec3(0.0f,0.0f,0.0f);
+		}	
+		else {
+			this->yaw(mNow.x * ds);
+			this->pitch(mNow.y * ds);
+		}
+
+		if (!mHeld) {
+			mNow *= 1.0 - (dt * mDegrade);
+		}
+	}
 
  }
 	 

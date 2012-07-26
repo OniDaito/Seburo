@@ -59,7 +59,7 @@ CMAKE_BINARY_DIR = /home/oni/Projects/S9Gear/build
 CMakeFiles/s9gear.dir/all:
 	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/depend
 	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/build
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/oni/Projects/S9Gear/build/CMakeFiles  2 3 4 5 6 7
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/oni/Projects/S9Gear/build/CMakeFiles  3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21
 	@echo "Built target s9gear"
 .PHONY : CMakeFiles/s9gear.dir/all
 
@@ -69,7 +69,7 @@ all: CMakeFiles/s9gear.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/s9gear.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/oni/Projects/S9Gear/build/CMakeFiles 6
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/oni/Projects/S9Gear/build/CMakeFiles 19
 	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/s9gear.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/oni/Projects/S9Gear/build/CMakeFiles 0
 .PHONY : CMakeFiles/s9gear.dir/rule
@@ -88,53 +88,103 @@ clean: CMakeFiles/s9gear.dir/clean
 .PHONY : clean
 
 #=============================================================================
-# Directory level rules for directory examples/Basic
+# Directory level rules for directory examples/basic
 
 # Convenience name for "all" pass in the directory.
-examples/Basic/all: examples/Basic/CMakeFiles/basic.dir/all
-.PHONY : examples/Basic/all
+examples/basic/all: examples/basic/CMakeFiles/basic.dir/all
+.PHONY : examples/basic/all
 
 # Convenience name for "clean" pass in the directory.
-examples/Basic/clean: examples/Basic/CMakeFiles/basic.dir/clean
-.PHONY : examples/Basic/clean
+examples/basic/clean: examples/basic/CMakeFiles/basic.dir/clean
+.PHONY : examples/basic/clean
 
 # Convenience name for "preinstall" pass in the directory.
-examples/Basic/preinstall:
-.PHONY : examples/Basic/preinstall
+examples/basic/preinstall:
+.PHONY : examples/basic/preinstall
 
 #=============================================================================
-# Target rules for target examples/Basic/CMakeFiles/basic.dir
+# Target rules for target examples/basic/CMakeFiles/basic.dir
 
 # All Build rule for target.
-examples/Basic/CMakeFiles/basic.dir/all: CMakeFiles/s9gear.dir/all
-	$(MAKE) -f examples/Basic/CMakeFiles/basic.dir/build.make examples/Basic/CMakeFiles/basic.dir/depend
-	$(MAKE) -f examples/Basic/CMakeFiles/basic.dir/build.make examples/Basic/CMakeFiles/basic.dir/build
+examples/basic/CMakeFiles/basic.dir/all: CMakeFiles/s9gear.dir/all
+	$(MAKE) -f examples/basic/CMakeFiles/basic.dir/build.make examples/basic/CMakeFiles/basic.dir/depend
+	$(MAKE) -f examples/basic/CMakeFiles/basic.dir/build.make examples/basic/CMakeFiles/basic.dir/build
 	$(CMAKE_COMMAND) -E cmake_progress_report /home/oni/Projects/S9Gear/build/CMakeFiles  1
 	@echo "Built target basic"
-.PHONY : examples/Basic/CMakeFiles/basic.dir/all
+.PHONY : examples/basic/CMakeFiles/basic.dir/all
 
 # Include target in all.
-all: examples/Basic/CMakeFiles/basic.dir/all
+all: examples/basic/CMakeFiles/basic.dir/all
 .PHONY : all
 
 # Build rule for subdir invocation for target.
-examples/Basic/CMakeFiles/basic.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/oni/Projects/S9Gear/build/CMakeFiles 7
-	$(MAKE) -f CMakeFiles/Makefile2 examples/Basic/CMakeFiles/basic.dir/all
+examples/basic/CMakeFiles/basic.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/oni/Projects/S9Gear/build/CMakeFiles 20
+	$(MAKE) -f CMakeFiles/Makefile2 examples/basic/CMakeFiles/basic.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/oni/Projects/S9Gear/build/CMakeFiles 0
-.PHONY : examples/Basic/CMakeFiles/basic.dir/rule
+.PHONY : examples/basic/CMakeFiles/basic.dir/rule
 
 # Convenience name for target.
-basic: examples/Basic/CMakeFiles/basic.dir/rule
+basic: examples/basic/CMakeFiles/basic.dir/rule
 .PHONY : basic
 
 # clean rule for target.
-examples/Basic/CMakeFiles/basic.dir/clean:
-	$(MAKE) -f examples/Basic/CMakeFiles/basic.dir/build.make examples/Basic/CMakeFiles/basic.dir/clean
-.PHONY : examples/Basic/CMakeFiles/basic.dir/clean
+examples/basic/CMakeFiles/basic.dir/clean:
+	$(MAKE) -f examples/basic/CMakeFiles/basic.dir/build.make examples/basic/CMakeFiles/basic.dir/clean
+.PHONY : examples/basic/CMakeFiles/basic.dir/clean
 
 # clean rule for target.
-clean: examples/Basic/CMakeFiles/basic.dir/clean
+clean: examples/basic/CMakeFiles/basic.dir/clean
+.PHONY : clean
+
+#=============================================================================
+# Directory level rules for directory examples/model
+
+# Convenience name for "all" pass in the directory.
+examples/model/all: examples/model/CMakeFiles/model.dir/all
+.PHONY : examples/model/all
+
+# Convenience name for "clean" pass in the directory.
+examples/model/clean: examples/model/CMakeFiles/model.dir/clean
+.PHONY : examples/model/clean
+
+# Convenience name for "preinstall" pass in the directory.
+examples/model/preinstall:
+.PHONY : examples/model/preinstall
+
+#=============================================================================
+# Target rules for target examples/model/CMakeFiles/model.dir
+
+# All Build rule for target.
+examples/model/CMakeFiles/model.dir/all: CMakeFiles/s9gear.dir/all
+	$(MAKE) -f examples/model/CMakeFiles/model.dir/build.make examples/model/CMakeFiles/model.dir/depend
+	$(MAKE) -f examples/model/CMakeFiles/model.dir/build.make examples/model/CMakeFiles/model.dir/build
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/oni/Projects/S9Gear/build/CMakeFiles  2
+	@echo "Built target model"
+.PHONY : examples/model/CMakeFiles/model.dir/all
+
+# Include target in all.
+all: examples/model/CMakeFiles/model.dir/all
+.PHONY : all
+
+# Build rule for subdir invocation for target.
+examples/model/CMakeFiles/model.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/oni/Projects/S9Gear/build/CMakeFiles 20
+	$(MAKE) -f CMakeFiles/Makefile2 examples/model/CMakeFiles/model.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/oni/Projects/S9Gear/build/CMakeFiles 0
+.PHONY : examples/model/CMakeFiles/model.dir/rule
+
+# Convenience name for target.
+model: examples/model/CMakeFiles/model.dir/rule
+.PHONY : model
+
+# clean rule for target.
+examples/model/CMakeFiles/model.dir/clean:
+	$(MAKE) -f examples/model/CMakeFiles/model.dir/build.make examples/model/CMakeFiles/model.dir/clean
+.PHONY : examples/model/CMakeFiles/model.dir/clean
+
+# clean rule for target.
+clean: examples/model/CMakeFiles/model.dir/clean
 .PHONY : clean
 
 #=============================================================================
