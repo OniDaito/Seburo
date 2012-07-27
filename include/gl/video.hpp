@@ -13,6 +13,7 @@
 
 #include "../common.hpp"
 #include "common.hpp"
+#include "utils.hpp"
 
 #ifdef _GEAR_OPENCV
 #include <opencv2/opencv.hpp>
@@ -31,10 +32,10 @@ namespace s9 {
 		 * Access to a camera device - OS dependent and using OpenGL as the texture method
 		 */
 
-		class S9VidCam {
+		class VidCam {
 		public:
-			S9VidCam();
-			bool open(std::string dev, size_t w, size_t h, size_t fps);
+			VidCam() {};
+			VidCam (std::string dev, size_t w, size_t h, size_t fps);
 			void stop();
 			glm::vec2 getSize() {return glm::vec2(mObj->mW, mObj->mH);};
 			GLuint getTexture() {return mObj->mTexID; };
@@ -47,9 +48,9 @@ namespace s9 {
 			class SharedObj {
 			public:
 
-	#ifdef _GEAR_X11_GLX
+#ifdef _GEAR_X11_GLX
 				boost::shared_ptr<UVCVideo> pCam;
-	#endif
+#endif
 				size_t mW,mH,mFPS;
 				GLuint mTexID;
 
@@ -84,7 +85,7 @@ namespace s9 {
 		class CVVidCam {
 		public:
 			CVVidCam();
-			CVVidCam(S9VidCam &cam);
+			CVVidCam(VidCam &cam);
 				
 			CameraParameters& getParams() {return mObj->mP;};
 			
@@ -115,7 +116,7 @@ namespace s9 {
 			class SharedObj {
 			public:
 
-				SharedObj(S9VidCam cam) {mCam = cam; };
+				SharedObj(VidCam cam) {mCam = cam; };
 				CameraParameters mP;
 				bool mSecondary;
 				cv::Mat mPlaneNormal;	// Normal to the camera plane
@@ -126,7 +127,7 @@ namespace s9 {
 					
 				GLuint mRectifiedTexID;
 				GLuint mTexResultID;
-				S9VidCam mCam;
+				VidCam mCam;
 
 			};
 

@@ -27,11 +27,14 @@ namespace po = boost::program_options;
 
 void ModelApp::init(){
  
-    mShader.load("../../../shaders/quad.vert", "../../../shaders/quad.frag");
+    mShader.load("../../../shaders/basic_lighting.vert", "../../../shaders/basic_lighting.frag");
 
     mGeometry = gl::Geometry<GeometryPNF>( AssetImporter::load("../../../data/bunny.ply"));
+    mGeometry.setScale(glm::vec3(30.0,30.0,30.0));
    
     mCamera.move(glm::vec3(0,0,20.0f));
+
+    glEnable(GL_DEPTH_TEST);
 }
 
 
@@ -49,8 +52,11 @@ void ModelApp::display(double_t dt){
 
     // Our matrix = the object * camera
     glm::mat4 mvp = mCamera.getMatrix() * mGeometry.getMatrix();
+    glm::mat4 mv = mCamera.getViewMatrix() * mGeometry.getMatrix();
+    glm::mat4 mn =  glm::transpose(glm::inverse(mv));
 
-    mShader.s("uMVPMatrix",mvp);
+    mShader.s("uMVPMatrix",mvp).s("uShininess",128.0f).s("uMVMatrix",mv)
+        .s("uNMatrix",mn).s("uLight0",glm::vec3(5.0,5.0,5.0));
 
     mGeometry.draw();
     
@@ -76,6 +82,7 @@ void ModelApp::fireEvent(MouseEvent &e){
 
 void ModelApp::fireEvent(ResizeEvent &e){
     cout << "Window Resized" << endl;
+    glViewport(0,0,e.mW,e.mH);
     mCamera.setRatio( static_cast<float_t>(e.mW) / e.mH);
 }
 

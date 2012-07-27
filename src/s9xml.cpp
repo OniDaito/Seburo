@@ -86,13 +86,23 @@ std::string XMLIterator::operator[](const char *s) {
  */
 
 std::string XMLSettings::operator[](std::string s) {
-	//split string via '/' into levels
-	std::vector<std::string> strs;
-	boost::split(strs, s, boost::is_any_of("/: "));
 
-	TiXmlElement *pRoot = mObj->mDoc->FirstChildElement(strs[0].c_str());
-	return find(strs,pRoot);
-	
+	// todo - be careful here if we ever add push and pop to the stack
+	// as the cache will need to keep the FULL path
+
+	map< string,string>::iterator it;
+	it = mObj->mCache.find(s);
+	if (it == mObj->mCache.end()){
+		//split string via '/' into levels
+		std::vector<std::string> strs;
+		boost::split(strs, s, boost::is_any_of("/: "));
+
+		TiXmlElement *pRoot = mObj->mDoc->FirstChildElement(strs[0].c_str());
+		string result = find(strs,pRoot);
+		mObj->mCache[s] = result;
+		return result;
+	}
+	return it->second;
 }
 
 bool XMLSettings::loadFile(std::string filename){

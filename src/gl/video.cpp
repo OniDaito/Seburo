@@ -16,9 +16,8 @@ using namespace boost;
 using namespace s9;
 using namespace s9::gl;
 
-S9VidCam::S9VidCam() {}
 
-bool S9VidCam::open(std::string dev, size_t w, size_t h, size_t fps) {
+VidCam::VidCam(std::string dev, size_t w, size_t h, size_t fps) {
 	mObj.reset(new SharedObj());
 
 #ifdef _GEAR_X11_GLX
@@ -28,34 +27,39 @@ bool S9VidCam::open(std::string dev, size_t w, size_t h, size_t fps) {
 	
 	mObj->mW = w; mObj->mH = h; mObj->mFPS = fps; 
 
+	glEnable(GL_TEXTURE_RECTANGLE);
+	
 	// Initialise texture - using GL_TEXTURE_RECTANGLE
 	glGenTextures(1, &(mObj->mTexID));
-	glBindTexture(GL_TEXTURE_RECTANGLE, mObj->mTexID);              
-	glTexParameterf(GL_TEXTURE_RECTANGLE,GL_TEXTURE_MIN_FILTER,GL_LINEAR); 
+	
+	glBindTexture(GL_TEXTURE_RECTANGLE, mObj->mTexID);   
+/*	glTexParameterf(GL_TEXTURE_RECTANGLE,GL_TEXTURE_MIN_FILTER,GL_LINEAR); 
 	glTexParameterf(GL_TEXTURE_RECTANGLE,GL_TEXTURE_MAG_FILTER,GL_LINEAR); 
 	glTexParameterf( GL_TEXTURE_RECTANGLE, GL_TEXTURE_WRAP_S, GL_REPEAT );
-	glTexParameterf( GL_TEXTURE_RECTANGLE, GL_TEXTURE_WRAP_T, GL_REPEAT );
+	glTexParameterf( GL_TEXTURE_RECTANGLE, GL_TEXTURE_WRAP_T, GL_REPEAT );*/
 	glTexImage2D(GL_TEXTURE_RECTANGLE, 0, 3, w, h, 0, GL_RGB, GL_UNSIGNED_BYTE, mObj->pCam->getBuffer());
-	
+
+
+	CXGLERROR
 }
 
 
-void S9VidCam::bind(){
+void VidCam::bind(){
 	glBindTexture(GL_TEXTURE_RECTANGLE, mObj->mTexID);
 }
 
-void S9VidCam::unbind(){
+void VidCam::unbind(){
 	glBindTexture(GL_TEXTURE_RECTANGLE, 0);
 }
 
 
-void S9VidCam::update() {
+void VidCam::update() {
 	bind();
 	glTexSubImage2D(GL_TEXTURE_RECTANGLE,0,0,0,mObj->mW, mObj->mH, GL_RGB, GL_UNSIGNED_BYTE, mObj->pCam->getBuffer() );		
 	unbind();
 }
 
-void S9VidCam::stop(){
+void VidCam::stop(){
 #ifdef _GEAR_X11_GLX
 	mObj->pCam->stop();
 #endif	
@@ -71,7 +75,7 @@ void S9VidCam::stop(){
 
 CVVidCam::CVVidCam(){}
 
-CVVidCam::CVVidCam(S9VidCam &cam){
+CVVidCam::CVVidCam(VidCam &cam){
 	
 	mObj.reset(new SharedObj(cam));
 
@@ -81,18 +85,18 @@ CVVidCam::CVVidCam(S9VidCam &cam){
 	mObj->mResult = Mat(size,CV_8UC3);
 	glGenTextures(1, &(mObj->mTexResultID));
 	glBindTexture(GL_TEXTURE_RECTANGLE, mObj->mTexResultID);
-	glTexParameterf(GL_TEXTURE_RECTANGLE,GL_TEXTURE_MIN_FILTER,GL_LINEAR); 
+/*	glTexParameterf(GL_TEXTURE_RECTANGLE,GL_TEXTURE_MIN_FILTER,GL_LINEAR); 
 	glTexParameterf(GL_TEXTURE_RECTANGLE,GL_TEXTURE_MAG_FILTER,GL_LINEAR); 
 	glTexParameterf( GL_TEXTURE_RECTANGLE, GL_TEXTURE_WRAP_S, GL_REPEAT );
-	glTexParameterf( GL_TEXTURE_RECTANGLE, GL_TEXTURE_WRAP_T, GL_REPEAT );
+	glTexParameterf( GL_TEXTURE_RECTANGLE, GL_TEXTURE_WRAP_T, GL_REPEAT );*/
 	glTexImage2D(GL_TEXTURE_RECTANGLE, 0, 3, mObj->mCam.getSize().x,  mObj->mCam.getSize().y,
 		0, GL_RGB, GL_UNSIGNED_BYTE, (unsigned char *) IplImage(mObj->mResult).imageData);
 	glGenTextures(1, &(mObj->mRectifiedTexID));
 	glBindTexture(GL_TEXTURE_RECTANGLE, mObj->mRectifiedTexID);               
-	glTexParameterf(GL_TEXTURE_RECTANGLE,GL_TEXTURE_MIN_FILTER,GL_LINEAR); 
+/*	glTexParameterf(GL_TEXTURE_RECTANGLE,GL_TEXTURE_MIN_FILTER,GL_LINEAR); 
 	glTexParameterf(GL_TEXTURE_RECTANGLE,GL_TEXTURE_MAG_FILTER,GL_LINEAR); 
 	glTexParameterf( GL_TEXTURE_RECTANGLE, GL_TEXTURE_WRAP_S, GL_REPEAT );
-	glTexParameterf( GL_TEXTURE_RECTANGLE, GL_TEXTURE_WRAP_T, GL_REPEAT );
+	glTexParameterf( GL_TEXTURE_RECTANGLE, GL_TEXTURE_WRAP_T, GL_REPEAT );*/
 	glTexImage2D(GL_TEXTURE_RECTANGLE, 0, 3,  mObj->mCam.getSize().x,  mObj->mCam.getSize().y,
 	 0, GL_RGB, GL_UNSIGNED_BYTE, (unsigned char *) IplImage(mObj->mImageRectified).imageData);
 

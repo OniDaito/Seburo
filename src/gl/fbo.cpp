@@ -17,31 +17,34 @@ using namespace s9::gl;
  * A Basic FBO with Rectangular textures FBO
  */
 
-void FBO::setup(size_t w, size_t h){
-	mW = w;
-	mH = h;
+FBO::FBO (size_t w, size_t h){
+		
+	mObj.reset(new SharedObj());
+
+	mObj->mW = w;
+	mObj->mH = h;
 	
-	glGenFramebuffers(1, &mID);
-	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, mID);
+	glGenFramebuffers(1, &(mObj->mID));
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, mObj->mID);
  
 	// Create depth renderbuffer
-	glGenRenderbuffers(1, &mDepth);
-	glBindRenderbuffer(GL_RENDERBUFFER, mDepth);
+	glGenRenderbuffers(1, &(mObj->mDepth));
+	glBindRenderbuffer(GL_RENDERBUFFER, mObj->mDepth);
 	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, w, h);
  
 	// Create the texture
-	glGenTextures(1, &mColour);
-	glBindTexture(GL_TEXTURE_RECTANGLE, mColour);
+	glGenTextures(1, &(mObj->mColour));
+	glBindTexture(GL_TEXTURE_RECTANGLE, mObj->mColour);
 	glTexImage2D(GL_TEXTURE_RECTANGLE, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_FLOAT, NULL);
 	glTexParameteri(GL_TEXTURE_RECTANGLE, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_RECTANGLE, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
  
 	// Attach texture to first color attachment and the depth to the depth attachment
-	glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_RECTANGLE, mColour, 0);
-	glFramebufferRenderbuffer(GL_DRAW_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, mDepth);
+	glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_RECTANGLE,mObj->mColour, 0);
+	glFramebufferRenderbuffer(GL_DRAW_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, mObj->mDepth);
  
 	if (checkStatus() )  {
-		mOk = true;
+		mObj->mOk = true;
 		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 	}
 }
@@ -181,15 +184,15 @@ void FBO::printFramebufferInfo() {
 
 
 void FBO::resize(size_t w, size_t h){
-	if(!mOk) return;
+	if(!mObj->mOk) return;
 	
-	mW = w;
-	mH = h;
+	mObj->mW = w;
+	mObj->mH = h;
 	
-	glBindTexture(GL_TEXTURE_RECTANGLE, mColour);
+	glBindTexture(GL_TEXTURE_RECTANGLE, mObj->mColour);
 	glTexImage2D(GL_TEXTURE_RECTANGLE, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_FLOAT, NULL);
 	
-	glBindRenderbuffer(GL_RENDERBUFFER, mDepth);
+	glBindRenderbuffer(GL_RENDERBUFFER, mObj->mDepth);
 	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, w, h);
 	
 }

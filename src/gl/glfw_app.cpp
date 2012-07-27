@@ -14,9 +14,9 @@ using namespace std;
 
 GLFWApp* GLFWApp::pThis;
 VisualApp* GLFWApp::pApp;
+string GLFWApp::mTitle;
 
-
-GLFWApp::GLFWApp (VisualApp* app){
+GLFWApp::GLFWApp (VisualApp* app, int argc = 0, char * argv[] = NULL, const char * title = "S9Gear"){
 	if( !glfwInit(NULL) ){
 		fprintf( stderr, "Failed to initialize GLFW\n" );
 		exit( EXIT_FAILURE );
@@ -24,6 +24,7 @@ GLFWApp::GLFWApp (VisualApp* app){
 	pApp = app;
 	pThis = this;
 	mFlag = 0x00;
+	mTitle = title;    
 }
 
 
@@ -43,6 +44,10 @@ void GLFWApp::mainLoop() {
 		pThis->mDX = glfwGetTime() - t;
 		
 		glfwPollEvents();
+
+#ifdef _GEAR_X11_GLX
+		gtk_main_iteration_do(false);
+#endif
 			
 		
 		BOOST_FOREACH ( GLFWwindow b, pThis->vWindows) {
@@ -191,7 +196,7 @@ GLFWwindow GLFWApp::createWindow(const char * title ="S9Gear", size_t w=800, siz
 	glfwOpenWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_COMPAT_PROFILE);
 	glfwOpenWindowHint(GLFW_FSAA_SAMPLES, 4);
 	
-	GLFWwindow w = createWindow();
+	GLFWwindow w = createWindow(mTitle.c_str());
 	
 	CXGLERROR
 	

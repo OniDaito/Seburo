@@ -18,6 +18,7 @@
  * Camera Class for a camera that pitches and yaws whilst keeping up always parallel with y
  * \todo certain camera classes could listen for events but we need to set a precidence (as sometimes we want
  * \todo  * Camera can extend primitve! *
+ * \todo update and resize hooks on all cameras
  * camera movement and othertimes we want selection for example) - bubbling
  */
  
@@ -39,6 +40,7 @@ namespace s9{
 		void setFar(float_t n) {mFar = n; compute(); };
 		
 		void setRatio(float_t r);
+		void setField(float_t a) {mField = a; compute(); };
 		
 		void setPos(glm::vec3 p) {mPos = p; compute(); };
 		void setLook(glm::vec3 l);

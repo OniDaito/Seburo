@@ -18,8 +18,6 @@
 #include <assimp/postprocess.h>
 
 
-
-
 namespace s9 {
 
 	/*
@@ -28,13 +26,18 @@ namespace s9 {
 
 	template<class T>
 	class Asset : public Primitive {
+	protected:
+		struct SharedObj{
+			T mGeom;
+		};
+		boost::shared_ptr<SharedObj> mObj;
+
 	public:
 		Asset() {};
-		Asset(T geom) {mGeom = geom; }
-		T getGeometry() {return mGeom; };
-	protected:
+		virtual operator int() const { return mObj.use_count() > 0; };
+		Asset(T geom) {mObj.reset(new SharedObj()); mObj->mGeom = geom; }
+		T getGeometry() { return mObj->mGeom; };
 
-		T mGeom;
 	};
 
 	// Handy typedefs
@@ -43,7 +46,6 @@ namespace s9 {
 	typedef Asset<GeometryPNF> AssetBasic;
 	typedef Asset<GeometryFullFloat> AssetFull;
 	
-
 	/*
  	 * A wrapper around the Assimp library
  	 * \todo do something better with pScene

@@ -6,14 +6,15 @@
 *
 */
 
-#ifndef GLAPP_HPP
-#define GLAPP_HPP
+#ifndef BASICAPP_HPP
+#define BASICAPP_HPP
 
 #include "s9gear.hpp"
 #include "common.hpp"
 #include "gl/shapes.hpp"
 #include "gl/shader.hpp"
 #include "gl/glfw_app.hpp"
+
 
 #include <anttweakbar/AntTweakBar.h>
 
@@ -39,7 +40,6 @@ namespace s9 {
 		gl::Shader mShader;
 		InertiaCam<OrbitCamera> mCamera;
 		
-		double_t mPrevT;
 	};
 }
 

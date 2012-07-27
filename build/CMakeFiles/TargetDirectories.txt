@@ -1,3 +1,6 @@
 /home/oni/Projects/S9Gear/build/examples/basic/CMakeFiles/basic.dir
+/home/oni/Projects/S9Gear/build/examples/fbo/CMakeFiles/fbo.dir
+/home/oni/Projects/S9Gear/build/applications/leeds/CMakeFiles/leeds.dir
 /home/oni/Projects/S9Gear/build/examples/model/CMakeFiles/model.dir
 /home/oni/Projects/S9Gear/build/CMakeFiles/s9gear.dir
+/home/oni/Projects/S9Gear/build/examples/video/CMakeFiles/video.dir

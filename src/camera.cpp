@@ -26,6 +26,7 @@ Camera::Camera(){
 	mNear = 1.0f;
 	mField = 55.0f;
 	mFar = 100.0f;
+	mR = 1.0;
 	compute();
 }
 

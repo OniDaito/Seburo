@@ -137,6 +137,45 @@ model/fast:
 	$(MAKE) -f examples/model/CMakeFiles/model.dir/build.make examples/model/CMakeFiles/model.dir/build
 .PHONY : model/fast
 
+#=============================================================================
+# Target rules for targets named fbo
+
+# Build rule for target.
+fbo: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 fbo
+.PHONY : fbo
+
+# fast build rule for target.
+fbo/fast:
+	$(MAKE) -f examples/fbo/CMakeFiles/fbo.dir/build.make examples/fbo/CMakeFiles/fbo.dir/build
+.PHONY : fbo/fast
+
+#=============================================================================
+# Target rules for targets named video
+
+# Build rule for target.
+video: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 video
+.PHONY : video
+
+# fast build rule for target.
+video/fast:
+	$(MAKE) -f examples/video/CMakeFiles/video.dir/build.make examples/video/CMakeFiles/video.dir/build
+.PHONY : video/fast
+
+#=============================================================================
+# Target rules for targets named leeds
+
+# Build rule for target.
+leeds: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 leeds
+.PHONY : leeds
+
+# fast build rule for target.
+leeds/fast:
+	$(MAKE) -f applications/leeds/CMakeFiles/leeds.dir/build.make applications/leeds/CMakeFiles/leeds.dir/build
+.PHONY : leeds/fast
+
 src/asset.o: src/asset.cpp.o
 .PHONY : src/asset.o
 
@@ -604,6 +643,9 @@ help:
 	@echo "... s9gear"
 	@echo "... basic"
 	@echo "... model"
+	@echo "... fbo"
+	@echo "... video"
+	@echo "... leeds"
 	@echo "... src/asset.o"
 	@echo "... src/asset.i"
 	@echo "... src/asset.s"

@@ -31,7 +31,6 @@ void BasicApp::init(){
 
     mTestQuad.move(glm::vec3(-0.5,-0.5,0.0));
     mCamera.move(glm::vec3(0,0,20.0f));
-    mPrevT = 0;
 
 }
 
@@ -75,7 +74,8 @@ void BasicApp::fireEvent(MouseEvent &e){
  */
 
 void BasicApp::fireEvent(ResizeEvent &e){
-    cout << "Window Resized" << endl;
+    cout << "Window Resized:" << e.mW << "," << e.mH << endl;
+    glViewport(0,0,e.mW,e.mH);
     mCamera.setRatio( static_cast<float_t>(e.mW) / e.mH);
 }
 

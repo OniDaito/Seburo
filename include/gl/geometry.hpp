@@ -33,28 +33,31 @@ namespace s9 {
 
 		protected:
 			virtual void _gen() {}
+			virtual void _allocate() {}
 		
 		public:
 			Geometry() {};
 			Geometry(T a) : Asset<T>(a) {  mVAO = 0; };
 			Geometry(Asset<T> b) : Asset<T>(b) { mVAO = 0; }
+			T getGeometry() { return this->mObj->mGeom; }
 
 			// Override this 
 			virtual void draw() {
 				if(mVAO == 0) _gen();
 				
 				bind();
-				if ( this->mGeom.indexsize() > 0)
-					glDrawElements(GL_TRIANGLES, this->mGeom.indexsize(), GL_UNSIGNED_INT, 0);
-				else
-					glDrawArrays(GL_TRIANGLES,0, this->mGeom.size());
+
+				if (getGeometry().isDirty()) _allocate();
+
+				if ( getGeometry().indexsize() > 0){
+					glDrawElements(GL_TRIANGLES, getGeometry().indexsize(), GL_UNSIGNED_INT, 0);
+				}
+				else{
+					glDrawArrays(GL_TRIANGLES,0, getGeometry().size());
+				}
 
 				unbind();
-				CXGLERROR
 			 }
-
-		
-
 		};
 
 		/*
@@ -62,20 +65,28 @@ namespace s9 {
 		 */
 
 		template<>
-		inline void Geometry<GeometryPNF>::_gen() {
-			glGenVertexArrays(1,&mVAO);
-	
-			unsigned int handle[2];
-			glGenBuffers(2,handle);
+		inline void Geometry<GeometryPNF>::_allocate() {
 
 			glBindBuffer(GL_ARRAY_BUFFER, handle[0]);
-			glBufferData(GL_ARRAY_BUFFER, this->mGeom.size() * sizeof(VertPNF), this->mGeom.addr(), GL_STATIC_DRAW);
+			glBufferData(GL_ARRAY_BUFFER, getGeometry().size() * sizeof(VertPNF), getGeometry().addr(), GL_STATIC_DRAW);
 			glBindBuffer(GL_ARRAY_BUFFER, 0);
 
+			if (getGeometry().indexsize() > 0){
+				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, handle[1]);
+				glBufferData(GL_ELEMENT_ARRAY_BUFFER, getGeometry().indexsize() * sizeof(uint32_t), getGeometry().indexaddr(), GL_STATIC_DRAW);
+				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,0);
+			}
+		}
 
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, handle[1]);
-			glBufferData(GL_ELEMENT_ARRAY_BUFFER, this->mGeom.indexsize() * sizeof(uint32_t), this->mGeom.indexaddr(), GL_STATIC_DRAW);
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,0);
+		template<>
+		inline void Geometry<GeometryPNF>::_gen() {
+			glGenVertexArrays(1, &(this->mVAO));
+			int s = getGeometry().indexsize() > 0 ? 2 : 1;
+			
+			handle = new unsigned int[2];
+			glGenBuffers(s,handle);
+
+			_allocate();
 
 			bind();
 
@@ -83,22 +94,22 @@ namespace s9 {
 
 			glEnableVertexAttribArray(0); // Pos
 			glEnableVertexAttribArray(1); // Normal
-			glEnableVertexAttribArray(2); // Indices
-
-
+		
 			glVertexAttribPointer(0,3, GL_FLOAT, GL_FALSE, sizeof(VertPNF), (GLvoid*)offsetof(VertPNF,mP) );
 			glVertexAttribPointer(1,3, GL_FLOAT, GL_FALSE, sizeof(VertPNF), (GLvoid*)offsetof(VertPNF,mN) );
 
 			// Indices
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, handle[1]);
-			glVertexAttribPointer(2, 1,GL_UNSIGNED_INT,GL_FALSE,0, (GLubyte*) NULL);
+			if (getGeometry().indexsize() > 0){
+				glEnableVertexAttribArray(2); // Indices
+				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, handle[1]);
+				glVertexAttribPointer(2, 1,GL_UNSIGNED_INT,GL_FALSE,0, (GLubyte*) NULL);
+			}
 
 			unbind();
 
 			glBindBuffer(GL_ARRAY_BUFFER, 0);
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,0);
 
-			CXGLERROR
 		}
 
 	}

@@ -16,6 +16,10 @@
 
 #include <GL/glfw3.h>
 
+#ifdef _GEAR_X11_GLX	
+#include <gtkmm.h>
+#endif
+
 namespace s9 {
 
 	namespace gl {
@@ -75,8 +79,6 @@ namespace s9 {
 			 * GLFW Callback for resizing a window
 			 */
 
-
-
 			static void _mousePositionCallback(GLFWwindow window, int x, int y);
 
 			static void _mouseWheelCallback(GLFWwindow window, int xpos, int ypos);
@@ -85,7 +87,7 @@ namespace s9 {
 
 
 		public:
-			GLFWApp(VisualApp *app);
+			GLFWApp(VisualApp *app, int argc, char * argv[], const char * title);
 
 			static GLFWwindow createWindow(const char * title, size_t w, size_t h);
 			
@@ -100,6 +102,7 @@ namespace s9 {
 
 			static VisualApp *pApp;
 			static GLFWApp *pThis;
+			static std::string mTitle;
 
 		};
 

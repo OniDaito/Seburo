@@ -28,6 +28,7 @@ namespace s9 {
 			void bind() { glBindVertexArray(mVAO); };
 			void unbind()  { glBindVertexArray(0); };
 			GLuint mVAO;
+			unsigned int *handle;
 
 		};
 	}

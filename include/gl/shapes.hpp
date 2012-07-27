@@ -27,6 +27,7 @@ namespace s9 {
 		class Quad : public s9::Quad, public ViaVAO {
 		protected:
 			void _gen();
+			void _allocate();
 
 		public:
 			Quad(){};
@@ -43,6 +44,7 @@ namespace s9 {
 		class Triangle : public s9::Triangle, public ViaVAO {
 		protected:
 			void _gen();
+			void _allocate();
 	
 		public:
 			Triangle() {};

@@ -7,8 +7,8 @@
 */
 
 
-#ifndef SHAPES_HPP
-#define SHAPES_HPP
+#ifndef S9_SHAPES_HPP
+#define S9_SHAPES_HPP
 
 #include "common.hpp"
 #include "geometry.hpp"
@@ -16,10 +16,15 @@
 
 namespace s9 {
 	
+	/*
+	 * Essentially the same as Assets but they have special properties on their geometry
+	 */ 
+
 	class Quad : public Primitive {
 	public:
 		Quad(){};
 		Quad(float_t w, float_t h);
+		void resize(float_t w, float_t h);
 		GeometryFullFloat mGeom;
 	};
 
@@ -27,6 +32,7 @@ namespace s9 {
 	public:
 		Triangle(){};
 		Triangle(float_t w, float_t h);
+		void resize(float_t w, float_t h);
 		GeometryFullFloat mGeom;
 	};
 

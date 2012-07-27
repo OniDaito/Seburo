@@ -297,6 +297,12 @@ endif(APPLE)
 if (NOT TARGET examples)
 	add_subdirectory("${CMAKE_SOURCE_DIR}/examples/basic")
 	add_subdirectory("${CMAKE_SOURCE_DIR}/examples/model")
+	add_subdirectory("${CMAKE_SOURCE_DIR}/examples/fbo")
+	add_subdirectory("${CMAKE_SOURCE_DIR}/examples/video")
+endif() 
+
+if (NOT TARGET applications)
+	add_subdirectory("${CMAKE_SOURCE_DIR}/applications/leeds")
 endif() 
 
 

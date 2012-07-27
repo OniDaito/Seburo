@@ -11,6 +11,7 @@
 #define S9_XML_HPP
 
 #include <numeric> 
+#include <map>
 
 #include "tinyxml.h"
 #include "common.hpp"
@@ -51,6 +52,7 @@ namespace s9{
 		public:
 			std::string mFilename;
 			boost::shared_ptr<TiXmlDocument> mDoc;
+			std::map < std::string, std::string > mCache;
 		};
 		
 		boost::shared_ptr<SharedObj> mObj;

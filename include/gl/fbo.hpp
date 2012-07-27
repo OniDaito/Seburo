@@ -23,29 +23,35 @@ namespace s9 {
 	namespace gl {
 
 		/*
-		 * Basic FBO Class
+		 * Basic FBO Class with depth and colour attachments
 		 */
 		 
 		class FBO {
+
+		protected:
+			struct SharedObj {
+				GLuint mW,mH,mID,mDepth,mColour;
+				bool mOk;
+			};
+			boost::shared_ptr<SharedObj> mObj;
+			
 		public:
-			FBO() {mOk = false;};
-			void setup(size_t w, size_t h);
-			void bind() { glBindFramebuffer(GL_FRAMEBUFFER, mID); glViewport(0,0,mW,mH); };
+			FBO() {};
+			FBO(size_t w, size_t h);
+			void bind() { glBindFramebuffer(GL_FRAMEBUFFER, mObj->mID); glViewport(0,0,mObj->mW,mObj->mH); };
 			void unbind() { glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0); } ;
 			bool checkStatus();
 			void printFramebufferInfo();
 			void resize(size_t w, size_t h);
-			void bindColour() { glBindTexture(GL_TEXTURE_RECTANGLE, mColour); }
+			void bindColour() { glBindTexture(GL_TEXTURE_RECTANGLE, mObj->mColour); }
 			void unbindColour() { glBindTexture(GL_TEXTURE_RECTANGLE, 0); }
-			void bindDepth() { glBindTexture(GL_TEXTURE_RECTANGLE, mDepth); }
+			void bindDepth() { glBindTexture(GL_TEXTURE_RECTANGLE, mObj->mDepth); }
 			void unbindDepth() { glBindTexture(GL_TEXTURE_RECTANGLE, 0);  }
 			
-			GLuint getWidth() {return mW; };
-			GLuint getHeight() {return mH; }
+			GLuint getWidth() {return mObj->mW; };
+			GLuint getHeight() {return mObj->mH; }
 			
-		protected:
-			GLuint mW,mH,mID,mDepth,mColour;
-			bool mOk;
+		
 
 		};
 

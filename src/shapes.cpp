@@ -49,6 +49,12 @@ Quad::Quad(float_t w, float_t h) {
 	mGeom.addIndices(indices);
 }
 
+///\todo
+void Quad::resize(float_t w, float_t h){
+
+}
+
+
 
 Triangle::Triangle(float_t w, float_t h){
 	
@@ -76,4 +82,9 @@ Triangle::Triangle(float_t w, float_t h){
 		
 	mGeom = GeometryFullFloat(verts,normals,texcoords,colours);
 	
+}
+
+///\todo
+void Triangle::resize(float_t w, float_t h) {
+
 }

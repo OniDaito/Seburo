@@ -11,7 +11,7 @@ layout (location = 3) in vec2 attribVertTexCoord;
 uniform mat4 uMVPMatrix;
 
 void main() {            
-    vVertexPosition = uMVPMatrix * vec4(attribVertPosition,1.0);
-    gl_Position = vVertexPosition;
+    vVertexPosition = vec4(attribVertPosition,1.0);
+    gl_Position = uMVPMatrix * vVertexPosition;
 	vColour = attribVertColour;
 } 

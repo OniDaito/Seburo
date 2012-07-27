@@ -6,8 +6,8 @@
 *
 */
 
-#ifndef GLAPP_HPP
-#define GLAPP_HPP
+#ifndef MODELAPP_HPP
+#define MODELAPP_HPP
 
 #include "s9gear.hpp"
 #include "common.hpp"

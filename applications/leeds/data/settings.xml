@@ -1,0 +1,111 @@
+<leeds>
+	<cameras>
+		<width>640</width>
+		<height>360</height>
+		<fps>15</fps>
+
+		<cam>
+			<dev>/dev/video0</dev>
+			<in>intrinsics0.yml</in>
+			<secondary>0</secondary>
+		</cam>
+		<cam>
+			<dev>/dev/video1</dev>
+			<in>intrinsics1.yml</in>
+			<secondary>0</secondary>
+		</cam>
+		<cam>
+			<dev>/dev/video2</dev>
+			<in>intrinsics2.yml</in>
+			<secondary>1</secondary>
+		</cam>
+		<cam>
+			<dev>/dev/video3</dev>
+			<in>intrinsics3.yml</in>
+			<secondary>0</secondary>
+		</cam>
+		<cam>
+			<dev>/dev/video4</dev>
+			<in>intrinsics4.yml</in>
+			<secondary>1</secondary>
+		</cam>
+		<cam>
+			<dev>/dev/video5</dev>
+			<in>intrinsics5.yml</in>
+			<secondary>0</secondary>
+		</cam>
+		<cam>
+			<dev>/dev/video6</dev>
+			<in>intrinsics6.yml</in>
+			<secondary>1</secondary>
+		</cam>
+		<cam>
+			<dev>/dev/video7</dev>
+			<in>intrinsics7.yml</in>
+			<secondary>1</secondary>
+		</cam>
+	</cameras>
+		
+
+	<chess>
+		<width>5</width>
+		<height>4</height>
+		<size>1</size>
+		<maximages>20</maximages>
+		<interval>1.0</interval>
+		<startpair>0</startpair>
+		<endpair>3</endpair>
+		<startcam>0</startcam>
+		<endcam>7</endcam>
+	</chess>
+	
+	
+	<world>
+		<size>
+			<xs>-15</xs>
+			<ys>-7</ys>
+			<zs>-1</zs>
+			<xe>15</xe>
+			<ye>8</ye>
+			<ze>15</ze>
+		</size>
+		<mesh>
+			<size>
+				<x>640</x>
+				<y>360</y>
+				<z>240</z>
+			</size>
+		</mesh>
+	</world>
+	
+	
+	<uvc>
+		<brightness>180</brightness>
+		<contrast>150</contrast>
+		<saturation>30</saturation>
+		<focus>1</focus>
+		<exposure>180</exposure>
+		<gain>20</gain>
+		<sharpness>1</sharpness>
+	</uvc>
+	
+	<poisson>
+		<depth>9</depth>
+		<scale>1.0</scale>
+		<samples>1.0</samples>
+	</poisson>
+	
+	<opencv>
+		<threshold>100.0</threshold>
+	</opencv>
+	
+	<pcl>
+		<filterk>50</filterk>
+		<filterthresh>1.0</filterthresh>
+		<searchradius>1.0</searchradius>
+		<polynomial>4</polynomial>
+		<sampleradius>0.01</sampleradius>
+		<stepsize>0.003</stepsize>
+	</pcl>
+
+</leeds>

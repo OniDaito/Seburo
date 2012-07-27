@@ -12,16 +12,10 @@ using namespace s9::gl;
 using namespace std;
 
 /*
- * Generate the VAO for the OpenGL Quad
+ * Allocate function for updates to the Quad size
  */
 
-void Quad::_gen() {
-
-	glGenVertexArrays(1,&mVAO);
-	
-
-	unsigned int handle[2];
-	glGenBuffers(2,handle);
+void Quad::_allocate() {
 
 	glBindBuffer(GL_ARRAY_BUFFER, handle[0]);
 	glBufferData(GL_ARRAY_BUFFER, mGeom.size() * sizeof(VertPNCTF), mGeom.addr(), GL_STATIC_DRAW);
@@ -31,6 +25,21 @@ void Quad::_gen() {
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, handle[1]);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, mGeom.indexsize() * sizeof(uint32_t), mGeom.indexaddr(), GL_STATIC_DRAW);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,0);
+}
+
+
+/*
+ * Generate the VAO for the OpenGL Quad
+ */
+
+void Quad::_gen() {
+
+	glGenVertexArrays(1,&mVAO);
+	
+	handle = new unsigned int[2];
+	glGenBuffers(2,handle);
+
+	_allocate();
 
 	bind();
 
@@ -66,6 +75,7 @@ void Quad::draw() {
 	if(mVAO == 0) _gen();
 
 	bind();
+	if (mGeom.isDirty()) _allocate();
 
 	glDrawElements(GL_TRIANGLES, mGeom.indexsize(), GL_UNSIGNED_INT, 0);
 
@@ -75,17 +85,29 @@ void Quad::draw() {
 }
 
 
-void Triangle::_gen() {
-	glGenVertexArrays(1,&mVAO);
-	
+/*
+ * Allocate the actual data
+ */
 
-	unsigned int handle[1];
-	glGenBuffers(1,handle);
+void Triangle::_allocate() {
 
 	glBindBuffer(GL_ARRAY_BUFFER, handle[0]);
 	glBufferData(GL_ARRAY_BUFFER, mGeom.size() * sizeof(VertPNCTF), mGeom.addr(), GL_STATIC_DRAW);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
+}
 
+/*
+ * Generate the Triangle
+ */
+
+void Triangle::_gen() {
+	glGenVertexArrays(1,&mVAO);
+	
+
+	handle = new unsigned int[1];
+	glGenBuffers(1,handle);
+
+	_allocate();
 
 	bind();
 
@@ -114,6 +136,7 @@ void Triangle::draw() {
 	if(mVAO == 0) _gen();
 
 	bind();
+	if (mGeom.isDirty()) _allocate();
 
 	glDrawArrays(GL_TRIANGLES, 0, mGeom.size());
 
