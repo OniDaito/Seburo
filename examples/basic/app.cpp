@@ -65,7 +65,7 @@ void BasicApp::display(double_t dt){
  * This is called by the wrapper function when an event is fired
  */
 
-void BasicApp::fireEvent(MouseEvent &e){
+void BasicApp::fireEvent(MouseEvent e){
     mCamera.passEvent(e);
 }
 
@@ -73,13 +73,13 @@ void BasicApp::fireEvent(MouseEvent &e){
  * Called when the window is resized. You should set cameras here
  */
 
-void BasicApp::fireEvent(ResizeEvent &e){
+void BasicApp::fireEvent(ResizeEvent e){
     cout << "Window Resized:" << e.mW << "," << e.mH << endl;
     glViewport(0,0,e.mW,e.mH);
     mCamera.setRatio( static_cast<float_t>(e.mW) / e.mH);
 }
 
-void BasicApp::fireEvent(KeyboardEvent &e){
+void BasicApp::fireEvent(KeyboardEvent e){
     cout << "Key Pressed: " << e.mKey << endl;
 }
 

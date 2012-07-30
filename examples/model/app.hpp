@@ -31,9 +31,9 @@ namespace s9 {
 		void display(double_t dt);
 
 		// Event handling - you can choose which to override
-		void fireEvent(MouseEvent &e);
-		void fireEvent(KeyboardEvent &e);
-		void fireEvent(ResizeEvent &e);
+		void fireEvent(MouseEvent e);
+		void fireEvent(KeyboardEvent e);
+		void fireEvent(ResizeEvent e);
 		
 	protected:
 		gl::Geometry<GeometryPNF> mGeometry;

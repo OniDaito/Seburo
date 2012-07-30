@@ -28,8 +28,6 @@
 namespace s9 {
 
 	// special typedefs
-
-	typedef VertexPNT8<float_t,float_t,float_t> VertPNT8F;
 	typedef Geometry<VertPNT8F> GeometryLeeds;
 
 	/*
@@ -47,11 +45,15 @@ namespace s9 {
 
 
 		// Event handling - you can choose which to override
-		void fireEvent(MouseEvent &e);
-		void fireEvent(KeyboardEvent &e);
-		void fireEvent(ResizeEvent &e);
+		void fireEvent(MouseEvent e);
+		void fireEvent(KeyboardEvent e);
+		void fireEvent(ResizeEvent e);
 		
 	protected:
+
+		// Internal functions
+		void createTextured();
+
 		// Geometry
 		gl::Quad mTestQuad;
 		gl::Quad mCamQuad;
@@ -74,6 +76,7 @@ namespace s9 {
 		gl::Shader mShaderCamera;
 		gl::Shader mShaderBasic;
 		gl::Shader mShaderLighting;
+		gl::Shader mShaderLeeds;
 
 		uint32_t mScreenW, mScreenH;
 	};

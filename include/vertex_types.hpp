@@ -90,7 +90,7 @@ namespace s9 {
 	struct VertexPNT8 {
 		T mP;
 		U mN;
-		V mT0, mT1, mT2, mT3, mT4, mT5, mT6, mT7;
+		V mT[8];
 	};
 	
 	// Specific types - Generally in order of Position, Normal, Colour, Textures
@@ -118,6 +118,8 @@ namespace s9 {
 	typedef VertexPCT<glm::vec3, glm::vec4, glm::vec2> VertPCTG;
 	typedef VertexPCT<Float3, Float4, Float2> VertPCTF;
 	typedef VertexPCT<Double3, Double4, Double2> VertPCTD;
+
+	typedef VertexPNT8<Float3, Float3, Float2> VertPNT8F;
 
 
 #pragma pack(pop)  

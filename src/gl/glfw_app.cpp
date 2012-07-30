@@ -61,6 +61,7 @@ void GLFWApp::mainLoop() {
 	exit( EXIT_SUCCESS );
 }
 
+
 /*
  * GLFW Callback for resizing a window
  */
@@ -99,10 +100,15 @@ void GLFWApp::_mouseButtonCallback(GLFWwindow window, int button, int action) {
 			if (action){
 				pThis->mFlag |= MOUSE_LEFT_DOWN;
 				pThis->mFlag ^= MOUSE_LEFT_UP;
+				MouseEvent e (pThis->mMX,pThis->mMY,pThis->mFlag,glfwGetTime());
+				pApp->fireEvent(e);
 			}
 			else{
 				pThis->mFlag |= MOUSE_LEFT_UP;
 				pThis->mFlag ^= MOUSE_LEFT_DOWN;
+				MouseEvent e (pThis->mMX,pThis->mMY,pThis->mFlag,glfwGetTime());
+				pApp->fireEvent(e);
+				pThis->mFlag ^= MOUSE_LEFT_UP;
 			}
 			break;
 		}
@@ -110,29 +116,37 @@ void GLFWApp::_mouseButtonCallback(GLFWwindow window, int button, int action) {
 			if (action){
 				pThis->mFlag |= MOUSE_RIGHT_DOWN;
 				pThis->mFlag ^= MOUSE_RIGHT_UP;
+				MouseEvent e (pThis->mMX,pThis->mMY,pThis->mFlag,glfwGetTime());
+				pApp->fireEvent(e);
 			}
 			else{
 				pThis->mFlag |= MOUSE_RIGHT_UP;
 				pThis->mFlag ^= MOUSE_RIGHT_DOWN;
+				MouseEvent e (pThis->mMX,pThis->mMY,pThis->mFlag,glfwGetTime());
+				pApp->fireEvent(e);
+				pThis->mFlag ^= MOUSE_RIGHT_UP;
 			}
 			break;
 		}
-		case 3: {
+		case 2: {
 			if (action) {
 				pThis->mFlag |= MOUSE_MIDDLE_DOWN;
 				pThis->mFlag ^= MOUSE_MIDDLE_UP;
+				MouseEvent e (pThis->mMX,pThis->mMY,pThis->mFlag,glfwGetTime());
+				pApp->fireEvent(e);
 			}
 				
 			else{
+
 				pThis->mFlag |= MOUSE_MIDDLE_UP;
 				pThis->mFlag ^= MOUSE_MIDDLE_DOWN;
+				MouseEvent e (pThis->mMX,pThis->mMY,pThis->mFlag,glfwGetTime());
+				pApp->fireEvent(e);
+				pThis->mFlag ^= MOUSE_MIDDLE_UP;
 			}
 			break;
 		}
 	}
-
-	MouseEvent e (pThis->mMX,pThis->mMY,pThis->mFlag,glfwGetTime());
-	pApp->fireEvent(e);
 }
 
 
@@ -144,22 +158,21 @@ void GLFWApp::_mousePositionCallback(GLFWwindow window, int x, int y) {
 
 }
 
+
 void GLFWApp::_mouseWheelCallback(GLFWwindow window, int xpos, int ypos) {
 
 	if (ypos == 1) {
-		pThis->mFlag |= MOUSE_WHEEL_UP;
-		pThis->mFlag ^= MOUSE_WHEEL_DOWN;
-	}else {
+		pThis->mFlag |= MOUSE_WHEEL_UP;	
+		MouseEvent e (pThis->mMX,pThis->mMY,pThis->mFlag,glfwGetTime());
+		pApp->fireEvent(e);
 		pThis->mFlag ^= MOUSE_WHEEL_UP;
+		
+	}else if (ypos == -1) {
 		pThis->mFlag |= MOUSE_WHEEL_DOWN;
-	}
-
-	MouseEvent e (pThis->mMX,pThis->mMY,pThis->mFlag,glfwGetTime());
-	pApp->fireEvent(e);
-	
-	pThis->mFlag ^= MOUSE_WHEEL_UP;
-	pThis->mFlag ^= MOUSE_WHEEL_DOWN;
-	
+		MouseEvent e (pThis->mMX,pThis->mMY,pThis->mFlag,glfwGetTime());
+		pApp->fireEvent(e);
+		pThis->mFlag ^= MOUSE_WHEEL_DOWN;
+	}	
 }
 
 void GLFWApp::_monitorCallback( GLFWmonitor m, int p) {

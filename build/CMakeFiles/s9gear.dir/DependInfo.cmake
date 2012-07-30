@@ -12,6 +12,7 @@ SET(CMAKE_C_COMPILER_ID "GNU")
 SET(CMAKE_DEPENDS_CHECK_CXX
   "/home/oni/Projects/S9Gear/src/asset.cpp" "/home/oni/Projects/S9Gear/build/CMakeFiles/s9gear.dir/src/asset.cpp.o"
   "/home/oni/Projects/S9Gear/src/camera.cpp" "/home/oni/Projects/S9Gear/build/CMakeFiles/s9gear.dir/src/camera.cpp.o"
+  "/home/oni/Projects/S9Gear/src/geometry.cpp" "/home/oni/Projects/S9Gear/build/CMakeFiles/s9gear.dir/src/geometry.cpp.o"
   "/home/oni/Projects/S9Gear/src/gl/fbo.cpp" "/home/oni/Projects/S9Gear/build/CMakeFiles/s9gear.dir/src/gl/fbo.cpp.o"
   "/home/oni/Projects/S9Gear/src/gl/geometry.cpp" "/home/oni/Projects/S9Gear/build/CMakeFiles/s9gear.dir/src/gl/geometry.cpp.o"
   "/home/oni/Projects/S9Gear/src/gl/glfw_app.cpp" "/home/oni/Projects/S9Gear/build/CMakeFiles/s9gear.dir/src/gl/glfw_app.cpp.o"

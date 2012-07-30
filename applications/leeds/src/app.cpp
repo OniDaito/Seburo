@@ -36,6 +36,7 @@ void Leeds::init(){
     mShaderCamera.load("./data/quad_texture.vert", "./data/quad_texture.frag");
     mShaderBasic.load("./data/quad.vert", "./data/quad.frag");
     mShaderLighting.load("./data/basic_lighting.vert", "./data/basic_lighting.frag");
+    mShaderLeeds.load("./data/leedsmesh.vert","./data/leedsmesh.frag");
 
     parseXML("./data/settings.xml");
 
@@ -78,7 +79,14 @@ void Leeds::drawCameras() {
     }
 }
 
+/*
+ * Create the textured Geometry
+ * \todo this is a bit messy despite gl geometry extending asset. Hmmmm
+ */
 
+void Leeds::createTextured() {
+    mMeshTextured = GeometryLeeds(  mMesh.getGeometry().convert() );
+}
 
 
 /*
@@ -102,8 +110,43 @@ void Leeds::display(double_t dt){
     mTestQuad.draw();
     mShaderBasic.unbind();
 
+    // First, attempt to draw ubermesh
+
+    if(mMeshTextured) {
+        mShaderLeeds.bind();
+        glm::mat4 mv = mCamera.getViewMatrix() * mMeshTextured.getMatrix();
+        glm::mat4 mn =  glm::transpose(glm::inverse(mv));
+
+        mShaderLeeds.s("uMVPMatrix",mvp).s("uShininess",128.0f).s("uMVMatrix",mv)
+        .s("uNMatrix",mn).s("uLight0",glm::vec3(15.0,15.0,15.0)).s("uMaxX",640).s("uMaxY",320);
+
+        for (int i=0; i < vCVCameras.size(); i++){
+            glActiveTexture(GL_TEXTURE0 + i);
+            vCVCameras[i].bind();
+            
+            std::stringstream Num;
+            std::string str;
+            Num << i;
+            str = "uCam" + Num.str();
+            
+            cv::Mat n = vCVCameras[i].getNormal();
+            glm::vec3 nn (n.at<double_t>(0,0),n.at<double_t>(1,0),n.at<double_t>(2,0));
+            nn  = glm::normalize(nn);
+            mShaderLeeds.s(str.c_str(), nn);
+        }
+
+        mMeshTextured.draw();
+
+        mShaderLeeds.unbind();
+
+        for (int i=0; i < vCVCameras.size(); i++){
+            glActiveTexture(GL_TEXTURE0 + i);
+            glBindTexture(GL_TEXTURE_2D, 0);
+        }
+    }
+
     // Draw our mesh
-    if(mMesh) {
+    else if(mMesh) {
         mShaderLighting.bind();
         glm::mat4 mv = mCamera.getViewMatrix() * mMesh.getMatrix();
         glm::mat4 mn =  glm::transpose(glm::inverse(mv));
@@ -119,6 +162,9 @@ void Leeds::display(double_t dt){
     BOOST_FOREACH(VidCam c, vCameras)
         c.update();
 
+    BOOST_FOREACH(CVVidCam c, vCVCameras)
+        c.update();
+
     drawCameras();
 
     CXGLERROR
@@ -129,7 +175,7 @@ void Leeds::display(double_t dt){
  * This is called by the wrapper function when an event is fired
  */
 
-void Leeds::fireEvent(MouseEvent &e){
+void Leeds::fireEvent(MouseEvent e){
     mCamera.passEvent(e);
 }
 
@@ -137,7 +183,7 @@ void Leeds::fireEvent(MouseEvent &e){
  * Called when the window is resized. You should set cameras here
  */
 
-void Leeds::fireEvent(ResizeEvent &e){
+void Leeds::fireEvent(ResizeEvent e){
     glViewport(0,0,e.mW,e.mH);
     mCamera.setRatio( static_cast<float_t>(e.mW) / e.mH);
     mScreenCamera.setDim( e.mW, e.mH);
@@ -146,16 +192,24 @@ void Leeds::fireEvent(ResizeEvent &e){
     mScreenH = e.mH;
 }
 
-void Leeds::fireEvent(KeyboardEvent &e){
+void Leeds::fireEvent(KeyboardEvent e){
     cout << "Key Pressed: " << e.mKey << endl;
 
-    if (e.mKey == 76 && e.mAction == 0){
+    if (e.mKey == GLFW_KEY_L && e.mAction == 0){
         string s = loadFileDialog();
         if (s != ""){
             mMesh = gl::Geometry<GeometryPNF>( AssetImporter::load(s));
         }
     }
+    if (e.mKey == GLFW_KEY_R && e.mAction == 0){
+        mCamera.reset();
+        mCamera.move(glm::vec3(0.0,0.0,20.0f));
+    }
 
+    if (e.mKey == GLFW_KEY_T && e.mAction == 0){
+       createTextured();
+       cout << "Leeds - Created Textured" << endl;
+    }
 }
 
 /*

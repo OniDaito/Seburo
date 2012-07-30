@@ -34,7 +34,6 @@ namespace s9 {
 		virtual uint32_t* indexaddr(){return NULL; }
 		virtual uint32_t size() {return 0;}
 		virtual uint32_t indexsize() {return 0;}
-
 	};
 	
 	
@@ -56,7 +55,7 @@ namespace s9 {
 		Geometry(std::vector<glm::vec3> v, std::vector<glm::vec3> n) {};
 		Geometry (std::vector<float_t> v, std::vector<float_t> n) {};
 		Geometry(std::vector<float_t> v, std::vector<float_t> n, std::vector<float_t> t, std::vector<float_t> c) {};
-				
+
 	protected:
 	
 		struct SharedObj {
@@ -73,6 +72,11 @@ namespace s9 {
 			mObj.reset(new SharedObj());
 			mObj->vBuffer = v;
 		};
+
+		template<class U>
+		U convert() {};
+
+		std::vector<T> getBuffer() {return mObj->vBuffer; };
 	
 		virtual operator int() const { return mObj.use_count() > 0; };
 	
@@ -85,7 +89,7 @@ namespace s9 {
 		bool isIndexed() {return mObj->vIndices.size() > 0; };
 		bool isDirty() {return mObj->mDirty;};
 		void setDirty(bool b) {mObj->mDirty = b; };
-		std::vector<uint32_t>&  getIndices() {return mObj->vIndices(); };
+		std::vector<uint32_t>&  getIndices() {return mObj->vIndices; };
 		void addVertex(T v) {mObj->push_back(v); setDirty(true); };
 		void setVertex(T v, uint32_t p) { mObj->vBuffer[p] = v; setDirty(true); };
 		void delVertex(uint32_t p) { mObj->vBuffer.erase( mObj->vBuffer.begin() + p); setDirty(true); };
@@ -139,12 +143,43 @@ namespace s9 {
 		
 		}
 	}
+
+	// Conversion templates - probaby inefficient ><
+
+	/*
+	 * Conversion from basic to 8 texture parameters - Quite specific
+	 */
 	
+	template <>
+	template <>
+	inline Geometry<VertPNT8F> Geometry<VertPNF>::convert() {
+
+		std::vector<VertPNT8F> vtemp;
+		std::vector<VertPNF> vstart = this->mObj->vBuffer;
+		for (std::vector<VertPNF>::iterator it = vstart.begin(); it != vstart.end(); it++) {
+			VertPNF p = *it;
+			VertPNT8F tp;
+			tp.mP = p.mP;
+			tp.mN = p.mN;
+
+			for (int i = 0; i < 8; i ++){
+				Float2 tt; tt.x = 0.0f; tt.y = 0.0f;
+				tp.mT[i] = tt;
+			}
+			vtemp.push_back(tp);
+		}
+
+		Geometry<VertPNT8F> b (vtemp);
+		b.addIndices(this->mObj->vIndices);
+		return b;
+	}
+
 	// Handy Typedefs
 	
 	typedef Geometry<VertPNCTF> GeometryFullFloat;
 	typedef Geometry<VertPNCTG> GeometryFullGLM;
 	typedef Geometry<VertPNF> GeometryPNF;
+
 
 }
 

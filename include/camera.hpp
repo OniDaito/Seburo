@@ -33,6 +33,8 @@ namespace s9{
 		virtual void yaw(float_t a);
 		virtual void pitch(float_t a);
 		virtual void roll(float_t a);
+
+		virtual void reset();
 		
 		virtual void align(Primitive &p);
 		
@@ -83,6 +85,7 @@ namespace s9{
 		void yaw(float_t a);
 		void pitch(float_t a);
 		void roll(float_t a);
+		void reset();
 
 	protected:
 		void compute();
@@ -107,7 +110,6 @@ namespace s9{
 	/*
 	 * A template that adds inertia and mouse drag movements
 	 * \todo make implicit in the visual app somehow?
-	 * \todo zooming
 	 */
 
 	template <class T>
@@ -120,6 +122,7 @@ namespace s9{
 		glm::vec3 mP;
 		double_t mDT;
 		bool mHeld;
+		float_t mZoom, mShift;
 
 	public:
 
@@ -129,12 +132,13 @@ namespace s9{
 			mDegrade = 2.0;
 			mDT = 0;
 			mHeld = false;
-
+			mZoom = 0.5;
+			mShift = 0.001;
 		}
 
 		void update(double_t dt){ }
 
-		void passEvent(MouseEvent &e){
+		void passEvent(MouseEvent e){
 
 			if (e.mFlag & MOUSE_LEFT_DOWN){
 
@@ -143,17 +147,32 @@ namespace s9{
 					mNow = glm::vec3(static_cast<float_t>(e.mX - mP.x), static_cast<float_t>(e.mY - mP.y),0.0f);
 					mHeld = true;
 				}
-			
-				mP = glm::vec3(static_cast<float_t>(e.mX), static_cast<float_t>(e.mY),0.0f);
 
 			}
 			else if (e.mFlag & MOUSE_LEFT_UP ){
 				mP = glm::vec3(0.0f,0.0f,0.0f);
 				mHeld = false;
 			}
+			if (e.mFlag & MOUSE_WHEEL_DOWN){
+				this->zoom(-mZoom);
+			}
+			else if (e.mFlag & MOUSE_WHEEL_UP){
+				this->zoom(mZoom);
+			}
+
+			if (e.mFlag & MOUSE_MIDDLE_DOWN){
+				this->shift(glm::vec2(static_cast<float_t>(e.mX - mP.x) * mShift, 
+						static_cast<float_t>(e.mY - mP.y) * mShift));
+			}
+
+			mP = glm::vec3(static_cast<float_t>(e.mX), static_cast<float_t>(e.mY),0.0f);
 		}
 	};
 
+	/*
+	 * Update is called as often as possible to complete inertia
+	 * \todo work out how best to do zooming and shifting
+	 */ 
 
 	template <>	
 	inline void InertiaCam<OrbitCamera>::update(double_t dt){

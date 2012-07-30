@@ -248,6 +248,30 @@ src/colorspaces.c.s:
 	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/colorspaces.c.s
 .PHONY : src/colorspaces.c.s
 
+src/geometry.o: src/geometry.cpp.o
+.PHONY : src/geometry.o
+
+# target to build an object file
+src/geometry.cpp.o:
+	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/geometry.cpp.o
+.PHONY : src/geometry.cpp.o
+
+src/geometry.i: src/geometry.cpp.i
+.PHONY : src/geometry.i
+
+# target to preprocess a source file
+src/geometry.cpp.i:
+	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/geometry.cpp.i
+.PHONY : src/geometry.cpp.i
+
+src/geometry.s: src/geometry.cpp.s
+.PHONY : src/geometry.s
+
+# target to generate assembly for a file
+src/geometry.cpp.s:
+	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/geometry.cpp.s
+.PHONY : src/geometry.cpp.s
+
 src/gl/fbo.o: src/gl/fbo.cpp.o
 .PHONY : src/gl/fbo.o
 
@@ -655,6 +679,9 @@ help:
 	@echo "... src/colorspaces.o"
 	@echo "... src/colorspaces.i"
 	@echo "... src/colorspaces.s"
+	@echo "... src/geometry.o"
+	@echo "... src/geometry.i"
+	@echo "... src/geometry.s"
 	@echo "... src/gl/fbo.o"
 	@echo "... src/gl/fbo.i"
 	@echo "... src/gl/fbo.s"

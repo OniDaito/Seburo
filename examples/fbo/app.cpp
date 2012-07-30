@@ -99,7 +99,7 @@ void FBOApp::display(double_t dt){
  * This is called by the wrapper function when an event is fired
  */
 
-void FBOApp::fireEvent(MouseEvent &e){
+void FBOApp::fireEvent(MouseEvent e){
     mCamera.passEvent(e);
 }
 
@@ -108,13 +108,13 @@ void FBOApp::fireEvent(MouseEvent &e){
  * and reset the viewport
  */
 
-void FBOApp::fireEvent(ResizeEvent &e){
+void FBOApp::fireEvent(ResizeEvent e){
     glViewport(0,0,e.mW,e.mH);
     mCamera.setRatio( static_cast<float_t>(e.mW) /  static_cast<float_t>(e.mH));
     mScreenCamera.setRatio( static_cast<float_t>(e.mW) /  static_cast<float_t>(e.mH));
 }
 
-void FBOApp::fireEvent(KeyboardEvent &e){
+void FBOApp::fireEvent(KeyboardEvent e){
     cout << "Key Pressed: " << e.mKey << endl;
 }
 

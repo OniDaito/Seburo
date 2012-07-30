@@ -69,20 +69,20 @@ void VideoApp::display(double_t dt){
  * This is called by the wrapper function when an event is fired
  */
 
-void VideoApp::fireEvent(MouseEvent &e){
+void VideoApp::fireEvent(MouseEvent e){
 }
 
 /*
  * Called when the window is resized. You should set cameras here
  */
 
-void VideoApp::fireEvent(ResizeEvent &e){
+void VideoApp::fireEvent(ResizeEvent e){
     cout << "Window Resized:" << e.mW << "," << e.mH << endl;
     glViewport(0,0,e.mW,e.mH);
     mCamera.setRatio( static_cast<float_t>(e.mW) / e.mH);
 }
 
-void VideoApp::fireEvent(KeyboardEvent &e){
+void VideoApp::fireEvent(KeyboardEvent e){
     cout << "Key Pressed: " << e.mKey << endl;
 }
 

@@ -20,6 +20,10 @@ using namespace s9;
  */
 
 Camera::Camera(){
+	reset();
+}
+
+void Camera::reset() {
 	mUp = glm::vec3(0,1,0);
 	mPos = glm::vec3(0,0,1.0);
 	mLook = glm::vec3(0,0,-1.0);
@@ -93,6 +97,10 @@ void Camera::compute() {
  */
 
 OrbitCamera::OrbitCamera() : Camera() {
+	reset();
+}
+
+void OrbitCamera::reset() {
 	mPos = glm::vec3(0,0,1.0);
 	mLook = glm::vec3(0,0,0);
 	mUp = glm::vec3(0,1,0);
