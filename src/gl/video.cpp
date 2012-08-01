@@ -6,7 +6,7 @@
 *
 */
 
-#include "gl/video.hpp"
+#include "s9/gl/video.hpp"
 
 using namespace std;
 #ifdef _GEAR_OPENCV

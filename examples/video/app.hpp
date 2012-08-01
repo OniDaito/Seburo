@@ -9,12 +9,12 @@
 #ifndef VIDEOAPP_HPP
 #define VIDEOAPP_HPP
 
-#include "s9gear.hpp"
-#include "common.hpp"
-#include "gl/shapes.hpp"
-#include "gl/shader.hpp"
-#include "gl/video.hpp"
-#include "gl/glfw_app.hpp"
+#include "s9/s9gear.hpp"
+#include "s9/common.hpp"
+#include "s9/gl/shapes.hpp"
+#include "s9/gl/shader.hpp"
+#include "s9/gl/video.hpp"
+#include "s9/gl/glfw_app.hpp"
 
 
 #include <anttweakbar/AntTweakBar.h>

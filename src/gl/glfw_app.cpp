@@ -6,7 +6,7 @@
 *
 */
 
-#include "gl/glfw_app.hpp"
+#include "s9/gl/glfw_app.hpp"
 
 using namespace s9;
 using namespace s9::gl;

@@ -6,14 +6,12 @@
 *
 */
 
-#include "asset.hpp"
+#include "s9/asset.hpp"
 
 using namespace std;
 using namespace boost;
 using namespace boost::assign;
 using namespace s9;
-
-
 
 const struct aiScene* AssetImporter::pScene;
 

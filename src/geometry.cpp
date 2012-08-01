@@ -6,7 +6,7 @@
 *
 */
 
-#include "geometry.hpp"
+#include "s9/geometry.hpp"
 
 
 using namespace std;

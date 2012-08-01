@@ -9,12 +9,12 @@
 #ifndef MODELAPP_HPP
 #define MODELAPP_HPP
 
-#include "s9gear.hpp"
-#include "common.hpp"
-#include "asset.hpp"
-#include "gl/shader.hpp"
-#include "gl/geometry.hpp"
-#include "gl/glfw_app.hpp"
+#include "s9/s9gear.hpp"
+#include "s9/common.hpp"
+#include "s9/asset.hpp"
+#include "s9/gl/shader.hpp"
+#include "s9/gl/geometry.hpp"
+#include "s9/gl/glfw_app.hpp"
 
 #include <anttweakbar/AntTweakBar.h>
 

@@ -6,7 +6,7 @@
 *
 */
 
-#include "wingedge.hpp"
+#include "s9/wingedge.hpp"
 
 using namespace std;
 using namespace boost;

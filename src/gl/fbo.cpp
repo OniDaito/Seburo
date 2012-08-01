@@ -6,7 +6,7 @@
 *
 */
 
-#include "gl/fbo.hpp"
+#include "s9/gl/fbo.hpp"
 
 using namespace std;
 using namespace boost;

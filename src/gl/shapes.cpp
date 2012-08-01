@@ -6,7 +6,7 @@
 *
 */
 
-#include "gl/shapes.hpp"
+#include "s9/gl/shapes.hpp"
 
 using namespace s9::gl;
 using namespace std;

@@ -6,7 +6,7 @@
 *
 */
 
-#include "primitive.hpp"
+#include "s9/primitive.hpp"
 
 using namespace std;
 using namespace boost;

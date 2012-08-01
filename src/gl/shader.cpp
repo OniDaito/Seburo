@@ -6,7 +6,7 @@
 *
 */
 
-#include "gl/shader.hpp"
+#include "s9/gl/shader.hpp"
 
 using namespace std;
 using namespace boost;

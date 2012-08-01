@@ -6,7 +6,7 @@
 *
 */
 
-#include "s9xml.hpp"
+#include "s9/s9xml.hpp"
 
 using namespace std;
 using namespace boost;

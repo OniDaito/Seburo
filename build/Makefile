@@ -8,7 +8,7 @@ default_target: all
 #=============================================================================
 # Special targets provided by cmake.
 
-# Disable implicit rules so canoncical targets will work.
+# Disable implicit rules so canonical targets will work.
 .SUFFIXES:
 
 # Remove some rules from gmake that .SUFFIXES does not remove.
@@ -30,19 +30,19 @@ cmake_force:
 SHELL = /bin/sh
 
 # The CMake executable.
-CMAKE_COMMAND = /usr/bin/cmake
+CMAKE_COMMAND = /usr/local/Cellar/cmake/2.8.8/bin/cmake
 
 # The command to remove a file.
-RM = /usr/bin/cmake -E remove -f
+RM = /usr/local/Cellar/cmake/2.8.8/bin/cmake -E remove -f
 
 # The program to use to edit the cache.
-CMAKE_EDIT_COMMAND = /usr/bin/ccmake
+CMAKE_EDIT_COMMAND = /usr/local/Cellar/cmake/2.8.8/bin/ccmake
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/oni/Projects/S9Gear
+CMAKE_SOURCE_DIR = /Users/oni/Projects/S9Gear
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/oni/Projects/S9Gear/build
+CMAKE_BINARY_DIR = /Users/oni/Projects/S9Gear/build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -50,7 +50,7 @@ CMAKE_BINARY_DIR = /home/oni/Projects/S9Gear/build
 # Special rule for the target edit_cache
 edit_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake cache editor..."
-	/usr/bin/ccmake -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+	/usr/local/Cellar/cmake/2.8.8/bin/ccmake -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
 .PHONY : edit_cache
 
 # Special rule for the target edit_cache
@@ -60,7 +60,7 @@ edit_cache/fast: edit_cache
 # Special rule for the target rebuild_cache
 rebuild_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
-	/usr/bin/cmake -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+	/usr/local/Cellar/cmake/2.8.8/bin/cmake -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
 .PHONY : rebuild_cache
 
 # Special rule for the target rebuild_cache
@@ -69,9 +69,9 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/oni/Projects/S9Gear/build/CMakeFiles /home/oni/Projects/S9Gear/build/CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/oni/Projects/S9Gear/build/CMakeFiles /Users/oni/Projects/S9Gear/build/CMakeFiles/progress.marks
 	$(MAKE) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/oni/Projects/S9Gear/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/oni/Projects/S9Gear/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -163,19 +163,6 @@ video/fast:
 	$(MAKE) -f examples/video/CMakeFiles/video.dir/build.make examples/video/CMakeFiles/video.dir/build
 .PHONY : video/fast
 
-#=============================================================================
-# Target rules for targets named leeds
-
-# Build rule for target.
-leeds: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 leeds
-.PHONY : leeds
-
-# fast build rule for target.
-leeds/fast:
-	$(MAKE) -f applications/leeds/CMakeFiles/leeds.dir/build.make applications/leeds/CMakeFiles/leeds.dir/build
-.PHONY : leeds/fast
-
 src/asset.o: src/asset.cpp.o
 .PHONY : src/asset.o
 
@@ -224,30 +211,6 @@ src/camera.cpp.s:
 	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/camera.cpp.s
 .PHONY : src/camera.cpp.s
 
-src/colorspaces.o: src/colorspaces.c.o
-.PHONY : src/colorspaces.o
-
-# target to build an object file
-src/colorspaces.c.o:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/colorspaces.c.o
-.PHONY : src/colorspaces.c.o
-
-src/colorspaces.i: src/colorspaces.c.i
-.PHONY : src/colorspaces.i
-
-# target to preprocess a source file
-src/colorspaces.c.i:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/colorspaces.c.i
-.PHONY : src/colorspaces.c.i
-
-src/colorspaces.s: src/colorspaces.c.s
-.PHONY : src/colorspaces.s
-
-# target to generate assembly for a file
-src/colorspaces.c.s:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/colorspaces.c.s
-.PHONY : src/colorspaces.c.s
-
 src/geometry.o: src/geometry.cpp.o
 .PHONY : src/geometry.o
 
@@ -271,198 +234,6 @@ src/geometry.s: src/geometry.cpp.s
 src/geometry.cpp.s:
 	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/geometry.cpp.s
 .PHONY : src/geometry.cpp.s
-
-src/gl/fbo.o: src/gl/fbo.cpp.o
-.PHONY : src/gl/fbo.o
-
-# target to build an object file
-src/gl/fbo.cpp.o:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/gl/fbo.cpp.o
-.PHONY : src/gl/fbo.cpp.o
-
-src/gl/fbo.i: src/gl/fbo.cpp.i
-.PHONY : src/gl/fbo.i
-
-# target to preprocess a source file
-src/gl/fbo.cpp.i:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/gl/fbo.cpp.i
-.PHONY : src/gl/fbo.cpp.i
-
-src/gl/fbo.s: src/gl/fbo.cpp.s
-.PHONY : src/gl/fbo.s
-
-# target to generate assembly for a file
-src/gl/fbo.cpp.s:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/gl/fbo.cpp.s
-.PHONY : src/gl/fbo.cpp.s
-
-src/gl/geometry.o: src/gl/geometry.cpp.o
-.PHONY : src/gl/geometry.o
-
-# target to build an object file
-src/gl/geometry.cpp.o:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/gl/geometry.cpp.o
-.PHONY : src/gl/geometry.cpp.o
-
-src/gl/geometry.i: src/gl/geometry.cpp.i
-.PHONY : src/gl/geometry.i
-
-# target to preprocess a source file
-src/gl/geometry.cpp.i:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/gl/geometry.cpp.i
-.PHONY : src/gl/geometry.cpp.i
-
-src/gl/geometry.s: src/gl/geometry.cpp.s
-.PHONY : src/gl/geometry.s
-
-# target to generate assembly for a file
-src/gl/geometry.cpp.s:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/gl/geometry.cpp.s
-.PHONY : src/gl/geometry.cpp.s
-
-src/gl/glfw_app.o: src/gl/glfw_app.cpp.o
-.PHONY : src/gl/glfw_app.o
-
-# target to build an object file
-src/gl/glfw_app.cpp.o:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/gl/glfw_app.cpp.o
-.PHONY : src/gl/glfw_app.cpp.o
-
-src/gl/glfw_app.i: src/gl/glfw_app.cpp.i
-.PHONY : src/gl/glfw_app.i
-
-# target to preprocess a source file
-src/gl/glfw_app.cpp.i:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/gl/glfw_app.cpp.i
-.PHONY : src/gl/glfw_app.cpp.i
-
-src/gl/glfw_app.s: src/gl/glfw_app.cpp.s
-.PHONY : src/gl/glfw_app.s
-
-# target to generate assembly for a file
-src/gl/glfw_app.cpp.s:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/gl/glfw_app.cpp.s
-.PHONY : src/gl/glfw_app.cpp.s
-
-src/gl/shader.o: src/gl/shader.cpp.o
-.PHONY : src/gl/shader.o
-
-# target to build an object file
-src/gl/shader.cpp.o:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/gl/shader.cpp.o
-.PHONY : src/gl/shader.cpp.o
-
-src/gl/shader.i: src/gl/shader.cpp.i
-.PHONY : src/gl/shader.i
-
-# target to preprocess a source file
-src/gl/shader.cpp.i:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/gl/shader.cpp.i
-.PHONY : src/gl/shader.cpp.i
-
-src/gl/shader.s: src/gl/shader.cpp.s
-.PHONY : src/gl/shader.s
-
-# target to generate assembly for a file
-src/gl/shader.cpp.s:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/gl/shader.cpp.s
-.PHONY : src/gl/shader.cpp.s
-
-src/gl/shapes.o: src/gl/shapes.cpp.o
-.PHONY : src/gl/shapes.o
-
-# target to build an object file
-src/gl/shapes.cpp.o:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/gl/shapes.cpp.o
-.PHONY : src/gl/shapes.cpp.o
-
-src/gl/shapes.i: src/gl/shapes.cpp.i
-.PHONY : src/gl/shapes.i
-
-# target to preprocess a source file
-src/gl/shapes.cpp.i:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/gl/shapes.cpp.i
-.PHONY : src/gl/shapes.cpp.i
-
-src/gl/shapes.s: src/gl/shapes.cpp.s
-.PHONY : src/gl/shapes.s
-
-# target to generate assembly for a file
-src/gl/shapes.cpp.s:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/gl/shapes.cpp.s
-.PHONY : src/gl/shapes.cpp.s
-
-src/gl/video.o: src/gl/video.cpp.o
-.PHONY : src/gl/video.o
-
-# target to build an object file
-src/gl/video.cpp.o:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/gl/video.cpp.o
-.PHONY : src/gl/video.cpp.o
-
-src/gl/video.i: src/gl/video.cpp.i
-.PHONY : src/gl/video.i
-
-# target to preprocess a source file
-src/gl/video.cpp.i:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/gl/video.cpp.i
-.PHONY : src/gl/video.cpp.i
-
-src/gl/video.s: src/gl/video.cpp.s
-.PHONY : src/gl/video.s
-
-# target to generate assembly for a file
-src/gl/video.cpp.s:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/gl/video.cpp.s
-.PHONY : src/gl/video.cpp.s
-
-src/jpeg.o: src/jpeg.c.o
-.PHONY : src/jpeg.o
-
-# target to build an object file
-src/jpeg.c.o:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/jpeg.c.o
-.PHONY : src/jpeg.c.o
-
-src/jpeg.i: src/jpeg.c.i
-.PHONY : src/jpeg.i
-
-# target to preprocess a source file
-src/jpeg.c.i:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/jpeg.c.i
-.PHONY : src/jpeg.c.i
-
-src/jpeg.s: src/jpeg.c.s
-.PHONY : src/jpeg.s
-
-# target to generate assembly for a file
-src/jpeg.c.s:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/jpeg.c.s
-.PHONY : src/jpeg.c.s
-
-src/linux/uvc_camera.o: src/linux/uvc_camera.cpp.o
-.PHONY : src/linux/uvc_camera.o
-
-# target to build an object file
-src/linux/uvc_camera.cpp.o:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/linux/uvc_camera.cpp.o
-.PHONY : src/linux/uvc_camera.cpp.o
-
-src/linux/uvc_camera.i: src/linux/uvc_camera.cpp.i
-.PHONY : src/linux/uvc_camera.i
-
-# target to preprocess a source file
-src/linux/uvc_camera.cpp.i:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/linux/uvc_camera.cpp.i
-.PHONY : src/linux/uvc_camera.cpp.i
-
-src/linux/uvc_camera.s: src/linux/uvc_camera.cpp.s
-.PHONY : src/linux/uvc_camera.s
-
-# target to generate assembly for a file
-src/linux/uvc_camera.cpp.s:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/linux/uvc_camera.cpp.s
-.PHONY : src/linux/uvc_camera.cpp.s
 
 src/primitive.o: src/primitive.cpp.o
 .PHONY : src/primitive.o
@@ -669,43 +440,15 @@ help:
 	@echo "... model"
 	@echo "... fbo"
 	@echo "... video"
-	@echo "... leeds"
 	@echo "... src/asset.o"
 	@echo "... src/asset.i"
 	@echo "... src/asset.s"
 	@echo "... src/camera.o"
 	@echo "... src/camera.i"
 	@echo "... src/camera.s"
-	@echo "... src/colorspaces.o"
-	@echo "... src/colorspaces.i"
-	@echo "... src/colorspaces.s"
 	@echo "... src/geometry.o"
 	@echo "... src/geometry.i"
 	@echo "... src/geometry.s"
-	@echo "... src/gl/fbo.o"
-	@echo "... src/gl/fbo.i"
-	@echo "... src/gl/fbo.s"
-	@echo "... src/gl/geometry.o"
-	@echo "... src/gl/geometry.i"
-	@echo "... src/gl/geometry.s"
-	@echo "... src/gl/glfw_app.o"
-	@echo "... src/gl/glfw_app.i"
-	@echo "... src/gl/glfw_app.s"
-	@echo "... src/gl/shader.o"
-	@echo "... src/gl/shader.i"
-	@echo "... src/gl/shader.s"
-	@echo "... src/gl/shapes.o"
-	@echo "... src/gl/shapes.i"
-	@echo "... src/gl/shapes.s"
-	@echo "... src/gl/video.o"
-	@echo "... src/gl/video.i"
-	@echo "... src/gl/video.s"
-	@echo "... src/jpeg.o"
-	@echo "... src/jpeg.i"
-	@echo "... src/jpeg.s"
-	@echo "... src/linux/uvc_camera.o"
-	@echo "... src/linux/uvc_camera.i"
-	@echo "... src/linux/uvc_camera.s"
 	@echo "... src/primitive.o"
 	@echo "... src/primitive.i"
 	@echo "... src/primitive.s"

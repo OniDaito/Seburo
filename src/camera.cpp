@@ -6,7 +6,7 @@
 *
 */
 
-#include "camera.hpp"
+#include "s9/camera.hpp"
 
 using namespace std;
 using namespace boost;

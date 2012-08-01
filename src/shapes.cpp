@@ -6,7 +6,7 @@
 *
 */
 
-#include "shapes.hpp"
+#include "s9/shapes.hpp"
 
 using namespace std;
 using namespace boost;
