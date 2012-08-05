@@ -16,8 +16,8 @@ GLFWApp* GLFWApp::pThis;
 VisualApp* GLFWApp::pApp;
 string GLFWApp::mTitle;
 
-GLFWApp::GLFWApp (VisualApp* app, int argc = 0, char * argv[] = NULL, const char * title = "S9Gear"){
-	if( !glfwInit(NULL) ){
+GLFWApp::GLFWApp (VisualApp* app, int argc = 0, const char * argv[] = NULL, const char * title = "S9Gear"){
+	if( !glfwInit() ){
 		fprintf( stderr, "Failed to initialize GLFW\n" );
 		exit( EXIT_FAILURE );
 	}
@@ -159,7 +159,7 @@ void GLFWApp::_mousePositionCallback(GLFWwindow window, int x, int y) {
 }
 
 
-void GLFWApp::_mouseWheelCallback(GLFWwindow window, int xpos, int ypos) {
+void GLFWApp::_mouseWheelCallback(GLFWwindow window, double xpos, double ypos) {
 
 	if (ypos == 1) {
 		pThis->mFlag |= MOUSE_WHEEL_UP;	
@@ -174,11 +174,6 @@ void GLFWApp::_mouseWheelCallback(GLFWwindow window, int xpos, int ypos) {
 		pThis->mFlag ^= MOUSE_WHEEL_DOWN;
 	}	
 }
-
-void GLFWApp::_monitorCallback( GLFWmonitor m, int p) {
-
-}
-
 
 
 GLFWwindow GLFWApp::createWindow(const char * title ="S9Gear", size_t w=800, size_t h=600) {
@@ -217,13 +212,12 @@ GLFWwindow GLFWApp::createWindow(const char * title ="S9Gear", size_t w=800, siz
 	
 	// Set Basic Callbacks
 	glfwSetKeyCallback(_keyCallback);
-	glfwSetMousePosCallback(_mousePositionCallback);
+	glfwSetCursorPosCallback(_mousePositionCallback);
 	glfwSetMouseButtonCallback(_mouseButtonCallback);
 	glfwSetScrollCallback(_mouseWheelCallback);
 	glfwSetWindowSizeCallback(_reshape);
-	glfwSetMonitorDeviceCallback(_monitorCallback);
 
-    glfwSwapInterval(1);
+  glfwSwapInterval(1);
 	
 
 	if( !w ) {

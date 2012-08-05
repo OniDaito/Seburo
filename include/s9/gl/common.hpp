@@ -13,8 +13,7 @@
 #ifndef GL_COMMON_HPP
 #define GL_COMMON_HPP
 
-#include <GL/glew.h>
-#include <GL/glut.h>
+#include "GL/glew.h"
 
 namespace s9 {
 	namespace gl {

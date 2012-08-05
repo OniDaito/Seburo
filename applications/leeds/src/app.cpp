@@ -246,7 +246,7 @@ void Leeds::parseXML(std::string filename) {
  * Main function - uses boost to parse program arguments
  */
 
-int main (int argc, char * argv[]) {
+int main (int argc, const char * argv[]) {
 
 #ifdef _GEAR_X11_GLX    
     // Linux only - need equivalent for Mac / Windows

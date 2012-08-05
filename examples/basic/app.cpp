@@ -107,7 +107,7 @@ int main (int argc, const char * argv[]) {
   
     BasicApp b;
 
-  	GLFWApp a(&b);
+  	GLFWApp a(&b, argc, argv, "Basic Application");
   	a.init(4,0); 
 
     return EXIT_SUCCESS;

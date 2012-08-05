@@ -10,11 +10,19 @@ FILE(REMOVE_RECURSE
   "CMakeFiles/s9gear.dir/src/tinyxmlerror.cpp.o"
   "CMakeFiles/s9gear.dir/src/tinyxmlparser.cpp.o"
   "CMakeFiles/s9gear.dir/src/wingedge.cpp.o"
+  "CMakeFiles/s9gear.dir/src/gl/fbo.cpp.o"
+  "CMakeFiles/s9gear.dir/src/gl/glew.c.o"
+  "CMakeFiles/s9gear.dir/src/gl/glewinfo.c.o"
+  "CMakeFiles/s9gear.dir/src/gl/glfw_app.cpp.o"
+  "CMakeFiles/s9gear.dir/src/gl/shader.cpp.o"
+  "CMakeFiles/s9gear.dir/src/gl/shapes.cpp.o"
+  "CMakeFiles/s9gear.dir/src/gl/video.cpp.o"
+  "CMakeFiles/s9gear.dir/src/gl/visualinfo.c.o"
   "libs9gear.pdb"
   "libs9gear.dylib"
 )
 
 # Per-language clean rules from dependency scanning.
-FOREACH(lang CXX)
+FOREACH(lang C CXX)
   INCLUDE(CMakeFiles/s9gear.dir/cmake_clean_${lang}.cmake OPTIONAL)
 ENDFOREACH(lang)

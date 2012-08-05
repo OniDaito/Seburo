@@ -19,7 +19,7 @@ elseif (UNIX AND NOT APPLE)
     set(_GEAR_X11_GLX 1)
     add_definitions(-D_GEAR_X11_GLX)
     message(STATUS "Building Gear for X11 and GLX on a Unix-like system")
-  FILE(GLOB OSSources src/linux/*)
+    FILE(GLOB OSSources src/linux/*)
 else()
     message(FATAL_ERROR "No supported platform was detected")
 endif()
@@ -28,6 +28,11 @@ endif()
 # S9 Includes
 
 include_directories(include)
+
+#####################################################################
+# OpenGL for now
+
+FILE(GLOB OSSources src/gl/*)
 
 #####################################################################
 # Macro to find libraries
@@ -69,6 +74,14 @@ elseif(UNIX AND APPLE)
   #set (CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "-m32")
   #set (CMAKE_OSX_ARCHITECTURES "i386")
 
+  FIND_LIBRARY(OPENGL_LIBRARY OpenGL)
+  FIND_LIBRARY(QUICKTIME_LIBRARY QuickTime )
+  FIND_LIBRARY(COCOA_LIBRARY Cocoa )
+  MARK_AS_ADVANCED (COCOA_LIBRARY
+                     QUICKTIME_LIBRARY
+                     OPENGL_LIBRARY)
+  SET(OSX_FRAMEWORKS ${COCOA_LIBRARY} ${QUICKTIME_LIBRARY} ${OPENGL_LIBRARY})
+
   set(LIBRARIES_SEARCH_PATHS 
     /usr/local/lib/
     /usr/local/lib64/
@@ -106,6 +119,7 @@ add_library(s9gear SHARED
 target_link_libraries(s9gear 
   ${GEAR_LIBRARIES}
   ${OPENGL_LIBRARY}
+  ${OSX_FRAMEWORKS}
 )
 
 project(${PROJECT_NAME})

@@ -1,12 +1,24 @@
 # The set of languages for which implicit dependencies are needed:
 SET(CMAKE_DEPENDS_LANGUAGES
+  "C"
   "CXX"
   )
 # The set of files for implicit dependencies of each language:
+SET(CMAKE_DEPENDS_CHECK_C
+  "/Users/oni/Projects/S9Gear/src/gl/glew.c" "/Users/oni/Projects/S9Gear/build/CMakeFiles/s9gear.dir/src/gl/glew.c.o"
+  "/Users/oni/Projects/S9Gear/src/gl/glewinfo.c" "/Users/oni/Projects/S9Gear/build/CMakeFiles/s9gear.dir/src/gl/glewinfo.c.o"
+  "/Users/oni/Projects/S9Gear/src/gl/visualinfo.c" "/Users/oni/Projects/S9Gear/build/CMakeFiles/s9gear.dir/src/gl/visualinfo.c.o"
+  )
+SET(CMAKE_C_COMPILER_ID "GNU")
 SET(CMAKE_DEPENDS_CHECK_CXX
   "/Users/oni/Projects/S9Gear/src/asset.cpp" "/Users/oni/Projects/S9Gear/build/CMakeFiles/s9gear.dir/src/asset.cpp.o"
   "/Users/oni/Projects/S9Gear/src/camera.cpp" "/Users/oni/Projects/S9Gear/build/CMakeFiles/s9gear.dir/src/camera.cpp.o"
   "/Users/oni/Projects/S9Gear/src/geometry.cpp" "/Users/oni/Projects/S9Gear/build/CMakeFiles/s9gear.dir/src/geometry.cpp.o"
+  "/Users/oni/Projects/S9Gear/src/gl/fbo.cpp" "/Users/oni/Projects/S9Gear/build/CMakeFiles/s9gear.dir/src/gl/fbo.cpp.o"
+  "/Users/oni/Projects/S9Gear/src/gl/glfw_app.cpp" "/Users/oni/Projects/S9Gear/build/CMakeFiles/s9gear.dir/src/gl/glfw_app.cpp.o"
+  "/Users/oni/Projects/S9Gear/src/gl/shader.cpp" "/Users/oni/Projects/S9Gear/build/CMakeFiles/s9gear.dir/src/gl/shader.cpp.o"
+  "/Users/oni/Projects/S9Gear/src/gl/shapes.cpp" "/Users/oni/Projects/S9Gear/build/CMakeFiles/s9gear.dir/src/gl/shapes.cpp.o"
+  "/Users/oni/Projects/S9Gear/src/gl/video.cpp" "/Users/oni/Projects/S9Gear/build/CMakeFiles/s9gear.dir/src/gl/video.cpp.o"
   "/Users/oni/Projects/S9Gear/src/primitive.cpp" "/Users/oni/Projects/S9Gear/build/CMakeFiles/s9gear.dir/src/primitive.cpp.o"
   "/Users/oni/Projects/S9Gear/src/s9xml.cpp" "/Users/oni/Projects/S9Gear/build/CMakeFiles/s9gear.dir/src/s9xml.cpp.o"
   "/Users/oni/Projects/S9Gear/src/shapes.cpp" "/Users/oni/Projects/S9Gear/build/CMakeFiles/s9gear.dir/src/shapes.cpp.o"

@@ -81,13 +81,11 @@ namespace s9 {
 
 			static void _mousePositionCallback(GLFWwindow window, int x, int y);
 
-			static void _mouseWheelCallback(GLFWwindow window, int xpos, int ypos);
-
-			static void _monitorCallback( GLFWmonitor m, int p);
+			static void _mouseWheelCallback(GLFWwindow window, double xpos, double ypos);
 
 
 		public:
-			GLFWApp(VisualApp *app, int argc, char * argv[], const char * title);
+			GLFWApp(VisualApp *app, int argc, const char * argv[], const char * title);
 
 			static GLFWwindow createWindow(const char * title, size_t w, size_t h);
 			

@@ -50,6 +50,8 @@ namespace s9 {
 
 #ifdef _GEAR_X11_GLX
 				boost::shared_ptr<UVCVideo> pCam;
+#else
+				boost::shared_ptr<QuicktimeVideo> pCam;
 #endif
 				size_t mW,mH,mFPS;
 				GLuint mTexID;
