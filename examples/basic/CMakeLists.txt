@@ -17,8 +17,8 @@ include_directories(
 )
 
 
-target_link_libraries(basic 
-	s9gear
+target_link_libraries( basic
+  s9gear 
 )
 
 

@@ -23,7 +23,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <glib.h>
-#include "colorspaces.h"
+#include "s9/colorspaces.h"
 
 /*------------------------------- Color space conversions --------------------*/
 /* regular yuv (YUYV) to rgb24*/

@@ -29,9 +29,9 @@
 ********************************************************************************/
 
 #include <glib.h>
-#include "jpeg.h"
-#include "huffman.h"
-#include "colorspaces.h"
+#include "s9/jpeg.h"
+#include "s9/huffman.h"
+#include "s9/colorspaces.h"
 
 /*********************************/
 

@@ -33,10 +33,6 @@ VidCam::VidCam(std::string dev, size_t w, size_t h, size_t fps) {
 	glGenTextures(1, &(mObj->mTexID));
 	
 	glBindTexture(GL_TEXTURE_RECTANGLE, mObj->mTexID);   
-/*	glTexParameterf(GL_TEXTURE_RECTANGLE,GL_TEXTURE_MIN_FILTER,GL_LINEAR); 
-	glTexParameterf(GL_TEXTURE_RECTANGLE,GL_TEXTURE_MAG_FILTER,GL_LINEAR); 
-	glTexParameterf( GL_TEXTURE_RECTANGLE, GL_TEXTURE_WRAP_S, GL_REPEAT );
-	glTexParameterf( GL_TEXTURE_RECTANGLE, GL_TEXTURE_WRAP_T, GL_REPEAT );*/
 	glTexImage2D(GL_TEXTURE_RECTANGLE, 0, 3, w, h, 0, GL_RGB, GL_UNSIGNED_BYTE, mObj->pCam->getBuffer());
 
 
@@ -85,18 +81,10 @@ CVVidCam::CVVidCam(VidCam &cam){
 	mObj->mResult = Mat(size,CV_8UC3);
 	glGenTextures(1, &(mObj->mTexResultID));
 	glBindTexture(GL_TEXTURE_RECTANGLE, mObj->mTexResultID);
-/*	glTexParameterf(GL_TEXTURE_RECTANGLE,GL_TEXTURE_MIN_FILTER,GL_LINEAR); 
-	glTexParameterf(GL_TEXTURE_RECTANGLE,GL_TEXTURE_MAG_FILTER,GL_LINEAR); 
-	glTexParameterf( GL_TEXTURE_RECTANGLE, GL_TEXTURE_WRAP_S, GL_REPEAT );
-	glTexParameterf( GL_TEXTURE_RECTANGLE, GL_TEXTURE_WRAP_T, GL_REPEAT );*/
 	glTexImage2D(GL_TEXTURE_RECTANGLE, 0, 3, mObj->mCam.getSize().x,  mObj->mCam.getSize().y,
 		0, GL_RGB, GL_UNSIGNED_BYTE, (unsigned char *) IplImage(mObj->mResult).imageData);
 	glGenTextures(1, &(mObj->mRectifiedTexID));
 	glBindTexture(GL_TEXTURE_RECTANGLE, mObj->mRectifiedTexID);               
-/*	glTexParameterf(GL_TEXTURE_RECTANGLE,GL_TEXTURE_MIN_FILTER,GL_LINEAR); 
-	glTexParameterf(GL_TEXTURE_RECTANGLE,GL_TEXTURE_MAG_FILTER,GL_LINEAR); 
-	glTexParameterf( GL_TEXTURE_RECTANGLE, GL_TEXTURE_WRAP_S, GL_REPEAT );
-	glTexParameterf( GL_TEXTURE_RECTANGLE, GL_TEXTURE_WRAP_T, GL_REPEAT );*/
 	glTexImage2D(GL_TEXTURE_RECTANGLE, 0, 3,  mObj->mCam.getSize().x,  mObj->mCam.getSize().y,
 	 0, GL_RGB, GL_UNSIGNED_BYTE, (unsigned char *) IplImage(mObj->mImageRectified).imageData);
 

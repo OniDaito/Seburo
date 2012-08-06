@@ -42,7 +42,28 @@ void Leeds::init(){
 
     mCamQuad = gl::Quad(fromStringS9<float_t> ( mSettings["leeds/cameras/width"]),
         fromStringS9<float_t> ( mSettings["leeds/cameras/height"]));
+
+    addTweakBar();
+    
+    glEnable(GL_DEPTH_TEST);
 }
+
+/*
+ * Setup Controls for the application
+ */
+
+void Leeds::addTweakBar(){
+    pBar = TwNewBar("TweakBar");
+    TwDefine(" GLOBAL help='Basic Leeds viewer application for scanned meshes.' "); // Message added to the help bar.  
+
+    TwAddButton(pBar, "Generate Texture",  _generateTexturedCallback, this, " label='Generate Textures for the mesh' ");
+
+}
+
+void Leeds::_generateTexturedCallback(void * obj){
+    static_cast<Leeds*>(obj)->createTextured();
+}
+
 
 /*
  * Draw Cameras along bottom of the screen - resizing as needed
@@ -85,7 +106,7 @@ void Leeds::drawCameras() {
  */
 
 void Leeds::createTextured() {
-    mMeshTextured = GeometryLeeds(  mMesh.getGeometry().convert() );
+    mMeshTextured = GLAsset<GeometryLeeds>(mMesh.getGeometry().convert<GeometryLeeds>());
 }
 
 
@@ -118,9 +139,9 @@ void Leeds::display(double_t dt){
         glm::mat4 mn =  glm::transpose(glm::inverse(mv));
 
         mShaderLeeds.s("uMVPMatrix",mvp).s("uShininess",128.0f).s("uMVMatrix",mv)
-        .s("uNMatrix",mn).s("uLight0",glm::vec3(15.0,15.0,15.0)).s("uMaxX",640).s("uMaxY",320);
+        .s("uNMatrix",mn).s("uLight0",glm::vec3(15.0,15.0,15.0)).s("uMaxX",640.0f).s("uMaxY",320.0f).s("uShowPos",0);
 
-        for (int i=0; i < vCVCameras.size(); i++){
+       for (int i=0; i < vCVCameras.size(); i++){
             glActiveTexture(GL_TEXTURE0 + i);
             vCVCameras[i].bind();
             
@@ -143,6 +164,7 @@ void Leeds::display(double_t dt){
             glActiveTexture(GL_TEXTURE0 + i);
             glBindTexture(GL_TEXTURE_2D, 0);
         }
+
     }
 
     // Draw our mesh
@@ -166,6 +188,7 @@ void Leeds::display(double_t dt){
         c.update();
 
     drawCameras();
+
 
     CXGLERROR
 }
@@ -198,7 +221,7 @@ void Leeds::fireEvent(KeyboardEvent e){
     if (e.mKey == GLFW_KEY_L && e.mAction == 0){
         string s = loadFileDialog();
         if (s != ""){
-            mMesh = gl::Geometry<GeometryPNF>( AssetImporter::load(s));
+            mMesh = gl::GLAsset<GeometryPNF>( AssetImporter::load(s));
         }
     }
     if (e.mKey == GLFW_KEY_R && e.mAction == 0){
@@ -250,7 +273,7 @@ int main (int argc, const char * argv[]) {
 
 #ifdef _GEAR_X11_GLX    
     // Linux only - need equivalent for Mac / Windows
-    Gtk::Main kit(&argc, &argv);
+    Gtk::Main kit(&argc, (char***)&argv);
 #endif
 
     // Declare the supported options.

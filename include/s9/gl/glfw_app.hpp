@@ -15,6 +15,7 @@
 #include "utils.hpp"
 
 #include <GL/glfw3.h>
+#include <anttweakbar/AntTweakBar.h>
 
 #ifdef _GEAR_X11_GLX	
 #include <gtkmm.h>
@@ -75,6 +76,10 @@ namespace s9 {
 
 			static void _mouseButtonCallback(GLFWwindow window, int button, int action);
 
+
+
+			static int _window_close_callback(GLFWwindow window);
+
 			/*
 			 * GLFW Callback for resizing a window
 			 */
@@ -82,7 +87,6 @@ namespace s9 {
 			static void _mousePositionCallback(GLFWwindow window, int x, int y);
 
 			static void _mouseWheelCallback(GLFWwindow window, double xpos, double ypos);
-
 
 		public:
 			GLFWApp(VisualApp *app, int argc, const char * argv[], const char * title);

@@ -12,7 +12,6 @@ in vec2 vTexCoord5;
 in vec2 vTexCoord6;
 in vec2 vTexCoord7;
 
-uniform sampler2DRect uBaseTex;
 uniform float uShininess;
 uniform float uMaxX;
 uniform float uMaxY;

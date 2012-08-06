@@ -9,19 +9,19 @@
 #ifndef LEEDSAPP_HPP
 #define LEEDSAPP_HPP
 
-#include "s9gear.hpp"
-#include "common.hpp"
-#include "gl/shapes.hpp"
-#include "gl/shader.hpp"
-#include "gl/video.hpp"
-#include "gl/geometry.hpp"
-#include "gl/glfw_app.hpp"
+#include "s9/s9gear.hpp"
+#include "s9/common.hpp"
+#include "s9/gl/shapes.hpp"
+#include "s9/gl/shader.hpp"
+#include "s9/gl/video.hpp"
+#include "s9/gl/glasset.hpp"
+#include "s9/gl/glfw_app.hpp"
 
 
 #include <anttweakbar/AntTweakBar.h>
 
 #ifdef _GEAR_X11_GLX	
-#include "linux/gtk_functions.hpp"
+#include "s9/linux/gtk_functions.hpp"
 #endif
 
  
@@ -53,13 +53,18 @@ namespace s9 {
 
 		// Internal functions
 		void createTextured();
+		void addTweakBar();
+
+		static void TW_CALL _generateTexturedCallback(void * obj);
+
+		TwBar *pBar; 
 
 		// Geometry
 		gl::Quad mTestQuad;
 		gl::Quad mCamQuad;
-		gl::Geometry<GeometryPNF> mGripper;
-		gl::Geometry<GeometryLeeds> mMeshTextured;
-		gl::Geometry<GeometryPNF> mMesh;
+		gl::GLAsset<GeometryPNF> mGripper;
+		gl::GLAsset<GeometryLeeds> mMeshTextured;
+		gl::GLAsset<GeometryPNF> mMesh;
 
 		// Cameras
 		InertiaCam<OrbitCamera> mCamera;

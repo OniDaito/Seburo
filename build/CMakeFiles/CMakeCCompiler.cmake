@@ -1,8 +1,7 @@
 SET(CMAKE_C_COMPILER "/usr/bin/gcc")
 SET(CMAKE_C_COMPILER_ARG1 "")
 SET(CMAKE_C_COMPILER_ID "GNU")
-SET(CMAKE_C_COMPILER_VERSION "4.2.1")
-SET(CMAKE_C_PLATFORM_ID "Darwin")
+SET(CMAKE_C_PLATFORM_ID "Linux")
 
 SET(CMAKE_AR "/usr/bin/ar")
 SET(CMAKE_RANLIB "/usr/bin/ranlib")
@@ -28,8 +27,8 @@ SET(CMAKE_C_LINKER_PREFERENCE 10)
 
 # Save compiler ABI information.
 SET(CMAKE_C_SIZEOF_DATA_PTR "8")
-SET(CMAKE_C_COMPILER_ABI "")
-SET(CMAKE_C_LIBRARY_ARCHITECTURE "")
+SET(CMAKE_C_COMPILER_ABI "ELF")
+SET(CMAKE_C_LIBRARY_ARCHITECTURE "x86_64-linux-gnu")
 
 IF(CMAKE_C_SIZEOF_DATA_PTR)
   SET(CMAKE_SIZEOF_VOID_P "${CMAKE_C_SIZEOF_DATA_PTR}")
@@ -40,11 +39,11 @@ IF(CMAKE_C_COMPILER_ABI)
 ENDIF(CMAKE_C_COMPILER_ABI)
 
 IF(CMAKE_C_LIBRARY_ARCHITECTURE)
-  SET(CMAKE_LIBRARY_ARCHITECTURE "")
+  SET(CMAKE_LIBRARY_ARCHITECTURE "x86_64-linux-gnu")
 ENDIF()
 
-SET(CMAKE_C_HAS_ISYSROOT "1")
-SET(CMAKE_C_OSX_DEPLOYMENT_TARGET_FLAG "-mmacosx-version-min=")
+SET(CMAKE_C_HAS_ISYSROOT "")
 
-SET(CMAKE_C_IMPLICIT_LINK_LIBRARIES "")
-SET(CMAKE_C_IMPLICIT_LINK_DIRECTORIES "/usr/llvm-gcc-4.2/lib/gcc/i686-apple-darwin11/4.2.1/x86_64;/Applications/Xcode.app/Contents/Developer/usr/llvm-gcc-4.2/lib/gcc/i686-apple-darwin11/4.2.1/x86_64;/usr/llvm-gcc-4.2/lib/gcc/i686-apple-darwin11/4.2.1;/usr/llvm-gcc-4.2/lib/gcc;/Applications/Xcode.app/Contents/Developer/usr/llvm-gcc-4.2/lib/gcc/i686-apple-darwin11/4.2.1;/usr/llvm-gcc-4.2/lib;/Applications/Xcode.app/Contents/Developer/usr/llvm-gcc-4.2/lib")
+
+SET(CMAKE_C_IMPLICIT_LINK_LIBRARIES "c")
+SET(CMAKE_C_IMPLICIT_LINK_DIRECTORIES "/usr/lib/gcc/x86_64-linux-gnu/4.4.6;/usr/lib/x86_64-linux-gnu;/usr/lib;/lib/x86_64-linux-gnu;/lib")

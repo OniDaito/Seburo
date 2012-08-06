@@ -38,8 +38,8 @@
 // http://sourceforge.net/p/guvcview/code/795/tree/trunk/src/
 
 extern "C" {
-    #include "jpeg.h"
-    #include "colorspaces.h"
+    #include "s9/jpeg.h"
+    #include "s9/colorspaces.h"
 }
  
 

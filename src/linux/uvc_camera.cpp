@@ -19,7 +19,7 @@
  ///http://stackoverflow.com/questions/8836872/mjpeg-to-raw-rgb24-with-video4linux
  ///http://stackoverflow.com/questions/5280756/libjpeg-ver-6b-jpeg-stdio-src-vs-jpeg-mem-src
  
-#include "linux/uvc_camera.hpp"
+#include "s9/linux/uvc_camera.hpp"
 
 using namespace std;
 

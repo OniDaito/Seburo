@@ -48,16 +48,11 @@ void GLFWApp::mainLoop() {
 #ifdef _GEAR_X11_GLX
 		gtk_main_iteration_do(false);
 #endif
-			
 		
-		BOOST_FOREACH ( GLFWwindow b, pThis->vWindows) {
-			if (!glfwIsWindow(b))
-				pThis->mRunning = false;
-		}
-    }
+ 	}
 
-    // Exiting state
-    glfwTerminate();
+  // Exiting state
+	glfwTerminate();
 	exit( EXIT_SUCCESS );
 }
 
@@ -68,6 +63,7 @@ void GLFWApp::mainLoop() {
 
 void GLFWApp::_reshape(GLFWwindow window, int w, int h) {
 	ResizeEvent e (w,h,glfwGetTime());
+	TwWindowSize(e.mW, e.mH);
 	pApp->fireEvent(e);
 }
 
@@ -77,6 +73,7 @@ void GLFWApp::_reshape(GLFWwindow window, int w, int h) {
 
 void GLFWApp::_display(GLFWwindow window) {
 	pApp->display(pThis->mDX);
+	TwDraw();
 }
 
 /*
@@ -94,68 +91,76 @@ void GLFWApp::_keyCallback(GLFWwindow window, int key, int action) {
  */
 
 void GLFWApp::_mouseButtonCallback(GLFWwindow window, int button, int action) {
-	
-	switch(button){
-		case 0: {
-			if (action){
-				pThis->mFlag |= MOUSE_LEFT_DOWN;
-				pThis->mFlag ^= MOUSE_LEFT_UP;
-				MouseEvent e (pThis->mMX,pThis->mMY,pThis->mFlag,glfwGetTime());
-				pApp->fireEvent(e);
+	if (!TwEventMouseButtonGLFW(button,action)){
+		switch(button){
+			case 0: {
+				if (action){
+					pThis->mFlag |= MOUSE_LEFT_DOWN;
+					pThis->mFlag ^= MOUSE_LEFT_UP;
+					MouseEvent e (pThis->mMX,pThis->mMY,pThis->mFlag,glfwGetTime());
+					pApp->fireEvent(e);
+				}
+				else{
+					pThis->mFlag |= MOUSE_LEFT_UP;
+					pThis->mFlag ^= MOUSE_LEFT_DOWN;
+					MouseEvent e (pThis->mMX,pThis->mMY,pThis->mFlag,glfwGetTime());
+					pApp->fireEvent(e);
+					pThis->mFlag ^= MOUSE_LEFT_UP;
+				}
+				break;
 			}
-			else{
-				pThis->mFlag |= MOUSE_LEFT_UP;
-				pThis->mFlag ^= MOUSE_LEFT_DOWN;
-				MouseEvent e (pThis->mMX,pThis->mMY,pThis->mFlag,glfwGetTime());
-				pApp->fireEvent(e);
-				pThis->mFlag ^= MOUSE_LEFT_UP;
+			case 1: {
+				if (action){
+					pThis->mFlag |= MOUSE_RIGHT_DOWN;
+					pThis->mFlag ^= MOUSE_RIGHT_UP;
+					MouseEvent e (pThis->mMX,pThis->mMY,pThis->mFlag,glfwGetTime());
+					pApp->fireEvent(e);
+				}
+				else{
+					pThis->mFlag |= MOUSE_RIGHT_UP;
+					pThis->mFlag ^= MOUSE_RIGHT_DOWN;
+					MouseEvent e (pThis->mMX,pThis->mMY,pThis->mFlag,glfwGetTime());
+					pApp->fireEvent(e);
+					pThis->mFlag ^= MOUSE_RIGHT_UP;
+				}
+				break;
 			}
-			break;
-		}
-		case 1: {
-			if (action){
-				pThis->mFlag |= MOUSE_RIGHT_DOWN;
-				pThis->mFlag ^= MOUSE_RIGHT_UP;
-				MouseEvent e (pThis->mMX,pThis->mMY,pThis->mFlag,glfwGetTime());
-				pApp->fireEvent(e);
-			}
-			else{
-				pThis->mFlag |= MOUSE_RIGHT_UP;
-				pThis->mFlag ^= MOUSE_RIGHT_DOWN;
-				MouseEvent e (pThis->mMX,pThis->mMY,pThis->mFlag,glfwGetTime());
-				pApp->fireEvent(e);
-				pThis->mFlag ^= MOUSE_RIGHT_UP;
-			}
-			break;
-		}
-		case 2: {
-			if (action) {
-				pThis->mFlag |= MOUSE_MIDDLE_DOWN;
-				pThis->mFlag ^= MOUSE_MIDDLE_UP;
-				MouseEvent e (pThis->mMX,pThis->mMY,pThis->mFlag,glfwGetTime());
-				pApp->fireEvent(e);
-			}
-				
-			else{
+			case 2: {
+				if (action) {
+					pThis->mFlag |= MOUSE_MIDDLE_DOWN;
+					pThis->mFlag ^= MOUSE_MIDDLE_UP;
+					MouseEvent e (pThis->mMX,pThis->mMY,pThis->mFlag,glfwGetTime());
+					pApp->fireEvent(e);
+				}
+					
+				else{
 
-				pThis->mFlag |= MOUSE_MIDDLE_UP;
-				pThis->mFlag ^= MOUSE_MIDDLE_DOWN;
-				MouseEvent e (pThis->mMX,pThis->mMY,pThis->mFlag,glfwGetTime());
-				pApp->fireEvent(e);
-				pThis->mFlag ^= MOUSE_MIDDLE_UP;
+					pThis->mFlag |= MOUSE_MIDDLE_UP;
+					pThis->mFlag ^= MOUSE_MIDDLE_DOWN;
+					MouseEvent e (pThis->mMX,pThis->mMY,pThis->mFlag,glfwGetTime());
+					pApp->fireEvent(e);
+					pThis->mFlag ^= MOUSE_MIDDLE_UP;
+				}
+				break;
 			}
-			break;
 		}
 	}
 }
 
 
 void GLFWApp::_mousePositionCallback(GLFWwindow window, int x, int y) {
-	pThis->mMX = x;
-	pThis->mMY = y;
-	MouseEvent e (pThis->mMX,pThis->mMY,pThis->mFlag,glfwGetTime());
-	pApp->fireEvent(e);
+	if( !TwEventMousePosGLFW(x, y) ){  
+		pThis->mMX = x;
+		pThis->mMY = y;
+		MouseEvent e (pThis->mMX,pThis->mMY,pThis->mFlag,glfwGetTime());
+		pApp->fireEvent(e);
+	}
 
+}
+
+int GLFWApp::_window_close_callback(GLFWwindow window) {
+	pThis->mRunning = GL_FALSE;
+	return GL_TRUE;
 }
 
 
@@ -216,6 +221,8 @@ GLFWwindow GLFWApp::createWindow(const char * title ="S9Gear", size_t w=800, siz
 	glfwSetMouseButtonCallback(_mouseButtonCallback);
 	glfwSetScrollCallback(_mouseWheelCallback);
 	glfwSetWindowSizeCallback(_reshape);
+	glfwSetWindowCloseCallback( _window_close_callback );
+		
 
   glfwSwapInterval(1);
 	
@@ -239,6 +246,8 @@ GLFWwindow GLFWApp::createWindow(const char * title ="S9Gear", size_t w=800, siz
 	
 	CXGLERROR
 	pThis->vWindows.push_back(w);
+
+	TwInit(TW_OPENGL, NULL);
 
 	pApp->init();
 

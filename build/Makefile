@@ -8,7 +8,7 @@ default_target: all
 #=============================================================================
 # Special targets provided by cmake.
 
-# Disable implicit rules so canonical targets will work.
+# Disable implicit rules so canoncical targets will work.
 .SUFFIXES:
 
 # Remove some rules from gmake that .SUFFIXES does not remove.
@@ -30,19 +30,19 @@ cmake_force:
 SHELL = /bin/sh
 
 # The CMake executable.
-CMAKE_COMMAND = /usr/local/Cellar/cmake/2.8.8/bin/cmake
+CMAKE_COMMAND = /usr/bin/cmake
 
 # The command to remove a file.
-RM = /usr/local/Cellar/cmake/2.8.8/bin/cmake -E remove -f
+RM = /usr/bin/cmake -E remove -f
 
 # The program to use to edit the cache.
-CMAKE_EDIT_COMMAND = /usr/local/Cellar/cmake/2.8.8/bin/ccmake
+CMAKE_EDIT_COMMAND = /usr/bin/ccmake
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /Users/oni/Projects/S9Gear
+CMAKE_SOURCE_DIR = /home/oni/Projects/S9Gear
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /Users/oni/Projects/S9Gear/build
+CMAKE_BINARY_DIR = /home/oni/Projects/S9Gear/build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -50,7 +50,7 @@ CMAKE_BINARY_DIR = /Users/oni/Projects/S9Gear/build
 # Special rule for the target edit_cache
 edit_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake cache editor..."
-	/usr/local/Cellar/cmake/2.8.8/bin/ccmake -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+	/usr/bin/ccmake -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
 .PHONY : edit_cache
 
 # Special rule for the target edit_cache
@@ -60,7 +60,7 @@ edit_cache/fast: edit_cache
 # Special rule for the target rebuild_cache
 rebuild_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
-	/usr/local/Cellar/cmake/2.8.8/bin/cmake -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+	/usr/bin/cmake -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
 .PHONY : rebuild_cache
 
 # Special rule for the target rebuild_cache
@@ -69,9 +69,9 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/oni/Projects/S9Gear/build/CMakeFiles /Users/oni/Projects/S9Gear/build/CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/oni/Projects/S9Gear/build/CMakeFiles /home/oni/Projects/S9Gear/build/CMakeFiles/progress.marks
 	$(MAKE) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/oni/Projects/S9Gear/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/oni/Projects/S9Gear/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -162,6 +162,32 @@ video: cmake_check_build_system
 video/fast:
 	$(MAKE) -f examples/video/CMakeFiles/video.dir/build.make examples/video/CMakeFiles/video.dir/build
 .PHONY : video/fast
+
+#=============================================================================
+# Target rules for targets named picking
+
+# Build rule for target.
+picking: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 picking
+.PHONY : picking
+
+# fast build rule for target.
+picking/fast:
+	$(MAKE) -f examples/picking/CMakeFiles/picking.dir/build.make examples/picking/CMakeFiles/picking.dir/build
+.PHONY : picking/fast
+
+#=============================================================================
+# Target rules for targets named leeds
+
+# Build rule for target.
+leeds: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 leeds
+.PHONY : leeds
+
+# fast build rule for target.
+leeds/fast:
+	$(MAKE) -f applications/leeds/CMakeFiles/leeds.dir/build.make applications/leeds/CMakeFiles/leeds.dir/build
+.PHONY : leeds/fast
 
 src/asset.o: src/asset.cpp.o
 .PHONY : src/asset.o
@@ -283,30 +309,6 @@ src/gl/glew.c.s:
 	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/gl/glew.c.s
 .PHONY : src/gl/glew.c.s
 
-src/gl/glewinfo.o: src/gl/glewinfo.c.o
-.PHONY : src/gl/glewinfo.o
-
-# target to build an object file
-src/gl/glewinfo.c.o:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/gl/glewinfo.c.o
-.PHONY : src/gl/glewinfo.c.o
-
-src/gl/glewinfo.i: src/gl/glewinfo.c.i
-.PHONY : src/gl/glewinfo.i
-
-# target to preprocess a source file
-src/gl/glewinfo.c.i:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/gl/glewinfo.c.i
-.PHONY : src/gl/glewinfo.c.i
-
-src/gl/glewinfo.s: src/gl/glewinfo.c.s
-.PHONY : src/gl/glewinfo.s
-
-# target to generate assembly for a file
-src/gl/glewinfo.c.s:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/gl/glewinfo.c.s
-.PHONY : src/gl/glewinfo.c.s
-
 src/gl/glfw_app.o: src/gl/glfw_app.cpp.o
 .PHONY : src/gl/glfw_app.o
 
@@ -403,29 +405,77 @@ src/gl/video.cpp.s:
 	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/gl/video.cpp.s
 .PHONY : src/gl/video.cpp.s
 
-src/gl/visualinfo.o: src/gl/visualinfo.c.o
-.PHONY : src/gl/visualinfo.o
+src/linux/colorspaces.o: src/linux/colorspaces.c.o
+.PHONY : src/linux/colorspaces.o
 
 # target to build an object file
-src/gl/visualinfo.c.o:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/gl/visualinfo.c.o
-.PHONY : src/gl/visualinfo.c.o
+src/linux/colorspaces.c.o:
+	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/linux/colorspaces.c.o
+.PHONY : src/linux/colorspaces.c.o
 
-src/gl/visualinfo.i: src/gl/visualinfo.c.i
-.PHONY : src/gl/visualinfo.i
+src/linux/colorspaces.i: src/linux/colorspaces.c.i
+.PHONY : src/linux/colorspaces.i
 
 # target to preprocess a source file
-src/gl/visualinfo.c.i:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/gl/visualinfo.c.i
-.PHONY : src/gl/visualinfo.c.i
+src/linux/colorspaces.c.i:
+	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/linux/colorspaces.c.i
+.PHONY : src/linux/colorspaces.c.i
 
-src/gl/visualinfo.s: src/gl/visualinfo.c.s
-.PHONY : src/gl/visualinfo.s
+src/linux/colorspaces.s: src/linux/colorspaces.c.s
+.PHONY : src/linux/colorspaces.s
 
 # target to generate assembly for a file
-src/gl/visualinfo.c.s:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/gl/visualinfo.c.s
-.PHONY : src/gl/visualinfo.c.s
+src/linux/colorspaces.c.s:
+	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/linux/colorspaces.c.s
+.PHONY : src/linux/colorspaces.c.s
+
+src/linux/jpeg.o: src/linux/jpeg.c.o
+.PHONY : src/linux/jpeg.o
+
+# target to build an object file
+src/linux/jpeg.c.o:
+	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/linux/jpeg.c.o
+.PHONY : src/linux/jpeg.c.o
+
+src/linux/jpeg.i: src/linux/jpeg.c.i
+.PHONY : src/linux/jpeg.i
+
+# target to preprocess a source file
+src/linux/jpeg.c.i:
+	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/linux/jpeg.c.i
+.PHONY : src/linux/jpeg.c.i
+
+src/linux/jpeg.s: src/linux/jpeg.c.s
+.PHONY : src/linux/jpeg.s
+
+# target to generate assembly for a file
+src/linux/jpeg.c.s:
+	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/linux/jpeg.c.s
+.PHONY : src/linux/jpeg.c.s
+
+src/linux/uvc_camera.o: src/linux/uvc_camera.cpp.o
+.PHONY : src/linux/uvc_camera.o
+
+# target to build an object file
+src/linux/uvc_camera.cpp.o:
+	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/linux/uvc_camera.cpp.o
+.PHONY : src/linux/uvc_camera.cpp.o
+
+src/linux/uvc_camera.i: src/linux/uvc_camera.cpp.i
+.PHONY : src/linux/uvc_camera.i
+
+# target to preprocess a source file
+src/linux/uvc_camera.cpp.i:
+	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/linux/uvc_camera.cpp.i
+.PHONY : src/linux/uvc_camera.cpp.i
+
+src/linux/uvc_camera.s: src/linux/uvc_camera.cpp.s
+.PHONY : src/linux/uvc_camera.s
+
+# target to generate assembly for a file
+src/linux/uvc_camera.cpp.s:
+	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/linux/uvc_camera.cpp.s
+.PHONY : src/linux/uvc_camera.cpp.s
 
 src/primitive.o: src/primitive.cpp.o
 .PHONY : src/primitive.o
@@ -632,6 +682,8 @@ help:
 	@echo "... model"
 	@echo "... fbo"
 	@echo "... video"
+	@echo "... picking"
+	@echo "... leeds"
 	@echo "... src/asset.o"
 	@echo "... src/asset.i"
 	@echo "... src/asset.s"
@@ -647,9 +699,6 @@ help:
 	@echo "... src/gl/glew.o"
 	@echo "... src/gl/glew.i"
 	@echo "... src/gl/glew.s"
-	@echo "... src/gl/glewinfo.o"
-	@echo "... src/gl/glewinfo.i"
-	@echo "... src/gl/glewinfo.s"
 	@echo "... src/gl/glfw_app.o"
 	@echo "... src/gl/glfw_app.i"
 	@echo "... src/gl/glfw_app.s"
@@ -662,9 +711,15 @@ help:
 	@echo "... src/gl/video.o"
 	@echo "... src/gl/video.i"
 	@echo "... src/gl/video.s"
-	@echo "... src/gl/visualinfo.o"
-	@echo "... src/gl/visualinfo.i"
-	@echo "... src/gl/visualinfo.s"
+	@echo "... src/linux/colorspaces.o"
+	@echo "... src/linux/colorspaces.i"
+	@echo "... src/linux/colorspaces.s"
+	@echo "... src/linux/jpeg.o"
+	@echo "... src/linux/jpeg.i"
+	@echo "... src/linux/jpeg.s"
+	@echo "... src/linux/uvc_camera.o"
+	@echo "... src/linux/uvc_camera.i"
+	@echo "... src/linux/uvc_camera.s"
 	@echo "... src/primitive.o"
 	@echo "... src/primitive.i"
 	@echo "... src/primitive.s"

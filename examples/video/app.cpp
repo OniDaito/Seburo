@@ -110,7 +110,7 @@ int main (int argc, const char * argv[]) {
   
     VideoApp b;
 
-  	GLFWApp a(&b);
+  	GLFWApp a(&b, argc, argv, "Video Sampling Application");
   	a.init(4,0); 
 
     return EXIT_SUCCESS;

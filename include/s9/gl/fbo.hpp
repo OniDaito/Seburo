@@ -38,6 +38,9 @@ namespace s9 {
 		public:
 			FBO() {};
 			FBO(size_t w, size_t h);
+
+			virtual operator int() const { return mObj.use_count() > 0; };
+
 			void bind() { glBindFramebuffer(GL_FRAMEBUFFER, mObj->mID); glViewport(0,0,mObj->mW,mObj->mH); };
 			void unbind() { glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0); } ;
 			bool checkStatus();

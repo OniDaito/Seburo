@@ -44,7 +44,7 @@ namespace s9 {
 	 * taken care of. Likely, this will be expanded to take into account PCL Meshes 
 	 * and similar and will become subclassed or specific
 	 * 
-	 * This class uses a single, flat array of types.
+	 * This class uses a single, flat array of types, interleaved
 	 */
 	
 	template <class T>
@@ -73,6 +73,8 @@ namespace s9 {
 			mObj->vBuffer = v;
 		};
 
+		void createEmpty() {mObj.reset(new SharedObj()); };
+
 		template<class U>
 		U convert() {};
 
@@ -85,17 +87,20 @@ namespace s9 {
 		
 		uint32_t size() { return mObj->vBuffer.size(); };
 		uint32_t indexsize() { return mObj->vIndices.size(); };
+		int elementsize() { return sizeof(T); };
 		
 		bool isIndexed() {return mObj->vIndices.size() > 0; };
 		bool isDirty() {return mObj->mDirty;};
 		void setDirty(bool b) {mObj->mDirty = b; };
-		std::vector<uint32_t>&  getIndices() {return mObj->vIndices; };
+		std::vector<uint32_t>  getIndices() {return mObj->vIndices; };
 		void addVertex(T v) {mObj->push_back(v); setDirty(true); };
 		void setVertex(T v, uint32_t p) { mObj->vBuffer[p] = v; setDirty(true); };
 		void delVertex(uint32_t p) { mObj->vBuffer.erase( mObj->vBuffer.begin() + p); setDirty(true); };
-		void addIndices(std::vector<uint32_t> idx) {mObj->vIndices = idx; };
+		void addIndices(std::vector<uint32_t> idx) { mObj->vIndices = idx; };
 	
 	};
+
+
 
 
 	// Specialist contructors for speed - basically, zipping from different vectors
@@ -162,7 +167,7 @@ namespace s9 {
 			tp.mP = p.mP;
 			tp.mN = p.mN;
 
-			for (int i = 0; i < 8; i ++){
+			for (int i = 0; i < 8; ++i){
 				Float2 tt; tt.x = 0.0f; tt.y = 0.0f;
 				tp.mT[i] = tt;
 			}
@@ -170,7 +175,33 @@ namespace s9 {
 		}
 
 		Geometry<VertPNT8F> b (vtemp);
-		b.addIndices(this->mObj->vIndices);
+		b.addIndices(getIndices());
+
+		return b;
+	}
+
+	/*
+	 * Conversion from basic to full
+	 */
+
+	template <>
+	template <>
+	inline Geometry<VertPNCTF> Geometry<VertPNF>::convert() {
+		std::vector<VertPNCTF> vtemp;
+		std::vector<VertPNF> vstart = this->mObj->vBuffer;
+		for (std::vector<VertPNF>::iterator it = vstart.begin(); it != vstart.end(); it++) {
+			VertPNF p = *it;
+			VertPNCTF tp;
+			tp.mP = p.mP;
+			tp.mN = p.mN;
+			tp.mC.x = tp.mC.y = tp.mC.z = 0.5f;
+			tp.mC.w = 1.0f;
+			tp.mT.x = tp.mT.y = 0.0f;
+			vtemp.push_back(tp);
+		}
+
+		Geometry<VertPNCTF> b (vtemp);
+		b.addIndices(getIndices());
 		return b;
 	}
 
@@ -179,7 +210,7 @@ namespace s9 {
 	typedef Geometry<VertPNCTF> GeometryFullFloat;
 	typedef Geometry<VertPNCTG> GeometryFullGLM;
 	typedef Geometry<VertPNF> GeometryPNF;
-
+	typedef Geometry<VertPNT8F> GeometryPNT8F;
 
 }
 

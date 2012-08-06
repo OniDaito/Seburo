@@ -25,16 +25,15 @@ namespace po = boost::program_options;
  * Called when the mainloop starts, just once
  */
 
-void FBOApp::init(){
+void PickingApp::init(){
     mTestQuad = gl::Quad(1.0,1.0);
     mShader.load("../../../shaders/quad.vert", "../../../shaders/quad.frag");
-    mFBOShader.load("../../../shaders/quad_texture.vert", "../../../shaders/quad_texture.frag");
+    mPickingShader.load("../../../shaders/picker.vert", "../../../shaders/picker.frag");
 
-    mFBO = gl::FBO(640,480);
-    mHudQuad = gl::Quad(640.0,480.0);
-    mHudQuad.setScale(glm::vec3(0.5,0.5,0.5));
-
+    mPickingFBO = gl::FBO(800,600);
+    
     mTestQuad.move(glm::vec3(-0.5,-0.5,0.0));
+    mCamera.setRatio(800.0 / 600.0);
     mCamera.move(glm::vec3(0,0,10.0f));
 
     glEnable(GL_TEXTURE_RECTANGLE);
@@ -46,7 +45,7 @@ void FBOApp::init(){
  * Called as fast as possible. Not set FPS wise but dt is passed in
  */
 		
-void FBOApp::display(double_t dt){
+void PickingApp::display(double_t dt){
     
 
     GLfloat depth = 1.0f;
@@ -54,17 +53,18 @@ void FBOApp::display(double_t dt){
     glm::mat4 mvp = mCamera.getMatrix() * mTestQuad.getMatrix();
 
     // Bind to an FBO
-    mFBO.bind();
-    glClearBufferfv(GL_COLOR, 0, &glm::vec4(0.7f, 0.7f, 0.7f, 1.0f)[0]);
+    mPickingFBO.bind();
+    glClearBufferfv(GL_COLOR, 0, &glm::vec4(0.0f, 0.0f, 0.0f, 0.0f)[0]);
     glClearBufferfv(GL_DEPTH, 0, &depth );
 
-    mShader.bind();
-    mShader.s("uMVPMatrix",mvp);
+    mPickingShader.bind();
+    mPickingShader.s("uMVPMatrix",mvp);
 
+    mPickingShader.s("uColour",mTestQuad.getColour());
     mTestQuad.draw();
-    mShader.unbind();
+    mPickingShader.unbind();
 
-    mFBO.unbind();
+    mPickingFBO.unbind();
 
     // Now draw to the screen
 
@@ -78,19 +78,6 @@ void FBOApp::display(double_t dt){
 
     mCamera.update(dt);
 
-    // Now switch to the HUD and draw a quad aligned to the FBO Size
-    mFBOShader.bind();
-    mvp = mScreenCamera.getMatrix() * mHudQuad.getMatrix();
-    mFBOShader.s("uMVPMatrix",mvp);
-
-    mFBO.bindColour();
-
-    mHudQuad.draw();
-
-    mFBO.unbindColour();
-    mFBOShader.unbind();
-
-
     CXGLERROR
 }
 
@@ -99,8 +86,27 @@ void FBOApp::display(double_t dt){
  * This is called by the wrapper function when an event is fired
  */
 
-void FBOApp::fireEvent(MouseEvent e){
+void PickingApp::fireEvent(MouseEvent e){
     mCamera.passEvent(e);
+
+
+   glm::vec4 c;
+   if (mPickingFBO && e.mFlag & MOUSE_LEFT_DOWN) {
+        mPickingFBO.bind();
+        glReadBuffer(GL_COLOR_ATTACHMENT0);
+        CXGLERROR
+
+        GLfloat *data = (GLfloat*) new GLfloat[4];
+        glReadPixels(e.mX, e.mY, 1, 1, GL_RGBA, GL_FLOAT, data);
+        CXGLERROR
+        c = glm::vec4 ( data[0], data[1], data[2], data[3]);
+
+        if (c == mTestQuad.getColour())
+            cout << "Selected the quad" << endl;
+
+        CXGLERROR
+        mPickingFBO.unbind();
+    }
 }
 
 /*
@@ -108,13 +114,16 @@ void FBOApp::fireEvent(MouseEvent e){
  * and reset the viewport
  */
 
-void FBOApp::fireEvent(ResizeEvent e){
+void PickingApp::fireEvent(ResizeEvent e){
     glViewport(0,0,e.mW,e.mH);
     mCamera.setRatio( static_cast<float_t>(e.mW) /  static_cast<float_t>(e.mH));
-    mScreenCamera.setRatio( static_cast<float_t>(e.mW) /  static_cast<float_t>(e.mH));
+    
+    if (mPickingFBO) {
+        mPickingFBO.resize(e.mW,e.mH);
+    }
 }
 
-void FBOApp::fireEvent(KeyboardEvent e){
+void PickingApp::fireEvent(KeyboardEvent e){
     cout << "Key Pressed: " << e.mKey << endl;
 }
 
@@ -140,9 +149,9 @@ int main (int argc, const char * argv[]) {
         return 1;
     }
   
-    FBOApp b;
+    PickingApp b;
 
-  	GLFWApp a(&b,argc,argv,"FBO App");
+  	GLFWApp a(&b,argc,argv,"Picking App");
   	a.init(4,0); 
 
     return EXIT_SUCCESS;

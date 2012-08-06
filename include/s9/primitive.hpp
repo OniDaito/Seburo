@@ -21,7 +21,6 @@
  
 namespace s9 {
 
-	
 	class Primitive;
 	
 	typedef boost::shared_ptr<Primitive> PrimPtr;
@@ -58,6 +57,9 @@ namespace s9 {
 			mScaleMatrix = glm::mat4(1.0f);
 
 			mScale = glm::vec3(1.0f,1.0f,1.0f);
+
+			mColour = glm::vec4(1.0,0.0,1.0,1.0);
+
 		}
 
 	//	virtual operator int() const { return mObj.use_count() > 0; };

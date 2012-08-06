@@ -20,7 +20,7 @@
 #endif
 
 #ifdef _GEAR_X11_GLX
-#include "linux/uvc_camera.hpp"
+#include "s9/linux/uvc_camera.hpp"
 #endif
 
 
@@ -44,6 +44,9 @@ namespace s9 {
 			void unbind();
 			void update();
 			unsigned char* getBuffer() {return mObj->pCam->getBuffer(); };
+
+			virtual operator int() const { return mObj.use_count() > 0; };
+			
 		protected:
 			class SharedObj {
 			public:
@@ -110,7 +113,7 @@ namespace s9 {
 			void bindRectified();
 			void bindResult();
 			void unbind();
-		
+			
 			void update();
 			
 		protected:

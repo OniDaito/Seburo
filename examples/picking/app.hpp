@@ -6,15 +6,15 @@
 *
 */
 
-#ifndef MODELAPP_HPP
-#define MODELAPP_HPP
+#ifndef FBOAPP_HPP
+#define FBOAPP_HPP
 
 #include "s9/s9gear.hpp"
 #include "s9/common.hpp"
-#include "s9/asset.hpp"
+#include "s9/gl/shapes.hpp"
 #include "s9/gl/shader.hpp"
-#include "s9/gl/glasset.hpp"
 #include "s9/gl/glfw_app.hpp"
+#include "s9/gl/fbo.hpp"
 
 #include <anttweakbar/AntTweakBar.h>
 
@@ -22,10 +22,10 @@
 namespace s9 {
 
 	/*
- 	 * The Model App loads the Stanford Bunny and shades it
+ 	 * An application that shows how to pick elements via colour
  	 */
 
-	class ModelApp : public VisualApp{
+	class PickingApp : public VisualApp{
 	public:
 		void init();
 		void display(double_t dt);
@@ -36,11 +36,13 @@ namespace s9 {
 		void fireEvent(ResizeEvent e);
 		
 	protected:
-		gl::GLAsset<GeometryPNF> mGeometry;
+		gl::Quad mTestQuad;
 		gl::Shader mShader;
+		gl::Shader mPickingShader;
+		gl::FBO mPickingFBO;
+
 		InertiaCam<OrbitCamera> mCamera;
 		
-		double_t mPrevT;
 	};
 }
 

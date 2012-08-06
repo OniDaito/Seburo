@@ -18,26 +18,27 @@ using namespace boost::assign;
  */ 
 namespace s9 {
 
-void convertGeometry( Geometry<VertPNF> a, Geometry<VertPNT8F> b) {
+	void convertGeometry( Geometry<VertPNF> a, Geometry<VertPNT8F> b) {
 
-	vector<VertPNT8F> vtemp;
-	vector<VertPNF> tv = a.getBuffer();
-	BOOST_FOREACH(VertPNF p, tv) {
+		vector<VertPNT8F> vtemp;
+		vector<VertPNF> tv = a.getBuffer();
 
-		VertPNT8F tp;
-		tp.mP = p.mP;
-		tp.mN = p.mN;
+		BOOST_FOREACH(VertPNF p, tv) {
 
-		for (int i = 0; i < 8; i ++){
-			Float2 tt; tt.x = 0.0f; tt.y = 0.0f;
-			tp.mT[i] = tt;
+			VertPNT8F tp;
+			tp.mP = p.mP;
+			tp.mN = p.mN;
+
+			for (int i = 0; i < 8; i ++){
+				Float2 tt; tt.x = 0.0f; tt.y = 0.0f;
+				tp.mT[i] = tt;
+			}
+			vtemp += tp;
 		}
-		vtemp += tp;
-	}
 
-	b = Geometry<VertPNT8F> (vtemp);
-	vector<uint32_t> ti = a.getIndices();
-	b.addIndices(ti);
-}
+		b = Geometry<VertPNT8F> (vtemp);
+		vector<uint32_t> ti = a.getIndices();
+		b.addIndices(ti);
+	}
 
 }
