@@ -9,8 +9,9 @@
 #ifndef LEEDSAPP_HPP
 #define LEEDSAPP_HPP
 
-#include "s9/s9gear.hpp"
 #include "s9/common.hpp"
+#include "s9/camera.hpp"
+#include "s9/s9xml.hpp"
 #include "s9/gl/shapes.hpp"
 #include "s9/gl/shader.hpp"
 #include "s9/gl/video.hpp"
@@ -34,7 +35,7 @@ namespace s9 {
  	 * An Basic App that draws a quad and provides a basic camera
  	 */
 
-	class Leeds : public VisualApp{
+	class Leeds : public WindowApp, WindowResponder{
 	public:
 		void init();
 		void display(double_t dt);
@@ -45,9 +46,9 @@ namespace s9 {
 
 
 		// Event handling - you can choose which to override
-		void fireEvent(MouseEvent e);
-		void fireEvent(KeyboardEvent e);
-		void fireEvent(ResizeEvent e);
+		void processEvent(MouseEvent e);
+		void processEvent(KeyboardEvent e);
+		void processEvent(ResizeEvent e);
 		
 	protected:
 
@@ -67,7 +68,7 @@ namespace s9 {
 		gl::GLAsset<GeometryPNF> mMesh;
 
 		// Cameras
-		InertiaCam<OrbitCamera> mCamera;
+		InertiaCam mCamera;
 		ScreenCamera mScreenCamera;
 
 		// Settings

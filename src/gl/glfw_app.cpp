@@ -1,6 +1,6 @@
 /**
 * @brief GLFW Bit
-* @file glfw_app.cpp
+* @file glfwpThis->_app.cpp
 * @author Benjamin Blundell <oni@section9.co.uk>
 * @date 25/07/2012
 *
@@ -13,19 +13,22 @@ using namespace s9::gl;
 using namespace std;
 
 GLFWApp* GLFWApp::pThis;
-VisualApp* GLFWApp::pApp;
 string GLFWApp::mTitle;
 
-GLFWApp::GLFWApp (VisualApp* app, int argc = 0, const char * argv[] = NULL, const char * title = "S9Gear"){
+
+GLFWApp::GLFWApp (WindowApp &app, const int w = 800, const int h = 600, 
+				bool fullscreen = false, int argc = 0, const char * argv[] = NULL, 
+				const char * title = "S9Gear", const int major = 4, const int minor = 0) : WindowSystem(app) {
 	if( !glfwInit() ){
 		fprintf( stderr, "Failed to initialize GLFW\n" );
 		exit( EXIT_FAILURE );
 	}
-	pApp = app;
 	pThis = this;
 	mFlag = 0x00;
-	mTitle = title;    
+	mTitle = title;
+	initGL(major,minor,w,h);
 }
+
 
 
 void GLFWApp::mainLoop() {
@@ -64,7 +67,7 @@ void GLFWApp::mainLoop() {
 void GLFWApp::_reshape(GLFWwindow window, int w, int h) {
 	ResizeEvent e (w,h,glfwGetTime());
 	TwWindowSize(e.mW, e.mH);
-	pApp->fireEvent(e);
+	pThis->_app.fireEvent(e);
 }
 
 /*
@@ -72,7 +75,7 @@ void GLFWApp::_reshape(GLFWwindow window, int w, int h) {
  */
 
 void GLFWApp::_display(GLFWwindow window) {
-	pApp->display(pThis->mDX);
+	pThis->_app.display(pThis->mDX);
 	TwDraw();
 }
 
@@ -83,7 +86,7 @@ void GLFWApp::_display(GLFWwindow window) {
 
 void GLFWApp::_keyCallback(GLFWwindow window, int key, int action) {
 	KeyboardEvent e (key,action,glfwGetTime());
-	pApp->fireEvent(e);
+	pThis->_app.fireEvent(e);
 }
 
 /*
@@ -98,13 +101,13 @@ void GLFWApp::_mouseButtonCallback(GLFWwindow window, int button, int action) {
 					pThis->mFlag |= MOUSE_LEFT_DOWN;
 					pThis->mFlag ^= MOUSE_LEFT_UP;
 					MouseEvent e (pThis->mMX,pThis->mMY,pThis->mFlag,glfwGetTime());
-					pApp->fireEvent(e);
+					pThis->_app.fireEvent(e);
 				}
 				else{
 					pThis->mFlag |= MOUSE_LEFT_UP;
 					pThis->mFlag ^= MOUSE_LEFT_DOWN;
 					MouseEvent e (pThis->mMX,pThis->mMY,pThis->mFlag,glfwGetTime());
-					pApp->fireEvent(e);
+					pThis->_app.fireEvent(e);
 					pThis->mFlag ^= MOUSE_LEFT_UP;
 				}
 				break;
@@ -114,13 +117,13 @@ void GLFWApp::_mouseButtonCallback(GLFWwindow window, int button, int action) {
 					pThis->mFlag |= MOUSE_RIGHT_DOWN;
 					pThis->mFlag ^= MOUSE_RIGHT_UP;
 					MouseEvent e (pThis->mMX,pThis->mMY,pThis->mFlag,glfwGetTime());
-					pApp->fireEvent(e);
+					pThis->_app.fireEvent(e);
 				}
 				else{
 					pThis->mFlag |= MOUSE_RIGHT_UP;
 					pThis->mFlag ^= MOUSE_RIGHT_DOWN;
 					MouseEvent e (pThis->mMX,pThis->mMY,pThis->mFlag,glfwGetTime());
-					pApp->fireEvent(e);
+					pThis->_app.fireEvent(e);
 					pThis->mFlag ^= MOUSE_RIGHT_UP;
 				}
 				break;
@@ -130,7 +133,7 @@ void GLFWApp::_mouseButtonCallback(GLFWwindow window, int button, int action) {
 					pThis->mFlag |= MOUSE_MIDDLE_DOWN;
 					pThis->mFlag ^= MOUSE_MIDDLE_UP;
 					MouseEvent e (pThis->mMX,pThis->mMY,pThis->mFlag,glfwGetTime());
-					pApp->fireEvent(e);
+					pThis->_app.fireEvent(e);
 				}
 					
 				else{
@@ -138,7 +141,7 @@ void GLFWApp::_mouseButtonCallback(GLFWwindow window, int button, int action) {
 					pThis->mFlag |= MOUSE_MIDDLE_UP;
 					pThis->mFlag ^= MOUSE_MIDDLE_DOWN;
 					MouseEvent e (pThis->mMX,pThis->mMY,pThis->mFlag,glfwGetTime());
-					pApp->fireEvent(e);
+					pThis->_app.fireEvent(e);
 					pThis->mFlag ^= MOUSE_MIDDLE_UP;
 				}
 				break;
@@ -153,7 +156,7 @@ void GLFWApp::_mousePositionCallback(GLFWwindow window, int x, int y) {
 		pThis->mMX = x;
 		pThis->mMY = y;
 		MouseEvent e (pThis->mMX,pThis->mMY,pThis->mFlag,glfwGetTime());
-		pApp->fireEvent(e);
+		pThis->_app.fireEvent(e);
 	}
 
 }
@@ -169,13 +172,13 @@ void GLFWApp::_mouseWheelCallback(GLFWwindow window, double xpos, double ypos) {
 	if (ypos == 1) {
 		pThis->mFlag |= MOUSE_WHEEL_UP;	
 		MouseEvent e (pThis->mMX,pThis->mMY,pThis->mFlag,glfwGetTime());
-		pApp->fireEvent(e);
+		pThis->_app.fireEvent(e);
 		pThis->mFlag ^= MOUSE_WHEEL_UP;
 		
 	}else if (ypos == -1) {
 		pThis->mFlag |= MOUSE_WHEEL_DOWN;
 		MouseEvent e (pThis->mMX,pThis->mMY,pThis->mFlag,glfwGetTime());
-		pApp->fireEvent(e);
+		pThis->_app.fireEvent(e);
 		pThis->mFlag ^= MOUSE_WHEEL_DOWN;
 	}	
 }
@@ -198,9 +201,11 @@ GLFWwindow GLFWApp::createWindow(const char * title ="S9Gear", size_t w=800, siz
 
 /*
  * Perform OpenGL initialisation using GLEW
+ * \todo FULLSCREEN apps
  */
 
- void GLFWApp::init(int major = 3, int minor = 2) {
+ void GLFWApp::initGL(const int major = 3, const int minor = 2, 
+ 		const int w = 800, const int h =600) {
 
 	glfwOpenWindowHint(GLFW_OPENGL_VERSION_MAJOR, major);
 	glfwOpenWindowHint(GLFW_OPENGL_VERSION_MINOR, minor);
@@ -209,7 +214,7 @@ GLFWwindow GLFWApp::createWindow(const char * title ="S9Gear", size_t w=800, siz
 	glfwOpenWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_COMPAT_PROFILE);
 	glfwOpenWindowHint(GLFW_FSAA_SAMPLES, 4);
 	
-	GLFWwindow w = createWindow(mTitle.c_str());
+	GLFWwindow window = createWindow(mTitle.c_str(),w, h);
 	
 	CXGLERROR
 	
@@ -227,7 +232,7 @@ GLFWwindow GLFWApp::createWindow(const char * title ="S9Gear", size_t w=800, siz
   glfwSwapInterval(1);
 	
 
-	if( !w ) {
+	if( !window ) {
 		fprintf( stderr, "Failed to open GLFW window\n" );
 		glfwTerminate();
 		exit( EXIT_FAILURE );
@@ -245,11 +250,15 @@ GLFWwindow GLFWApp::createWindow(const char * title ="S9Gear", size_t w=800, siz
 	}
 	
 	CXGLERROR
-	pThis->vWindows.push_back(w);
+	pThis->vWindows.push_back(window);
 
 	TwInit(TW_OPENGL, NULL);
 
-	pApp->init();
+	pThis->_app.init();
+
+	// fire a cheeky resize event to make sure all is well
+	ResizeEvent e (w,h,glfwGetTime());
+	pThis->_app.fireEvent(e);
 
 	mainLoop();
 

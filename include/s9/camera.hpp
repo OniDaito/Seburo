@@ -13,41 +13,34 @@
 #include "common.hpp"
 #include "primitive.hpp"
 #include "events.hpp"
-
 /* 
  * Camera Class for a camera that pitches and yaws whilst keeping up always parallel with y
  * \todo certain camera classes could listen for events but we need to set a precidence (as sometimes we want
- * \todo  * Camera can extend primitve! *
  * \todo update and resize hooks on all cameras
  * camera movement and othertimes we want selection for example) - bubbling
  */
  
 namespace s9{
 	 
-	class Camera {
+	class Camera : public Primitive, public WindowResponder{
 
 	public:
 
 		Camera();
 		
-		virtual void yaw(float_t a);
-		virtual void pitch(float_t a);
-		virtual void roll(float_t a);
-
 		virtual void reset();
 		
 		virtual void align(Primitive &p);
+
+		virtual void processEvent(ResizeEvent e) { 
+			setRatio( static_cast<float_t>(e.mW) / e.mH);
+		}
 		
 		void setNear(float_t n) {mNear = n; compute(); };
 		void setFar(float_t n) {mFar = n; compute(); };
 		
 		void setRatio(float_t r);
 		void setField(float_t a) {mField = a; compute(); };
-		
-		void setPos(glm::vec3 p) {mPos = p; compute(); };
-		void setLook(glm::vec3 l);
-		
-		virtual void move(glm::vec3 m);
 		
 		glm::vec3 getPos() {return mPos; };
 		glm::vec3 getLook() {return mLook; };
@@ -62,11 +55,7 @@ namespace s9{
 		
 		glm::mat4 mViewMatrix;
 		glm::mat4 mProjectionMatrix;
-		
-		glm::vec3 mPos;
-		glm::vec3 mLook;
-		glm::vec3 mUp;
-		
+
 		float_t mR,mFar,mNear, mField;
 		
 	};
@@ -112,8 +101,7 @@ namespace s9{
 	 * \todo make implicit in the visual app somehow?
 	 */
 
-	template <class T>
-	class InertiaCam : public T {
+	class InertiaCam : public OrbitCamera {
 
 	protected:
 		glm::vec3 mNow;
@@ -136,9 +124,11 @@ namespace s9{
 			mShift = 0.001;
 		}
 
-		void update(double_t dt){ }
+		void processEvent(ResizeEvent e) { 
+			setRatio( static_cast<float_t>(e.mW) / e.mH);
+		}
 
-		void passEvent(MouseEvent e){
+		void processEvent(MouseEvent e){
 
 			if (e.mFlag & MOUSE_LEFT_DOWN){
 
@@ -167,30 +157,29 @@ namespace s9{
 
 			mP = glm::vec3(static_cast<float_t>(e.mX), static_cast<float_t>(e.mY),0.0f);
 		}
+
+		/*
+		 * Update is called as often as possible to complete inertia
+		 * \todo work out how best to do zooming and shifting
+		 */ 
+
+		void update(double_t dt){
+			
+			double_t ds = mAngle * dt;
+
+			if (glm::length(mNow) < 0.01){
+				 mNow = glm::vec3(0.0f,0.0f,0.0f);
+			}	
+			else {
+				this->yaw(mNow.x * ds);
+				this->pitch(mNow.y * ds);
+			}
+
+			if (!mHeld) {
+				mNow *= 1.0 - (dt * mDegrade);
+			}
+		}
 	};
-
-	/*
-	 * Update is called as often as possible to complete inertia
-	 * \todo work out how best to do zooming and shifting
-	 */ 
-
-	template <>	
-	inline void InertiaCam<OrbitCamera>::update(double_t dt){
-		
-		double_t ds = mAngle * dt;
-
-		if (glm::length(mNow) < 0.01){
-			 mNow = glm::vec3(0.0f,0.0f,0.0f);
-		}	
-		else {
-			this->yaw(mNow.x * ds);
-			this->pitch(mNow.y * ds);
-		}
-
-		if (!mHeld) {
-			mNow *= 1.0 - (dt * mDegrade);
-		}
-	}
 
  }
 	 

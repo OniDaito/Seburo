@@ -9,8 +9,8 @@
 #ifndef VIDEOAPP_HPP
 #define VIDEOAPP_HPP
 
-#include "s9/s9gear.hpp"
 #include "s9/common.hpp"
+#include "s9/camera.hpp"
 #include "s9/gl/shapes.hpp"
 #include "s9/gl/shader.hpp"
 #include "s9/gl/video.hpp"
@@ -26,15 +26,15 @@ namespace s9 {
  	 * A Video App that grabs a camera and draws it to the screen
  	 */
 
-	class VideoApp : public VisualApp{
+	class VideoApp : public WindowApp, WindowResponder{
 	public:
 		void init();
 		void display(double_t dt);
 
 		// Event handling - you can choose which to override
-		void fireEvent(MouseEvent e);
-		void fireEvent(KeyboardEvent e);
-		void fireEvent(ResizeEvent e);
+		void processEvent(MouseEvent e);
+		void processEvent(KeyboardEvent e);
+		void processEvent(ResizeEvent e);
 		
 	protected:
 		gl::Quad mTestQuad;

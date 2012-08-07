@@ -34,8 +34,10 @@ void VideoApp::init(){
 #ifdef _GEAR_X11_GLX
     mVideo = VidCam("/dev/video0",640,320,30);
 #endif
-}
 
+    link(mCamera);
+    link(*this);
+}
 
 /*
  * Called as fast as possible. Not set FPS wise but dt is passed in
@@ -69,20 +71,19 @@ void VideoApp::display(double_t dt){
  * This is called by the wrapper function when an event is fired
  */
 
-void VideoApp::fireEvent(MouseEvent e){
+void VideoApp::processEvent(MouseEvent e){
 }
 
 /*
  * Called when the window is resized. You should set cameras here
  */
 
-void VideoApp::fireEvent(ResizeEvent e){
+void VideoApp::processEvent(ResizeEvent e){
     cout << "Window Resized:" << e.mW << "," << e.mH << endl;
     glViewport(0,0,e.mW,e.mH);
-    mCamera.setRatio( static_cast<float_t>(e.mW) / e.mH);
 }
 
-void VideoApp::fireEvent(KeyboardEvent e){
+void VideoApp::processEvent(KeyboardEvent e){
     cout << "Key Pressed: " << e.mKey << endl;
 }
 
@@ -110,8 +111,7 @@ int main (int argc, const char * argv[]) {
   
     VideoApp b;
 
-  	GLFWApp a(&b, argc, argv, "Video Sampling Application");
-  	a.init(4,0); 
+    GLFWApp a(b, 800, 600, false, argc, argv, "Video",4,0);
 
     return EXIT_SUCCESS;
 

@@ -15,11 +15,10 @@ using namespace s9;
 
 
 /*
- * Basic Camera - This one keeps the up vector always parallel to Y axis
- * \todo add inertia
+ * Basic Camera - Simply extends a primitive with viewports
  */
 
-Camera::Camera(){
+Camera::Camera() {
 	reset();
 }
 
@@ -35,45 +34,6 @@ void Camera::reset() {
 }
 
  
-void Camera::yaw(float_t a){
-	glm::quat q_rotate;
-	q_rotate = glm::rotate( q_rotate, a, mUp );
-	mLook = q_rotate * mLook;
-	mUp = q_rotate * mUp;
-	compute();
-}
-
-void Camera::pitch(float_t a){
-	glm::quat q_rotate;
-	
-	glm::vec3 right = glm::cross(mUp,mLook);
-	
-	q_rotate = glm::rotate( q_rotate, a, right );
-	mLook = q_rotate * mLook;
-	mUp = q_rotate * mUp;
-	
-	compute();
-}
-
-void Camera::roll(float_t a){
-	glm::quat q_rotate;
-	q_rotate = glm::rotate( q_rotate, a, mLook);
-	mLook = q_rotate * mLook;
-	mLook = glm::normalize(mLook);
-	mUp = q_rotate * mUp;
-	
-	compute();
-}
-
-void Camera::setLook(glm::vec3 l) {
-	mLook = glm::normalize(l);
-	compute(); 
-}
-	
-void Camera::move(glm::vec3 m){
-	mPos += m;
-	compute();
-}
 
 void Camera::setRatio(float_t r) {
 	mR = r;

@@ -9,8 +9,8 @@
 #ifndef FBOAPP_HPP
 #define FBOAPP_HPP
 
-#include "s9/s9gear.hpp"
 #include "s9/common.hpp"
+#include "s9/camera.hpp"
 #include "s9/gl/shapes.hpp"
 #include "s9/gl/shader.hpp"
 #include "s9/gl/glfw_app.hpp"
@@ -25,15 +25,15 @@ namespace s9 {
  	 * An application that shows how to deal with an FBO and draw to the screen
  	 */
 
-	class FBOApp : public VisualApp{
+	class FBOApp : public WindowApp, WindowResponder{
 	public:
 		void init();
 		void display(double_t dt);
 
 		// Event handling - you can choose which to override
-		void fireEvent(MouseEvent e);
-		void fireEvent(KeyboardEvent e);
-		void fireEvent(ResizeEvent e);
+		void processEvent(MouseEvent e);
+		void processEvent(KeyboardEvent e);
+		void processEvent(ResizeEvent e);
 		
 	protected:
 		gl::Quad mTestQuad;
@@ -42,7 +42,7 @@ namespace s9 {
 		gl::Shader mFBOShader;
 		gl::FBO mFBO;
 
-		InertiaCam<OrbitCamera> mCamera;
+		InertiaCam mCamera;
 		ScreenCamera mScreenCamera;
 		
 	};

@@ -10,6 +10,7 @@ FILE(REMOVE_RECURSE
   "CMakeFiles/s9gear.dir/src/tinyxmlerror.cpp.o"
   "CMakeFiles/s9gear.dir/src/wingedge.cpp.o"
   "CMakeFiles/s9gear.dir/src/primitive.cpp.o"
+  "CMakeFiles/s9gear.dir/src/visual_app.cpp.o"
   "CMakeFiles/s9gear.dir/src/gl/video.cpp.o"
   "CMakeFiles/s9gear.dir/src/gl/shapes.cpp.o"
   "CMakeFiles/s9gear.dir/src/gl/glfw_app.cpp.o"

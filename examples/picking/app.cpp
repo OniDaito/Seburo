@@ -35,6 +35,9 @@ void PickingApp::init(){
     mTestQuad.move(glm::vec3(-0.5,-0.5,0.0));
     mCamera.setRatio(800.0 / 600.0);
     mCamera.move(glm::vec3(0,0,10.0f));
+   
+    link(mCamera);
+    link(*this);
 
     glEnable(GL_TEXTURE_RECTANGLE);
 
@@ -86,9 +89,7 @@ void PickingApp::display(double_t dt){
  * This is called by the wrapper function when an event is fired
  */
 
-void PickingApp::fireEvent(MouseEvent e){
-    mCamera.passEvent(e);
-
+void PickingApp::processEvent(MouseEvent e){
 
    glm::vec4 c;
    if (mPickingFBO && e.mFlag & MOUSE_LEFT_DOWN) {
@@ -114,16 +115,15 @@ void PickingApp::fireEvent(MouseEvent e){
  * and reset the viewport
  */
 
-void PickingApp::fireEvent(ResizeEvent e){
+void PickingApp::processEvent(ResizeEvent e){
     glViewport(0,0,e.mW,e.mH);
-    mCamera.setRatio( static_cast<float_t>(e.mW) /  static_cast<float_t>(e.mH));
     
     if (mPickingFBO) {
         mPickingFBO.resize(e.mW,e.mH);
     }
 }
 
-void PickingApp::fireEvent(KeyboardEvent e){
+void PickingApp::processEvent(KeyboardEvent e){
     cout << "Key Pressed: " << e.mKey << endl;
 }
 
@@ -151,8 +151,7 @@ int main (int argc, const char * argv[]) {
   
     PickingApp b;
 
-  	GLFWApp a(&b,argc,argv,"Picking App");
-  	a.init(4,0); 
+    GLFWApp a(b, 800, 600, false, argc, argv, "Picking",4,0);
 
     return EXIT_SUCCESS;
 

@@ -8,7 +8,6 @@
 
 #include "app.hpp"
 
-
 #include <boost/program_options.hpp>
 #include <signal.h>
 
@@ -32,6 +31,9 @@ void BasicApp::init(){
     mTestQuad.move(glm::vec3(-0.5,-0.5,0.0));
     mCamera.move(glm::vec3(0,0,20.0f));
 
+    link(*this);
+    link(mCamera);
+    
 }
 
 
@@ -65,21 +67,20 @@ void BasicApp::display(double_t dt){
  * This is called by the wrapper function when an event is fired
  */
 
-void BasicApp::fireEvent(MouseEvent e){
-    mCamera.passEvent(e);
+void BasicApp::processEvent(MouseEvent e){
 }
 
 /*
  * Called when the window is resized. You should set cameras here
  */
 
-void BasicApp::fireEvent(ResizeEvent e){
+void BasicApp::processEvent(ResizeEvent e){
     cout << "Window Resized:" << e.mW << "," << e.mH << endl;
     glViewport(0,0,e.mW,e.mH);
-    mCamera.setRatio( static_cast<float_t>(e.mW) / e.mH);
+   
 }
 
-void BasicApp::fireEvent(KeyboardEvent e){
+void BasicApp::processEvent(KeyboardEvent e){
     cout << "Key Pressed: " << e.mKey << endl;
 }
 
@@ -107,8 +108,7 @@ int main (int argc, const char * argv[]) {
   
     BasicApp b;
 
-  	GLFWApp a(&b, argc, argv, "Basic Application");
-  	a.init(4,0); 
+    GLFWApp a(b, 800, 600, false, argc, argv, "Basic",4,0);
 
     return EXIT_SUCCESS;
 

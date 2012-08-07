@@ -645,6 +645,30 @@ src/tinyxmlparser.cpp.s:
 	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/tinyxmlparser.cpp.s
 .PHONY : src/tinyxmlparser.cpp.s
 
+src/visual_app.o: src/visual_app.cpp.o
+.PHONY : src/visual_app.o
+
+# target to build an object file
+src/visual_app.cpp.o:
+	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/visual_app.cpp.o
+.PHONY : src/visual_app.cpp.o
+
+src/visual_app.i: src/visual_app.cpp.i
+.PHONY : src/visual_app.i
+
+# target to preprocess a source file
+src/visual_app.cpp.i:
+	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/visual_app.cpp.i
+.PHONY : src/visual_app.cpp.i
+
+src/visual_app.s: src/visual_app.cpp.s
+.PHONY : src/visual_app.s
+
+# target to generate assembly for a file
+src/visual_app.cpp.s:
+	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/visual_app.cpp.s
+.PHONY : src/visual_app.cpp.s
+
 src/wingedge.o: src/wingedge.cpp.o
 .PHONY : src/wingedge.o
 
@@ -741,6 +765,9 @@ help:
 	@echo "... src/tinyxmlparser.o"
 	@echo "... src/tinyxmlparser.i"
 	@echo "... src/tinyxmlparser.s"
+	@echo "... src/visual_app.o"
+	@echo "... src/visual_app.i"
+	@echo "... src/visual_app.s"
 	@echo "... src/wingedge.o"
 	@echo "... src/wingedge.i"
 	@echo "... src/wingedge.s"

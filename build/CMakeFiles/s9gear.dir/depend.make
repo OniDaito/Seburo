@@ -258,9 +258,11 @@ CMakeFiles/s9gear.dir/src/asset.cpp.o: ../include/glm/gtx/string_cast.hpp
 CMakeFiles/s9gear.dir/src/asset.cpp.o: ../include/glm/gtx/string_cast.inl
 CMakeFiles/s9gear.dir/src/asset.cpp.o: ../include/s9/asset.hpp
 CMakeFiles/s9gear.dir/src/asset.cpp.o: ../include/s9/common.hpp
+CMakeFiles/s9gear.dir/src/asset.cpp.o: ../include/s9/events.hpp
 CMakeFiles/s9gear.dir/src/asset.cpp.o: ../include/s9/geometry.hpp
 CMakeFiles/s9gear.dir/src/asset.cpp.o: ../include/s9/primitive.hpp
 CMakeFiles/s9gear.dir/src/asset.cpp.o: ../include/s9/vertex_types.hpp
+CMakeFiles/s9gear.dir/src/asset.cpp.o: ../include/s9/visualapp.hpp
 CMakeFiles/s9gear.dir/src/asset.cpp.o: ../src/asset.cpp
 
 CMakeFiles/s9gear.dir/src/camera.cpp.o: ../include/glm/./core/_detail.hpp
@@ -352,6 +354,7 @@ CMakeFiles/s9gear.dir/src/camera.cpp.o: ../include/s9/camera.hpp
 CMakeFiles/s9gear.dir/src/camera.cpp.o: ../include/s9/common.hpp
 CMakeFiles/s9gear.dir/src/camera.cpp.o: ../include/s9/events.hpp
 CMakeFiles/s9gear.dir/src/camera.cpp.o: ../include/s9/primitive.hpp
+CMakeFiles/s9gear.dir/src/camera.cpp.o: ../include/s9/visualapp.hpp
 CMakeFiles/s9gear.dir/src/camera.cpp.o: ../src/camera.cpp
 
 CMakeFiles/s9gear.dir/src/geometry.cpp.o: ../include/glm/./core/_detail.hpp
@@ -623,19 +626,9 @@ CMakeFiles/s9gear.dir/src/gl/glfw_app.cpp.o: ../include/glm/gtx/matrix_interpola
 CMakeFiles/s9gear.dir/src/gl/glfw_app.cpp.o: ../include/glm/gtx/matrix_interpolation.inl
 CMakeFiles/s9gear.dir/src/gl/glfw_app.cpp.o: ../include/glm/gtx/string_cast.hpp
 CMakeFiles/s9gear.dir/src/gl/glfw_app.cpp.o: ../include/glm/gtx/string_cast.inl
-CMakeFiles/s9gear.dir/src/gl/glfw_app.cpp.o: ../include/s9/gl/../camera.hpp
 CMakeFiles/s9gear.dir/src/gl/glfw_app.cpp.o: ../include/s9/gl/../common.hpp
 CMakeFiles/s9gear.dir/src/gl/glfw_app.cpp.o: ../include/s9/gl/../events.hpp
-CMakeFiles/s9gear.dir/src/gl/glfw_app.cpp.o: ../include/s9/gl/../geometry.hpp
-CMakeFiles/s9gear.dir/src/gl/glfw_app.cpp.o: ../include/s9/gl/../primitive.hpp
-CMakeFiles/s9gear.dir/src/gl/glfw_app.cpp.o: ../include/s9/gl/../s9gear.hpp
-CMakeFiles/s9gear.dir/src/gl/glfw_app.cpp.o: ../include/s9/gl/../s9xml.hpp
-CMakeFiles/s9gear.dir/src/gl/glfw_app.cpp.o: ../include/s9/gl/../shapes.hpp
-CMakeFiles/s9gear.dir/src/gl/glfw_app.cpp.o: ../include/s9/gl/../tinystr.h
-CMakeFiles/s9gear.dir/src/gl/glfw_app.cpp.o: ../include/s9/gl/../tinyxml.h
-CMakeFiles/s9gear.dir/src/gl/glfw_app.cpp.o: ../include/s9/gl/../vertex_types.hpp
 CMakeFiles/s9gear.dir/src/gl/glfw_app.cpp.o: ../include/s9/gl/../visualapp.hpp
-CMakeFiles/s9gear.dir/src/gl/glfw_app.cpp.o: ../include/s9/gl/../wingedge.hpp
 CMakeFiles/s9gear.dir/src/gl/glfw_app.cpp.o: ../include/s9/gl/common.hpp
 CMakeFiles/s9gear.dir/src/gl/glfw_app.cpp.o: ../include/s9/gl/glfw_app.hpp
 CMakeFiles/s9gear.dir/src/gl/glfw_app.cpp.o: ../include/s9/gl/utils.hpp
@@ -1777,10 +1770,12 @@ CMakeFiles/s9gear.dir/src/gl/shapes.cpp.o: ../include/glm/gtx/matrix_interpolati
 CMakeFiles/s9gear.dir/src/gl/shapes.cpp.o: ../include/glm/gtx/string_cast.hpp
 CMakeFiles/s9gear.dir/src/gl/shapes.cpp.o: ../include/glm/gtx/string_cast.inl
 CMakeFiles/s9gear.dir/src/gl/shapes.cpp.o: ../include/s9/gl/../common.hpp
+CMakeFiles/s9gear.dir/src/gl/shapes.cpp.o: ../include/s9/gl/../events.hpp
 CMakeFiles/s9gear.dir/src/gl/shapes.cpp.o: ../include/s9/gl/../geometry.hpp
 CMakeFiles/s9gear.dir/src/gl/shapes.cpp.o: ../include/s9/gl/../primitive.hpp
 CMakeFiles/s9gear.dir/src/gl/shapes.cpp.o: ../include/s9/gl/../shapes.hpp
 CMakeFiles/s9gear.dir/src/gl/shapes.cpp.o: ../include/s9/gl/../vertex_types.hpp
+CMakeFiles/s9gear.dir/src/gl/shapes.cpp.o: ../include/s9/gl/../visualapp.hpp
 CMakeFiles/s9gear.dir/src/gl/shapes.cpp.o: ../include/s9/gl/common.hpp
 CMakeFiles/s9gear.dir/src/gl/shapes.cpp.o: ../include/s9/gl/shapes.hpp
 CMakeFiles/s9gear.dir/src/gl/shapes.cpp.o: ../include/s9/gl/utils.hpp
@@ -1974,7 +1969,9 @@ CMakeFiles/s9gear.dir/src/primitive.cpp.o: ../include/glm/gtx/matrix_interpolati
 CMakeFiles/s9gear.dir/src/primitive.cpp.o: ../include/glm/gtx/string_cast.hpp
 CMakeFiles/s9gear.dir/src/primitive.cpp.o: ../include/glm/gtx/string_cast.inl
 CMakeFiles/s9gear.dir/src/primitive.cpp.o: ../include/s9/common.hpp
+CMakeFiles/s9gear.dir/src/primitive.cpp.o: ../include/s9/events.hpp
 CMakeFiles/s9gear.dir/src/primitive.cpp.o: ../include/s9/primitive.hpp
+CMakeFiles/s9gear.dir/src/primitive.cpp.o: ../include/s9/visualapp.hpp
 CMakeFiles/s9gear.dir/src/primitive.cpp.o: ../src/primitive.cpp
 
 CMakeFiles/s9gear.dir/src/s9xml.cpp.o: ../include/glm/./core/_detail.hpp
@@ -2154,10 +2151,12 @@ CMakeFiles/s9gear.dir/src/shapes.cpp.o: ../include/glm/gtx/matrix_interpolation.
 CMakeFiles/s9gear.dir/src/shapes.cpp.o: ../include/glm/gtx/string_cast.hpp
 CMakeFiles/s9gear.dir/src/shapes.cpp.o: ../include/glm/gtx/string_cast.inl
 CMakeFiles/s9gear.dir/src/shapes.cpp.o: ../include/s9/common.hpp
+CMakeFiles/s9gear.dir/src/shapes.cpp.o: ../include/s9/events.hpp
 CMakeFiles/s9gear.dir/src/shapes.cpp.o: ../include/s9/geometry.hpp
 CMakeFiles/s9gear.dir/src/shapes.cpp.o: ../include/s9/primitive.hpp
 CMakeFiles/s9gear.dir/src/shapes.cpp.o: ../include/s9/shapes.hpp
 CMakeFiles/s9gear.dir/src/shapes.cpp.o: ../include/s9/vertex_types.hpp
+CMakeFiles/s9gear.dir/src/shapes.cpp.o: ../include/s9/visualapp.hpp
 CMakeFiles/s9gear.dir/src/shapes.cpp.o: ../src/shapes.cpp
 
 CMakeFiles/s9gear.dir/src/tinystr.cpp.o: ../include/s9/tinystr.h
@@ -2174,6 +2173,8 @@ CMakeFiles/s9gear.dir/src/tinyxmlerror.cpp.o: ../src/tinyxmlerror.cpp
 CMakeFiles/s9gear.dir/src/tinyxmlparser.cpp.o: ../include/s9/tinystr.h
 CMakeFiles/s9gear.dir/src/tinyxmlparser.cpp.o: ../include/s9/tinyxml.h
 CMakeFiles/s9gear.dir/src/tinyxmlparser.cpp.o: ../src/tinyxmlparser.cpp
+
+CMakeFiles/s9gear.dir/src/visual_app.cpp.o: ../src/visual_app.cpp
 
 CMakeFiles/s9gear.dir/src/wingedge.cpp.o: ../include/glm/./core/_detail.hpp
 CMakeFiles/s9gear.dir/src/wingedge.cpp.o: ../include/glm/./core/_fixes.hpp

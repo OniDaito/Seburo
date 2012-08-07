@@ -63,3 +63,34 @@ glm::mat4 Primitive::_getMatrix(PrimPtr p, glm::mat4 m) {
 }
  
 
+
+void Primitive::pitch(float_t a){
+	glm::quat q_rotate;
+	
+	glm::vec3 right = glm::cross(mUp,mLook);
+	
+	q_rotate = glm::rotate( q_rotate, a, right );
+	mLook = q_rotate * mLook;
+	mUp = q_rotate * mUp;
+	
+	compute();
+}
+
+void Primitive::roll(float_t a){
+	glm::quat q_rotate;
+	q_rotate = glm::rotate( q_rotate, a, mLook);
+	mLook = q_rotate * mLook;
+	mLook = glm::normalize(mLook);
+	mUp = q_rotate * mUp;
+	
+	compute();
+}
+
+
+void Primitive::yaw(float_t a){
+	glm::quat q_rotate;
+	q_rotate = glm::rotate( q_rotate, a, mUp );
+	mLook = q_rotate * mLook;
+	mUp = q_rotate * mUp;
+	compute();
+}

@@ -47,16 +47,15 @@ namespace s9 {
 			}
 		
 		public:
-			GLAsset() {};
-			GLAsset(T a) : Asset<T>(a) {  mVAO = 0; };
-			GLAsset(Asset<T> b) : Asset<T>(b) { mVAO = 0; }
+			GLAsset() { this->mVAO = 0; };
+			GLAsset(T a) : Asset<T>(a) {  this->mVAO = 0; };
+			GLAsset(Asset<T> b) : Asset<T>(b) { this->mVAO = 0; }
 			T getGeometry() { return this->mObj->mGeom; }
-
-			virtual operator int() const { return mVAO != 0; };
 
 			// Override this 
 			virtual void draw() {
-				if(mVAO == 0) _gen();
+
+				if(this->mVAO == 0) _gen();
 				
 				bind();
 
@@ -82,7 +81,7 @@ namespace s9 {
 		inline void GLAsset<GeometryPNF>::_gen() {
 			glGenVertexArrays(1, &(this->mVAO));
 			int s = getGeometry().indexsize() > 0 ? 2 : 1;
-			
+
 			handle = new unsigned int[s];
 			glGenBuffers(s,handle);
 

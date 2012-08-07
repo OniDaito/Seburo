@@ -11,6 +11,7 @@
 #define S9_PRIMITIVE_HPP
 
 #include "common.hpp"
+#include "visualapp.hpp"
 
 
 /*
@@ -25,7 +26,7 @@ namespace s9 {
 	
 	typedef boost::shared_ptr<Primitive> PrimPtr;
 
-	class Primitive  {
+	class Primitive {
 		
 	protected:
 	
@@ -66,8 +67,8 @@ namespace s9 {
 
 		virtual ~Primitive(); 
 		
-		void move(glm::vec3 p) { mPos += p; compute(); };
-		void rotate(glm::vec3 r);
+		virtual void move(glm::vec3 p) { mPos += p; compute(); };
+		virtual void rotate(glm::vec3 r);
 		glm::mat4 getMatrix();
 		glm::mat4 getLocalMatrix() { return mTransMatrix * mRotMatrix * mScaleMatrix; };
 		
@@ -75,21 +76,25 @@ namespace s9 {
 		glm::mat4 getRotMatrix() { return mRotMatrix; };
 		glm::mat4 getScaleMatrix() { return mScaleMatrix; };
 		
-		void setLook(glm::vec3 v) {mLook = v; glm::normalize(v); compute(); };
-		void setPos(glm::vec3 v) {mPos = v;compute(); };
-		void setScale(glm::vec3 v) {mScale = v; compute(); };
-		void setColour(glm::vec4 v) {mColour = v; };
+		virtual void setLook(glm::vec3 v) {mLook = v; glm::normalize(v); compute(); };
+		virtual void setPos(glm::vec3 v) {mPos = v;compute(); };
+		virtual void setScale(glm::vec3 v) {mScale = v; compute(); };
+		virtual void setColour(glm::vec4 v) {mColour = v; };
 		
 		int addChild(PrimPtr p) { vChildren.push_back(p); p->pParent = PrimPtr(this); return vChildren.size()-1; };
 		void removeChild(PrimPtr p){};
 		
-		void compute();
+		virtual void compute();
 		
 		glm::vec3 getPos() { return mPos;};
 		glm::vec3 getLook() { return mLook;};
 		glm::vec3 getScale() { return mScale;};
 		glm::vec3 getUp() { return mUp;};
 		glm::vec4 getColour() { return mColour;};
+
+		virtual void yaw(float_t a);
+		virtual void pitch(float_t a);
+		virtual void roll(float_t a);
 				
 	
 		PrimPtr getParent(){return pParent; };

@@ -27,6 +27,7 @@ namespace po = boost::program_options;
 
 void Leeds::init(){
     
+
     mTestQuad = gl::Quad(1.0,1.0);
 
     mTestQuad.move(glm::vec3(-0.5,-0.5,0.0));
@@ -44,6 +45,10 @@ void Leeds::init(){
         fromStringS9<float_t> ( mSettings["leeds/cameras/height"]));
 
     addTweakBar();
+
+    link(*this);
+    link(mCamera);
+    link(mScreenCamera);
     
     glEnable(GL_DEPTH_TEST);
 }
@@ -174,11 +179,11 @@ void Leeds::display(double_t dt){
         glm::mat4 mn =  glm::transpose(glm::inverse(mv));
         mShaderLighting.s("uMVPMatrix",mvp).s("uShininess",128.0f).s("uMVMatrix",mv)
         .s("uNMatrix",mn).s("uLight0",glm::vec3(15.0,15.0,15.0));
-
         mMesh.draw();
         mShaderLighting.unbind();
     }
 
+    
     mCamera.update(dt);
 
     BOOST_FOREACH(VidCam c, vCameras)
@@ -198,29 +203,27 @@ void Leeds::display(double_t dt){
  * This is called by the wrapper function when an event is fired
  */
 
-void Leeds::fireEvent(MouseEvent e){
-    mCamera.passEvent(e);
+void Leeds::processEvent(MouseEvent e){
 }
 
 /*
  * Called when the window is resized. You should set cameras here
  */
 
-void Leeds::fireEvent(ResizeEvent e){
+void Leeds::processEvent(ResizeEvent e){
     glViewport(0,0,e.mW,e.mH);
-    mCamera.setRatio( static_cast<float_t>(e.mW) / e.mH);
-    mScreenCamera.setDim( e.mW, e.mH);
 
     mScreenW = e.mW;
     mScreenH = e.mH;
 }
 
-void Leeds::fireEvent(KeyboardEvent e){
+void Leeds::processEvent(KeyboardEvent e){
     cout << "Key Pressed: " << e.mKey << endl;
 
     if (e.mKey == GLFW_KEY_L && e.mAction == 0){
         string s = loadFileDialog();
         if (s != ""){
+            cout << "Leeds - Loading " << s << endl;
             mMesh = gl::GLAsset<GeometryPNF>( AssetImporter::load(s));
         }
     }
@@ -294,9 +297,8 @@ int main (int argc, const char * argv[]) {
   
     Leeds b;
 
-  	GLFWApp a(&b, argc, argv, "Leeds");
-  	a.init(4,0); 
-
+  	GLFWApp a(b, 800, 600, false, argc, argv, "Leeds",4,0);
+  
     return EXIT_SUCCESS;
 
 }

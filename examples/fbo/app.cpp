@@ -37,6 +37,10 @@ void FBOApp::init(){
     mTestQuad.move(glm::vec3(-0.5,-0.5,0.0));
     mCamera.move(glm::vec3(0,0,10.0f));
 
+    link(mCamera);
+    link(*this);
+    link(mScreenCamera);
+
     glEnable(GL_TEXTURE_RECTANGLE);
 
 }
@@ -99,8 +103,7 @@ void FBOApp::display(double_t dt){
  * This is called by the wrapper function when an event is fired
  */
 
-void FBOApp::fireEvent(MouseEvent e){
-    mCamera.passEvent(e);
+void FBOApp::processEvent(MouseEvent e){
 }
 
 /*
@@ -108,13 +111,11 @@ void FBOApp::fireEvent(MouseEvent e){
  * and reset the viewport
  */
 
-void FBOApp::fireEvent(ResizeEvent e){
+void FBOApp::processEvent(ResizeEvent e){
     glViewport(0,0,e.mW,e.mH);
-    mCamera.setRatio( static_cast<float_t>(e.mW) /  static_cast<float_t>(e.mH));
-    mScreenCamera.setRatio( static_cast<float_t>(e.mW) /  static_cast<float_t>(e.mH));
 }
 
-void FBOApp::fireEvent(KeyboardEvent e){
+void FBOApp::processEvent(KeyboardEvent e){
     cout << "Key Pressed: " << e.mKey << endl;
 }
 
@@ -142,8 +143,7 @@ int main (int argc, const char * argv[]) {
   
     FBOApp b;
 
-  	GLFWApp a(&b,argc,argv,"FBO App");
-  	a.init(4,0); 
+    GLFWApp a(b, 800, 600, false, argc, argv, "FBO",4,0);
 
     return EXIT_SUCCESS;
 
