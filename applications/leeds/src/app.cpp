@@ -17,6 +17,7 @@ using namespace boost;
 using namespace boost::assign;
 using namespace s9;
 using namespace s9::gl;
+using namespace cv;
 
 namespace po = boost::program_options;
 
@@ -107,11 +108,41 @@ void Leeds::drawCameras() {
 
 /*
  * Create the textured Geometry
- * \todo this is a bit messy despite gl geometry extending asset. Hmmmm
  */
 
 void Leeds::createTextured() {
     mMeshTextured = GLAsset<GeometryLeeds>(mMesh.getGeometry().convert<GeometryLeeds>());
+    // Now create the texture co-ordinates
+
+    for (size_t j=0; j < vCVCameras.size(); j++){
+        
+        vector<cv::Point2f> results;
+        CVVidCam cam = vCVCameras[j];
+        CameraParameters in = cam.getParams();
+        vector<cv::Point3f> tOPoints;
+        
+        GeometryLeeds geom = mMeshTextured.getGeometry();
+
+        // Convert points to OpenCV and process
+
+        for (size_t i =0; i < geom.size(); ++i){
+            VertPNT8F v = geom.getVertex(i);
+            tOPoints.push_back(cv::Point3f( v.mP.x, v.mP.y, v.mP.z));            
+        }
+
+        cv::projectPoints(tOPoints, in.R, in.T, in.M, in.D, results );
+        
+        for (size_t i =0; i < tOPoints.size(); ++i){
+            VertPNT8F v = geom.getVertex(i);
+            Float2 f = {results[i].x, results[i].y};
+            v.mT[j] = f;   
+            geom.setVertex(v,i);
+        }
+    }
+    
+
+    
+    CXGLERROR
 }
 
 
@@ -183,7 +214,7 @@ void Leeds::display(double_t dt){
         mShaderLighting.unbind();
     }
 
-    
+
     mCamera.update(dt);
 
     BOOST_FOREACH(VidCam c, vCameras)

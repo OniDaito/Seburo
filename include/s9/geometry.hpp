@@ -97,7 +97,7 @@ namespace s9 {
 		void setVertex(T v, uint32_t p) { mObj->vBuffer[p] = v; setDirty(true); };
 		void delVertex(uint32_t p) { mObj->vBuffer.erase( mObj->vBuffer.begin() + p); setDirty(true); };
 		void addIndices(std::vector<uint32_t> idx) { mObj->vIndices = idx; };
-	
+		T getVertex(uint32_t i) { return mObj->vBuffer[i]; };
 	};
 
 

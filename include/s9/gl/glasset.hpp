@@ -44,6 +44,8 @@ namespace s9 {
 					glBufferData(GL_ELEMENT_ARRAY_BUFFER, getGeometry().indexsize() * sizeof(uint32_t), getGeometry().indexaddr(), GL_STATIC_DRAW);
 					glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,0);
 				}	
+
+				getGeometry().setDirty(false);
 			}
 		
 		public:
