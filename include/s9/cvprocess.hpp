@@ -1,0 +1,132 @@
+/**
+* @brief An Application that draws to the screen at some point
+* @file visualapp.hpp
+* @author Benjamin Blundell <oni@section9.co.uk>
+* @date 03/07/2012
+*
+*/
+
+#ifndef S9_CVPROCESS_HPP
+#define S9_CVPROCESS_HPP
+
+#include "common.hpp"
+#include <opencv2/opencv.hpp>
+
+
+namespace s9{
+
+  namespace compvis {
+
+
+    class Process;
+
+    /*
+     * A step in the processing - records a result
+     */
+
+    class ProcessBlock {
+    public:
+
+      friend class Process;
+
+      ProcessBlock() {}
+      cv::Mat& process(cv::Mat &in);
+
+      template <class T>
+      void setValue(std::string tag, T value) {
+        std::map<std::string,boost::shared_ptr<void> >::iterator it = _obj->_values.find(tag);
+        if(it != _obj->_values.end()){
+          boost::shared_ptr<T> tp = boost::static_pointer_cast<T>(_obj->_values[tag]);
+          *tp = value;
+        }
+        else
+          _obj->_values[tag] = boost::shared_ptr<T>(new T(value));
+      }
+
+
+      ///\todo wrong key should not fall over but warn
+      template <class T>
+      T getValue(std::string tag) {      
+        boost::shared_ptr<void> tp = _obj->_values[tag];
+        return *(boost::static_pointer_cast<T>( tp ));
+      }
+
+    protected:
+      virtual void _init() {_obj.reset(new SharedObj);  std::cout << "INIT" << std::endl; } ;
+
+      virtual cv::Mat& _process(cv::Mat &in) { return _obj->_result; };
+
+      struct SharedObj {
+        cv::Mat _result;
+        std::map< std::string, boost::shared_ptr<void> > _values;
+      };
+
+      boost::shared_ptr<SharedObj> _obj;
+
+    };
+
+    /*
+     * A Pipeline of image processing blocks
+     */
+
+    class Process {
+    public:
+      Process() {};
+   
+      cv::Mat process(cv::Mat &in);
+    
+      template<class T>
+        Process& addBlock() {
+
+          if (_obj == boost::shared_ptr<SharedObj>())
+             _obj.reset(new SharedObj());
+
+          _obj->_blocks.push_back( boost::shared_ptr<T>(new T));
+          _obj->_blocks.back()->_init();
+          return *this;
+      }
+
+      void addBlock(ProcessBlock block, int pos);
+      void removeBlock(int pos);
+      ProcessBlock getBlock(int pos);
+
+    protected:
+      struct SharedObj {
+        std::vector<boost::shared_ptr<ProcessBlock> > _blocks; 
+      };
+
+      boost::shared_ptr<SharedObj> _obj;
+
+    };
+
+    // Useful Blocks
+
+    class BlockGreyscale : public ProcessBlock {
+  
+    protected:
+        cv::Mat& _process(cv::Mat &in);
+    };
+
+  
+    class BlockThreshold : public ProcessBlock {
+    public:
+      void setLower(int val);
+      void setUpper(int val);
+
+    protected:
+      cv::Mat& _process(cv::Mat &in);
+      void _init();
+    };
+  
+    class BlockDetectPoint : public ProcessBlock {
+
+    protected:
+      cv::Mat& _process(cv::Mat &in);
+      void _init();
+    };
+  }
+
+}
+
+
+#endif

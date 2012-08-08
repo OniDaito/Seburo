@@ -40,6 +40,8 @@ namespace s9 {
 			glm::vec2 getSize() {return glm::vec2(mObj->mW, mObj->mH);};
 			GLuint getTexture() {return mObj->mTexID; };
 			
+			void setControl(unsigned int id, int value);
+
 			void bind();	// Texture bind
 			void unbind();
 			void update();
@@ -102,7 +104,6 @@ namespace s9 {
 				
 			cv::Mat& getImage() { return  mObj->mImage; };
 			cv::Mat& getImageRectified() {return  mObj->mImageRectified; };
-			cv::Mat& getResult() {return  mObj->mResult; };
 			glm::vec2 getSize() {return mObj->mCam.getSize(); };
 			void computeNormal();
 			
@@ -128,10 +129,8 @@ namespace s9 {
 				cv::Mat mTransform;		// The computed transform to the world
 				cv::Mat mImage;
 				cv::Mat mImageRectified;
-				cv::Mat mResult;
 					
 				GLuint mRectifiedTexID;
-				GLuint mTexResultID;
 				VidCam mCam;
 
 			};

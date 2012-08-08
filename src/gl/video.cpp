@@ -62,6 +62,13 @@ void VidCam::stop(){
 	
 }
 
+void VidCam::setControl(unsigned int id, int value) {
+#ifdef _GEAR_X11_GLX
+	mObj->pCam->set_control(id,value);
+#endif	
+}
+
+
 #ifdef _GEAR_OPENCV
 
 /*
@@ -78,11 +85,6 @@ CVVidCam::CVVidCam(VidCam &cam){
 	cv::Size size (mObj->mCam.getSize().x,  mObj->mCam.getSize().y);
 	mObj->mImage = Mat(size, CV_8UC3);
 	mObj->mImageRectified = Mat(size, CV_8UC3);
-	mObj->mResult = Mat(size,CV_8UC3);
-	glGenTextures(1, &(mObj->mTexResultID));
-	glBindTexture(GL_TEXTURE_RECTANGLE, mObj->mTexResultID);
-	glTexImage2D(GL_TEXTURE_RECTANGLE, 0, 3, mObj->mCam.getSize().x,  mObj->mCam.getSize().y,
-		0, GL_RGB, GL_UNSIGNED_BYTE, (unsigned char *) IplImage(mObj->mResult).imageData);
 	glGenTextures(1, &(mObj->mRectifiedTexID));
 	glBindTexture(GL_TEXTURE_RECTANGLE, mObj->mRectifiedTexID);               
 	glTexImage2D(GL_TEXTURE_RECTANGLE, 0, 3,  mObj->mCam.getSize().x,  mObj->mCam.getSize().y,
@@ -114,7 +116,6 @@ void CVVidCam::computeNormal() {
 		
 	
 void CVVidCam::bindRectified(){ glBindTexture(GL_TEXTURE_RECTANGLE, mObj->mRectifiedTexID); }
-void CVVidCam::bindResult(){ glBindTexture(GL_TEXTURE_RECTANGLE, mObj->mTexResultID); }
 	
 	
 void CVVidCam::update(){
@@ -130,10 +131,6 @@ void CVVidCam::update(){
 			mObj->mImageRectified.size().height, GL_RGB, GL_UNSIGNED_BYTE, (unsigned char *) IplImage(mObj->mImageRectified).imageData );
 		unbind();
 		
-		bindResult();
-		glTexSubImage2D(GL_TEXTURE_RECTANGLE,0,0,0, mObj->mResult.size().width, 
-			mObj->mResult.size().height, GL_RGB, GL_UNSIGNED_BYTE, (unsigned char *) IplImage(mObj->mResult).imageData );
-		unbind();
 	}	
 }
 

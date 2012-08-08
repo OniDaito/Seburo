@@ -237,6 +237,30 @@ src/camera.cpp.s:
 	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/camera.cpp.s
 .PHONY : src/camera.cpp.s
 
+src/cvprocess.o: src/cvprocess.cpp.o
+.PHONY : src/cvprocess.o
+
+# target to build an object file
+src/cvprocess.cpp.o:
+	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/cvprocess.cpp.o
+.PHONY : src/cvprocess.cpp.o
+
+src/cvprocess.i: src/cvprocess.cpp.i
+.PHONY : src/cvprocess.i
+
+# target to preprocess a source file
+src/cvprocess.cpp.i:
+	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/cvprocess.cpp.i
+.PHONY : src/cvprocess.cpp.i
+
+src/cvprocess.s: src/cvprocess.cpp.s
+.PHONY : src/cvprocess.s
+
+# target to generate assembly for a file
+src/cvprocess.cpp.s:
+	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/cvprocess.cpp.s
+.PHONY : src/cvprocess.cpp.s
+
 src/geometry.o: src/geometry.cpp.o
 .PHONY : src/geometry.o
 
@@ -714,6 +738,9 @@ help:
 	@echo "... src/camera.o"
 	@echo "... src/camera.i"
 	@echo "... src/camera.s"
+	@echo "... src/cvprocess.o"
+	@echo "... src/cvprocess.i"
+	@echo "... src/cvprocess.s"
 	@echo "... src/geometry.o"
 	@echo "... src/geometry.i"
 	@echo "... src/geometry.s"

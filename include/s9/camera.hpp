@@ -90,6 +90,7 @@ namespace s9{
 		ScreenCamera() {mW = 800; mH = 600; compute(); };
 		void setDim(size_t w, size_t h) {mW = w; mH = h; compute(); };
 		void align(Primitive &p){};
+		virtual void processEvent(ResizeEvent e) { setDim(e.mW, e.mH); };		
 		
 	protected:
 		void compute();

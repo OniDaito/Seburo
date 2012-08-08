@@ -1,6 +1,7 @@
 FILE(REMOVE_RECURSE
   "CMakeFiles/s9gear.dir/src/shapes.cpp.o"
   "CMakeFiles/s9gear.dir/src/asset.cpp.o"
+  "CMakeFiles/s9gear.dir/src/cvprocess.cpp.o"
   "CMakeFiles/s9gear.dir/src/geometry.cpp.o"
   "CMakeFiles/s9gear.dir/src/tinyxml.cpp.o"
   "CMakeFiles/s9gear.dir/src/tinyxmlparser.cpp.o"

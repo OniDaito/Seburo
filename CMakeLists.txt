@@ -191,9 +191,9 @@ project(${PROJECT_NAME})
 ################################
 # DEBUG mode
 
-#add_definitions(-DDEBUG)
-#SET(CMAKE_BUILD_TYPE debug)
-#SET(CMAKE_CXX_FLAGS_DEBUG "-g")
+add_definitions(-DDEBUG)
+SET(CMAKE_BUILD_TYPE debug)
+SET(CMAKE_CXX_FLAGS_DEBUG "-g")
 
 
 #####################################################################
