@@ -19,32 +19,29 @@ using namespace s9::gl;
 
 FBO::FBO (size_t w, size_t h){
 		
-	mObj.reset(new SharedObj());
+	_obj.reset(new SharedObj());
 
-	mObj->mW = w;
-	mObj->mH = h;
+	_obj->mW = w;
+	_obj->mH = h;
 	
-	glGenFramebuffers(1, &(mObj->mID));
-	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, mObj->mID);
+	glGenFramebuffers(1, &(_obj->mID));
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, _obj->mID);
  
 	// Create depth renderbuffer
-	glGenRenderbuffers(1, &(mObj->mDepth));
-	glBindRenderbuffer(GL_RENDERBUFFER, mObj->mDepth);
+	glGenRenderbuffers(1, &(_obj->mDepth));
+	glBindRenderbuffer(GL_RENDERBUFFER, _obj->mDepth);
 	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, w, h);
  
 	// Create the texture
-	glGenTextures(1, &(mObj->mColour));
-	glBindTexture(GL_TEXTURE_RECTANGLE, mObj->mColour);
-	glTexImage2D(GL_TEXTURE_RECTANGLE, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_FLOAT, NULL);
-	glTexParameteri(GL_TEXTURE_RECTANGLE, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_RECTANGLE, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
- 
+
+  _obj->_colour = Texture(glm::vec2(w,h));
+	
 	// Attach texture to first color attachment and the depth to the depth attachment
-	glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_RECTANGLE,mObj->mColour, 0);
-	glFramebufferRenderbuffer(GL_DRAW_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, mObj->mDepth);
+	glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_RECTANGLE,_obj->_colour.id(), 0);
+	glFramebufferRenderbuffer(GL_DRAW_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, _obj->mDepth);
  
 	if (checkStatus() )  {
-		mObj->mOk = true;
+		_obj->mOk = true;
 		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 	}
 }
@@ -184,15 +181,15 @@ void FBO::printFramebufferInfo() {
 
 
 void FBO::resize(size_t w, size_t h){
-	if(!mObj->mOk) return;
+	if(!_obj->mOk) return;
 	
-	mObj->mW = w;
-	mObj->mH = h;
+	_obj->mW = w;
+	_obj->mH = h;
 	
-	glBindTexture(GL_TEXTURE_RECTANGLE, mObj->mColour);
+	glBindTexture(GL_TEXTURE_RECTANGLE, _obj->_colour.id());
 	glTexImage2D(GL_TEXTURE_RECTANGLE, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_FLOAT, NULL);
 	
-	glBindRenderbuffer(GL_RENDERBUFFER, mObj->mDepth);
+	glBindRenderbuffer(GL_RENDERBUFFER, _obj->mDepth);
 	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, w, h);
 	
 }

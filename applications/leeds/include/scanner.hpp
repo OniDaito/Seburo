@@ -23,7 +23,9 @@ namespace leeds {
     class Scanner {
     public:
       Scanner();
-      bool detectPoint(s9::gl::CVVidCam cam, cv::Point2f &point);
+      bool detectPoint(s9::gl::compvis::CVVidCam cam, cv::Point2f &point, cv::Mat &result);
+      cv::Point3f solveForAll( std::vector< std::pair< cv::Point2f, s9::gl::compvis::CameraParameters > > points);
+
 
     protected:
       s9::compvis::Process _detect_proc;

@@ -405,6 +405,30 @@ src/gl/shapes.cpp.s:
 	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/gl/shapes.cpp.s
 .PHONY : src/gl/shapes.cpp.s
 
+src/gl/texture.o: src/gl/texture.cpp.o
+.PHONY : src/gl/texture.o
+
+# target to build an object file
+src/gl/texture.cpp.o:
+	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/gl/texture.cpp.o
+.PHONY : src/gl/texture.cpp.o
+
+src/gl/texture.i: src/gl/texture.cpp.i
+.PHONY : src/gl/texture.i
+
+# target to preprocess a source file
+src/gl/texture.cpp.i:
+	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/gl/texture.cpp.i
+.PHONY : src/gl/texture.cpp.i
+
+src/gl/texture.s: src/gl/texture.cpp.s
+.PHONY : src/gl/texture.s
+
+# target to generate assembly for a file
+src/gl/texture.cpp.s:
+	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/gl/texture.cpp.s
+.PHONY : src/gl/texture.cpp.s
+
 src/gl/video.o: src/gl/video.cpp.o
 .PHONY : src/gl/video.o
 
@@ -572,6 +596,30 @@ src/shapes.s: src/shapes.cpp.s
 src/shapes.cpp.s:
 	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/shapes.cpp.s
 .PHONY : src/shapes.cpp.s
+
+src/state.o: src/state.cpp.o
+.PHONY : src/state.o
+
+# target to build an object file
+src/state.cpp.o:
+	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/state.cpp.o
+.PHONY : src/state.cpp.o
+
+src/state.i: src/state.cpp.i
+.PHONY : src/state.i
+
+# target to preprocess a source file
+src/state.cpp.i:
+	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/state.cpp.i
+.PHONY : src/state.cpp.i
+
+src/state.s: src/state.cpp.s
+.PHONY : src/state.s
+
+# target to generate assembly for a file
+src/state.cpp.s:
+	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/state.cpp.s
+.PHONY : src/state.cpp.s
 
 src/tinystr.o: src/tinystr.cpp.o
 .PHONY : src/tinystr.o
@@ -759,6 +807,9 @@ help:
 	@echo "... src/gl/shapes.o"
 	@echo "... src/gl/shapes.i"
 	@echo "... src/gl/shapes.s"
+	@echo "... src/gl/texture.o"
+	@echo "... src/gl/texture.i"
+	@echo "... src/gl/texture.s"
 	@echo "... src/gl/video.o"
 	@echo "... src/gl/video.i"
 	@echo "... src/gl/video.s"
@@ -780,6 +831,9 @@ help:
 	@echo "... src/shapes.o"
 	@echo "... src/shapes.i"
 	@echo "... src/shapes.s"
+	@echo "... src/state.o"
+	@echo "... src/state.i"
+	@echo "... src/state.s"
 	@echo "... src/tinystr.o"
 	@echo "... src/tinystr.i"
 	@echo "... src/tinystr.s"

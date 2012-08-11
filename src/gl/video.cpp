@@ -15,56 +15,36 @@ using namespace cv;
 using namespace boost; 
 using namespace s9;
 using namespace s9::gl;
+using namespace s9::gl::compvis;
 
 
 VidCam::VidCam(std::string dev, size_t w, size_t h, size_t fps) {
-	mObj.reset(new SharedObj());
+	_obj.reset(new SharedObj());
+	_obj->_texture = Texture(glm::vec2(w,h));
 
 #ifdef _GEAR_X11_GLX
-	mObj->pCam.reset(new UVCVideo());
-	mObj->pCam->startCapture(dev,w,h,fps);
+	_obj->_cam.reset(new UVCVideo());
+	_obj->_cam->startCapture(dev,w,h,fps);
 #endif
-	
-	mObj->mW = w; mObj->mH = h; mObj->mFPS = fps; 
-
-	glEnable(GL_TEXTURE_RECTANGLE);
-	
-	// Initialise texture - using GL_TEXTURE_RECTANGLE
-	glGenTextures(1, &(mObj->mTexID));
-	
-	glBindTexture(GL_TEXTURE_RECTANGLE, mObj->mTexID);   
-	glTexImage2D(GL_TEXTURE_RECTANGLE, 0, 3, w, h, 0, GL_RGB, GL_UNSIGNED_BYTE, mObj->pCam->getBuffer());
-
+	_obj->_fps = fps; 
 
 	CXGLERROR
 }
 
-
-void VidCam::bind(){
-	glBindTexture(GL_TEXTURE_RECTANGLE, mObj->mTexID);
-}
-
-void VidCam::unbind(){
-	glBindTexture(GL_TEXTURE_RECTANGLE, 0);
-}
-
-
 void VidCam::update() {
-	bind();
-	glTexSubImage2D(GL_TEXTURE_RECTANGLE,0,0,0,mObj->mW, mObj->mH, GL_RGB, GL_UNSIGNED_BYTE, mObj->pCam->getBuffer() );		
-	unbind();
+	_obj->_texture.update(_obj->_cam->getBuffer());
 }
 
 void VidCam::stop(){
 #ifdef _GEAR_X11_GLX
-	mObj->pCam->stop();
+	_obj->_cam->stop();
 #endif	
 	
 }
 
 void VidCam::setControl(unsigned int id, int value) {
 #ifdef _GEAR_X11_GLX
-	mObj->pCam->set_control(id,value);
+	_obj->_cam->set_control(id,value);
 #endif	
 }
 
@@ -80,20 +60,20 @@ CVVidCam::CVVidCam(){}
 
 CVVidCam::CVVidCam(VidCam &cam){
 	
-	mObj.reset(new SharedObj(cam));
+	_obj.reset(new SharedObj(cam));
 
-	cv::Size size (mObj->mCam.getSize().x,  mObj->mCam.getSize().y);
-	mObj->mImage = Mat(size, CV_8UC3);
-	mObj->mImageRectified = Mat(size, CV_8UC3);
-	glGenTextures(1, &(mObj->mRectifiedTexID));
-	glBindTexture(GL_TEXTURE_RECTANGLE, mObj->mRectifiedTexID);               
-	glTexImage2D(GL_TEXTURE_RECTANGLE, 0, 3,  mObj->mCam.getSize().x,  mObj->mCam.getSize().y,
-	 0, GL_RGB, GL_UNSIGNED_BYTE, (unsigned char *) IplImage(mObj->mImageRectified).imageData);
+	cv::Size size (_obj->mCam.getSize().x,  _obj->mCam.getSize().y);
+	_obj->mImage = Mat(size, CV_8UC3);
+	_obj->mImageRectified = Mat(size, CV_8UC3);
+	glGenTextures(1, &(_obj->mRectifiedTexID));
+	glBindTexture(GL_TEXTURE_RECTANGLE, _obj->mRectifiedTexID);               
+	glTexImage2D(GL_TEXTURE_RECTANGLE, 0, 3,  _obj->mCam.getSize().x,  _obj->mCam.getSize().y,
+	 0, GL_RGB, GL_UNSIGNED_BYTE, (unsigned char *) IplImage(_obj->mImageRectified).imageData);
 
-	mObj->mPlaneNormal = Mat(Size(1,3), CV_64FC1);
-	mObj->mPlaneNormal.at<double_t>(0,0) = 0.0;
-	mObj->mPlaneNormal.at<double_t>(1,0) = 0.0;	
-	mObj->mPlaneNormal.at<double_t>(2,0) = 1.0;
+	_obj->mPlaneNormal = Mat(Size(1,3), CV_64FC1);
+	_obj->mPlaneNormal.at<double_t>(0,0) = 0.0;
+	_obj->mPlaneNormal.at<double_t>(1,0) = 0.0;	
+	_obj->mPlaneNormal.at<double_t>(2,0) = 1.0;
 	
 
 }
@@ -102,40 +82,40 @@ CVVidCam::CVVidCam(VidCam &cam){
 void CVVidCam::computeNormal() {
 	
 	Mat r (Size(3,3), CV_64FC1);
-	Rodrigues(mObj->mP.R,r);
+	Rodrigues(_obj->mP.R,r);
 
 	r = r.inv();
 	r *= -1;
-	mObj->mPlaneNormal = Mat(Size(1,3), CV_64FC1);
-	mObj->mPlaneNormal.at<double_t>(0,0) = 0.0;
-	mObj->mPlaneNormal.at<double_t>(1,0) = 0.0;	
-	mObj->mPlaneNormal.at<double_t>(2,0) = 1.0;
-	mObj->mPlaneNormal = r * mObj->mPlaneNormal;
+	_obj->mPlaneNormal = Mat(Size(1,3), CV_64FC1);
+	_obj->mPlaneNormal.at<double_t>(0,0) = 0.0;
+	_obj->mPlaneNormal.at<double_t>(1,0) = 0.0;	
+	_obj->mPlaneNormal.at<double_t>(2,0) = 1.0;
+	_obj->mPlaneNormal = r * _obj->mPlaneNormal;
 	
 }
 		
 	
-void CVVidCam::bindRectified(){ glBindTexture(GL_TEXTURE_RECTANGLE, mObj->mRectifiedTexID); }
+void CVVidCam::bindRectified(){ glBindTexture(GL_TEXTURE_RECTANGLE, _obj->mRectifiedTexID); }
 	
 	
 void CVVidCam::update(){
-	mObj->mCam.update();
+	_obj->mCam.update();
 	
-	mObj->mImage = cv::Mat (mObj->mImage.size(), CV_8UC3, mObj->mCam.getBuffer());
+	_obj->mImage = cv::Mat (_obj->mImage.size(), CV_8UC3, _obj->mCam.getBuffer());
 	
-	if (mObj->mP.mCalibrated){
-		undistort(mObj->mImage, mObj->mImageRectified, mObj->mP.M,mObj->mP.D);
+	if (_obj->mP.mCalibrated){
+		undistort(_obj->mImage, _obj->mImageRectified, _obj->mP.M,_obj->mP.D);
 		
 		bindRectified();
-		glTexSubImage2D(GL_TEXTURE_RECTANGLE,0,0,0, mObj->mImageRectified.size().width, 
-			mObj->mImageRectified.size().height, GL_RGB, GL_UNSIGNED_BYTE, (unsigned char *) IplImage(mObj->mImageRectified).imageData );
+		glTexSubImage2D(GL_TEXTURE_RECTANGLE,0,0,0, _obj->mImageRectified.size().width, 
+			_obj->mImageRectified.size().height, GL_RGB, GL_UNSIGNED_BYTE, (unsigned char *) IplImage(_obj->mImageRectified).imageData );
 		unbind();
 		
 	}	
 }
 
 void CVVidCam::bind(){
-	mObj->mCam.bind();
+	_obj->mCam.bind();
 }
 
 void CVVidCam::unbind(){
@@ -158,19 +138,19 @@ bool CVVidCam::loadParameters(string filename) {
 			return false;
 		}
 
-		fs["M"] >> mObj->mP.M;
-		fs["D"] >> mObj->mP.D;
+		fs["M"] >> _obj->mP.M;
+		fs["D"] >> _obj->mP.D;
 
 		try {
-			fs["R"] >> mObj->mP.R;
-			fs["T"] >> mObj->mP.T;
+			fs["R"] >> _obj->mP.R;
+			fs["T"] >> _obj->mP.T;
 		}
 		catch (...) {
 			cout << "S9Gear - failed to load world transforms in intrinsics." << endl;
 		}
 		
 		cout << "S9Gear - Loaded camera Parameters " << filename << endl;
-		mObj->mP.mCalibrated = true;
+		_obj->mP.mCalibrated = true;
 		fs.release();
 		computeNormal();
 		return true;
@@ -191,7 +171,7 @@ bool CVVidCam::saveParameters(string filename) {
 
     FileStorage fs(filename, CV_STORAGE_WRITE);
     if( fs.isOpened() ) {
-        fs << "M" << mObj->mP.M << "D" << mObj->mP.D << "R" << mObj->mP.R << "T" << mObj->mP.T;
+        fs << "M" << _obj->mP.M << "D" << _obj->mP.D << "R" << _obj->mP.R << "T" << _obj->mP.T;
         fs.release();
         return true;
     }

@@ -17,6 +17,7 @@
  * Camera Class for a camera that pitches and yaws whilst keeping up always parallel with y
  * \todo certain camera classes could listen for events but we need to set a precidence (as sometimes we want
  * \todo update and resize hooks on all cameras
+ * \todo create GL Cameras that extend this so we get viewport and such for free
  * camera movement and othertimes we want selection for example) - bubbling
  */
  
@@ -35,7 +36,7 @@ namespace s9{
 		virtual void processEvent(ResizeEvent e) { 
 			setRatio( static_cast<float_t>(e.mW) / e.mH);
 		}
-		
+
 		void setNear(float_t n) {mNear = n; compute(); };
 		void setFar(float_t n) {mFar = n; compute(); };
 		
@@ -58,6 +59,7 @@ namespace s9{
 
 		float_t mR,mFar,mNear, mField;
 		
+		
 	};
 
 	/* 
@@ -76,8 +78,39 @@ namespace s9{
 		void roll(float_t a);
 		void reset();
 
+		/*
+		 * Basic mouse movement for an orbiting camera
+		 */
+
+		virtual void processEvent(MouseEvent e) { 
+			if(e.mFlag & MOUSE_LEFT_DOWN){
+				glm::vec2 mouse_d = glm::vec2(e.mX,e.mY) - _mouse_pre;
+				yaw(static_cast<float_t>(mouse_d.x) * _sense);
+				pitch(static_cast<float_t>(mouse_d.y) * _sense);
+			}
+
+			if (e.mFlag & MOUSE_WHEEL_DOWN){
+				zoom(-_sense * 2);
+			}
+			else if (e.mFlag & MOUSE_WHEEL_UP){
+				zoom(_sense * 2);
+			}
+
+			if (e.mFlag & MOUSE_MIDDLE_DOWN){
+				shift(glm::vec2(static_cast<float_t>(e.mX - _mouse_pre.x) * _sense * 0.8, 
+						static_cast<float_t>(e.mY - _mouse_pre.y) * _sense * 0.8));
+			}
+
+			_mouse_pre = glm::vec2(e.mX,e.mY);
+		}
+
+
+
 	protected:
 		void compute();
+
+		float_t _sense;
+		glm::vec2 _mouse_pre;
 		
 	};
 	

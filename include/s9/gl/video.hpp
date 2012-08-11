@@ -13,6 +13,7 @@
 
 #include "../common.hpp"
 #include "common.hpp"
+#include "texture.hpp"
 #include "utils.hpp"
 
 #ifdef _GEAR_OPENCV
@@ -36,108 +37,115 @@ namespace s9 {
 		public:
 			VidCam() {};
 			VidCam (std::string dev, size_t w, size_t h, size_t fps);
-			void stop();
-			glm::vec2 getSize() {return glm::vec2(mObj->mW, mObj->mH);};
-			GLuint getTexture() {return mObj->mTexID; };
-			
+			void stop();		
 			void setControl(unsigned int id, int value);
-
-			void bind();	// Texture bind
-			void unbind();
 			void update();
-			unsigned char* getBuffer() {return mObj->pCam->getBuffer(); };
+			unsigned char* getBuffer() {return _obj->_cam->getBuffer(); };
 
-			virtual operator int() const { return mObj.use_count() > 0; };
+			void bind() {_obj->_texture.bind(); };
+			void unbind() {_obj->_texture.unbind(); };
+
+			Texture getTexture() {return _obj->_texture; };
+
+			glm::vec2 size() {return _obj->_texture.size(); }
+			glm::vec2 getSize() {return size(); }
+
+			virtual operator int() const { return _obj.use_count() > 0; };
 			
 		protected:
-			class SharedObj {
+
+			// Previously, I extended the texture shared obj
+			// but not now.
+
+			struct SharedObj {
 			public:
 
 #ifdef _GEAR_X11_GLX
-				boost::shared_ptr<UVCVideo> pCam;
+				boost::shared_ptr<UVCVideo> _cam;
 #else
-				boost::shared_ptr<QuicktimeVideo> pCam;
+				boost::shared_ptr<QuicktimeVideo> _cam;
 #endif
-				size_t mW,mH,mFPS;
-				GLuint mTexID;
-
+				size_t _fps;
+				Texture _texture;
 			};
 			
-			boost::shared_ptr<SharedObj> mObj;
+			boost::shared_ptr<SharedObj> _obj;
 			
 		};
 
 
 #ifdef _GEAR_OPENCV
+		namespace compvis{
 
-		/*
-		 * OpenCV Based Camera Parameters
-		 */
+			/*
+			 * OpenCV Based Camera Parameters
+			 */
 
-		class CameraParameters {
-		public:
-			CameraParameters() { M = cv::Mat::eye(3, 3, CV_64F); mCalibrated = false;};
-			cv::Mat M, D, R, T; 		// Camera Matrix, Distortion co-efficients, rotation and translation matrices
-			std::vector<cv::Mat> Rs;	// Rotations for each view
-			std::vector<cv::Mat> Ts;	// Translations for each view
-			bool mCalibrated;			// Is this calibrated and distortion free?
-		};
-
-		/*
-		 * OpenCV style camera with correction - wraps the other camera
-		 * \todo decorator pattern?
-		 * \todo set as a template so we can pass through to underlying?
-		 */
-
-		class CVVidCam {
-		public:
-			CVVidCam();
-			CVVidCam(VidCam &cam);
-				
-			CameraParameters& getParams() {return mObj->mP;};
-			
-			bool loadParameters(std::string filename);
-			bool saveParameters(std::string filename);
-			
-			bool isSecondary() { return  mObj->mSecondary;};
-			bool isRectified() { return  mObj->mP.mCalibrated;};
-				
-			cv::Mat& getImage() { return  mObj->mImage; };
-			cv::Mat& getImageRectified() {return  mObj->mImageRectified; };
-			glm::vec2 getSize() {return mObj->mCam.getSize(); };
-			void computeNormal();
-			
-			GLuint getRectifiedTexture() {return  mObj->mRectifiedTexID; };
-			cv::Mat& getNormal() {return  mObj->mPlaneNormal; };
-			
-			void bind();
-			void bindRectified();
-			void bindResult();
-			void unbind();
-			
-			void update();
-			
-		protected:
-
-			class SharedObj {
+			class CameraParameters {
 			public:
-
-				SharedObj(VidCam cam) {mCam = cam; };
-				CameraParameters mP;
-				bool mSecondary;
-				cv::Mat mPlaneNormal;	// Normal to the camera plane
-				cv::Mat mTransform;		// The computed transform to the world
-				cv::Mat mImage;
-				cv::Mat mImageRectified;
-					
-				GLuint mRectifiedTexID;
-				VidCam mCam;
-
+				CameraParameters() { M = cv::Mat::eye(3, 3, CV_64F); mCalibrated = false;};
+				cv::Mat M, D, R, T; 		// Camera Matrix, Distortion co-efficients, rotation and translation matrices
+				std::vector<cv::Mat> Rs;	// Rotations for each view
+				std::vector<cv::Mat> Ts;	// Translations for each view
+				bool mCalibrated;			// Is this calibrated and distortion free?
 			};
 
-			boost::shared_ptr<SharedObj> mObj;
+			/*
+			 * OpenCV style camera with correction - wraps the other camera
+			 * \todo decorator pattern?
+			 * \todo set as a template so we can pass through to underlying?
+			 */
 
-		};
+			class CVVidCam {
+			public:
+				CVVidCam();
+				CVVidCam(VidCam &cam);
+					
+				CameraParameters& getParams() {return _obj->mP;};
+				
+				bool loadParameters(std::string filename);
+				bool saveParameters(std::string filename);
+				
+				bool isSecondary() { return  _obj->mSecondary;};
+				bool isRectified() { return  _obj->mP.mCalibrated;};
+					
+				cv::Mat& getImage() { return  _obj->mImage; };
+				cv::Mat& getImageRectified() {return  _obj->mImageRectified; };
+				glm::vec2 getSize() {return _obj->mCam.getSize(); };
+				void computeNormal();
+				
+				GLuint getRectifiedTexture() {return  _obj->mRectifiedTexID; };
+				cv::Mat& getNormal() {return  _obj->mPlaneNormal; };
+				
+				void bind();
+				void bindRectified();
+				void bindResult();
+				void unbind();
+				
+				void update();
+				
+			protected:
+
+				class SharedObj {
+				public:
+
+					SharedObj(VidCam cam) {mCam = cam; };
+					CameraParameters mP;
+					bool mSecondary;
+					cv::Mat mPlaneNormal;	// Normal to the camera plane
+					cv::Mat mTransform;		// The computed transform to the world
+					cv::Mat mImage;
+					cv::Mat mImageRectified;
+						
+					GLuint mRectifiedTexID;
+					VidCam mCam;
+
+				};
+
+				boost::shared_ptr<SharedObj> _obj;
+
+			};
+		}
 #endif
 	}
 

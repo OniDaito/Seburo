@@ -67,6 +67,7 @@ void OrbitCamera::reset() {
 	mNear = 1.0f;
 	mField = 55.0f;
 	mFar = 100.0f;
+	_sense = 0.1f;
 }
 
 void OrbitCamera::compute() {

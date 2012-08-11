@@ -1,8 +1,8 @@
 /**
-* @brief An Application that draws to the screen at some point
-* @file visualapp.hpp
+* @brief A pipeline for OpenCV image processing
+* @file cvprocess.hpp
 * @author Benjamin Blundell <oni@section9.co.uk>
-* @date 03/07/2012
+* @date 07/08/2012
 *
 */
 

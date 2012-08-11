@@ -22,8 +22,7 @@ using namespace s9::compvis;
  */
 
 cv::Mat& ProcessBlock::process(cv::Mat &in) {
-  _obj->_result = Mat(in);
-  return _process(_obj->_result);
+  return _process(in);
 }
 
 
@@ -72,7 +71,9 @@ ProcessBlock Process::getBlock(int pos){
 
 
 cv::Mat&  BlockGreyscale::_process(cv::Mat &in){
-  _obj->_result = Mat(in.size(), CV_8UC1);
+  if (_obj->_result.size() != in.size())
+    _obj->_result = Mat(in.size(), CV_8UC1);
+
   cvtColor( in, _obj->_result, CV_RGB2GRAY );
   return _obj->_result;
 }
@@ -82,12 +83,15 @@ cv::Mat&  BlockGreyscale::_process(cv::Mat &in){
  */
 
 cv::Mat&  BlockThreshold::_process(cv::Mat &in){
-  _obj->_result = Mat(in.size(), CV_8UC1);
+  if (_obj->_result.size() != in.size())
+    _obj->_result = Mat(in.size(), CV_8UC1);
+  
   threshold(in, _obj->_result, 
     getValue<int>("bottom"),  
     getValue<int>("top"), 
     THRESH_BINARY);
-  
+
+  return _obj->_result;
 }
 
 /*
@@ -112,43 +116,49 @@ void BlockThreshold::setUpper(int val){
 
 void BlockThreshold::_init(){
   _obj.reset(new SharedObj());
-  setLower(10);
-  setUpper(250);
+  setLower(100);
+  setUpper(255);
 }
 
 
 cv::Mat& BlockDetectPoint::_process(cv::Mat &in){
 
-  _obj->_result = Mat(in.size(), CV_8UC3);
+  if (_obj->_result.size() != in.size())
+    _obj->_result = Mat(in.size(), CV_8UC3);
 
-  for (int i=0; i < in.rows; i++){
+  cvtColor( in, _obj->_result, CV_GRAY2RGB );
+ 
+  setValue<bool>("found",false);
+
+  for (int i=0; i < in.rows; ++i){
   
-    for (int j=0; j < in.cols; j++){
+    for (int j=0; j < in.cols; ++j){
+
       if (in.ptr<uint8_t>(i)[j] >= 220){
         float score = in.ptr<uint8_t>(i)[j];
+    
         // We have a local area so search it  
         for (int k =-3; k <4; k ++){
           for (int l = -3; l < 4; l++){
             score += in.ptr<uint8_t>(i + k)[j + l];
           }
         }
-        
+
         if ( score / 49.0 > 50) {
           setValue<bool>("found",true);
-          cv::Point2f point = getValue<cv::Point2f>("point");
-
+          cv::Point2f point = Point2f(j,i);
+          setValue<cv::Point2f>("point",point);
           circle(_obj->_result, point, 20, Scalar(255,0,0),2);
           return _obj->_result;
-        }     
+        }  
       }
     }
-    return _obj->_result;
   }
+  return _obj->_result;
 }
 
 void BlockDetectPoint::_init(){
   _obj.reset(new SharedObj());
-  cout << "INIT DETECT" << endl;
   setValue<bool>("found",false);
   _obj->_values["point"] = shared_ptr<Point2f>(new Point2f(0,0));
 }

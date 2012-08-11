@@ -13,6 +13,7 @@
 
 #include "../common.hpp"
 #include "common.hpp"
+#include "texture.hpp"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -30,29 +31,31 @@ namespace s9 {
 
 		protected:
 			struct SharedObj {
-				GLuint mW,mH,mID,mDepth,mColour;
+				GLuint mW,mH,mID,mDepth;
+				Texture _colour;
 				bool mOk;
 			};
-			boost::shared_ptr<SharedObj> mObj;
+			boost::shared_ptr<SharedObj> _obj;
 			
 		public:
 			FBO() {};
 			FBO(size_t w, size_t h);
 
-			virtual operator int() const { return mObj.use_count() > 0; };
+			virtual operator int() const { return _obj.use_count() > 0; };
 
-			void bind() { glBindFramebuffer(GL_FRAMEBUFFER, mObj->mID); glViewport(0,0,mObj->mW,mObj->mH); };
+			void bind() { glBindFramebuffer(GL_FRAMEBUFFER, _obj->mID); glViewport(0,0,_obj->mW,_obj->mH); };
 			void unbind() { glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0); } ;
 			bool checkStatus();
 			void printFramebufferInfo();
 			void resize(size_t w, size_t h);
-			void bindColour() { glBindTexture(GL_TEXTURE_RECTANGLE, mObj->mColour); }
-			void unbindColour() { glBindTexture(GL_TEXTURE_RECTANGLE, 0); }
-			void bindDepth() { glBindTexture(GL_TEXTURE_RECTANGLE, mObj->mDepth); }
+			void bindColour() { _obj->_colour.bind(); }
+			void unbindColour() { _obj->_colour.unbind(); }
+			void bindDepth() { glBindTexture(GL_TEXTURE_RECTANGLE, _obj->mDepth); }
 			void unbindDepth() { glBindTexture(GL_TEXTURE_RECTANGLE, 0);  }
-			
-			GLuint getWidth() {return mObj->mW; };
-			GLuint getHeight() {return mObj->mH; }
+			glm::vec2 size() { return glm::vec2(_obj->mW, _obj->mH); }
+
+			GLuint getWidth() {return _obj->mW; };
+			GLuint getHeight() {return _obj->mH; }
 			
 		
 

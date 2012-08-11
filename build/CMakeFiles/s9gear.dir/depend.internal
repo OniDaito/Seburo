@@ -623,9 +623,12 @@ CMakeFiles/s9gear.dir/src/gl/fbo.cpp.o
  ../include/glm/gtx/matrix_interpolation.inl
  ../include/glm/gtx/string_cast.hpp
  ../include/glm/gtx/string_cast.inl
+ ../include/s9/common.hpp
  ../include/s9/gl/../common.hpp
  ../include/s9/gl/common.hpp
  ../include/s9/gl/fbo.hpp
+ ../include/s9/gl/texture.hpp
+ ../include/s9/image.hpp
  /home/oni/Projects/S9Gear/src/gl/fbo.cpp
 CMakeFiles/s9gear.dir/src/gl/glfw_app.cpp.o
  ../include/GL/glew.h
@@ -1870,6 +1873,98 @@ CMakeFiles/s9gear.dir/src/gl/shapes.cpp.o
  ../include/s9/gl/shapes.hpp
  ../include/s9/gl/utils.hpp
  /home/oni/Projects/S9Gear/src/gl/shapes.cpp
+CMakeFiles/s9gear.dir/src/gl/texture.cpp.o
+ ../include/GL/glew.h
+ ../include/glm/./core/_detail.hpp
+ ../include/glm/./core/_fixes.hpp
+ ../include/glm/./core/_swizzle.hpp
+ ../include/glm/./core/_swizzle_func.hpp
+ ../include/glm/./core/_vectorize.hpp
+ ../include/glm/./core/func_common.hpp
+ ../include/glm/./core/func_common.inl
+ ../include/glm/./core/func_exponential.hpp
+ ../include/glm/./core/func_exponential.inl
+ ../include/glm/./core/func_geometric.hpp
+ ../include/glm/./core/func_geometric.inl
+ ../include/glm/./core/func_integer.hpp
+ ../include/glm/./core/func_integer.inl
+ ../include/glm/./core/func_matrix.hpp
+ ../include/glm/./core/func_matrix.inl
+ ../include/glm/./core/func_noise.hpp
+ ../include/glm/./core/func_noise.inl
+ ../include/glm/./core/func_packing.hpp
+ ../include/glm/./core/func_packing.inl
+ ../include/glm/./core/func_trigonometric.hpp
+ ../include/glm/./core/func_trigonometric.inl
+ ../include/glm/./core/func_vector_relational.hpp
+ ../include/glm/./core/func_vector_relational.inl
+ ../include/glm/./core/setup.hpp
+ ../include/glm/./core/type.hpp
+ ../include/glm/./core/type_float.hpp
+ ../include/glm/./core/type_gentype.hpp
+ ../include/glm/./core/type_half.hpp
+ ../include/glm/./core/type_half.inl
+ ../include/glm/./core/type_int.hpp
+ ../include/glm/./core/type_mat.hpp
+ ../include/glm/./core/type_mat2x2.hpp
+ ../include/glm/./core/type_mat2x2.inl
+ ../include/glm/./core/type_mat2x3.hpp
+ ../include/glm/./core/type_mat2x3.inl
+ ../include/glm/./core/type_mat2x4.hpp
+ ../include/glm/./core/type_mat2x4.inl
+ ../include/glm/./core/type_mat3x2.hpp
+ ../include/glm/./core/type_mat3x2.inl
+ ../include/glm/./core/type_mat3x3.hpp
+ ../include/glm/./core/type_mat3x3.inl
+ ../include/glm/./core/type_mat3x4.hpp
+ ../include/glm/./core/type_mat3x4.inl
+ ../include/glm/./core/type_mat4x2.hpp
+ ../include/glm/./core/type_mat4x2.inl
+ ../include/glm/./core/type_mat4x3.hpp
+ ../include/glm/./core/type_mat4x3.inl
+ ../include/glm/./core/type_mat4x4.hpp
+ ../include/glm/./core/type_mat4x4.inl
+ ../include/glm/./core/type_size.hpp
+ ../include/glm/./core/type_vec.hpp
+ ../include/glm/./core/type_vec1.hpp
+ ../include/glm/./core/type_vec1.inl
+ ../include/glm/./core/type_vec2.hpp
+ ../include/glm/./core/type_vec2.inl
+ ../include/glm/./core/type_vec3.hpp
+ ../include/glm/./core/type_vec3.inl
+ ../include/glm/./core/type_vec4.hpp
+ ../include/glm/./core/type_vec4.inl
+ ../include/glm/core/_fixes.hpp
+ ../include/glm/core/setup.hpp
+ ../include/glm/glm.hpp
+ ../include/glm/gtc/../glm.hpp
+ ../include/glm/gtc/../gtc/half_float.hpp
+ ../include/glm/gtc/../gtc/half_float.inl
+ ../include/glm/gtc/../gtc/quaternion.hpp
+ ../include/glm/gtc/../gtc/type_precision.hpp
+ ../include/glm/gtc/../gtc/type_precision.inl
+ ../include/glm/gtc/matrix_inverse.hpp
+ ../include/glm/gtc/matrix_inverse.inl
+ ../include/glm/gtc/matrix_transform.hpp
+ ../include/glm/gtc/matrix_transform.inl
+ ../include/glm/gtc/quaternion.hpp
+ ../include/glm/gtc/quaternion.inl
+ ../include/glm/gtc/swizzle.hpp
+ ../include/glm/gtc/swizzle.inl
+ ../include/glm/gtc/type_ptr.hpp
+ ../include/glm/gtc/type_ptr.inl
+ ../include/glm/gtx/../gtx/integer.hpp
+ ../include/glm/gtx/../gtx/integer.inl
+ ../include/glm/gtx/../gtx/quaternion.hpp
+ ../include/glm/gtx/matrix_interpolation.hpp
+ ../include/glm/gtx/matrix_interpolation.inl
+ ../include/glm/gtx/string_cast.hpp
+ ../include/glm/gtx/string_cast.inl
+ ../include/s9/common.hpp
+ ../include/s9/gl/common.hpp
+ ../include/s9/gl/texture.hpp
+ ../include/s9/image.hpp
+ /home/oni/Projects/S9Gear/src/gl/texture.cpp
 CMakeFiles/s9gear.dir/src/gl/video.cpp.o
  ../include/GL/glew.h
  ../include/glm/./core/_detail.hpp
@@ -1958,11 +2053,14 @@ CMakeFiles/s9gear.dir/src/gl/video.cpp.o
  ../include/glm/gtx/string_cast.hpp
  ../include/glm/gtx/string_cast.inl
  ../include/s9/colorspaces.h
+ ../include/s9/common.hpp
  ../include/s9/defs.h
  ../include/s9/gl/../common.hpp
  ../include/s9/gl/common.hpp
+ ../include/s9/gl/texture.hpp
  ../include/s9/gl/utils.hpp
  ../include/s9/gl/video.hpp
+ ../include/s9/image.hpp
  ../include/s9/jpeg.h
  ../include/s9/linux/uvc_camera.hpp
  /home/oni/Projects/S9Gear/src/gl/video.cpp
@@ -2248,6 +2346,95 @@ CMakeFiles/s9gear.dir/src/shapes.cpp.o
  ../include/s9/vertex_types.hpp
  ../include/s9/visualapp.hpp
  /home/oni/Projects/S9Gear/src/shapes.cpp
+CMakeFiles/s9gear.dir/src/state.cpp.o
+ ../include/glm/./core/_detail.hpp
+ ../include/glm/./core/_fixes.hpp
+ ../include/glm/./core/_swizzle.hpp
+ ../include/glm/./core/_swizzle_func.hpp
+ ../include/glm/./core/_vectorize.hpp
+ ../include/glm/./core/func_common.hpp
+ ../include/glm/./core/func_common.inl
+ ../include/glm/./core/func_exponential.hpp
+ ../include/glm/./core/func_exponential.inl
+ ../include/glm/./core/func_geometric.hpp
+ ../include/glm/./core/func_geometric.inl
+ ../include/glm/./core/func_integer.hpp
+ ../include/glm/./core/func_integer.inl
+ ../include/glm/./core/func_matrix.hpp
+ ../include/glm/./core/func_matrix.inl
+ ../include/glm/./core/func_noise.hpp
+ ../include/glm/./core/func_noise.inl
+ ../include/glm/./core/func_packing.hpp
+ ../include/glm/./core/func_packing.inl
+ ../include/glm/./core/func_trigonometric.hpp
+ ../include/glm/./core/func_trigonometric.inl
+ ../include/glm/./core/func_vector_relational.hpp
+ ../include/glm/./core/func_vector_relational.inl
+ ../include/glm/./core/setup.hpp
+ ../include/glm/./core/type.hpp
+ ../include/glm/./core/type_float.hpp
+ ../include/glm/./core/type_gentype.hpp
+ ../include/glm/./core/type_half.hpp
+ ../include/glm/./core/type_half.inl
+ ../include/glm/./core/type_int.hpp
+ ../include/glm/./core/type_mat.hpp
+ ../include/glm/./core/type_mat2x2.hpp
+ ../include/glm/./core/type_mat2x2.inl
+ ../include/glm/./core/type_mat2x3.hpp
+ ../include/glm/./core/type_mat2x3.inl
+ ../include/glm/./core/type_mat2x4.hpp
+ ../include/glm/./core/type_mat2x4.inl
+ ../include/glm/./core/type_mat3x2.hpp
+ ../include/glm/./core/type_mat3x2.inl
+ ../include/glm/./core/type_mat3x3.hpp
+ ../include/glm/./core/type_mat3x3.inl
+ ../include/glm/./core/type_mat3x4.hpp
+ ../include/glm/./core/type_mat3x4.inl
+ ../include/glm/./core/type_mat4x2.hpp
+ ../include/glm/./core/type_mat4x2.inl
+ ../include/glm/./core/type_mat4x3.hpp
+ ../include/glm/./core/type_mat4x3.inl
+ ../include/glm/./core/type_mat4x4.hpp
+ ../include/glm/./core/type_mat4x4.inl
+ ../include/glm/./core/type_size.hpp
+ ../include/glm/./core/type_vec.hpp
+ ../include/glm/./core/type_vec1.hpp
+ ../include/glm/./core/type_vec1.inl
+ ../include/glm/./core/type_vec2.hpp
+ ../include/glm/./core/type_vec2.inl
+ ../include/glm/./core/type_vec3.hpp
+ ../include/glm/./core/type_vec3.inl
+ ../include/glm/./core/type_vec4.hpp
+ ../include/glm/./core/type_vec4.inl
+ ../include/glm/core/_fixes.hpp
+ ../include/glm/core/setup.hpp
+ ../include/glm/glm.hpp
+ ../include/glm/gtc/../glm.hpp
+ ../include/glm/gtc/../gtc/half_float.hpp
+ ../include/glm/gtc/../gtc/half_float.inl
+ ../include/glm/gtc/../gtc/quaternion.hpp
+ ../include/glm/gtc/../gtc/type_precision.hpp
+ ../include/glm/gtc/../gtc/type_precision.inl
+ ../include/glm/gtc/matrix_inverse.hpp
+ ../include/glm/gtc/matrix_inverse.inl
+ ../include/glm/gtc/matrix_transform.hpp
+ ../include/glm/gtc/matrix_transform.inl
+ ../include/glm/gtc/quaternion.hpp
+ ../include/glm/gtc/quaternion.inl
+ ../include/glm/gtc/swizzle.hpp
+ ../include/glm/gtc/swizzle.inl
+ ../include/glm/gtc/type_ptr.hpp
+ ../include/glm/gtc/type_ptr.inl
+ ../include/glm/gtx/../gtx/integer.hpp
+ ../include/glm/gtx/../gtx/integer.inl
+ ../include/glm/gtx/../gtx/quaternion.hpp
+ ../include/glm/gtx/matrix_interpolation.hpp
+ ../include/glm/gtx/matrix_interpolation.inl
+ ../include/glm/gtx/string_cast.hpp
+ ../include/glm/gtx/string_cast.inl
+ ../include/s9/common.hpp
+ ../include/s9/cvprocess.hpp
+ /home/oni/Projects/S9Gear/src/state.cpp
 CMakeFiles/s9gear.dir/src/tinystr.cpp.o
  ../include/s9/tinystr.h
  /home/oni/Projects/S9Gear/src/tinystr.cpp

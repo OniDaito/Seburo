@@ -14,7 +14,7 @@ out vec2 vTexCoord7;
 
 uniform mat4 uMVPMatrix;
 uniform mat4 uMVMatrix;
-uniform mat4 uNMatrix;
+uniform mat4 uNormalMatrix;
 uniform vec3 uLight0;
 
 layout (location = 0) in vec3 attribVertPosition;
@@ -30,10 +30,10 @@ layout (location = 9) in vec2 attribTexCoord7;
 
 
 void main() {            
-    vVertexNormal = vec4(-attribNormal,1.0); //normalize(uNMatrix * vec4(-attribNormal,1.0));
+    vVertexNormal = vec4(-attribNormal,1.0); //normalize(uNormalMatrix * vec4(-attribNormal,1.0));
     vLightPos = normalize( vec4(uLight0,1.0));
     vVertexPosition = vec4(attribVertPosition,1.0);
-    gl_Position = uMVPMatrix * vec4(attribVertPosition,1.0);;
+    gl_Position = uMVPMatrix * vec4(attribVertPosition,1.0);
     
     vTexCoord0 = attribTexCoord0;
     vTexCoord1 = attribTexCoord1;
