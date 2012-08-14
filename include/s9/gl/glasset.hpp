@@ -33,48 +33,71 @@ namespace s9 {
 
 		protected:
 			virtual void _gen() {}
+
+			/*
+			 * Allocate the GLBuffer in the first instance or resize
+			 */
 			virtual void _allocate() {
+				// Allocation type depends whether we are buffering
+				GLint method = GL_STATIC_DRAW;
+				if(getGeometry().size() != getGeometry().numElements() || 
+					(getGeometry().indexsize() > 0 && getGeometry().indexsize() != getGeometry().numElements() ))
+				method = GL_STATIC_DRAW;
+
 				glBindBuffer(GL_ARRAY_BUFFER, handle[0]);
-				glBufferData(GL_ARRAY_BUFFER, getGeometry().size() * getGeometry().elementsize(), getGeometry().addr(), GL_STATIC_DRAW);
+				glBufferData(GL_ARRAY_BUFFER, getGeometry().size() * getGeometry().elementsize(), getGeometry().addr(), method);
 
 				glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 				if (getGeometry().indexsize() > 0){
 					glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, handle[1]);
-					glBufferData(GL_ELEMENT_ARRAY_BUFFER, getGeometry().indexsize() * sizeof(uint32_t), getGeometry().indexaddr(), GL_STATIC_DRAW);
+					glBufferData(GL_ELEMENT_ARRAY_BUFFER, getGeometry().indexsize() * sizeof(uint32_t), getGeometry().indexaddr(), method);
 					glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,0);
 				}	
 
+				getGeometry().setResized(false);
+			}
+
+			/*
+			 * Update part of the buffer - for now update the whole thing
+			 * \todo this is inefficent as we are replacing the entire buffer
+			 * if one value changes. We need a better method
+			 */
+			virtual void _update() {
+				glBindBuffer(GL_ARRAY_BUFFER, handle[0]);
+				glBufferSubData(GL_ARRAY_BUFFER, 0, getGeometry().size() * getGeometry().elementsize(), getGeometry().addr());
 				getGeometry().setDirty(false);
+				glBindBuffer(GL_ARRAY_BUFFER, 0);
 			}
 		
 		public:
 			GLAsset() { this->mVAO = 0; };
-			GLAsset(T a) : Asset<T>(a) {  this->mVAO = 0; };
-			GLAsset(Asset<T> b) : Asset<T>(b) { this->mVAO = 0; }
+			GLAsset(T a) : Asset<T>(a) {  this->mVAO = 0;};
+			GLAsset(Asset<T> b) : Asset<T>(b) { this->mVAO = 0;}
 			T getGeometry() { return this->mObj->mGeom; }
 
 			// Override this 
-			virtual void draw() {
+			virtual void draw(GLint type=GL_TRIANGLES) {
 
 				if(this->mVAO == 0) _gen();
 				
 				bind();
 
-				if (getGeometry().isDirty()) _allocate();
+				if (getGeometry().isResized()) _allocate();
+				if (getGeometry().isDirty()) _update();
 
 				if ( getGeometry().indexsize() > 0){
-					glDrawElements(GL_TRIANGLES, getGeometry().indexsize(), GL_UNSIGNED_INT, 0);
+					glDrawElements(type, getGeometry().numElements(), GL_UNSIGNED_INT, 0);
 				}
 				else{
-					glDrawArrays(GL_TRIANGLES,0, getGeometry().size());
+					glDrawArrays(type,0, getGeometry().numElements());
 				}
 
 				unbind();
 			 }
 		};
 
-
+	
 		/*
 		 * Creating a VAO around a basic Asset
 		 */
@@ -201,6 +224,40 @@ namespace s9 {
 
 
 		}
+
+		/*
+		 * Just basic points
+		 */
+
+
+		template<>
+		inline void GLAsset<GeometryPF>::_gen() {
+			glGenVertexArrays(1, &(this->mVAO));
+			int s = getGeometry().indexsize() > 0 ? 2 : 1;
+			
+			handle = new unsigned int[s];
+			glGenBuffers(s,handle);
+			_allocate();
+			bind();
+
+			glBindBuffer(GL_ARRAY_BUFFER, handle[0]);
+			glEnableVertexAttribArray(0); // Pos
+			glVertexAttribPointer(0,3, GL_FLOAT, GL_FALSE, getGeometry().elementsize(),0 );
+		
+			// Indices
+			if (getGeometry().indexsize() > 0){
+				glEnableVertexAttribArray(1); // Indices
+				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, handle[1]);
+				glVertexAttribPointer(1, 1,GL_UNSIGNED_INT,GL_FALSE,0, (GLubyte*) NULL);
+			}
+
+			unbind();
+
+			glBindBuffer(GL_ARRAY_BUFFER, 0);
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,0);
+
+		}
+
 
 
 

@@ -192,11 +192,6 @@ void drawReference(SharedObjPtr obj) {
 
 
 void StateInitial::_update(double_t dt){
-    SharedObjPtr obj = static_pointer_cast<SharedObj>(_data);
-    BOOST_FOREACH(VidCam c, obj->_cameras)
-    c.update();
-    BOOST_FOREACH(CVVidCam c, obj->_cv_cameras)
-    c.update();
 }
 
 static float_t msense = 0.1;
@@ -212,6 +207,12 @@ void StateInitial::_draw(double_t dt){
     drawCameras(obj,textures);
     drawGripper(obj,obj->_camera);
     drawToPicker(obj);
+
+    // Cant call update for cameras as they are GL! 
+    BOOST_FOREACH(VidCam c, obj->_cameras)
+    c.update();
+    BOOST_FOREACH(CVVidCam c, obj->_cv_cameras)
+    c.update();
 }
 
 /*
@@ -360,13 +361,23 @@ void StateDrawTexturedMesh::_draw(double_t dt){
  * Start Scanning
  */
 
-
-
 StateScan::StateScan(SharedObjPtr p) : State(static_cast<boost::shared_ptr <void> > (p)) {
     // Create 8 new textures for our drawing section
     BOOST_FOREACH(CVVidCam c, p->_cv_cameras) {
         _results.push_back( Texture(c.getSize()) );
+        cv::Mat tm = cv::Mat(cv::Size(c.getSize().x, c.getSize().y),CV_8UC3);
+        _result_matrices.push_back(tm);
     }
+
+    // Fire up our geometry - non indexed with initially 200 points
+    vector<VertPF> tv;
+    for (int i=0; i < 200; i ++){
+        VertPF tp;
+        tv.push_back(tp);
+    }
+    p->_points = GeometryPF(tv);
+    p->_points.setNumElements(0);
+    p->_point_mesh = GLAsset<GeometryPF>(p->_points);   
 }
 
 void StateScan::_update(double_t dt){
@@ -382,20 +393,59 @@ void StateScan::_update(double_t dt){
         if (obj->_scanner.detectPoint(c,p,result)){
             points.push_back(pair<cv::Point2f, gl::compvis::CameraParameters>(p,c.getParams()));
         }  
-
-        _results[i].update(MatToGL(result));
-        i++;
+        _result_matrices[i] = result;
+        ++i;
     }
+
     if (points.size() > 1){
         cv::Point3f p = obj->_scanner.solveForAll(points); 
         cout << p << endl;
+
+        VertPF nv;
+        nv.mP.x = p.x;
+        nv.mP.y = p.y;
+        nv.mP.z = p.z;
+
+        // Resize the buffer for more space
+        if (obj->_points.numElements() >= (obj->_points.size() * 0.6)){
+            VertPF np;
+            int range = obj->_points.size();
+            for (int i=0; i < range; ++i){
+                obj->_points.addVertex(np);
+            }
+        }
+
+        obj->_points.setVertex(nv,obj->_points.numElements());
+        obj->_points.setNumElements(obj->_points.numElements()+1);
+
     }
 
 }
 
 void StateScan::_draw(double_t dt){
+
+    int i = 0;
+    BOOST_FOREACH(cv::Mat result, _result_matrices) {
+        _results[i].update(MatToGL(result));
+        ++i;
+    }
+
     SharedObjPtr obj = static_pointer_cast<SharedObj>(_data);
     drawCameras(obj,_results, glm::vec2(0.0, -360.0));
+  //  glEnable(GL_BLEND);
+  //  glBlendFunc(GL_ONE,GL_SRC_ALPHA);
+    glPointSize(2.0f);
+    // Draw the mesh
+    obj->_shader_point.bind();
+
+    glm::mat4 mvp = obj->_camera.getMatrix() * obj->_point_mesh.getMatrix();
+    obj->_shader_point.s("uMVPMatrix",mvp)
+        .s("uColour",glm::vec4(0.12,0.31,0.95,0.91));
+
+    obj->_point_mesh.draw(GL_POINTS);
+
+    obj->_shader_point.unbind();
+  //  glDisable(GL_BLEND);
 }
 
 /*
@@ -403,22 +453,65 @@ void StateScan::_draw(double_t dt){
  */
 
 
+StateCalibrate::StateCalibrate(SharedObjPtr p) : State(static_cast<boost::shared_ptr <void> > (p)) {
+
+    BOOST_FOREACH(CVVidCam c, p->_cv_cameras) {
+        cv::Mat tm = cv::Mat(cv::Size(c.getSize().x, c.getSize().y),CV_8UC3);
+        _results.push_back(tm);
+    }
+}
+
+
 void StateCalibrate::_update(double_t dt){
+    SharedObjPtr obj = static_pointer_cast<SharedObj>(_data);
     
+    _calibrated = true;
+  
+    BOOST_FOREACH(CVVidCam cam, obj->_cv_cameras) {
+
+        if (findChessboard(cam, corners, results[i], _board_size)){
+          
+          _image_points.push_back(corners);    
+          
+          for(int j=0;j< _board_size.height * _board_size.width; j++)
+            tOPoints.push_back(Point3f(j/_board_size.width, j%_board_size.width, 0.0f));
+      
+          CameraParameters cp = cam.getParams();
+
+          solvePnP(tOPoints,imagePoints[0],cp.M, cp.D, cp.R, cp.T, false, CV_ITERATIVE);
+          ++i;
+        }
+        else
+            _calibrated = false;
+    }
+
+    if (_calibrated){
+        cout << "Calibrated to World" << endl;
+        remove();
+    }
 }
 
 void StateCalibrate::_draw(double_t dt){
-
+    
 }
 
 
 /*
- * Use PCL to generate a mesh
+ * Use PCL to generate a mesh. This State blokcs and removes itself
+ * when finished
  */
 
 
 void StateGenerateMesh::_update(double_t dt){
+    SharedObjPtr obj = static_pointer_cast<SharedObj>(_data);
     
+    if(obj->_points) {
+        cout << "Generating Mesh" << endl;
+        obj->_model = obj->_mesher.generate(obj->_points);
+    }
+
+    remove();
+    cout << "Removed State" << endl;
 }
 
 void StateGenerateMesh::_draw(double_t dt){

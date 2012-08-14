@@ -39,6 +39,16 @@ gear_find_library(opencv_ts)
 gear_find_library(opencv_video)
 
 #####################################################################
+# PCL Library
+
+
+find_package(PCL 1.2 REQUIRED)
+include_directories(${PCL_INCLUDE_DIRS})
+link_directories(${PCL_LIBRARY_DIRS})
+add_definitions(${PCL_DEFINITIONS})
+
+
+#####################################################################
 # Add Executable and sources
 
 add_executable (leeds
@@ -63,4 +73,5 @@ include_directories(${PROJECT_SOURCE_DIR}/include
 target_link_libraries(leeds 
   s9gear
   ${GEAR_LIBRARIES}
+  ${PCL_LIBRARIES}
 )

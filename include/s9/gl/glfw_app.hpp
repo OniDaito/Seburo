@@ -21,6 +21,8 @@
 #include <gtkmm.h>
 #endif
 
+#include <boost/thread.hpp>
+
 namespace s9 {
 
 	namespace gl {
@@ -40,14 +42,19 @@ namespace s9 {
 
 			bool mRunning;
 			std::vector<GLFWwindow> vWindows;
-			double_t mDX;
+			double_t _dt;
 			size_t mMX, mMY;
 			uint16_t mFlag;
 
 			static void initGL(const int major, const int minor,
 					const int w, const int h);
 
+
+			static void _shutdown();
+
 			static void mainLoop();
+
+			static void _update();
 
 			static void _reshape(GLFWwindow window, int w, int h);
 
@@ -75,6 +82,7 @@ namespace s9 {
 
 			static GLFWApp *pThis;
 			static std::string mTitle;
+			boost::thread *_update_thread;
 
 		};
 

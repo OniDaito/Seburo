@@ -45,6 +45,8 @@ namespace s9 {
 	public:
 		virtual void init() {};
 		virtual void display(double_t dt) {};
+		virtual void update(double_t dt) {};
+		virtual void shutdown() {};
 
 		void fireEvent(Event e);
 		void fireEvent(MouseEvent e);

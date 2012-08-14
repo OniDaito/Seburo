@@ -126,6 +126,31 @@ namespace s9{
     };
   }
 
+  // Useful functions
+  
+  /*
+   * Find the Chessboard
+   */
+
+  inline bool findChessboard(cv::Mat &cam0, std::vector<cv::Point2f> &corners, cv::Mat &board, cv::Size &size ) {
+    if ( cv::findChessboardCorners(cam0, size, corners, cv::CALIB_CB_ADAPTIVE_THRESH + cv::CALIB_CB_NORMALIZE_IMAGE + cv::CALIB_CB_FAST_CHECK) ) {
+    
+      cam0.copyTo(board);
+      cv::drawChessboardCorners(board, size, corners, true);
+      
+      cv::Mat grey = cam0;
+
+      cv::cvtColor( cam0, grey, CV_RGB2GRAY);   
+      cv::cornerSubPix(grey, corners, cv::Size(11,11), cv::Size(-1,-1), 
+        cv::TermCriteria(CV_TERMCRIT_ITER + CV_TERMCRIT_EPS, 30, 0.01));
+
+      return true;
+    }
+    cam0.copyTo(board); 
+    return false;
+  }
+
+
 }
 
 

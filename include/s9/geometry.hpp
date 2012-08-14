@@ -59,45 +59,72 @@ namespace s9 {
 	protected:
 	
 		struct SharedObj {
-			std::vector<T> vBuffer;
-			std::vector<uint32_t> vIndices;
-			bool mDirty;
+			std::vector<T> _buffer;
+			std::vector<uint32_t> _indices;
+			bool _dirty,_resized;
+			uint32_t _range;
 		};
 		
-		boost::shared_ptr<SharedObj> mObj;
+		boost::shared_ptr<SharedObj> _obj;
 	
 	public:
 		
 		Geometry(std::vector<T> v) {
-			mObj.reset(new SharedObj());
-			mObj->vBuffer = v;
+			_obj.reset(new SharedObj());
+			_obj->_buffer = v;
+			_obj->_range = v.size();
+			setResized(true);
 		};
 
-		void createEmpty() {mObj.reset(new SharedObj()); };
+		void createEmpty() {_obj.reset(new SharedObj()); };
 
 		template<class U>
 		U convert() {};
+ 
+		std::vector<T> getBuffer() {return _obj->_buffer; };
+	
+		virtual operator int() const { return _obj.use_count() > 0; };
+	
+		/// Return the address of the data
+		void* addr() { return &(_obj->_buffer[0]); };
 
-		std::vector<T> getBuffer() {return mObj->vBuffer; };
-	
-		virtual operator int() const { return mObj.use_count() > 0; };
-	
-		void* addr() { return &(mObj->vBuffer[0]); };
-		uint32_t* indexaddr() { return &(mObj->vIndices[0]); };
+		/// Return the address of the index
+		uint32_t* indexaddr() { return &(_obj->_indices[0]); };
 		
-		uint32_t size() { return mObj->vBuffer.size(); };
-		uint32_t indexsize() { return mObj->vIndices.size(); };
+		/// Return the size of the data buffer
+		uint32_t size() { return _obj->_buffer.size(); };
+		uint32_t indexsize() { return _obj->_indices.size(); };
 		int elementsize() { return sizeof(T); };
 		
-		bool isIndexed() {return mObj->vIndices.size() > 0; };
-		bool isDirty() {return mObj->mDirty;};
-		void setDirty(bool b) {mObj->mDirty = b; };
-		std::vector<uint32_t>  getIndices() {return mObj->vIndices; };
-		void addVertex(T v) {mObj->push_back(v); setDirty(true); };
-		void setVertex(T v, uint32_t p) { mObj->vBuffer[p] = v; setDirty(true); };
-		void delVertex(uint32_t p) { mObj->vBuffer.erase( mObj->vBuffer.begin() + p); setDirty(true); };
-		void addIndices(std::vector<uint32_t> idx) { mObj->vIndices = idx; };
-		T getVertex(uint32_t i) { return mObj->vBuffer[i]; };
+		/// Get the number of elements to be drawn
+		uint32_t numElements() {return _obj->_range; };
+
+		/// Set the number of elements to be drawn. Allows buffering
+		void setNumElements(uint32_t r) { _obj->_range = r; };
+
+		/// Is this geometry indexed
+		bool isIndexed() {return _obj->_indices.size() > 0; };
+	
+		/// Have any values been changed
+		bool isDirty() {return _obj->_dirty;};
+
+		/// Set the dirty/values changed flag
+		void setDirty(bool b) {_obj->_dirty = b; };
+
+		/// Has this geometry been resized
+		bool isResized() {return _obj->_resized;};
+
+		/// Set the geometry resize flag
+		void setResized(bool b){ _obj->_resized = b; };
+
+	
+		std::vector<uint32_t>  getIndices() {return _obj->_indices; };
+		void addVertex(T v) {_obj->_buffer.push_back(v); setResized(true); };
+		
+		void setVertex(T v, uint32_t p) { _obj->_buffer[p] = v; setDirty(true); };
+		void delVertex(uint32_t p) { _obj->_buffer.erase( _obj->_buffer.begin() + p); setResized(true); };
+		void addIndices(std::vector<uint32_t> idx) { _obj->_indices = idx; setNumElements(idx.size()); setResized(true); };
+		T getVertex(uint32_t i) { return _obj->_buffer[i]; };
 	};
 
 
@@ -107,19 +134,21 @@ namespace s9 {
 	
 	template<>
 	inline Geometry<VertPNG>::Geometry(std::vector<glm::vec3> v, std::vector<glm::vec3> n) {
-		mObj.reset(new SharedObj());
+		_obj.reset(new SharedObj());
 		
 		if (v.size() != n.size()) { std::cerr << "S9Gear - Counts do not match" << std::endl; throw; return; }
 		
 		for (uint32_t i=0; i < v.size(); ++i){
 			VertPNG png = {v[i],n[i]};
-			mObj->vBuffer.push_back( png );
+			_obj->_buffer.push_back( png );
 		}
+		setNumElements(v.size());
+		setResized(true);
 	}
 	
 	template<>
 	inline Geometry<VertPNF>::Geometry (std::vector<float_t> v, std::vector<float_t> n) {
-		mObj.reset(new SharedObj());
+		_obj.reset(new SharedObj());
 		
 		if (v.size() != n.size()) { std::cerr << "S9Gear - Counts do not match" << std::endl; throw; return; }
 		
@@ -127,14 +156,16 @@ namespace s9 {
 			Float3 a = {v[i],v[i+1],v[i+2]}; 
 			Float3 b = {n[i],n[i+1],n[i+2]};
 			VertPNF p = {a,b}; 
-			mObj->vBuffer.push_back(p);	
+			_obj->_buffer.push_back(p);	
 		}
+		setNumElements(v.size());
+		setResized(true);
 	}
 	
 
 	template<>
 	inline Geometry<VertPNCTF>::Geometry(std::vector<float_t> v, std::vector<float_t> n, std::vector<float_t> t, std::vector<float_t> c) {
-		mObj.reset(new SharedObj());
+		_obj.reset(new SharedObj());
 		///\todo add size checking heres
 		
 		for (uint32_t i=0; i < v.size() / 3; i++){
@@ -144,9 +175,10 @@ namespace s9 {
 			Float2 v3 = {t[i*2],t[i*2+1]};
 			
 			VertPNCTF p = {v0,v1,v2,v3};
-			mObj->vBuffer.push_back(p);
-		
+			_obj->_buffer.push_back(p);
 		}
+		setNumElements(v.size());
+		setResized(true);
 	}
 
 	// Conversion templates - probaby inefficient ><
@@ -160,7 +192,7 @@ namespace s9 {
 	inline Geometry<VertPNT8F> Geometry<VertPNF>::convert() {
 
 		std::vector<VertPNT8F> vtemp;
-		std::vector<VertPNF> vstart = this->mObj->vBuffer;
+		std::vector<VertPNF> vstart = this->_obj->_buffer;
 		for (std::vector<VertPNF>::iterator it = vstart.begin(); it != vstart.end(); it++) {
 			VertPNF p = *it;
 			VertPNT8F tp;
@@ -176,6 +208,7 @@ namespace s9 {
 
 		Geometry<VertPNT8F> b (vtemp);
 		b.addIndices(getIndices());
+		b.setResized(true);
 
 		return b;
 	}
@@ -188,7 +221,7 @@ namespace s9 {
 	template <>
 	inline Geometry<VertPNCTF> Geometry<VertPNF>::convert() {
 		std::vector<VertPNCTF> vtemp;
-		std::vector<VertPNF> vstart = this->mObj->vBuffer;
+		std::vector<VertPNF> vstart = this->_obj->_buffer;
 		for (std::vector<VertPNF>::iterator it = vstart.begin(); it != vstart.end(); it++) {
 			VertPNF p = *it;
 			VertPNCTF tp;
@@ -202,6 +235,7 @@ namespace s9 {
 
 		Geometry<VertPNCTF> b (vtemp);
 		b.addIndices(getIndices());
+		b.setResized(true);
 		return b;
 	}
 
@@ -210,6 +244,7 @@ namespace s9 {
 	typedef Geometry<VertPNCTF> GeometryFullFloat;
 	typedef Geometry<VertPNCTG> GeometryFullGLM;
 	typedef Geometry<VertPNF> GeometryPNF;
+	typedef Geometry<VertPF> GeometryPF;
 	typedef Geometry<VertPNT8F> GeometryPNT8F;
 
 }

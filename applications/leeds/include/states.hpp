@@ -51,6 +51,10 @@ namespace leeds {
     gl::GLAsset<GeometryLeeds> _ground_textured_model;
     gl::GLAsset<GeometryLeeds> _textured_model;
     gl::GLAsset<GeometryPNF> _model;
+    gl::GLAsset<GeometryPF> _point_mesh;
+
+
+    GeometryPF _points;
 
     // Cameras
     OrbitCamera _camera;
@@ -71,6 +75,7 @@ namespace leeds {
     gl::Shader _shader_light;
     gl::Shader _shader_leeds;
     gl::Shader _shader_pick;
+    gl::Shader _shader_point;
 
     //FBOs
     gl::FBO   _gripper_fbo;
@@ -89,6 +94,7 @@ namespace leeds {
     // Mesh Reconstruction
 
     Scanner _scanner;
+    Mesher _mesher;
   };
 
   typedef boost::shared_ptr<SharedObj> SharedObjPtr;
@@ -159,6 +165,7 @@ namespace leeds {
     void _draw(double_t dt);
 
     std::vector<s9::gl::Texture> _results;
+    std::vector<cv::Mat> _result_matrices;
   };
 
   /*
@@ -167,12 +174,13 @@ namespace leeds {
 
   class StateCalibrate : public State {
   public:
-    StateCalibrate(SharedObjPtr p) :
-      State(static_cast<boost::shared_ptr <void> > (p)) {};
+    StateCalibrate(SharedObjPtr p);
 
   protected:
     void _update(double_t dt);
     void _draw(double_t dt);
+
+    std::vector<cv::Mat> _results;
   };
 
   /*

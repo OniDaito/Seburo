@@ -44,7 +44,7 @@ void GLFWApp::mainLoop() {
 			glfwSwapBuffers();
 		}
 
-		pThis->mDX = glfwGetTime() - t;
+		pThis->_dt = glfwGetTime() - t;
 		
 		glfwPollEvents();
 
@@ -53,7 +53,7 @@ void GLFWApp::mainLoop() {
 #endif
 		
  	}
-
+ 	_shutdown();
   // Exiting state
 	glfwTerminate();
 	exit( EXIT_SUCCESS );
@@ -70,12 +70,21 @@ void GLFWApp::_reshape(GLFWwindow window, int w, int h) {
 	pThis->_app.fireEvent(e);
 }
 
+
+/*
+ * GLFW Shutdown
+ */
+
+void GLFWApp::_shutdown() {
+	pThis->_app.shutdown();
+}
+
 /*
  * GLFW display
  */
 
 void GLFWApp::_display(GLFWwindow window) {
-	pThis->_app.display(pThis->mDX);
+	pThis->_app.display(pThis->_dt);
 	TwDraw();
 }
 
@@ -197,6 +206,15 @@ GLFWwindow GLFWApp::createWindow(const char * title ="S9Gear", size_t w=800, siz
 	return win;
 }
 
+/*
+ * Threaded update function. NO GL calls can be made from it
+ */
+
+void GLFWApp::_update(){
+	while(pThis->mRunning)
+		pThis->_app.update(pThis->_dt);
+}
+
 
 
 /*
@@ -259,6 +277,11 @@ GLFWwindow GLFWApp::createWindow(const char * title ="S9Gear", size_t w=800, siz
 	// fire a cheeky resize event to make sure all is well
 	ResizeEvent e (w,h,glfwGetTime());
 	pThis->_app.fireEvent(e);
+
+	// Fire up the thread to keep update happy
+
+	// Use a thread for the updates
+  pThis->_update_thread =  new boost::thread(&GLFWApp::_update);
 
 	mainLoop();
 

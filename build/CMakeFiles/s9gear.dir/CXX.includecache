@@ -602,3 +602,7 @@ opencv2/opencv.hpp
 s9/cvprocess.hpp
 /home/oni/Projects/S9Gear/src/s9/cvprocess.hpp
 
+/home/oni/Projects/S9Gear/src/state.cpp
+s9/cvprocess.hpp
+/home/oni/Projects/S9Gear/src/s9/cvprocess.hpp
+

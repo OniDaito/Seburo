@@ -54,6 +54,7 @@ namespace po = boost::program_options;
     _obj->_shader_light.load("./data/basic_lighting.vert", "./data/basic_lighting.frag");
     _obj->_shader_leeds.load("./data/leedsmesh.vert","./data/leedsmesh.frag");
     _obj->_shader_pick.load("./data/picker.vert", "./data/picker.frag");
+    _obj->_shader_point.load("./data/meshpoint.vert", "./data/meshpoint.frag");
 
     parseXML("./data/settings.xml");
 
@@ -79,6 +80,7 @@ namespace po = boost::program_options;
     link(*(static_pointer_cast<StateInitial>(_state)));
 
     glEnable(GL_DEPTH_TEST);
+
 }
 
 /*
@@ -91,6 +93,8 @@ namespace po = boost::program_options;
 
     TwAddButton(pBar, "Generate Texture", _generateTexturedCallback, this, " label='Generate Textures for the mesh' ");
     TwAddButton(pBar, "Toggle Scanning", _scanningCallback, this, " label='Toggle Scanning' ");
+    TwAddButton(pBar, "Generate Mesh", _generateMeshCallback, this, " label='Generate Mesh' ");
+
     TwAddSeparator(pBar, "Camera Controls", NULL);
     TwAddVarCB(pBar,"Contrast",TW_TYPE_UINT8, _setContrast, _getContrast, _obj.get()," label='Contrast' precision=1 help='Adjust the contrast of all the cameras' " );
     TwAddVarCB(pBar,"Brightness",TW_TYPE_UINT8, _setBrightness, _getBrightness, _obj.get()," label='Brightness' precision=1 help='Adjust the contrast of all the cameras' " );
@@ -104,6 +108,17 @@ void Leeds::_generateTexturedCallback(void * obj){
     static_cast<Leeds*>(obj)->createTextured();
 }
 
+
+void Leeds::_generateMeshCallback(void * obj){
+    Leeds* l = static_cast<Leeds*>(obj);
+    if (l->_state_gen_mesh == StatePtr()){
+        l->_state_gen_mesh.reset(new StateGenerateMesh(l->_obj));
+        l->_state_gen_mesh->setBlocking(true);
+    }
+
+    if(!l->_state_gen_mesh->isActive())
+        l->_state->add(l->_state_gen_mesh);
+}    
 
 void Leeds::_scanningCallback(void * obj){
     Leeds* l = static_cast<Leeds*>(obj);
@@ -200,11 +215,20 @@ void Leeds::_setSaturation(const void *value, void *clientData){
     glClearBufferfv(GL_DEPTH, 0, &depth );
     glViewport(0,0,_obj->_screen_width,_obj->_screen_height);
 
-    _state->update(dt);
+   
     _state->draw(dt);
 
     CXGLERROR
 }
+
+/*
+ * Update method - threaded
+ */
+
+ void Leeds::update(double_t dt) {
+    _state->update(dt);
+ }
+
 
 /*
  * Create the textured Geometry

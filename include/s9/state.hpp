@@ -52,13 +52,15 @@ namespace s9{
      */
 
     void add(StatePtr s){
-      if (_next != NULL) {
-        _next->_prev = s.get();
-        s->_next = _next;
+      if (!_blocking){
+        if (_next != NULL) {
+          _next->_prev = s.get();
+          s->_next = _next;
+        }
+        _next = s.get();
+        s->_prev = this;
+        s->_active = true;
       }
-      _next = s.get();
-      s->_prev = this;
-      s->_active = true;
     }
 
     /*

@@ -2,7 +2,7 @@
 
 out vec4 vVertexPosition;
 
-layout (location = 0) in vec3 attribVertPosition; // 1 is the indicies
+layout (location = 0) in vec3 attribVertPosition;
 
 uniform mat4 uMVPMatrix;
 

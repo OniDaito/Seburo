@@ -44,6 +44,7 @@ namespace leeds {
 	public:
 		void init();
 		void display(double_t dt);
+ 		void update(double_t dt);
 		void parseXML(std::string filename);
 
 
@@ -77,15 +78,19 @@ namespace leeds {
 
 		static void TW_CALL _generateTexturedCallback(void * obj);
 		static void TW_CALL _scanningCallback(void * obj);
+		static void TW_CALL _generateMeshCallback(void * obj);
+
 
 
 		TwBar *pBar; 
 
 		SharedObjPtr _obj;
+
 		StatePtr _state;
 		StatePtr _state_mesh;
 		StatePtr _state_textured;
 		StatePtr _state_scanning;
+		StatePtr _state_gen_mesh;
 
 	};
 }
