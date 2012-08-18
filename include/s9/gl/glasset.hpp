@@ -164,7 +164,7 @@ namespace s9 {
 			// Textures
 			for (int i=0; i < 8; ++i){
 				glEnableVertexAttribArray(i+2);
-				glVertexAttribPointer(i+2,2, GL_FLOAT, GL_FALSE, getGeometry().elementsize(), (GLvoid*)offsetof(VertPNT8F,mT) + (sizeof(Float2) * i) );		
+				glVertexAttribPointer(i+2,2, GL_FLOAT, GL_FALSE, getGeometry().elementsize(), (GLvoid*)(offsetof(VertPNT8F,mT) + (sizeof(Float2) * i)) );		
 			}
 
 			// Indices

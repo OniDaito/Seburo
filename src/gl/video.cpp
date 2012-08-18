@@ -12,6 +12,7 @@ using namespace std;
 #ifdef _GEAR_OPENCV
 using namespace cv;
 #endif
+
 using namespace boost; 
 using namespace s9;
 using namespace s9::gl;
@@ -26,6 +27,8 @@ VidCam::VidCam(std::string dev, size_t w, size_t h, size_t fps) {
 	_obj->_cam.reset(new UVCVideo());
 	_obj->_cam->startCapture(dev,w,h,fps);
 #endif
+
+
 	_obj->_fps = fps; 
 
 	CXGLERROR

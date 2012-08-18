@@ -21,4 +21,3 @@ void main() {
     gl_Position = uMVPMatrix * vVertexPosition;
 
 } 
-

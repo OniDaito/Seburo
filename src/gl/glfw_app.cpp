@@ -225,6 +225,8 @@ void GLFWApp::_update(){
  void GLFWApp::initGL(const int major = 3, const int minor = 2, 
  		const int w = 800, const int h =600) {
 
+#ifdef _GEAR_LINUX
+
 	glfwOpenWindowHint(GLFW_OPENGL_VERSION_MAJOR, major);
 	glfwOpenWindowHint(GLFW_OPENGL_VERSION_MINOR, minor);
 	
@@ -232,6 +234,8 @@ void GLFWApp::_update(){
 	glfwOpenWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_COMPAT_PROFILE);
 	glfwOpenWindowHint(GLFW_FSAA_SAMPLES, 4);
 	
+#endif
+
 	GLFWwindow window = createWindow(mTitle.c_str(),w, h);
 	
 	CXGLERROR

@@ -4,20 +4,29 @@
 cmake_minimum_required (VERSION 2.8) 
 project (S9Gear) 
 
+set(GEAR_VERSION_MAJOR "0")
+set(GEAR_VERSION_MINOR "2")
+set(GEAR_VERSION_PATCH "0")
+set(GEAR_VERSION_EXTRA "")
+set(GEAR_VERSION "${GEAR_VERSION_MAJOR}.${GEAR_VERSION_MINOR}")
+set(GEAR_VERSION_FULL "${GEAR_VERSION}.${GEAR_VERSION_PATCH}${GEAR_VERSION_EXTRA}")
+
+
 #####################################################################
 # Detect OS 
 
 if (WIN32)
-    set(_GEAR_WIN32_WGL 1)
+    set(_GEAR_WIN32 1)
     message(STATUS "Building Gear for WGL on a Win32 system") 
-    add_definitions(-D_GEAR_WIN32_WGL)
+    add_definitions(-D_GEAR_WIN32)
 elseif (UNIX AND APPLE)
-    set(_GEAR_COCOA_NSGL 1)
-    add_definitions(-D_GEAR_COCOA_NSGL)
+    set(_GEAR_OSX 1)
+    add_definitions(-D_GEAR_OSX)
     message(STATUS "Building Gear for Cocoa and NSOpenGL on Mac OS X")
+    FILE(GLOB OSSources src/osx/*)
 elseif (UNIX AND NOT APPLE)
-    set(_GEAR_X11_GLX 1)
-    add_definitions(-D_GEAR_X11_GLX)
+    set(_GEAR_LINUX 1)
+    add_definitions(-D_GEAR_LINUX)
     message(STATUS "Building Gear for X11 and GLX on a Unix-like system")
     FILE(GLOB OSSources src/linux/*)
 else()
@@ -35,12 +44,12 @@ include_directories(include)
 FILE(GLOB GLSources src/gl/*)
 
 #####################################################################
-# Macro to find libraries
+# Macro to find libraries in the local lib directory then system wide
 
 macro(gear_find_library libname)
   string(TOLOWER ${libname} libnamelow)
 
-  find_library(${libname}_LIB NAMES ${libname} PATHS ${LIBRARIES_SEARCH_PATHS})
+  find_library(${libname}_LIB NAMES ${libname} PATHS ${LOCAL_LIBRARIES_SEARCH_PATHS} NO_DEFAULT_PATH)
   if (NOT ${libname}_LIB)
     find_library(${libname}_LIB NAMES ${libnamelow} PATHS ${LIBRARIES_SEARCH_PATHS})
   endif()
@@ -66,7 +75,6 @@ if (UNIX AND NOT APPLE)
   set (CMAKE_FIND_LIBRARY_SUFFIXES ".so" ".a")
 
   set(LIBRARIES_SEARCH_PATHS
-    ${CMAKE_SOURCE_DIR}/lib/linux
     /usr/local/lib/
     /usr/local/lib64/
     CACHE STRING "Library search paths")
@@ -93,6 +101,10 @@ if (UNIX AND NOT APPLE)
   gear_find_pkgconfig_lib(gtkmm-3.0)
   gear_find_pkgconfig_lib(gl)
 
+  gear_find_library(glfw)
+  gear_find_library(AntTweakBar)
+  gear_find_library(AssImp)
+
   include_directories(${PROJECT_SOURCE_DIR}/lib/linux
     ${GEAR_INCLUDES}
   )
@@ -106,16 +118,20 @@ elseif(UNIX AND APPLE)
   #set (CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "-m32")
   #set (CMAKE_OSX_ARCHITECTURES "i386")
 
+  find_library(IOKIT_FRAMEWORK IOKit)
+  find_library(CORE_FOUNDATION_FRAMEWORK CoreFoundation)
   FIND_LIBRARY(OPENGL_LIBRARY OpenGL)
-  FIND_LIBRARY(QUICKTIME_LIBRARY QuickTime )
   FIND_LIBRARY(COCOA_LIBRARY Cocoa )
   MARK_AS_ADVANCED (COCOA_LIBRARY
-                     QUICKTIME_LIBRARY
                      OPENGL_LIBRARY)
-  SET(OSX_FRAMEWORKS ${COCOA_LIBRARY} ${QUICKTIME_LIBRARY} ${OPENGL_LIBRARY})
 
+  SET(OSX_FRAMEWORKS ${COCOA_LIBRARY} 
+    ${OPENGL_LIBRARY} 
+    ${IOKIT_FRAMEWORK}
+    ${CORE_FOUNDATION_FRAMEWORK}
+  )
+   
   set(LIBRARIES_SEARCH_PATHS
-    ${CMAKE_SOURCE_DIR}/lib/osx
     /usr/local/lib/
     /usr/local/lib64/
     CACHE STRING "Library search paths")
@@ -123,6 +139,10 @@ elseif(UNIX AND APPLE)
   set(LOCAL_LIBRARIES_SEARCH_PATHS
     ${CMAKE_SOURCE_DIR}/lib/osx
     CACHE STRING "Local Library search paths")
+
+  gear_find_library(glfw3)
+  gear_find_library(AntTweakBar)
+  gear_find_library(AssImp)
 
 else()
   message(FATAL_ERROR "No supported platform was detected")
@@ -148,7 +168,7 @@ if (USEOPENCV)
   gear_find_library(opencv_core)
   gear_find_library(opencv_features2d)
   gear_find_library(opencv_gpu)
-  gear_find_library(opencv_highgui)
+#  gear_find_library(opencv_highgui)
   gear_find_library(opencv_imgproc)
   gear_find_library(opencv_legacy)
   gear_find_library(opencv_ml)
@@ -174,10 +194,6 @@ add_library(s9gear SHARED
 target_link_libraries(s9gear 
   ${GEAR_LIBRARIES}
   ${OPENGL_LIBRARY}
-  ${OSX_FRAMEWORKS}
-  assimp
-  glfw
-  AntTweakBar
   ${Boost_FILESYSTEM_LIBRARY}
   ${Boost_SYSTEM_LIBRARY}
   ${Boost_THREAD_LIBRARY}
@@ -186,15 +202,25 @@ target_link_libraries(s9gear
   ${Boost_PROGRAM_OPTIONS_LIBRARY}
 )
 
+# seperate libs depending on OS
+
+if (UNIX AND APPLE)
+  target_link_libraries(s9gear 
+    ${OSX_FRAMEWORKS}
+  )
+endif()
+
 project(${PROJECT_NAME})
 
 ################################
 # DEBUG mode
 
-add_definitions(-DDEBUG)
-SET(CMAKE_BUILD_TYPE debug)
-SET(CMAKE_CXX_FLAGS_DEBUG "-g")
-
+option(DEBUG "Debug Mode" ON)
+if(DEBUG)
+  add_definitions(-DDEBUG)  
+  SET(CMAKE_BUILD_TYPE debug)
+  SET(CMAKE_CXX_FLAGS_DEBUG "-g")
+endif()
 
 #####################################################################
 # Go into examples directory and build these

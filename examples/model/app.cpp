@@ -98,6 +98,7 @@ void ModelApp::processEvent(KeyboardEvent e){
 
 int main (int argc, const char * argv[]) {
   
+#ifdef _GEAR_LINUX
     // Declare the supported options.
     po::options_description desc("Allowed options");
     desc.add_options()
@@ -113,10 +114,11 @@ int main (int argc, const char * argv[]) {
         cout << desc << "\n";
         return 1;
     }
+#endif
   
     ModelApp b;
 
-    GLFWApp a(b, 800, 600, false, argc, argv, "Bunny",4,0);
+    GLFWApp a(b, 800, 600, false, argc, argv, "Bunny",2,1);
 
     return EXIT_SUCCESS;
 

@@ -15,13 +15,13 @@ namespace s9{
 
   class QuicktimeCamera {
   public:
-    UVCVideo () {};
+    QuicktimeCamera () {};
     bool startCapture(std::string devname, unsigned int width, unsigned int height, unsigned int fps);
     void stop();
     unsigned char* getBuffer();
 
     void video_list_controls(int dev);
-    void set_control(unsigned int id, int value) { uvc_set_control(dev,id,value); };
+    void set_control(unsigned int id, int value);
 
   protected:
   };

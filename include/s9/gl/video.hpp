@@ -24,6 +24,10 @@
 #include "s9/linux/uvc_camera.hpp"
 #endif
 
+#ifdef _GEAR_OSX
+#include "s9/osx/quicktime_camera.hpp"
+#endif
+
 
 namespace s9 {
 
@@ -63,7 +67,7 @@ namespace s9 {
 #ifdef _GEAR_X11_GLX
 				boost::shared_ptr<UVCVideo> _cam;
 #else
-				boost::shared_ptr<QuicktimeVideo> _cam;
+				boost::shared_ptr<QuicktimeCamera> _cam;
 #endif
 				size_t _fps;
 				Texture _texture;
