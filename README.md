@@ -25,6 +25,9 @@ So far, we have basic Linux and OSX support and hopefully, I'll have Windows sup
 
 ## Todo
 
+* Shader version control with OpenGL
+  * Shaders to be hard-coded and ready made as strings inside the app
+* Resource loading cross platform
 * Add QHull Library
 * Add Freeimage Library for textures
 * Add Lighting solutions

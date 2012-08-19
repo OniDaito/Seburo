@@ -124,6 +124,15 @@ namespace s9{
       cv::Mat& _process(cv::Mat &in);
       void _init();
     };
+
+  
+    class BlockContours : public ProcessBlock {
+
+    protected:
+      cv::Mat& _process(cv::Mat &in);
+      void _init();
+    };
+
   }
 
   // Useful functions

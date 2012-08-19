@@ -69,8 +69,6 @@ endmacro()
 
 if (UNIX AND NOT APPLE)
 
-  link_directories(${PROJECT_SOURCE_DIR}/lib/linux)
-
   set (CMAKE_FIND_LIBRARY_PREFIXES "lib" "")
   set (CMAKE_FIND_LIBRARY_SUFFIXES ".so" ".a")
 
@@ -79,9 +77,17 @@ if (UNIX AND NOT APPLE)
     /usr/local/lib64/
     CACHE STRING "Library search paths")
  
-  set(LOCAL_LIBRARIES_SEARCH_PATHS
-    ${CMAKE_SOURCE_DIR}/lib/linux
-    CACHE STRING "Local Library search paths")
+  if(CMAKE_SIZEOF_VOID_P EQUAL 8)
+    set(LOCAL_LIBRARIES_SEARCH_PATHS
+      ${CMAKE_SOURCE_DIR}/lib/linux64
+      CACHE STRING "Local Library search paths")
+    link_directories(${PROJECT_SOURCE_DIR}/lib/linux64)
+  else()
+    set(LOCAL_LIBRARIES_SEARCH_PATHS
+      ${CMAKE_SOURCE_DIR}/lib/linux32
+      CACHE STRING "Local Library search paths")
+    link_directories(${PROJECT_SOURCE_DIR}/lib/linux32)
+  endif()
 
 
   # Setup pkgconfig macro for including extra things
@@ -100,10 +106,11 @@ if (UNIX AND NOT APPLE)
 
   gear_find_pkgconfig_lib(gtkmm-3.0)
   gear_find_pkgconfig_lib(gl)
-
-  gear_find_library(glfw)
+ 
+  gear_find_library(glfw3)
   gear_find_library(AntTweakBar)
-  gear_find_library(AssImp)
+  gear_find_library(assimp)
+  gear_find_pkgconfig_lib(xxf86vm)
 
   include_directories(${PROJECT_SOURCE_DIR}/lib/linux
     ${GEAR_INCLUDES}
@@ -173,8 +180,8 @@ if (USEOPENCV)
   gear_find_library(opencv_legacy)
   gear_find_library(opencv_ml)
   gear_find_library(opencv_objdetect)
-  gear_find_library(opencv_stitching)
-  gear_find_library(opencv_ts)
+#  gear_find_library(opencv_stitching)
+#  gear_find_library(opencv_ts)
   gear_find_library(opencv_video)
 endif(USEOPENCV)
 
@@ -236,6 +243,6 @@ endif()
 #####################################################################
 # Build Leeds Application
 
-if (NOT TARGET applications AND _GEAR_X11_GLX)
-  add_subdirectory("${CMAKE_SOURCE_DIR}/applications/leeds")
+if (NOT TARGET applications)
+  add_subdirectory("${CMAKE_SOURCE_DIR}/applications/template")
 endif() 

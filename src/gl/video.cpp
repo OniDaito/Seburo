@@ -23,7 +23,7 @@ VidCam::VidCam(std::string dev, size_t w, size_t h, size_t fps) {
 	_obj.reset(new SharedObj());
 	_obj->_texture = Texture(glm::vec2(w,h));
 
-#ifdef _GEAR_X11_GLX
+#ifdef _GEAR_LINUX
 	_obj->_cam.reset(new UVCVideo());
 	_obj->_cam->startCapture(dev,w,h,fps);
 #endif
@@ -39,14 +39,14 @@ void VidCam::update() {
 }
 
 void VidCam::stop(){
-#ifdef _GEAR_X11_GLX
+#ifdef _GEAR_LINUX
 	_obj->_cam->stop();
 #endif	
 	
 }
 
 void VidCam::setControl(unsigned int id, int value) {
-#ifdef _GEAR_X11_GLX
+#ifdef _GEAR_LINUX
 	_obj->_cam->set_control(id,value);
 #endif	
 }

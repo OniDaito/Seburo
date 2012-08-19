@@ -20,7 +20,7 @@
 #include <opencv2/opencv.hpp>
 #endif
 
-#ifdef _GEAR_X11_GLX
+#ifdef _GEAR_LINUX
 #include "s9/linux/uvc_camera.hpp"
 #endif
 
@@ -64,7 +64,7 @@ namespace s9 {
 			struct SharedObj {
 			public:
 
-#ifdef _GEAR_X11_GLX
+#ifdef _GEAR_LINUX
 				boost::shared_ptr<UVCVideo> _cam;
 #else
 				boost::shared_ptr<QuicktimeCamera> _cam;

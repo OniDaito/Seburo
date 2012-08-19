@@ -130,7 +130,8 @@ void OrbitCamera::roll(float_t a){
  
 void ScreenCamera::compute() {
 	mViewMatrix = glm::mat4(1.0f);
-	mProjectionMatrix = glm::ortho(0.0f, static_cast<float_t>(mW), static_cast<float_t>(mH), 0.0f);
+	mProjectionMatrix = glm::ortho(static_cast<float_t>(0.0), static_cast<float_t>(mW), 
+			static_cast<float_t>(mH), static_cast<float_t>(0.0));
 }
 
 

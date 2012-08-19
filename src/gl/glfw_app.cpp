@@ -16,19 +16,6 @@ GLFWApp* GLFWApp::pThis;
 string GLFWApp::mTitle;
 
 
-GLFWApp::GLFWApp (WindowApp &app, const int w = 800, const int h = 600, 
-				bool fullscreen = false, int argc = 0, const char * argv[] = NULL, 
-				const char * title = "S9Gear", const int major = 4, const int minor = 0) : WindowSystem(app) {
-	if( !glfwInit() ){
-		fprintf( stderr, "Failed to initialize GLFW\n" );
-		exit( EXIT_FAILURE );
-	}
-	pThis = this;
-	mFlag = 0x00;
-	mTitle = title;
-	initGL(major,minor,w,h);
-}
-
 
 
 void GLFWApp::mainLoop() {
@@ -41,7 +28,7 @@ void GLFWApp::mainLoop() {
 		BOOST_FOREACH ( GLFWwindow b, pThis->vWindows) {	
 			glfwMakeContextCurrent(b);
 			_display(b);
-			glfwSwapBuffers();
+			glfwSwapBuffers(b);
 		}
 
 		pThis->_dt = glfwGetTime() - t;
@@ -193,10 +180,10 @@ void GLFWApp::_mouseWheelCallback(GLFWwindow window, double xpos, double ypos) {
 }
 
 
-GLFWwindow GLFWApp::createWindow(const char * title ="S9Gear", size_t w=800, size_t h=600) {
-	GLFWwindow win = glfwOpenWindow(w, h, GLFW_WINDOWED, title, NULL);
+GLFWwindow GLFWApp::createWindow(const char * title ="S9Gear", int w=800, int h=600) {
+	GLFWwindow win = glfwCreateWindow(800,600, GLFW_WINDOWED, title, NULL);
 	if (!win){
-		std::cerr << "Failed to open GLFW window: " << glfwErrorString(glfwGetError()) << std::endl;				
+		std::cout << "Failed to open GLFW window: " << glfwErrorString(glfwGetError()) << std::endl;				
 		glfwTerminate();
 		exit(EXIT_FAILURE);
 	}
@@ -222,51 +209,52 @@ void GLFWApp::_update(){
  * \todo FULLSCREEN apps
  */
 
- void GLFWApp::initGL(const int major = 3, const int minor = 2, 
- 		const int w = 800, const int h =600) {
+ void GLFWApp::initGL( const int w = 800, const int h =600,
+ 		const int major = 3, const int minor = 3) {
 
-#ifdef _GEAR_LINUX
-
-	glfwOpenWindowHint(GLFW_OPENGL_VERSION_MAJOR, major);
-	glfwOpenWindowHint(GLFW_OPENGL_VERSION_MINOR, minor);
+	//glfwWindowHint(GLFW_OPENGL_VERSION_MAJOR, major);
+	//glfwWindowHint(GLFW_OPENGL_VERSION_MINOR, minor);
 	
 	///\todo fully switch to core profile - there is something causing an error in core
-	glfwOpenWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_COMPAT_PROFILE);
-	glfwOpenWindowHint(GLFW_FSAA_SAMPLES, 4);
-	
-#endif
+	//glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_COMPAT_PROFILE);
+
+
+ 	glfwWindowHint(GLFW_DEPTH_BITS, 16);
+	glfwWindowHint(GLFW_FSAA_SAMPLES, 4);
 
 	GLFWwindow window = createWindow(mTitle.c_str(),w, h);
+
+	glfwSetWindowSizeCallback(_reshape);
+	glfwMakeContextCurrent(window);
 	
 	CXGLERROR
 	
 	std::cout << "OpenGL Version: " << glGetString(GL_VERSION) << std::endl;
-	
+
 	// Set Basic Callbacks
 	glfwSetKeyCallback(_keyCallback);
 	glfwSetCursorPosCallback(_mousePositionCallback);
 	glfwSetMouseButtonCallback(_mouseButtonCallback);
 	glfwSetScrollCallback(_mouseWheelCallback);
-	glfwSetWindowSizeCallback(_reshape);
+	
 	glfwSetWindowCloseCallback( _window_close_callback );
 		
-
   glfwSwapInterval(1);
-	
+	CXGLERROR
 
 	if( !window ) {
 		fprintf( stderr, "Failed to open GLFW window\n" );
 		glfwTerminate();
 		exit( EXIT_FAILURE );
 	}
-	
+CXGLERROR
 	// Call only after one window / context has been created!
 	
 	glewExperimental = true;
 	GLenum err=glewInit();
 
 	if(err!=GLEW_OK) {
-		std::cout << "GLEWInit failed, aborting." << std::endl;
+		std::cout << "GLEWInit failed, aborting with error: " << err << std::endl;
 		glfwTerminate();
 		exit( EXIT_FAILURE );
 	}
@@ -275,17 +263,20 @@ void GLFWApp::_update(){
 	pThis->vWindows.push_back(window);
 
 	TwInit(TW_OPENGL, NULL);
+	TwWindowSize(w, h);
 
 	pThis->_app.init();
 
 	// fire a cheeky resize event to make sure all is well
-	ResizeEvent e (w,h,glfwGetTime());
-	pThis->_app.fireEvent(e);
+	//ResizeEvent e (w,h,glfwGetTime());
+	//pThis->_app.fireEvent(e);
 
 	// Fire up the thread to keep update happy
 
 	// Use a thread for the updates
   pThis->_update_thread =  new boost::thread(&GLFWApp::_update);
+
+
 
 	mainLoop();
 

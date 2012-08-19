@@ -26,8 +26,6 @@ cv::Mat& ProcessBlock::process(cv::Mat &in) {
 }
 
 
-
-
 /*
  * Perform the routine
  */
@@ -163,5 +161,34 @@ void BlockDetectPoint::_init(){
   _obj->_values["point"] = shared_ptr<Point2f>(new Point2f(0,0));
 }
 
+
+void  BlockContours::_init(){
+  _obj.reset(new SharedObj());
+  setValue<int>("thresh",255);
+  //_obj->_values["point"] = shared_ptr<Point2f>(new Point2f(0,0));
+}
+
+cv::Mat& BlockContours::_process(cv::Mat &in){
+  if (_obj->_result.size() != in.size())
+    _obj->_result = Mat(in.size(), CV_8UC3);
+
+  cv::Mat canny_output;
+  vector<vector<Point> > contours;
+  vector<Vec4i> hierarchy;
+
+  /// Detect edges using canny
+  Canny( in, canny_output, getValue<float_t>("thresh"), getValue<float_t>("thresh")*2, 3 );
+  /// Find contours
+  findContours( canny_output, contours, hierarchy, CV_RETR_TREE, CV_CHAIN_APPROX_SIMPLE, Point(0, 0) );
+
+  /// Draw contours
+  _obj->_result = Mat::zeros( canny_output.size(), CV_8UC3 );
+  for( int i = 0; i< contours.size(); i++ ) {
+    Scalar color = Scalar( 255,0,0 );
+    drawContours( _obj->_result, contours, i, color, 2, 8, hierarchy, 0, Point() );
+  }
+
+  return _obj->_result;
+}
 
 #endif

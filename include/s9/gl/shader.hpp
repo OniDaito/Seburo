@@ -38,6 +38,7 @@ namespace s9 {
 			Shader& s(const char * name, glm::vec4 v);
 			Shader& s(const char * name, glm::mat4 v);
 			Shader& s(const char * name, float_t f);
+			Shader& s(const char * name, float f);
 			Shader& s(const char * name, int i);
 
 			void bind() { glUseProgram(mProgram);};

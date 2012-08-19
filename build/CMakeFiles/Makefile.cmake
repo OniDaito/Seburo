@@ -8,6 +8,7 @@ SET(CMAKE_DEPENDS_GENERATOR "Unix Makefiles")
 SET(CMAKE_MAKEFILE_DEPENDS
   "CMakeCache.txt"
   "../CMakeLists.txt"
+  "../applications/template/CMakeLists.txt"
   "CMakeFiles/CMakeCCompiler.cmake"
   "CMakeFiles/CMakeCXXCompiler.cmake"
   "CMakeFiles/CMakeSystem.cmake"
@@ -16,21 +17,21 @@ SET(CMAKE_MAKEFILE_DEPENDS
   "../examples/model/CMakeLists.txt"
   "../examples/picking/CMakeLists.txt"
   "../examples/video/CMakeLists.txt"
-  "/usr/local/Cellar/cmake/2.8.8/share/cmake/Modules/CMakeCInformation.cmake"
-  "/usr/local/Cellar/cmake/2.8.8/share/cmake/Modules/CMakeCXXInformation.cmake"
-  "/usr/local/Cellar/cmake/2.8.8/share/cmake/Modules/CMakeCommonLanguageInclude.cmake"
-  "/usr/local/Cellar/cmake/2.8.8/share/cmake/Modules/CMakeGenericSystem.cmake"
-  "/usr/local/Cellar/cmake/2.8.8/share/cmake/Modules/CMakeSystemSpecificInformation.cmake"
-  "/usr/local/Cellar/cmake/2.8.8/share/cmake/Modules/Compiler/GNU-C.cmake"
-  "/usr/local/Cellar/cmake/2.8.8/share/cmake/Modules/Compiler/GNU-CXX.cmake"
-  "/usr/local/Cellar/cmake/2.8.8/share/cmake/Modules/Compiler/GNU.cmake"
-  "/usr/local/Cellar/cmake/2.8.8/share/cmake/Modules/FindBoost.cmake"
-  "/usr/local/Cellar/cmake/2.8.8/share/cmake/Modules/MacOSXBundleInfo.plist.in"
-  "/usr/local/Cellar/cmake/2.8.8/share/cmake/Modules/Platform/Darwin-GNU-C.cmake"
-  "/usr/local/Cellar/cmake/2.8.8/share/cmake/Modules/Platform/Darwin-GNU-CXX.cmake"
-  "/usr/local/Cellar/cmake/2.8.8/share/cmake/Modules/Platform/Darwin-GNU.cmake"
-  "/usr/local/Cellar/cmake/2.8.8/share/cmake/Modules/Platform/Darwin.cmake"
-  "/usr/local/Cellar/cmake/2.8.8/share/cmake/Modules/Platform/UnixPaths.cmake"
+  "/usr/share/cmake-2.8/Modules/CMakeCInformation.cmake"
+  "/usr/share/cmake-2.8/Modules/CMakeCXXInformation.cmake"
+  "/usr/share/cmake-2.8/Modules/CMakeCommonLanguageInclude.cmake"
+  "/usr/share/cmake-2.8/Modules/CMakeGenericSystem.cmake"
+  "/usr/share/cmake-2.8/Modules/CMakeSystemSpecificInformation.cmake"
+  "/usr/share/cmake-2.8/Modules/Compiler/GNU-C.cmake"
+  "/usr/share/cmake-2.8/Modules/Compiler/GNU-CXX.cmake"
+  "/usr/share/cmake-2.8/Modules/Compiler/GNU.cmake"
+  "/usr/share/cmake-2.8/Modules/FindBoost.cmake"
+  "/usr/share/cmake-2.8/Modules/FindPkgConfig.cmake"
+  "/usr/share/cmake-2.8/Modules/Platform/Linux-GNU-C.cmake"
+  "/usr/share/cmake-2.8/Modules/Platform/Linux-GNU-CXX.cmake"
+  "/usr/share/cmake-2.8/Modules/Platform/Linux-GNU.cmake"
+  "/usr/share/cmake-2.8/Modules/Platform/Linux.cmake"
+  "/usr/share/cmake-2.8/Modules/Platform/UnixPaths.cmake"
   )
 
 # The corresponding makefile is:
@@ -47,6 +48,7 @@ SET(CMAKE_MAKEFILE_PRODUCTS
   "examples/fbo/CMakeFiles/CMakeDirectoryInformation.cmake"
   "examples/video/CMakeFiles/CMakeDirectoryInformation.cmake"
   "examples/picking/CMakeFiles/CMakeDirectoryInformation.cmake"
+  "applications/template/CMakeFiles/CMakeDirectoryInformation.cmake"
   )
 
 # Dependency information for all targets:
@@ -57,4 +59,5 @@ SET(CMAKE_DEPEND_INFO_FILES
   "examples/fbo/CMakeFiles/fbo.dir/DependInfo.cmake"
   "examples/video/CMakeFiles/video.dir/DependInfo.cmake"
   "examples/picking/CMakeFiles/picking.dir/DependInfo.cmake"
+  "applications/template/CMakeFiles/template.dir/DependInfo.cmake"
   )

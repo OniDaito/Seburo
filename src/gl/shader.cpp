@@ -117,6 +117,13 @@ Shader& Shader::s(const char * name, float_t f) {
 	return *this;
 }
 
+
+Shader& Shader::s(const char * name, float f) {
+	GLuint l = location(name);
+	glUniform1f(l,f);
+	return *this;
+}
+
 Shader& Shader::s(const char * name, int i){
 	GLuint l = location(name);
 	glUniform1i(l,i);

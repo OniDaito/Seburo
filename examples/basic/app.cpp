@@ -26,14 +26,13 @@ namespace po = boost::program_options;
 
 void BasicApp::init(){
     mTestQuad = gl::Quad(1.0,1.0);
-    mShader.load("../../../shaders/quad.vert", "../../../shaders/quad.frag");
+    mShader.load("../../../shaders/3/quad.vert", "../../../shaders/3/quad.frag");
 
     mTestQuad.move(glm::vec3(-0.5,-0.5,0.0));
     mCamera.move(glm::vec3(0,0,20.0f));
 
     link(*this);
     link(mCamera);
-    
 }
 
 
@@ -108,7 +107,7 @@ int main (int argc, const char * argv[]) {
   
     BasicApp b;
 
-    GLFWApp a(b, 800, 600, false, argc, argv, "Basic",4,0);
+    GLFWApp a(b, 800, 600, false, argc, argv, "Basic");
 
     return EXIT_SUCCESS;
 

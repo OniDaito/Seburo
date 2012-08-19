@@ -46,8 +46,8 @@ namespace s9 {
 			size_t mMX, mMY;
 			uint16_t mFlag;
 
-			static void initGL(const int major, const int minor,
-					const int w, const int h);
+			static void initGL(const int w, const int h,
+				const int major, const int minor);
 
 
 			static void _shutdown();
@@ -72,11 +72,22 @@ namespace s9 {
 
 		public:
 
-			GLFWApp(WindowApp &app, int w, int h, 
-				bool fullscreen, int argc, const char * argv[], 
-				const char * title, const int major, const int minor);
+			GLFWApp (WindowApp &app, const int w = 800, const int h = 600, 
+				bool fullscreen = false, int argc = 0, const char * argv[] = NULL, 
+				const char * title = "S9Gear", const int major = 4, const int minor = 0) : WindowSystem(app) {
+				if( !glfwInit() ){
+					fprintf( stderr, "Failed to initialize GLFW\n" );
+					exit( EXIT_FAILURE );
+				}
+				pThis = this;
+				mFlag = 0x00;
+				mTitle = title;
+				initGL(w,h,major,minor);
+			}
 
-			static GLFWwindow createWindow(const char * title, size_t w, size_t h);
+
+
+			static GLFWwindow createWindow(const char * title, int w, int h);
 			
 		private:
 
