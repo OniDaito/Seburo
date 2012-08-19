@@ -1,4 +1,5 @@
 #version 330
+precision highp float;
 
 out vec4 vVertexPosition;
 out vec4 vColour;

@@ -21,13 +21,15 @@ using namespace s9::gl::compvis;
 
 VidCam::VidCam(std::string dev, size_t w, size_t h, size_t fps) {
 	_obj.reset(new SharedObj());
-	_obj->_texture = Texture(glm::vec2(w,h));
+	_obj->_texture = TextureStream(glm::vec2(w,h),TEXTURE_RGB);
 
 #ifdef _GEAR_LINUX
 	_obj->_cam.reset(new UVCVideo());
 	_obj->_cam->startCapture(dev,w,h,fps);
 #endif
 
+	_obj->_texture.setData(_obj->_cam->getBuffer());
+	_obj->_texture.start();
 
 	_obj->_fps = fps; 
 
@@ -35,14 +37,15 @@ VidCam::VidCam(std::string dev, size_t w, size_t h, size_t fps) {
 }
 
 void VidCam::update() {
-	_obj->_texture.update(_obj->_cam->getBuffer());
+	_obj->_texture.update();
+	//_obj->_texture.update(_obj->_cam->getBuffer());
 }
 
 void VidCam::stop(){
 #ifdef _GEAR_LINUX
 	_obj->_cam->stop();
 #endif	
-	
+	_obj->_texture.stop();
 }
 
 void VidCam::setControl(unsigned int id, int value) {

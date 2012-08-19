@@ -15,23 +15,4 @@
 
 #include "GL/glew.h"
 
-namespace s9 {
-	namespace gl {
-		
-		/*
-		 * Small Interface class to wrap the VAO state for an object
-		 */
-
-		class ViaVAO {
-		public:
-			void bind() { glBindVertexArray(mVAO); };
-			void unbind()  { glBindVertexArray(0); };
-			GLuint mVAO;
-			unsigned int *handle;
-
-		};
-	}
-}
-
-
 #endif

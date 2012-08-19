@@ -34,14 +34,14 @@ namespace s9{
 		virtual void align(Primitive &p);
 
 		virtual void processEvent(ResizeEvent e) { 
-			setRatio( static_cast<float_t>(e.mW) / e.mH);
+			setRatio( static_cast<float>(e.mW) / e.mH);
 		}
 
-		void setNear(float_t n) {mNear = n; compute(); };
-		void setFar(float_t n) {mFar = n; compute(); };
+		void setNear(float n) {mNear = n; compute(); };
+		void setFar(float n) {mFar = n; compute(); };
 		
-		void setRatio(float_t r);
-		void setField(float_t a) {mField = a; compute(); };
+		void setRatio(float r);
+		void setField(float a) {mField = a; compute(); };
 		
 		glm::vec3 getPos() {return mPos; };
 		glm::vec3 getLook() {return mLook; };
@@ -57,7 +57,7 @@ namespace s9{
 		glm::mat4 mViewMatrix;
 		glm::mat4 mProjectionMatrix;
 
-		float_t mR,mFar,mNear, mField;
+		float mR,mFar,mNear, mField;
 		
 		
 	};
@@ -69,13 +69,13 @@ namespace s9{
 	class OrbitCamera : public Camera{
 	public:
 		OrbitCamera();
-		void zoom(float_t z);
+		void zoom(float z);
 		void shift(glm::vec2 s);
 		void align(Primitive &p){};
 		
-		void yaw(float_t a);
-		void pitch(float_t a);
-		void roll(float_t a);
+		void yaw(float a);
+		void pitch(float a);
+		void roll(float a);
 		void reset();
 
 		/*
@@ -85,8 +85,8 @@ namespace s9{
 		virtual void processEvent(MouseEvent e) { 
 			if(e.mFlag & MOUSE_LEFT_DOWN){
 				glm::vec2 mouse_d = glm::vec2(e.mX,e.mY) - _mouse_pre;
-				yaw(static_cast<float_t>(mouse_d.x) * _sense);
-				pitch(static_cast<float_t>(mouse_d.y) * _sense);
+				yaw(static_cast<float>(mouse_d.x) * _sense);
+				pitch(static_cast<float>(mouse_d.y) * _sense);
 			}
 
 			if (e.mFlag & MOUSE_WHEEL_DOWN){
@@ -97,8 +97,8 @@ namespace s9{
 			}
 
 			if (e.mFlag & MOUSE_MIDDLE_DOWN){
-				shift(glm::vec2(static_cast<float_t>(e.mX - _mouse_pre.x) * _sense * 0.8, 
-						static_cast<float_t>(e.mY - _mouse_pre.y) * _sense * 0.8));
+				shift(glm::vec2(static_cast<float>(e.mX - _mouse_pre.x) * _sense * 0.8, 
+						static_cast<float>(e.mY - _mouse_pre.y) * _sense * 0.8));
 			}
 
 			_mouse_pre = glm::vec2(e.mX,e.mY);
@@ -109,7 +109,7 @@ namespace s9{
 	protected:
 		void compute();
 
-		float_t _sense;
+		float _sense;
 		glm::vec2 _mouse_pre;
 		
 	};
@@ -140,11 +140,11 @@ namespace s9{
 	protected:
 		glm::vec3 mNow;
 		glm::vec3 mPrev;
-		float_t mAngle, mDegrade;
+		float mAngle, mDegrade;
 		glm::vec3 mP;
 		double_t mDT;
 		bool mHeld;
-		float_t mZoom, mShift;
+		float mZoom, mShift;
 
 	public:
 
@@ -159,7 +159,7 @@ namespace s9{
 		}
 
 		void processEvent(ResizeEvent e) { 
-			setRatio( static_cast<float_t>(e.mW) / e.mH);
+			setRatio( static_cast<float>(e.mW) / e.mH);
 		}
 
 		void processEvent(MouseEvent e){
@@ -168,7 +168,7 @@ namespace s9{
 
 				if (glm::length(mP) > 0){
 
-					mNow = glm::vec3(static_cast<float_t>(e.mX - mP.x), static_cast<float_t>(e.mY - mP.y),0.0f);
+					mNow = glm::vec3(static_cast<float>(e.mX - mP.x), static_cast<float>(e.mY - mP.y),0.0f);
 					mHeld = true;
 				}
 
@@ -185,11 +185,11 @@ namespace s9{
 			}
 
 			if (e.mFlag & MOUSE_MIDDLE_DOWN){
-				this->shift(glm::vec2(static_cast<float_t>(e.mX - mP.x) * mShift, 
-						static_cast<float_t>(e.mY - mP.y) * mShift));
+				this->shift(glm::vec2(static_cast<float>(e.mX - mP.x) * mShift, 
+						static_cast<float>(e.mY - mP.y) * mShift));
 			}
 
-			mP = glm::vec3(static_cast<float_t>(e.mX), static_cast<float_t>(e.mY),0.0f);
+			mP = glm::vec3(static_cast<float>(e.mX), static_cast<float>(e.mY),0.0f);
 		}
 
 		/*

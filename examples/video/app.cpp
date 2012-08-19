@@ -26,17 +26,17 @@ namespace po = boost::program_options;
  */
 
 void VideoApp::init(){
-    mTestQuad = gl::Quad(640.0,320.0);
-    mShader.load("../../../shaders/quad_texture.vert", "../../../shaders/quad_texture.frag");
+    _test_quad = gl::Quad(640.0,480.0);
+    _shader.load("../../../shaders/3/quad_texture.vert", "../../../shaders/3/quad_texture.frag");
 
-  //  mTestQuad.move(glm::vec3(-0.5,-0.5,0.0));
-
-#ifdef _GEAR_X11_GLX
-    mVideo = VidCam("/dev/video0",640,320,30);
+#ifdef _GEAR_LINUX
+    _video = VidCam("/dev/video0",640, 480,30);
 #endif
 
-    link(mCamera);
+    link(_camera);
     link(*this);
+
+    glEnable(GL_TEXTURE_RECTANGLE);
 }
 
 /*
@@ -49,19 +49,20 @@ void VideoApp::display(double_t dt){
     GLfloat depth = 1.0f;
     glClearBufferfv(GL_DEPTH, 0, &depth );
 
-    mShader.bind();
+    _shader.bind();
 
     // Our matrix = the object * camera
-    glm::mat4 mvp = mCamera.getMatrix() * mTestQuad.getMatrix();
+    glm::mat4 mvp = _camera.getMatrix() * _test_quad.getMatrix();
 
-    mShader.s("uMVPMatrix",mvp);
-    mVideo.bind();
+    _shader.s("uMVPMatrix",mvp);
+    _shader.s("uBaseTex",0);
+    _video.bind();
 
-    mTestQuad.draw();
-    mVideo.unbind();
+    _test_quad.draw();
+    _video.unbind();
 
-    mShader.unbind();
-    mVideo.update();
+    _shader.unbind();
+    _video.update();
 
     CXGLERROR
 }
@@ -96,7 +97,7 @@ int main (int argc, const char * argv[]) {
     // Declare the supported options.
     po::options_description desc("Allowed options");
     desc.add_options()
-    ("help", "S9Gear Basic Application - No Options")
+    ("help", "S9Gear Video Application - No Options")
     ;
     
     po::variables_map vm;
@@ -111,7 +112,7 @@ int main (int argc, const char * argv[]) {
   
     VideoApp b;
 
-    GLFWApp a(b, 800, 600, false, argc, argv, "Video",4,0);
+    GLFWApp a(b, 800, 600, false, argc, argv, "Video");
 
     return EXIT_SUCCESS;
 

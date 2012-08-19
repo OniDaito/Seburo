@@ -16,7 +16,6 @@ FILE(REMOVE_RECURSE
   "CMakeFiles/s9gear.dir/src/gl/shader.cpp.o"
   "CMakeFiles/s9gear.dir/src/gl/glfw_app.cpp.o"
   "CMakeFiles/s9gear.dir/src/gl/glew.c.o"
-  "CMakeFiles/s9gear.dir/src/gl/shapes.cpp.o"
   "CMakeFiles/s9gear.dir/src/gl/fbo.cpp.o"
   "CMakeFiles/s9gear.dir/src/gl/video.cpp.o"
   "CMakeFiles/s9gear.dir/src/linux/colorspaces.c.o"

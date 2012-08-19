@@ -53,8 +53,8 @@ namespace s9 {
 		Geometry() {};
 		
 		Geometry(std::vector<glm::vec3> v, std::vector<glm::vec3> n) {};
-		Geometry (std::vector<float_t> v, std::vector<float_t> n) {};
-		Geometry(std::vector<float_t> v, std::vector<float_t> n, std::vector<float_t> t, std::vector<float_t> c) {};
+		Geometry (std::vector<float> v, std::vector<float> n) {};
+		Geometry(std::vector<float> v, std::vector<float> n, std::vector<float> t, std::vector<float> c) {};
 
 	protected:
 	
@@ -147,7 +147,7 @@ namespace s9 {
 	}
 	
 	template<>
-	inline Geometry<VertPNF>::Geometry (std::vector<float_t> v, std::vector<float_t> n) {
+	inline Geometry<VertPNF>::Geometry (std::vector<float> v, std::vector<float> n) {
 		_obj.reset(new SharedObj());
 		
 		if (v.size() != n.size()) { std::cerr << "S9Gear - Counts do not match" << std::endl; throw; return; }
@@ -164,7 +164,7 @@ namespace s9 {
 	
 
 	template<>
-	inline Geometry<VertPNCTF>::Geometry(std::vector<float_t> v, std::vector<float_t> n, std::vector<float_t> t, std::vector<float_t> c) {
+	inline Geometry<VertPNCTF>::Geometry(std::vector<float> v, std::vector<float> n, std::vector<float> t, std::vector<float> c) {
 		_obj.reset(new SharedObj());
 		///\todo add size checking heres
 		

@@ -33,11 +33,11 @@ namespace s9 {
 	
 	struct Double4 { double_t x,y,z,w; };
 	
-	struct Float2 { float_t x,y; };
+	struct Float2 { float x,y; };
 
-	struct Float3 { float_t x,y,z; };
+	struct Float3 { float x,y,z; };
 	
-	struct Float4 { float_t x,y,z,w;};
+	struct Float4 { float x,y,z,w;};
 	
 	///\todo uint
 	

@@ -92,9 +92,9 @@ namespace s9 {
 		glm::vec3 getUp() { return mUp;};
 		glm::vec4 getColour() { return mColour;};
 
-		virtual void yaw(float_t a);
-		virtual void pitch(float_t a);
-		virtual void roll(float_t a);
+		virtual void yaw(float a);
+		virtual void pitch(float a);
+		virtual void roll(float a);
 				
 	
 		PrimPtr getParent(){return pParent; };

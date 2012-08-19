@@ -11,6 +11,7 @@
 
 #include "s9/common.hpp"
 #include "s9/gl/common.hpp"
+#include "s9/gl/utils.hpp"
 #include "s9/image.hpp"
 
 #ifdef _GEAR_OPENCV
@@ -23,7 +24,7 @@ namespace s9 {
 
     typedef enum {
       TEXTURE_RGB,
-      TEXTURE_INTENSITY,
+      TEXTURE_GREY,
       TEXTURE_RGBA
     }TextureType;
 
@@ -35,7 +36,6 @@ namespace s9 {
     public:
       Texture() {};
       Texture(glm::vec2 size, TextureType format=TEXTURE_RGB, const char* data = NULL);
-      Texture(uint32_t w, uint32_t h, TextureType format=TEXTURE_RGB) { Texture(glm::vec2(w,h),format); };
       Texture(Image image);
 
       GLuint id() { return _obj->_id; };
@@ -76,8 +76,45 @@ namespace s9 {
     inline unsigned char * MatToGL(cv::Mat &mat) {
       return (unsigned char *)IplImage(mat).imageData; 
     };
-
 #endif
+
+    /*
+     * Streaming texture with a PBO. This need to be started,
+     * updated and then stopped.
+     */
+
+    class TextureStream {
+    public:
+      TextureStream() {};
+      TextureStream(glm::vec2 size, TextureType format);
+      ~TextureStream();
+
+      GLuint id() { return _obj->_id; };
+
+      void bind();
+      void unbind();
+
+      glm::vec2 size() {return _obj->_size;};
+
+      void update();
+
+      void setData(void *data);
+
+      void start();
+      void stop();
+
+    protected:
+      struct SharedObj {
+        GLuint _id, _texBuffer;
+        glm::vec2 _size;
+        TextureType _format;
+        void *_pboMemory,*_texData;
+      };
+
+      boost::shared_ptr <SharedObj> _obj;
+
+    };
+
   }
 }
 

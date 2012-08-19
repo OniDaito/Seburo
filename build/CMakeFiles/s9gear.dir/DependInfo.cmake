@@ -17,7 +17,6 @@ SET(CMAKE_DEPENDS_CHECK_CXX
   "/home/oni/S9Gear/src/gl/fbo.cpp" "/home/oni/S9Gear/build/CMakeFiles/s9gear.dir/src/gl/fbo.cpp.o"
   "/home/oni/S9Gear/src/gl/glfw_app.cpp" "/home/oni/S9Gear/build/CMakeFiles/s9gear.dir/src/gl/glfw_app.cpp.o"
   "/home/oni/S9Gear/src/gl/shader.cpp" "/home/oni/S9Gear/build/CMakeFiles/s9gear.dir/src/gl/shader.cpp.o"
-  "/home/oni/S9Gear/src/gl/shapes.cpp" "/home/oni/S9Gear/build/CMakeFiles/s9gear.dir/src/gl/shapes.cpp.o"
   "/home/oni/S9Gear/src/gl/texture.cpp" "/home/oni/S9Gear/build/CMakeFiles/s9gear.dir/src/gl/texture.cpp.o"
   "/home/oni/S9Gear/src/gl/video.cpp" "/home/oni/S9Gear/build/CMakeFiles/s9gear.dir/src/gl/video.cpp.o"
   "/home/oni/S9Gear/src/linux/uvc_camera.cpp" "/home/oni/S9Gear/build/CMakeFiles/s9gear.dir/src/linux/uvc_camera.cpp.o"

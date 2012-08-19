@@ -49,7 +49,7 @@ namespace s9 {
 			void bind() {_obj->_texture.bind(); };
 			void unbind() {_obj->_texture.unbind(); };
 
-			Texture getTexture() {return _obj->_texture; };
+			TextureStream getTexture() {return _obj->_texture; };
 
 			glm::vec2 size() {return _obj->_texture.size(); }
 			glm::vec2 getSize() {return size(); }
@@ -70,7 +70,7 @@ namespace s9 {
 				boost::shared_ptr<QuicktimeCamera> _cam;
 #endif
 				size_t _fps;
-				Texture _texture;
+				TextureStream _texture;
 			};
 			
 			boost::shared_ptr<SharedObj> _obj;

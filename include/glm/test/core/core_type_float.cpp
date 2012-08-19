@@ -12,9 +12,9 @@
 int test_float_size()
 {
     return
-        sizeof(glm::float_t) != sizeof(glm::lowp_float) &&
-        sizeof(glm::float_t) != sizeof(glm::mediump_float) && 
-        sizeof(glm::float_t) != sizeof(glm::highp_float);
+        sizeof(glm::float) != sizeof(glm::lowp_float) &&
+        sizeof(glm::float) != sizeof(glm::mediump_float) && 
+        sizeof(glm::float) != sizeof(glm::highp_float);
 }
 
 int test_float_precision()

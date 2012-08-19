@@ -35,6 +35,7 @@ cv::Mat Process::process(cv::Mat &in){
   for (int i = 0; i < _obj->_blocks.size(); ++i){
     result = _obj->_blocks[i]->process(result);
   }
+  _obj->_processed = true;
   return result;
 }
 
@@ -177,18 +178,62 @@ cv::Mat& BlockContours::_process(cv::Mat &in){
   vector<Vec4i> hierarchy;
 
   /// Detect edges using canny
-  Canny( in, canny_output, getValue<float_t>("thresh"), getValue<float_t>("thresh")*2, 3 );
+  Canny( in, canny_output, getValue<float>("thresh"), getValue<float>("thresh")*2, 3 );
   /// Find contours
-  findContours( canny_output, contours, hierarchy, CV_RETR_TREE, CV_CHAIN_APPROX_SIMPLE, Point(0, 0) );
+  findContours( canny_output, contours, hierarchy, CV_RETR_EXTERNAL, CV_CHAIN_APPROX_SIMPLE, Point(0, 0) );
 
   /// Draw contours
   _obj->_result = Mat::zeros( canny_output.size(), CV_8UC3 );
+  Scalar color = Scalar( 255,0,0 );
   for( int i = 0; i< contours.size(); i++ ) {
-    Scalar color = Scalar( 255,0,0 );
     drawContours( _obj->_result, contours, i, color, 2, 8, hierarchy, 0, Point() );
   }
 
   return _obj->_result;
 }
+
+
+cv::Mat& BlockSmooth::_process(cv::Mat &in) {
+  int MAX_KERNEL_LENGTH = 8;
+   if (_obj->_result.size() != in.size())
+    _obj->_result = Mat(in.size(), CV_8UC1);
+
+  for ( int i = 3; i < MAX_KERNEL_LENGTH; i = i + 2 ) { 
+    GaussianBlur( in, _obj->_result, Size( i, i ), 0, 0 );
+  }
+  return _obj->_result;
+}
+
+void BlockSmooth::_init() {
+  _obj.reset(new SharedObj());
+}
+
+   
+cv::Mat& BlockBackground::_process(cv::Mat &in){
+  if (_obj->_result.size() != in.size())
+    _obj->_result = Mat(in.size(), CV_8UC1);
+
+  _subtractor(in,_obj->_result,0.01);
+  return _obj->_result;
+
+}
+
+void BlockBackground::_init() {
+   _obj.reset(new SharedObj());
+   _subtractor = BackgroundSubtractorMOG(1, 3, 1.0);
+}
+
+
+cv::Mat& BlockHighPass::_process(cv::Mat &in) {
+
+}
+
+void BlockHighPass::_init(){
+  _obj.reset(new SharedObj());
+}
+
+
+
+
 
 #endif

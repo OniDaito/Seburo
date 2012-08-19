@@ -15,7 +15,7 @@
 namespace s9 {
 	namespace gl {
 
-		#define CXGLERROR checkError(__FUNCTION__,__LINE__,__FILE__);
+#define CXGLERROR checkError(__FUNCTION__,__LINE__,__FILE__);
 
 		inline bool checkError(const char * func, int line, const char* file) {
 			int Error;

@@ -35,6 +35,9 @@ CMAKE_COMMAND = /usr/bin/cmake
 # The command to remove a file.
 RM = /usr/bin/cmake -E remove -f
 
+# The program to use to edit the cache.
+CMAKE_EDIT_COMMAND = /usr/bin/ccmake
+
 # The top-level source directory on which CMake was run.
 CMAKE_SOURCE_DIR = /home/oni/S9Gear
 
@@ -46,8 +49,8 @@ CMAKE_BINARY_DIR = /home/oni/S9Gear/build
 
 # Special rule for the target edit_cache
 edit_cache:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running interactive CMake command-line interface..."
-	/usr/bin/cmake -i .
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake cache editor..."
+	/usr/bin/ccmake -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
 .PHONY : edit_cache
 
 # Special rule for the target edit_cache
@@ -109,17 +112,17 @@ s9gear/fast:
 .PHONY : s9gear/fast
 
 #=============================================================================
-# Target rules for targets named basic
+# Target rules for targets named picking
 
 # Build rule for target.
-basic: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 basic
-.PHONY : basic
+picking: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 picking
+.PHONY : picking
 
 # fast build rule for target.
-basic/fast:
-	$(MAKE) -f examples/basic/CMakeFiles/basic.dir/build.make examples/basic/CMakeFiles/basic.dir/build
-.PHONY : basic/fast
+picking/fast:
+	$(MAKE) -f examples/picking/CMakeFiles/picking.dir/build.make examples/picking/CMakeFiles/picking.dir/build
+.PHONY : picking/fast
 
 #=============================================================================
 # Target rules for targets named model
@@ -148,6 +151,19 @@ fbo/fast:
 .PHONY : fbo/fast
 
 #=============================================================================
+# Target rules for targets named basic
+
+# Build rule for target.
+basic: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 basic
+.PHONY : basic
+
+# fast build rule for target.
+basic/fast:
+	$(MAKE) -f examples/basic/CMakeFiles/basic.dir/build.make examples/basic/CMakeFiles/basic.dir/build
+.PHONY : basic/fast
+
+#=============================================================================
 # Target rules for targets named video
 
 # Build rule for target.
@@ -161,19 +177,6 @@ video/fast:
 .PHONY : video/fast
 
 #=============================================================================
-# Target rules for targets named picking
-
-# Build rule for target.
-picking: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 picking
-.PHONY : picking
-
-# fast build rule for target.
-picking/fast:
-	$(MAKE) -f examples/picking/CMakeFiles/picking.dir/build.make examples/picking/CMakeFiles/picking.dir/build
-.PHONY : picking/fast
-
-#=============================================================================
 # Target rules for targets named template
 
 # Build rule for target.
@@ -185,6 +188,19 @@ template: cmake_check_build_system
 template/fast:
 	$(MAKE) -f applications/template/CMakeFiles/template.dir/build.make applications/template/CMakeFiles/template.dir/build
 .PHONY : template/fast
+
+#=============================================================================
+# Target rules for targets named touchwall
+
+# Build rule for target.
+touchwall: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 touchwall
+.PHONY : touchwall
+
+# fast build rule for target.
+touchwall/fast:
+	$(MAKE) -f applications/touchwall/CMakeFiles/touchwall.dir/build.make applications/touchwall/CMakeFiles/touchwall.dir/build
+.PHONY : touchwall/fast
 
 src/asset.o: src/asset.cpp.o
 .PHONY : src/asset.o
@@ -353,30 +369,6 @@ src/gl/shader.s: src/gl/shader.cpp.s
 src/gl/shader.cpp.s:
 	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/gl/shader.cpp.s
 .PHONY : src/gl/shader.cpp.s
-
-src/gl/shapes.o: src/gl/shapes.cpp.o
-.PHONY : src/gl/shapes.o
-
-# target to build an object file
-src/gl/shapes.cpp.o:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/gl/shapes.cpp.o
-.PHONY : src/gl/shapes.cpp.o
-
-src/gl/shapes.i: src/gl/shapes.cpp.i
-.PHONY : src/gl/shapes.i
-
-# target to preprocess a source file
-src/gl/shapes.cpp.i:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/gl/shapes.cpp.i
-.PHONY : src/gl/shapes.cpp.i
-
-src/gl/shapes.s: src/gl/shapes.cpp.s
-.PHONY : src/gl/shapes.s
-
-# target to generate assembly for a file
-src/gl/shapes.cpp.s:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/gl/shapes.cpp.s
-.PHONY : src/gl/shapes.cpp.s
 
 src/gl/texture.o: src/gl/texture.cpp.o
 .PHONY : src/gl/texture.o
@@ -747,12 +739,13 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... s9gear"
-	@echo "... basic"
+	@echo "... picking"
 	@echo "... model"
 	@echo "... fbo"
+	@echo "... basic"
 	@echo "... video"
-	@echo "... picking"
 	@echo "... template"
+	@echo "... touchwall"
 	@echo "... src/asset.o"
 	@echo "... src/asset.i"
 	@echo "... src/asset.s"
@@ -774,9 +767,6 @@ help:
 	@echo "... src/gl/shader.o"
 	@echo "... src/gl/shader.i"
 	@echo "... src/gl/shader.s"
-	@echo "... src/gl/shapes.o"
-	@echo "... src/gl/shapes.i"
-	@echo "... src/gl/shapes.s"
 	@echo "... src/gl/texture.o"
 	@echo "... src/gl/texture.i"
 	@echo "... src/gl/texture.s"

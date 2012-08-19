@@ -35,7 +35,7 @@ void Camera::reset() {
 
  
 
-void Camera::setRatio(float_t r) {
+void Camera::setRatio(float r) {
 	mR = r;
 	compute();
 }
@@ -75,7 +75,7 @@ void OrbitCamera::compute() {
 	mProjectionMatrix = glm::perspective(mField, mR, mNear, mFar);
 }
 
-void OrbitCamera::zoom(float_t z) {
+void OrbitCamera::zoom(float z) {
 	glm::vec3 dir = mPos - mLook;
 	dir = glm::normalize(dir);
 	dir *= z;
@@ -96,7 +96,7 @@ void OrbitCamera::shift(glm::vec2 s) {
 	compute();
 }
 
-void OrbitCamera::yaw(float_t a){
+void OrbitCamera::yaw(float a){
 	glm::quat q_rotate;
 	q_rotate = glm::rotate( q_rotate, a, mUp );
 	mUp = q_rotate * mUp;
@@ -104,7 +104,7 @@ void OrbitCamera::yaw(float_t a){
 	compute();
 }
 
-void OrbitCamera::pitch(float_t a){
+void OrbitCamera::pitch(float a){
 	glm::quat q_rotate;
 	
 	glm::vec3 right = glm::normalize(glm::cross(mUp, glm::normalize(mLook - mPos)));
@@ -116,7 +116,7 @@ void OrbitCamera::pitch(float_t a){
 	compute();
 }
 
-void OrbitCamera::roll(float_t a){
+void OrbitCamera::roll(float a){
 	glm::quat q_rotate;
 	q_rotate = glm::rotate( q_rotate, a,  glm::normalize(mLook - mPos));
 	mUp = q_rotate * mUp;
@@ -130,8 +130,8 @@ void OrbitCamera::roll(float_t a){
  
 void ScreenCamera::compute() {
 	mViewMatrix = glm::mat4(1.0f);
-	mProjectionMatrix = glm::ortho(static_cast<float_t>(0.0), static_cast<float_t>(mW), 
-			static_cast<float_t>(mH), static_cast<float_t>(0.0));
+	mProjectionMatrix = glm::ortho(static_cast<float>(0.0), static_cast<float>(mW), 
+			static_cast<float>(mH), static_cast<float>(0.0));
 }
 
 

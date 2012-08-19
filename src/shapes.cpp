@@ -14,13 +14,15 @@ using namespace boost::assign;
 
 using namespace s9;
 
-Quad::Quad(float_t w, float_t h) {
+Quad::Quad(float w, float h) {
 	
+	_obj.reset(new SharedObj);
+
 	vector<uint32_t> indices;
-	vector<float_t> verts;
-	vector<float_t> texcoords;
-	vector<float_t> colours;
-	vector<float_t> normals;
+	vector<float> verts;
+	vector<float> texcoords;
+	vector<float> colours;
+	vector<float> normals;
 	
 	// Quad for Camera drawing
 	indices += 0,3,1,3,2,1;
@@ -44,24 +46,26 @@ Quad::Quad(float_t w, float_t h) {
 		0.0f,1.0f,0.0f,1.0f,
 		0.0f,0.0f,0.0f,1.0f;
 	
-	mGeom = GeometryFullFloat(verts,normals,texcoords,colours);
+	_obj->_geom = GeometryFullFloat(verts,normals,texcoords,colours);
 	
-	mGeom.addIndices(indices);
+	_obj->_geom.addIndices(indices);
 }
 
 ///\todo
-void Quad::resize(float_t w, float_t h){
+void Quad::resize(float w, float h){
 
 }
 
 
 
-Triangle::Triangle(float_t w, float_t h){
+Triangle::Triangle(float w, float h){
 	
-	vector<float_t> verts;
-	vector<float_t> texcoords;
-	vector<float_t> colours;
-	vector<float_t> normals;
+	_obj.reset(new SharedObj);
+	
+	vector<float> verts;
+	vector<float> texcoords;
+	vector<float> colours;
+	vector<float> normals;
 	
 	// Quad for Camera drawing
 	verts += 0.0f,0.0f,0.0f,
@@ -80,11 +84,11 @@ Triangle::Triangle(float_t w, float_t h){
 		0.0f,0.0f,1.0f,1.0f,
 		0.0f,1.0f,0.0f,1.0f;
 		
-	mGeom = GeometryFullFloat(verts,normals,texcoords,colours);
+	_obj->_geom = GeometryFullFloat(verts,normals,texcoords,colours);
 	
 }
 
 ///\todo
-void Triangle::resize(float_t w, float_t h) {
+void Triangle::resize(float w, float h) {
 
 }

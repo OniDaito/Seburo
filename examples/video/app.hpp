@@ -37,10 +37,10 @@ namespace s9 {
 		void processEvent(ResizeEvent e);
 		
 	protected:
-		gl::Quad mTestQuad;
-		gl::Shader mShader;
-		ScreenCamera mCamera;
-		gl::VidCam mVideo;
+		gl::Quad _test_quad;
+		gl::Shader _shader;
+		ScreenCamera _camera;
+		gl::VidCam _video;
 		
 	};
 }

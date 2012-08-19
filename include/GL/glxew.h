@@ -418,7 +418,7 @@ typedef GLXContext ( * PFNGLXCREATECONTEXTATTRIBSARBPROC) (Display* dpy, GLXFBCo
 #define GLX_ARB_fbconfig_float 1
 
 #define GLX_RGBA_FLOAT_BIT 0x00000004
-#define GLX_RGBA_FLOAT_TYPE 0x20B9
+#define GLX_RGBA_floatYPE 0x20B9
 
 #define GLXEW_ARB_fbconfig_float GLXEW_GET_VAR(__GLXEW_ARB_fbconfig_float)
 
@@ -550,7 +550,7 @@ typedef void ( * PFNGLXRELEASETEXIMAGEATIPROC) (Display *dpy, GLXPbuffer pbuf, i
 #define GLX_EXT_fbconfig_packed_float 1
 
 #define GLX_RGBA_UNSIGNED_FLOAT_BIT_EXT 0x00000008
-#define GLX_RGBA_UNSIGNED_FLOAT_TYPE_EXT 0x20B1
+#define GLX_RGBA_UNSIGNED_floatYPE_EXT 0x20B1
 
 #define GLXEW_EXT_fbconfig_packed_float GLXEW_GET_VAR(__GLXEW_EXT_fbconfig_packed_float)
 

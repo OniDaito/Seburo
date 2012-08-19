@@ -28,15 +28,15 @@ namespace s9 {
 	class Asset : public Primitive {
 	protected:
 		struct SharedObj{
-			T mGeom;
+			T _geom;
 		};
-		boost::shared_ptr<SharedObj> mObj;
+		boost::shared_ptr<SharedObj> _obj;
 
 	public:
 		Asset() {};
-		virtual operator int() const { return mObj.use_count() > 0; };
-		Asset(T geom) {mObj.reset(new SharedObj()); mObj->mGeom = geom; }
-		T getGeometry() { return mObj->mGeom; };
+		virtual operator int() const { return _obj.use_count() > 0; };
+		Asset(T geom) {_obj.reset(new SharedObj()); _obj->_geom = geom; }
+		T getGeometry() { return _obj->_geom; };
 
 	};
 

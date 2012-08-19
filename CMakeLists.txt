@@ -233,16 +233,19 @@ endif()
 # Go into examples directory and build these
 
 if (NOT TARGET examples)
-  add_subdirectory("${CMAKE_SOURCE_DIR}/examples/basic")
-  add_subdirectory("${CMAKE_SOURCE_DIR}/examples/model")
-  add_subdirectory("${CMAKE_SOURCE_DIR}/examples/fbo")
-  add_subdirectory("${CMAKE_SOURCE_DIR}/examples/video")
-  add_subdirectory("${CMAKE_SOURCE_DIR}/examples/picking")
-endif() 
+  FILE(GLOB examples examples/*)
+  foreach(example ${examples})
+    add_subdirectory(${example})
+  endforeach()
+endif()
+
 
 #####################################################################
-# Build Leeds Application
+# Build Applications
 
 if (NOT TARGET applications)
-  add_subdirectory("${CMAKE_SOURCE_DIR}/applications/template")
-endif() 
+  FILE(GLOB applications applications/*)
+  foreach(application ${applications})
+    add_subdirectory(${application})
+  endforeach()
+endif()

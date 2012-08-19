@@ -1,4 +1,4 @@
-The system is: Linux - 3.2.0-27-generic-pae - i686
+The system is: Linux - 3.2.0-29-generic-pae - i686
 Compiling the C compiler identification source file "CMakeCCompilerId.c" succeeded.
 Compiler: /usr/bin/gcc 
 Build flags: 

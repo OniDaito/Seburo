@@ -16,8 +16,6 @@ GLFWApp* GLFWApp::pThis;
 string GLFWApp::mTitle;
 
 
-
-
 void GLFWApp::mainLoop() {
 	pThis->mRunning = true;
 
@@ -247,7 +245,7 @@ void GLFWApp::_update(){
 		glfwTerminate();
 		exit( EXIT_FAILURE );
 	}
-CXGLERROR
+	CXGLERROR
 	// Call only after one window / context has been created!
 	
 	glewExperimental = true;
@@ -268,8 +266,8 @@ CXGLERROR
 	pThis->_app.init();
 
 	// fire a cheeky resize event to make sure all is well
-	//ResizeEvent e (w,h,glfwGetTime());
-	//pThis->_app.fireEvent(e);
+	ResizeEvent e (w,h,glfwGetTime());
+	pThis->_app.fireEvent(e);
 
 	// Fire up the thread to keep update happy
 

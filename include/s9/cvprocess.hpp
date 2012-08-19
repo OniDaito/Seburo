@@ -43,6 +43,7 @@ namespace s9{
           _obj->_values[tag] = boost::shared_ptr<T>(new T(value));
       }
 
+      cv::Mat& getResult() { return _obj->_result; };
 
       ///\todo wrong key should not fall over but warn
       template <class T>
@@ -71,15 +72,22 @@ namespace s9{
 
     class Process {
     public:
-      Process() {};
-   
+      Process() { };
+
+      virtual operator int() const { return _obj->_processed; };
+
+
       cv::Mat process(cv::Mat &in);
+
+      cv::Mat& getResult() { return _obj->_blocks.back()->getResult(); };
     
       template<class T>
         Process& addBlock() {
 
-          if (_obj == boost::shared_ptr<SharedObj>())
+          if (_obj == boost::shared_ptr<SharedObj>()) {
              _obj.reset(new SharedObj());
+             _obj->_processed = false;
+           }
 
           _obj->_blocks.push_back( boost::shared_ptr<T>(new T));
           _obj->_blocks.back()->_init();
@@ -92,7 +100,8 @@ namespace s9{
 
     protected:
       struct SharedObj {
-        std::vector<boost::shared_ptr<ProcessBlock> > _blocks; 
+        std::vector<boost::shared_ptr<ProcessBlock> > _blocks;
+        bool _processed;
       };
 
       boost::shared_ptr<SharedObj> _obj;
@@ -127,6 +136,29 @@ namespace s9{
 
   
     class BlockContours : public ProcessBlock {
+
+    protected:
+      cv::Mat& _process(cv::Mat &in);
+      void _init();
+    };
+
+    class BlockSmooth : public ProcessBlock {
+
+    protected:
+      cv::Mat& _process(cv::Mat &in);
+      void _init();
+    };
+
+    class BlockBackground : public ProcessBlock {
+
+    protected:
+      cv::Mat& _process(cv::Mat &in);
+      void _init();
+
+      cv::BackgroundSubtractorMOG _subtractor;
+    };
+
+    class BlockHighPass : public ProcessBlock {
 
     protected:
       cv::Mat& _process(cv::Mat &in);

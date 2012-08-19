@@ -21,8 +21,8 @@ const struct aiScene* AssetImporter::pScene;
 
 AssetPtr AssetImporter::_load (const struct aiScene *sc, const struct aiNode* nd, AssetPtr p ) {
 
-	vector<float_t> verts;
-	vector<float_t> norms;
+	vector<float> verts;
+	vector<float> norms;
 	vector<uint32_t> indices;
 
 

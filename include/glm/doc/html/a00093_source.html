@@ -90,28 +90,28 @@
 <a name="l00035"></a>00035 <span class="keyword">namespace </span>glm
 <a name="l00036"></a>00036 {
 <a name="l00037"></a>00037 <span class="preprocessor">#ifdef GLM_USE_HALF_SCALAR</span>
-<a name="l00038"></a>00038 <span class="preprocessor"></span>    <span class="keyword">typedef</span> <a class="code" href="a00143.html#ga09cefb48e7a630c2e3bfb3d23cd88e44" title="Type for half-precision floating-point numbers.">detail::half</a>                lowp_float_t;
+<a name="l00038"></a>00038 <span class="preprocessor"></span>    <span class="keyword">typedef</span> <a class="code" href="a00143.html#ga09cefb48e7a630c2e3bfb3d23cd88e44" title="Type for half-precision floating-point numbers.">detail::half</a>                lowp_float;
 <a name="l00039"></a>00039 <span class="preprocessor">#else//GLM_USE_HALF_SCALAR</span>
-<a name="l00040"></a>00040 <span class="preprocessor"></span>    <span class="keyword">typedef</span> <span class="keywordtype">float</span>                               lowp_float_t;
+<a name="l00040"></a>00040 <span class="preprocessor"></span>    <span class="keyword">typedef</span> <span class="keywordtype">float</span>                               lowp_float;
 <a name="l00041"></a>00041 <span class="preprocessor">#endif//GLM_USE_HALF_SCALAR</span>
-<a name="l00042"></a>00042 <span class="preprocessor"></span>    <span class="keyword">typedef</span> <span class="keywordtype">float</span>                               mediump_float_t;
-<a name="l00043"></a>00043     <span class="keyword">typedef</span> <span class="keywordtype">double</span>                              highp_float_t;
+<a name="l00042"></a>00042 <span class="preprocessor"></span>    <span class="keyword">typedef</span> <span class="keywordtype">float</span>                               mediump_float;
+<a name="l00043"></a>00043     <span class="keyword">typedef</span> <span class="keywordtype">double</span>                              highp_float;
 <a name="l00044"></a>00044 
 <a name="l00047"></a>00047 
-<a name="l00053"></a><a class="code" href="a00141.html#ga358d69e11b1c0f6c7c469e0d39ab7fd1">00053</a>     <span class="keyword">typedef</span> lowp_float_t                <a class="code" href="a00141.html#ga358d69e11b1c0f6c7c469e0d39ab7fd1" title="Low precision floating-point numbers.">lowp_float</a>;
+<a name="l00053"></a><a class="code" href="a00141.html#ga358d69e11b1c0f6c7c469e0d39ab7fd1">00053</a>     <span class="keyword">typedef</span> lowp_float                <a class="code" href="a00141.html#ga358d69e11b1c0f6c7c469e0d39ab7fd1" title="Low precision floating-point numbers.">lowp_float</a>;
 <a name="l00054"></a>00054     
-<a name="l00060"></a><a class="code" href="a00141.html#ga280c68f537f4b1e03a00b23e62573b98">00060</a>     <span class="keyword">typedef</span> mediump_float_t     <a class="code" href="a00141.html#ga280c68f537f4b1e03a00b23e62573b98" title="Medium precision floating-point numbers.">mediump_float</a>;
+<a name="l00060"></a><a class="code" href="a00141.html#ga280c68f537f4b1e03a00b23e62573b98">00060</a>     <span class="keyword">typedef</span> mediump_float     <a class="code" href="a00141.html#ga280c68f537f4b1e03a00b23e62573b98" title="Medium precision floating-point numbers.">mediump_float</a>;
 <a name="l00061"></a>00061     
-<a name="l00067"></a><a class="code" href="a00141.html#ga6e95694987ba35af6f736638be39626a">00067</a>     <span class="keyword">typedef</span> highp_float_t               <a class="code" href="a00141.html#ga6e95694987ba35af6f736638be39626a" title="High precision floating-point numbers.">highp_float</a>;
+<a name="l00067"></a><a class="code" href="a00141.html#ga6e95694987ba35af6f736638be39626a">00067</a>     <span class="keyword">typedef</span> highp_float               <a class="code" href="a00141.html#ga6e95694987ba35af6f736638be39626a" title="High precision floating-point numbers.">highp_float</a>;
 <a name="l00068"></a>00068 
 <a name="l00069"></a>00069 <span class="preprocessor">#if(!defined(GLM_PRECISION_HIGHP_FLOAT) &amp;&amp; !defined(GLM_PRECISION_MEDIUMP_FLOAT) &amp;&amp; !defined(GLM_PRECISION_LOWP_FLOAT))</span>
-<a name="l00070"></a>00070 <span class="preprocessor"></span>        <span class="keyword">typedef</span> <a class="code" href="a00141.html#ga280c68f537f4b1e03a00b23e62573b98" title="Medium precision floating-point numbers.">mediump_float</a>                           float_t;
+<a name="l00070"></a>00070 <span class="preprocessor"></span>        <span class="keyword">typedef</span> <a class="code" href="a00141.html#ga280c68f537f4b1e03a00b23e62573b98" title="Medium precision floating-point numbers.">mediump_float</a>                           float;
 <a name="l00071"></a>00071 <span class="preprocessor">#elif(defined(GLM_PRECISION_HIGHP_FLOAT) &amp;&amp; !defined(GLM_PRECISION_MEDIUMP_FLOAT) &amp;&amp; !defined(GLM_PRECISION_LOWP_FLOAT))</span>
-<a name="l00072"></a>00072 <span class="preprocessor"></span>        <span class="keyword">typedef</span> <a class="code" href="a00141.html#ga6e95694987ba35af6f736638be39626a" title="High precision floating-point numbers.">highp_float</a>                  float_t;
+<a name="l00072"></a>00072 <span class="preprocessor"></span>        <span class="keyword">typedef</span> <a class="code" href="a00141.html#ga6e95694987ba35af6f736638be39626a" title="High precision floating-point numbers.">highp_float</a>                  float;
 <a name="l00073"></a>00073 <span class="preprocessor">#elif(!defined(GLM_PRECISION_HIGHP_FLOAT) &amp;&amp; defined(GLM_PRECISION_MEDIUMP_FLOAT) &amp;&amp; !defined(GLM_PRECISION_LOWP_FLOAT))</span>
-<a name="l00074"></a>00074 <span class="preprocessor"></span>        <span class="keyword">typedef</span> <a class="code" href="a00141.html#ga280c68f537f4b1e03a00b23e62573b98" title="Medium precision floating-point numbers.">mediump_float</a>                           float_t;
+<a name="l00074"></a>00074 <span class="preprocessor"></span>        <span class="keyword">typedef</span> <a class="code" href="a00141.html#ga280c68f537f4b1e03a00b23e62573b98" title="Medium precision floating-point numbers.">mediump_float</a>                           float;
 <a name="l00075"></a>00075 <span class="preprocessor">#elif(!defined(GLM_PRECISION_HIGHP_FLOAT) &amp;&amp; !defined(GLM_PRECISION_MEDIUMP_FLOAT) &amp;&amp; defined(GLM_PRECISION_LOWP_FLOAT))</span>
-<a name="l00076"></a>00076 <span class="preprocessor"></span>        <span class="keyword">typedef</span> <a class="code" href="a00141.html#ga358d69e11b1c0f6c7c469e0d39ab7fd1" title="Low precision floating-point numbers.">lowp_float</a>                                      float_t;
+<a name="l00076"></a>00076 <span class="preprocessor"></span>        <span class="keyword">typedef</span> <a class="code" href="a00141.html#ga358d69e11b1c0f6c7c469e0d39ab7fd1" title="Low precision floating-point numbers.">lowp_float</a>                                      float;
 <a name="l00077"></a>00077 <span class="preprocessor">#else</span>
 <a name="l00078"></a>00078 <span class="preprocessor"></span><span class="preprocessor">#       error &quot;GLM error: multiple default precision requested for floating-point types&quot;</span>
 <a name="l00079"></a>00079 <span class="preprocessor"></span><span class="preprocessor">#endif</span>

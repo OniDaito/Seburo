@@ -13,7 +13,7 @@
 #include "s9/asset.hpp"
 #include "s9/camera.hpp"
 #include "s9/gl/shader.hpp"
-#include "s9/gl/glasset.hpp"
+#include "s9/gl/asset.hpp"
 #include "s9/gl/glfw_app.hpp"
 
 #include <anttweakbar/AntTweakBar.h>
@@ -36,7 +36,7 @@ namespace s9 {
 		void processEvent(ResizeEvent e);
 		
 	protected:
-		gl::GLAsset<GeometryPNF> mGeometry;
+		gl::Asset<GeometryPNF> mGeometry;
 		gl::Shader mShader;
 		InertiaCam mCamera;
 		

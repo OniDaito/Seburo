@@ -31,6 +31,9 @@ CMAKE_COMMAND = /usr/bin/cmake
 # The command to remove a file.
 RM = /usr/bin/cmake -E remove -f
 
+# The program to use to edit the cache.
+CMAKE_EDIT_COMMAND = /usr/bin/ccmake
+
 # The top-level source directory on which CMake was run.
 CMAKE_SOURCE_DIR = /home/oni/S9Gear
 
@@ -437,32 +440,9 @@ CMakeFiles/s9gear.dir/src/gl/glew.c.o.provides: CMakeFiles/s9gear.dir/src/gl/gle
 
 CMakeFiles/s9gear.dir/src/gl/glew.c.o.provides.build: CMakeFiles/s9gear.dir/src/gl/glew.c.o
 
-CMakeFiles/s9gear.dir/src/gl/shapes.cpp.o: CMakeFiles/s9gear.dir/flags.make
-CMakeFiles/s9gear.dir/src/gl/shapes.cpp.o: ../src/gl/shapes.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/oni/S9Gear/build/CMakeFiles $(CMAKE_PROGRESS_18)
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object CMakeFiles/s9gear.dir/src/gl/shapes.cpp.o"
-	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/s9gear.dir/src/gl/shapes.cpp.o -c /home/oni/S9Gear/src/gl/shapes.cpp
-
-CMakeFiles/s9gear.dir/src/gl/shapes.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/s9gear.dir/src/gl/shapes.cpp.i"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/oni/S9Gear/src/gl/shapes.cpp > CMakeFiles/s9gear.dir/src/gl/shapes.cpp.i
-
-CMakeFiles/s9gear.dir/src/gl/shapes.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/s9gear.dir/src/gl/shapes.cpp.s"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/oni/S9Gear/src/gl/shapes.cpp -o CMakeFiles/s9gear.dir/src/gl/shapes.cpp.s
-
-CMakeFiles/s9gear.dir/src/gl/shapes.cpp.o.requires:
-.PHONY : CMakeFiles/s9gear.dir/src/gl/shapes.cpp.o.requires
-
-CMakeFiles/s9gear.dir/src/gl/shapes.cpp.o.provides: CMakeFiles/s9gear.dir/src/gl/shapes.cpp.o.requires
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/gl/shapes.cpp.o.provides.build
-.PHONY : CMakeFiles/s9gear.dir/src/gl/shapes.cpp.o.provides
-
-CMakeFiles/s9gear.dir/src/gl/shapes.cpp.o.provides.build: CMakeFiles/s9gear.dir/src/gl/shapes.cpp.o
-
 CMakeFiles/s9gear.dir/src/gl/fbo.cpp.o: CMakeFiles/s9gear.dir/flags.make
 CMakeFiles/s9gear.dir/src/gl/fbo.cpp.o: ../src/gl/fbo.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/oni/S9Gear/build/CMakeFiles $(CMAKE_PROGRESS_19)
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/oni/S9Gear/build/CMakeFiles $(CMAKE_PROGRESS_18)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object CMakeFiles/s9gear.dir/src/gl/fbo.cpp.o"
 	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/s9gear.dir/src/gl/fbo.cpp.o -c /home/oni/S9Gear/src/gl/fbo.cpp
 
@@ -485,7 +465,7 @@ CMakeFiles/s9gear.dir/src/gl/fbo.cpp.o.provides.build: CMakeFiles/s9gear.dir/src
 
 CMakeFiles/s9gear.dir/src/gl/video.cpp.o: CMakeFiles/s9gear.dir/flags.make
 CMakeFiles/s9gear.dir/src/gl/video.cpp.o: ../src/gl/video.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/oni/S9Gear/build/CMakeFiles $(CMAKE_PROGRESS_20)
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/oni/S9Gear/build/CMakeFiles $(CMAKE_PROGRESS_19)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object CMakeFiles/s9gear.dir/src/gl/video.cpp.o"
 	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/s9gear.dir/src/gl/video.cpp.o -c /home/oni/S9Gear/src/gl/video.cpp
 
@@ -508,7 +488,7 @@ CMakeFiles/s9gear.dir/src/gl/video.cpp.o.provides.build: CMakeFiles/s9gear.dir/s
 
 CMakeFiles/s9gear.dir/src/linux/colorspaces.c.o: CMakeFiles/s9gear.dir/flags.make
 CMakeFiles/s9gear.dir/src/linux/colorspaces.c.o: ../src/linux/colorspaces.c
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/oni/S9Gear/build/CMakeFiles $(CMAKE_PROGRESS_21)
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/oni/S9Gear/build/CMakeFiles $(CMAKE_PROGRESS_20)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building C object CMakeFiles/s9gear.dir/src/linux/colorspaces.c.o"
 	/usr/bin/gcc  $(C_DEFINES) $(C_FLAGS) -o CMakeFiles/s9gear.dir/src/linux/colorspaces.c.o   -c /home/oni/S9Gear/src/linux/colorspaces.c
 
@@ -531,7 +511,7 @@ CMakeFiles/s9gear.dir/src/linux/colorspaces.c.o.provides.build: CMakeFiles/s9gea
 
 CMakeFiles/s9gear.dir/src/linux/uvc_camera.cpp.o: CMakeFiles/s9gear.dir/flags.make
 CMakeFiles/s9gear.dir/src/linux/uvc_camera.cpp.o: ../src/linux/uvc_camera.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/oni/S9Gear/build/CMakeFiles $(CMAKE_PROGRESS_22)
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/oni/S9Gear/build/CMakeFiles $(CMAKE_PROGRESS_21)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object CMakeFiles/s9gear.dir/src/linux/uvc_camera.cpp.o"
 	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/s9gear.dir/src/linux/uvc_camera.cpp.o -c /home/oni/S9Gear/src/linux/uvc_camera.cpp
 
@@ -554,7 +534,7 @@ CMakeFiles/s9gear.dir/src/linux/uvc_camera.cpp.o.provides.build: CMakeFiles/s9ge
 
 CMakeFiles/s9gear.dir/src/linux/jpeg.c.o: CMakeFiles/s9gear.dir/flags.make
 CMakeFiles/s9gear.dir/src/linux/jpeg.c.o: ../src/linux/jpeg.c
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/oni/S9Gear/build/CMakeFiles $(CMAKE_PROGRESS_23)
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/oni/S9Gear/build/CMakeFiles $(CMAKE_PROGRESS_22)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building C object CMakeFiles/s9gear.dir/src/linux/jpeg.c.o"
 	/usr/bin/gcc  $(C_DEFINES) $(C_FLAGS) -o CMakeFiles/s9gear.dir/src/linux/jpeg.c.o   -c /home/oni/S9Gear/src/linux/jpeg.c
 
@@ -594,7 +574,6 @@ s9gear_OBJECTS = \
 "CMakeFiles/s9gear.dir/src/gl/shader.cpp.o" \
 "CMakeFiles/s9gear.dir/src/gl/glfw_app.cpp.o" \
 "CMakeFiles/s9gear.dir/src/gl/glew.c.o" \
-"CMakeFiles/s9gear.dir/src/gl/shapes.cpp.o" \
 "CMakeFiles/s9gear.dir/src/gl/fbo.cpp.o" \
 "CMakeFiles/s9gear.dir/src/gl/video.cpp.o" \
 "CMakeFiles/s9gear.dir/src/linux/colorspaces.c.o" \
@@ -621,7 +600,6 @@ libs9gear.so: CMakeFiles/s9gear.dir/src/gl/texture.cpp.o
 libs9gear.so: CMakeFiles/s9gear.dir/src/gl/shader.cpp.o
 libs9gear.so: CMakeFiles/s9gear.dir/src/gl/glfw_app.cpp.o
 libs9gear.so: CMakeFiles/s9gear.dir/src/gl/glew.c.o
-libs9gear.so: CMakeFiles/s9gear.dir/src/gl/shapes.cpp.o
 libs9gear.so: CMakeFiles/s9gear.dir/src/gl/fbo.cpp.o
 libs9gear.so: CMakeFiles/s9gear.dir/src/gl/video.cpp.o
 libs9gear.so: CMakeFiles/s9gear.dir/src/linux/colorspaces.c.o
@@ -672,7 +650,6 @@ CMakeFiles/s9gear.dir/requires: CMakeFiles/s9gear.dir/src/gl/texture.cpp.o.requi
 CMakeFiles/s9gear.dir/requires: CMakeFiles/s9gear.dir/src/gl/shader.cpp.o.requires
 CMakeFiles/s9gear.dir/requires: CMakeFiles/s9gear.dir/src/gl/glfw_app.cpp.o.requires
 CMakeFiles/s9gear.dir/requires: CMakeFiles/s9gear.dir/src/gl/glew.c.o.requires
-CMakeFiles/s9gear.dir/requires: CMakeFiles/s9gear.dir/src/gl/shapes.cpp.o.requires
 CMakeFiles/s9gear.dir/requires: CMakeFiles/s9gear.dir/src/gl/fbo.cpp.o.requires
 CMakeFiles/s9gear.dir/requires: CMakeFiles/s9gear.dir/src/gl/video.cpp.o.requires
 CMakeFiles/s9gear.dir/requires: CMakeFiles/s9gear.dir/src/linux/colorspaces.c.o.requires

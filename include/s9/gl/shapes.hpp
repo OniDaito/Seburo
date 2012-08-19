@@ -14,6 +14,7 @@
 #include "utils.hpp"
 #include "../shapes.hpp"
 #include "../primitive.hpp"
+#include "s9/gl/asset.hpp"
 
 namespace s9 {
 
@@ -24,34 +25,32 @@ namespace s9 {
 		 * Extends the basic Quad for OpenGL stuff
 		 */
 
-		class Quad : public s9::Quad, public ViaVAO {
-		protected:
-			void _gen();
-			void _allocate();
+		class Quad : public s9::gl::Asset<GeometryFullFloat> {
 
 		public:
 			Quad(){};
-			Quad(float_t w, float_t h) : s9::Quad(w,h) { mVAO = 0; }
-			void draw();
-			
-	
+			Quad(float w, float h) {
+				s9::Quad q (w,h);
+				_obj.reset(new SharedObj()); 
+				_obj->_geom = q.getGeometry();
+			}
 		};
 
 		/*
 		 * Extend geometry for an OpenGL Triangle
 		 */
 
-		class Triangle : public s9::Triangle, public ViaVAO {
+/*		class Triangle : public s9::Triangle, public ViaVAO {
 		protected:
 			void _gen();
 			void _allocate();
 	
 		public:
 			Triangle() {};
-			Triangle(float_t w, float_t h) : s9::Triangle(w,h) { mVAO = 0; }
+			Triangle(float w, float h) : s9::Triangle(w,h) { mVAO = 0; }
 			void draw();
 		
-		};
+		};*/
 
 	}
 

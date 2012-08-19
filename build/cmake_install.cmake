@@ -34,12 +34,13 @@ ENDIF(NOT DEFINED CMAKE_INSTALL_SO_NO_EXE)
 
 IF(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
-  INCLUDE("/home/oni/S9Gear/build/examples/basic/cmake_install.cmake")
+  INCLUDE("/home/oni/S9Gear/build/examples/picking/cmake_install.cmake")
   INCLUDE("/home/oni/S9Gear/build/examples/model/cmake_install.cmake")
   INCLUDE("/home/oni/S9Gear/build/examples/fbo/cmake_install.cmake")
+  INCLUDE("/home/oni/S9Gear/build/examples/basic/cmake_install.cmake")
   INCLUDE("/home/oni/S9Gear/build/examples/video/cmake_install.cmake")
-  INCLUDE("/home/oni/S9Gear/build/examples/picking/cmake_install.cmake")
   INCLUDE("/home/oni/S9Gear/build/applications/template/cmake_install.cmake")
+  INCLUDE("/home/oni/S9Gear/build/applications/touchwall/cmake_install.cmake")
 
 ENDIF(NOT CMAKE_INSTALL_LOCAL_ONLY)
 

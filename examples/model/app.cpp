@@ -29,7 +29,7 @@ void ModelApp::init(){
  
     mShader.load("../../../shaders/basic_lighting.vert", "../../../shaders/basic_lighting.frag");
 
-    mGeometry = gl::GLAsset<GeometryPNF>( AssetImporter::load("../../../data/bunny.ply"));
+    mGeometry = gl::Asset<GeometryPNF>( AssetImporter::load("../../../data/bunny.ply"));
     mGeometry.setScale(glm::vec3(30.0,30.0,30.0));
    
     mCamera.move(glm::vec3(0,0,20.0f));
@@ -85,7 +85,7 @@ void ModelApp::processEvent(MouseEvent e){
 void ModelApp::processEvent(ResizeEvent e){
     cout << "Window Resized" << endl;
     glViewport(0,0,e.mW,e.mH);
-    mCamera.setRatio( static_cast<float_t>(e.mW) / e.mH);
+    mCamera.setRatio( static_cast<float>(e.mW) / e.mH);
 }
 
 void ModelApp::processEvent(KeyboardEvent e){
