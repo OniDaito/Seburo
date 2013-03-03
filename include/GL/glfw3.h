@@ -71,6 +71,7 @@ extern "C" {
  */
 #if __MINGW64__
  #define WINAPI
+#include <stddef.h>
 #endif
 
 /* The following three defines are here solely to make some Windows-based
@@ -109,10 +110,11 @@ extern "C" {
  #define GLFW_CALLBACK_DEFINED
 #endif /* CALLBACK */
 
-/* Most <GL/glu.h> variants on Windows need wchar_t */
-#if defined(_WIN32)
- #include <stddef.h>
-#endif
+/* Microsoft Visual C++, Borland C++ and Pelles C <GL*glu.h> needs wchar_t */
+#if defined(_WIN32) && (defined(_MSC_VER) || defined(__BORLANDC__) || defined(__POCC__)) && !defined(_WCHAR_T_DEFINED)
+ typedef unsigned short wchar_t;
+ #define _WCHAR_T_DEFINED
+#endif /* _WCHAR_T_DEFINED */
 
 
 /* ---------------- GLFW related system specific defines ----------------- */
@@ -381,17 +383,19 @@ extern "C" {
  * Other definitions
  *************************************************************************/
 
-/* glfwCreateWindow modes */
+/* glfwOpenWindow modes */
 #define GLFW_WINDOWED             0x00010001
 #define GLFW_FULLSCREEN           0x00010002
 
 /* glfwGetWindowParam tokens */
 #define GLFW_ACTIVE               0x00020001
 #define GLFW_ICONIFIED            0x00020002
-#define GLFW_CLOSE_REQUESTED      0x00020003
+#define GLFW_ACCELERATED          0x00020003
 #define GLFW_OPENGL_REVISION      0x00020004
 
-/* glfwWindowHint tokens */
+/* The following constants are used for both glfwGetWindowParam
+ * and glfwOpenWindowHint
+ */
 #define GLFW_RED_BITS             0x00021000
 #define GLFW_GREEN_BITS           0x00021001
 #define GLFW_BLUE_BITS            0x00021002
@@ -407,10 +411,6 @@ extern "C" {
 #define GLFW_STEREO               0x0002100C
 #define GLFW_WINDOW_RESIZABLE     0x0002100D
 #define GLFW_FSAA_SAMPLES         0x0002100E
-
-/* The following constants are used with both glfwGetWindowParam
- * and glfwWindowHint
- */
 #define GLFW_OPENGL_VERSION_MAJOR 0x0002100F
 #define GLFW_OPENGL_VERSION_MINOR 0x00021010
 #define GLFW_OPENGL_FORWARD_COMPAT 0x00021011
@@ -449,7 +449,7 @@ extern "C" {
 /* glfwGetError/glfwErrorString tokens */
 #define GLFW_NO_ERROR             0
 #define GLFW_NOT_INITIALIZED      0x00070001
-#define GLFW_NO_CURRENT_CONTEXT   0x00070002
+#define GLFW_NO_CURRENT_WINDOW    0x00070002
 #define GLFW_INVALID_ENUM         0x00070003
 #define GLFW_INVALID_VALUE        0x00070004
 #define GLFW_OUT_OF_MEMORY        0x00070005
@@ -521,7 +521,7 @@ GLFWAPI const char* glfwErrorString(int error);
 GLFWAPI void glfwSetErrorCallback(GLFWerrorfun cbfun);
 
 /* Video mode functions */
-GLFWAPI GLFWvidmode* glfwGetVideoModes(int* count);
+GLFWAPI int  glfwGetVideoModes(GLFWvidmode* list, int maxcount);
 GLFWAPI void glfwGetDesktopMode(GLFWvidmode* mode);
 
 /* Gamma ramp functions */
@@ -530,9 +530,10 @@ GLFWAPI void glfwGetGammaRamp(GLFWgammaramp* ramp);
 GLFWAPI void glfwSetGammaRamp(const GLFWgammaramp* ramp);
 
 /* Window handling */
-GLFWAPI void glfwWindowHint(int target, int hint);
-GLFWAPI GLFWwindow glfwCreateWindow(int width, int height, int mode, const char* title, GLFWwindow share);
-GLFWAPI void glfwDestroyWindow(GLFWwindow window);
+GLFWAPI GLFWwindow glfwOpenWindow(int width, int height, int mode, const char* title, GLFWwindow share);
+GLFWAPI void glfwOpenWindowHint(int target, int hint);
+GLFWAPI int  glfwIsWindow(GLFWwindow window);
+GLFWAPI void glfwCloseWindow(GLFWwindow window);
 GLFWAPI void glfwSetWindowTitle(GLFWwindow, const char* title);
 GLFWAPI void glfwGetWindowSize(GLFWwindow, int* width, int* height);
 GLFWAPI void glfwSetWindowSize(GLFWwindow, int width, int height);
@@ -584,7 +585,7 @@ GLFWAPI void   glfwSetTime(double time);
 /* OpenGL support */
 GLFWAPI void glfwMakeContextCurrent(GLFWwindow window);
 GLFWAPI GLFWwindow glfwGetCurrentContext(void);
-GLFWAPI void  glfwSwapBuffers(GLFWwindow window);
+GLFWAPI void  glfwSwapBuffers(void);
 GLFWAPI void  glfwSwapInterval(int interval);
 GLFWAPI int   glfwExtensionSupported(const char* extension);
 GLFWAPI GLFWglproc glfwGetProcAddress(const char* procname);

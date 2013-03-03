@@ -59,7 +59,9 @@ namespace s9 {
 			static void _reshape(GLFWwindow window, int w, int h);
 
 			static void _display(GLFWwindow window);
-			
+  
+      static void _display();
+
 			static void _keyCallback(GLFWwindow window, int key, int action);
 
 			static void _mouseButtonCallback(GLFWwindow window, int button, int action);

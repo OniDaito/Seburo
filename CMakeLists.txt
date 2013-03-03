@@ -230,6 +230,12 @@ if(DEBUG)
 endif()
 
 #####################################################################
+# GLFW Windowed mode (in case you want multiple windows in your GLFW3
+# Application)
+
+option(MULTIWINDOW "Multiple Window Support" OFF)
+
+#####################################################################
 # Go into examples directory and build these
 
 if (NOT TARGET examples)

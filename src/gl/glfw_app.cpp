@@ -23,11 +23,16 @@ void GLFWApp::mainLoop() {
 
 		double_t t = glfwGetTime();
 
+#ifdef MULTIWINDOW
 		BOOST_FOREACH ( GLFWwindow b, pThis->vWindows) {	
 			glfwMakeContextCurrent(b);
 			_display(b);
 			glfwSwapBuffers(b);
 		}
+#else
+    _display();
+    glfwSwapBuffers();
+#endif
 
 		pThis->_dt = glfwGetTime() - t;
 		
@@ -71,6 +76,11 @@ void GLFWApp::_shutdown() {
 void GLFWApp::_display(GLFWwindow window) {
 	pThis->_app.display(pThis->_dt);
 	TwDraw();
+}
+
+void GLFWApp::_display(){
+  pThis->_app.display(pThis->_dt);
+  TwDraw();
 }
 
 /*
@@ -179,8 +189,13 @@ void GLFWApp::_mouseWheelCallback(GLFWwindow window, double xpos, double ypos) {
 
 
 GLFWwindow GLFWApp::createWindow(const char * title ="S9Gear", int w=800, int h=600) {
-	GLFWwindow win = glfwCreateWindow(800,600, GLFW_WINDOWED, title, NULL);
-	if (!win){
+#ifdef MULTIWINDOW
+  GLFWwindow win = glfwCreateWindow(w,h, GLFW_WINDOWED, title, NULL);
+#else
+  GLFWwindow win = glfwOpenWindow(w,h,GLFW_WINDOWED,title,NULL);
+#endif
+
+  if (!win){
 		std::cout << "Failed to open GLFW window: " << glfwErrorString(glfwGetError()) << std::endl;				
 		glfwTerminate();
 		exit(EXIT_FAILURE);
@@ -216,9 +231,13 @@ void GLFWApp::_update(){
 	///\todo fully switch to core profile - there is something causing an error in core
 	//glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_COMPAT_PROFILE);
 
-
+#ifdef MULTIWINDOW
  	glfwWindowHint(GLFW_DEPTH_BITS, 16);
 	glfwWindowHint(GLFW_FSAA_SAMPLES, 4);
+#else
+  glfwOpenWindowHint(GLFW_DEPTH_BITS, 16);
+  glfwOpenWindowHint(GLFW_FSAA_SAMPLES, 4);
+#endif
 
 	GLFWwindow window = createWindow(mTitle.c_str(),w, h);
 
@@ -273,8 +292,6 @@ void GLFWApp::_update(){
 
 	// Use a thread for the updates
   pThis->_update_thread =  new boost::thread(&GLFWApp::_update);
-
-
 
 	mainLoop();
 

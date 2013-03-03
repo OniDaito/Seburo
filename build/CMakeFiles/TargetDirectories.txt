@@ -1,8 +1,8 @@
-/home/oni/S9Gear/build/examples/basic/CMakeFiles/basic.dir
-/home/oni/S9Gear/build/examples/fbo/CMakeFiles/fbo.dir
-/home/oni/S9Gear/build/examples/model/CMakeFiles/model.dir
-/home/oni/S9Gear/build/examples/picking/CMakeFiles/picking.dir
-/home/oni/S9Gear/build/CMakeFiles/s9gear.dir
-/home/oni/S9Gear/build/applications/template/CMakeFiles/template.dir
-/home/oni/S9Gear/build/applications/touchwall/CMakeFiles/touchwall.dir
-/home/oni/S9Gear/build/examples/video/CMakeFiles/video.dir
+/Users/oni/Projects/S9Gear/build/examples/basic/CMakeFiles/basic.dir
+/Users/oni/Projects/S9Gear/build/examples/fbo/CMakeFiles/fbo.dir
+/Users/oni/Projects/S9Gear/build/examples/model/CMakeFiles/model.dir
+/Users/oni/Projects/S9Gear/build/examples/picking/CMakeFiles/picking.dir
+/Users/oni/Projects/S9Gear/build/CMakeFiles/s9gear.dir
+/Users/oni/Projects/S9Gear/build/applications/template/CMakeFiles/template.dir
+/Users/oni/Projects/S9Gear/build/applications/touchwall/CMakeFiles/touchwall.dir
+/Users/oni/Projects/S9Gear/build/examples/video/CMakeFiles/video.dir

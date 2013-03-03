@@ -30,19 +30,22 @@ cmake_force:
 SHELL = /bin/sh
 
 # The CMake executable.
-CMAKE_COMMAND = /usr/bin/cmake
+CMAKE_COMMAND = /usr/local/Cellar/cmake/2.8.10.1/bin/cmake
 
 # The command to remove a file.
-RM = /usr/bin/cmake -E remove -f
+RM = /usr/local/Cellar/cmake/2.8.10.1/bin/cmake -E remove -f
+
+# Escaping for special characters.
+EQUALS = =
 
 # The program to use to edit the cache.
-CMAKE_EDIT_COMMAND = /usr/bin/ccmake
+CMAKE_EDIT_COMMAND = /usr/local/Cellar/cmake/2.8.10.1/bin/ccmake
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/oni/S9Gear
+CMAKE_SOURCE_DIR = /Users/oni/Projects/S9Gear
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/oni/S9Gear/build
+CMAKE_BINARY_DIR = /Users/oni/Projects/S9Gear/build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -50,17 +53,58 @@ CMAKE_BINARY_DIR = /home/oni/S9Gear/build
 # Special rule for the target edit_cache
 edit_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake cache editor..."
-	/usr/bin/ccmake -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+	/usr/local/Cellar/cmake/2.8.10.1/bin/ccmake -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
 .PHONY : edit_cache
 
 # Special rule for the target edit_cache
 edit_cache/fast: edit_cache
 .PHONY : edit_cache/fast
 
+# Special rule for the target install
+install: preinstall
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Install the project..."
+	/usr/local/Cellar/cmake/2.8.10.1/bin/cmake -P cmake_install.cmake
+.PHONY : install
+
+# Special rule for the target install
+install/fast: preinstall/fast
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Install the project..."
+	/usr/local/Cellar/cmake/2.8.10.1/bin/cmake -P cmake_install.cmake
+.PHONY : install/fast
+
+# Special rule for the target install/local
+install/local: preinstall
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing only the local directory..."
+	/usr/local/Cellar/cmake/2.8.10.1/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
+.PHONY : install/local
+
+# Special rule for the target install/local
+install/local/fast: install/local
+.PHONY : install/local/fast
+
+# Special rule for the target install/strip
+install/strip: preinstall
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing the project stripped..."
+	/usr/local/Cellar/cmake/2.8.10.1/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
+.PHONY : install/strip
+
+# Special rule for the target install/strip
+install/strip/fast: install/strip
+.PHONY : install/strip/fast
+
+# Special rule for the target list_install_components
+list_install_components:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Available install components are: \"Runtime\""
+.PHONY : list_install_components
+
+# Special rule for the target list_install_components
+list_install_components/fast: list_install_components
+.PHONY : list_install_components/fast
+
 # Special rule for the target rebuild_cache
 rebuild_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
-	/usr/bin/cmake -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+	/usr/local/Cellar/cmake/2.8.10.1/bin/cmake -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
 .PHONY : rebuild_cache
 
 # Special rule for the target rebuild_cache
@@ -69,9 +113,9 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/oni/S9Gear/build/CMakeFiles /home/oni/S9Gear/build/CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/oni/Projects/S9Gear/build/CMakeFiles /Users/oni/Projects/S9Gear/build/CMakeFiles/progress.marks
 	$(MAKE) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/oni/S9Gear/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/oni/Projects/S9Gear/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -112,30 +156,17 @@ s9gear/fast:
 .PHONY : s9gear/fast
 
 #=============================================================================
-# Target rules for targets named picking
+# Target rules for targets named basic
 
 # Build rule for target.
-picking: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 picking
-.PHONY : picking
+basic: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 basic
+.PHONY : basic
 
 # fast build rule for target.
-picking/fast:
-	$(MAKE) -f examples/picking/CMakeFiles/picking.dir/build.make examples/picking/CMakeFiles/picking.dir/build
-.PHONY : picking/fast
-
-#=============================================================================
-# Target rules for targets named model
-
-# Build rule for target.
-model: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 model
-.PHONY : model
-
-# fast build rule for target.
-model/fast:
-	$(MAKE) -f examples/model/CMakeFiles/model.dir/build.make examples/model/CMakeFiles/model.dir/build
-.PHONY : model/fast
+basic/fast:
+	$(MAKE) -f examples/basic/CMakeFiles/basic.dir/build.make examples/basic/CMakeFiles/basic.dir/build
+.PHONY : basic/fast
 
 #=============================================================================
 # Target rules for targets named fbo
@@ -151,17 +182,30 @@ fbo/fast:
 .PHONY : fbo/fast
 
 #=============================================================================
-# Target rules for targets named basic
+# Target rules for targets named model
 
 # Build rule for target.
-basic: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 basic
-.PHONY : basic
+model: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 model
+.PHONY : model
 
 # fast build rule for target.
-basic/fast:
-	$(MAKE) -f examples/basic/CMakeFiles/basic.dir/build.make examples/basic/CMakeFiles/basic.dir/build
-.PHONY : basic/fast
+model/fast:
+	$(MAKE) -f examples/model/CMakeFiles/model.dir/build.make examples/model/CMakeFiles/model.dir/build
+.PHONY : model/fast
+
+#=============================================================================
+# Target rules for targets named picking
+
+# Build rule for target.
+picking: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 picking
+.PHONY : picking
+
+# fast build rule for target.
+picking/fast:
+	$(MAKE) -f examples/picking/CMakeFiles/picking.dir/build.make examples/picking/CMakeFiles/picking.dir/build
+.PHONY : picking/fast
 
 #=============================================================================
 # Target rules for targets named video
@@ -418,77 +462,29 @@ src/gl/video.cpp.s:
 	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/gl/video.cpp.s
 .PHONY : src/gl/video.cpp.s
 
-src/linux/colorspaces.o: src/linux/colorspaces.c.o
-.PHONY : src/linux/colorspaces.o
+src/osx/quicktime_capture.o: src/osx/quicktime_capture.cpp.o
+.PHONY : src/osx/quicktime_capture.o
 
 # target to build an object file
-src/linux/colorspaces.c.o:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/linux/colorspaces.c.o
-.PHONY : src/linux/colorspaces.c.o
+src/osx/quicktime_capture.cpp.o:
+	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/osx/quicktime_capture.cpp.o
+.PHONY : src/osx/quicktime_capture.cpp.o
 
-src/linux/colorspaces.i: src/linux/colorspaces.c.i
-.PHONY : src/linux/colorspaces.i
-
-# target to preprocess a source file
-src/linux/colorspaces.c.i:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/linux/colorspaces.c.i
-.PHONY : src/linux/colorspaces.c.i
-
-src/linux/colorspaces.s: src/linux/colorspaces.c.s
-.PHONY : src/linux/colorspaces.s
-
-# target to generate assembly for a file
-src/linux/colorspaces.c.s:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/linux/colorspaces.c.s
-.PHONY : src/linux/colorspaces.c.s
-
-src/linux/jpeg.o: src/linux/jpeg.c.o
-.PHONY : src/linux/jpeg.o
-
-# target to build an object file
-src/linux/jpeg.c.o:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/linux/jpeg.c.o
-.PHONY : src/linux/jpeg.c.o
-
-src/linux/jpeg.i: src/linux/jpeg.c.i
-.PHONY : src/linux/jpeg.i
+src/osx/quicktime_capture.i: src/osx/quicktime_capture.cpp.i
+.PHONY : src/osx/quicktime_capture.i
 
 # target to preprocess a source file
-src/linux/jpeg.c.i:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/linux/jpeg.c.i
-.PHONY : src/linux/jpeg.c.i
+src/osx/quicktime_capture.cpp.i:
+	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/osx/quicktime_capture.cpp.i
+.PHONY : src/osx/quicktime_capture.cpp.i
 
-src/linux/jpeg.s: src/linux/jpeg.c.s
-.PHONY : src/linux/jpeg.s
-
-# target to generate assembly for a file
-src/linux/jpeg.c.s:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/linux/jpeg.c.s
-.PHONY : src/linux/jpeg.c.s
-
-src/linux/uvc_camera.o: src/linux/uvc_camera.cpp.o
-.PHONY : src/linux/uvc_camera.o
-
-# target to build an object file
-src/linux/uvc_camera.cpp.o:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/linux/uvc_camera.cpp.o
-.PHONY : src/linux/uvc_camera.cpp.o
-
-src/linux/uvc_camera.i: src/linux/uvc_camera.cpp.i
-.PHONY : src/linux/uvc_camera.i
-
-# target to preprocess a source file
-src/linux/uvc_camera.cpp.i:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/linux/uvc_camera.cpp.i
-.PHONY : src/linux/uvc_camera.cpp.i
-
-src/linux/uvc_camera.s: src/linux/uvc_camera.cpp.s
-.PHONY : src/linux/uvc_camera.s
+src/osx/quicktime_capture.s: src/osx/quicktime_capture.cpp.s
+.PHONY : src/osx/quicktime_capture.s
 
 # target to generate assembly for a file
-src/linux/uvc_camera.cpp.s:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/linux/uvc_camera.cpp.s
-.PHONY : src/linux/uvc_camera.cpp.s
+src/osx/quicktime_capture.cpp.s:
+	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/osx/quicktime_capture.cpp.s
+.PHONY : src/osx/quicktime_capture.cpp.s
 
 src/primitive.o: src/primitive.cpp.o
 .PHONY : src/primitive.o
@@ -737,12 +733,16 @@ help:
 	@echo "... clean"
 	@echo "... depend"
 	@echo "... edit_cache"
+	@echo "... install"
+	@echo "... install/local"
+	@echo "... install/strip"
+	@echo "... list_install_components"
 	@echo "... rebuild_cache"
 	@echo "... s9gear"
-	@echo "... picking"
-	@echo "... model"
-	@echo "... fbo"
 	@echo "... basic"
+	@echo "... fbo"
+	@echo "... model"
+	@echo "... picking"
 	@echo "... video"
 	@echo "... template"
 	@echo "... touchwall"
@@ -773,15 +773,9 @@ help:
 	@echo "... src/gl/video.o"
 	@echo "... src/gl/video.i"
 	@echo "... src/gl/video.s"
-	@echo "... src/linux/colorspaces.o"
-	@echo "... src/linux/colorspaces.i"
-	@echo "... src/linux/colorspaces.s"
-	@echo "... src/linux/jpeg.o"
-	@echo "... src/linux/jpeg.i"
-	@echo "... src/linux/jpeg.s"
-	@echo "... src/linux/uvc_camera.o"
-	@echo "... src/linux/uvc_camera.i"
-	@echo "... src/linux/uvc_camera.s"
+	@echo "... src/osx/quicktime_capture.o"
+	@echo "... src/osx/quicktime_capture.i"
+	@echo "... src/osx/quicktime_capture.s"
 	@echo "... src/primitive.o"
 	@echo "... src/primitive.i"
 	@echo "... src/primitive.s"

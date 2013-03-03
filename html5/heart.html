@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+
+<head>
+
+<!--
+                       __  .__              ________ 
+   ______ ____   _____/  |_|__| ____   ____/   __   \
+  /  ___// __ \_/ ___\   __\  |/  _ \ /    \____    /
+  \___ \\  ___/\  \___|  | |  (  <_> )   |  \ /    / 
+ /____  >\___  >\___  >__| |__|\____/|___|  //____/  .co.uk
+      \/     \/     \/                    \/         
+ 
+ THE GHOST IN THE CSH
+ 
+2013 section9 dot co dot uk ltd , www.section9.co.uk
+
+Author: Benjamin Blundell
+Date: 14/12/2013
+
+Heart!
+
+A very basic Ray tracer that needs more work! :P
+
+-->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title></title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width">
+
+    <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="css/main.css">
+    <script src="js/vendor/modernizr-2.6.2.min.js"></script>
+</head>
+<body>
+    <!--[if lt IE 7]>
+        <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+    <![endif]-->
+
+  
+    <div style="width:640px; margin-left:auto; margin-right:auto">
+        <img src="img/love.png" alt="Taubin Love" />
+        <canvas id="glcanvas" width="640" height="480"></canvas>
+    </div>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.8.2.min.js"><\/script>')</script>
+    <script src="js/plugins.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/glmatrix.js"></script>
+    <script src="js/webgl-utils.js"></script>
+
+
+
+    <!-- Here, we define some useful functions that we will use later on -->
+
+    <script type="text/javascript">
+    function loadFile(url, data, callback, errorCallback) {
+        // Set up an asynchronous request
+        var request = new XMLHttpRequest();
+        request.open('GET', url, true);
+
+        // Hook the event that gets called as the request progresses
+        request.onreadystatechange = function () {
+            // If the request is "DONE" (completed or failed)
+            if (request.readyState == 4) {
+                // If we got HTTP status 200 (OK)
+                if (request.status == 200) {
+                    callback(request.responseText, data)
+                } else { // Failed
+                    errorCallback(url);
+                }
+            }
+        };
+
+        request.send(null);    
+    }
+
+    function loadFiles(urls, callback, errorCallback) {
+        var numUrls = urls.length;
+        var numComplete = 0;
+        var result = [];
+
+        // Callback for a single file
+        function partialCallback(text, urlIndex) {
+            result[urlIndex] = text;
+            numComplete++;
+
+            // When all files have downloaded
+            if (numComplete == numUrls) {
+                callback(result);
+            }
+        }
+
+        for (var i = 0; i < numUrls; i++) {
+            loadFile(urls[i], i, partialCallback, errorCallback);
+        }
+    }
+    </script>
+
+
+    <!-- Now we run the script, giving out canvas element to it -->
+
+    <script type="text/javascript">
+        canvas = document.getElementById("glcanvas");
+        gl = WebGLUtils.setupWebGL(canvas);
+
+        // Create a few global vars for simplicity
+        var quadVertexPositionBuffer;
+        var shaderProgram;
+
+        var startTime;
+        // Create a setup function 
+
+        var setup = function(shaderText){
+
+            // Read the loaded files into their shaders and compile
+
+            startTime = Date.now() / 1000.0;
+
+            var vertexShader = gl.createShader(gl.VERTEX_SHADER);
+            gl.shaderSource(vertexShader, shaderText[0]);
+            gl.compileShader(vertexShader);
+
+            if (!gl.getShaderParameter(vertexShader, gl.COMPILE_STATUS)) {
+                alert(gl.getShaderInfoLog(vertexShader));
+                return null;
+            }
+      
+            var fragmentShader = gl.createShader(gl.FRAGMENT_SHADER);
+            gl.shaderSource(fragmentShader, shaderText[1]);
+            gl.compileShader(fragmentShader);
+
+             if (!gl.getShaderParameter(fragmentShader, gl.COMPILE_STATUS)) {
+                alert(gl.getShaderInfoLog(fragmentShader));
+                return null;
+            }
+
+            // Now link the shader program itself
+
+            shaderProgram = gl.createProgram();
+
+            gl.attachShader(shaderProgram, vertexShader);
+            gl.attachShader(shaderProgram, fragmentShader);
+            gl.linkProgram(shaderProgram);
+
+            if (!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS)) {
+                alert("Could not initialise shaders");
+            }
+
+            gl.useProgram(shaderProgram);
+
+            // Get the locations of the uniforms
+            shaderProgram.vertexPositionAttribute = gl.getAttribLocation(shaderProgram, "aVertexPosition");
+            gl.enableVertexAttribArray(shaderProgram.vertexPositionAttribute);
+
+            // We have different uniforms eh
+            shaderProgram.resolution = gl.getUniformLocation(shaderProgram, "uResolution");
+            shaderProgram.timeUniform = gl.getUniformLocation(shaderProgram, "uTime");
+
+
+            // Setup the width and height of the context to match the canvas
+
+            gl.viewportWidth = canvas.width;
+            gl.viewportHeight = canvas.height;
+
+            // Create a buffer for our quad vertices
+            quadVertexPositionBuffer = gl.createBuffer();
+            gl.bindBuffer(gl.ARRAY_BUFFER, quadVertexPositionBuffer);
+          
+            var vertices = [
+                -1.0,  -1.0,  0.0,
+                -1.0, 1.0,  0.0,
+                1.0, -1.0,  0.0,
+                1.0, 1.0,  0.0
+            ];
+
+            // Set the actual buffer
+            gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
+
+            // Set the actual number of items and their size
+            quadVertexPositionBuffer.itemSize = 3;
+            quadVertexPositionBuffer.numItems = 4;
+
+            // We now make all our drawing calls from a function called
+            // draw that is called as often as possible
+            window.requestAnimFrame(draw);
+
+          
+        
+        }
+
+        // Create a draw function that is called each frame
+        var draw = function() {
+              // Now we create the viewport
+            gl.viewport(0, 0, gl.viewportWidth, gl.viewportHeight);
+
+            // set a clear colour
+            gl.clearColor(0.0, 0.0, 0.0, 1.0);
+
+            // Clear the buffer
+            gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+            // Bind the buffer to the context
+            gl.bindBuffer(gl.ARRAY_BUFFER, quadVertexPositionBuffer);
+            
+            // Pass the attribute to the shader
+            gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, quadVertexPositionBuffer.itemSize, gl.FLOAT, false, 0, 0);
+
+     
+            // Set our uniform variables
+
+            gl.uniform2f(shaderProgram.resolution,640.0,480.0);
+            gl.uniform1f(shaderProgram.timeUniform, startTime - (Date.now() / 1000.0));
+
+            //console.log( Date.now() / 1000.0);
+
+
+            // Finally, the actual draw call
+            gl.drawArrays(gl.TRIANGLE_STRIP, 0, quadVertexPositionBuffer.numItems);
+
+            // Request another frame
+            window.requestAnimFrame(draw);
+        }
+
+        // Now actually load our shaders externally. Note a slightly different frag shader
+
+        loadFiles(['shaders/ray.vert', 'shaders/heart.frag'], setup, function (url) {
+            alert('Failed to download "' + url + '"');
+        }); 
+
+
+       
+
+    </script>
+
+</body>
+</html>
