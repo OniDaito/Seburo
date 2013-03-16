@@ -10,13 +10,13 @@ add_executable (video
   ${SOURCE_FILES} 
 ) 
 
-include_directories( ${GEAR_INCLUDES}
+include_directories( ${SEBURO_INCLUDES}
   ${INCLUDES_SEARCH_PATHS}
   ${INCLUDES}
 )
 
 target_link_libraries(video 
-  s9gear
-  ${GEAR_LIBRARIES}
+  Seburo
+  ${SEBURO_LIBRARIES}
 )
 

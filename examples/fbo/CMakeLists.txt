@@ -10,12 +10,12 @@ add_executable (fbo
   ${SOURCE_FILES} 
 ) 
 
-include_directories(${GEAR_INCLUDES}
+include_directories(${SEBURO_INCLUDES}
   ${INCLUDES_SEARCH_PATHS}
   ${INCLUDES}
 )
 
 target_link_libraries(fbo 
-  s9gear
+  Seburo
 )
 

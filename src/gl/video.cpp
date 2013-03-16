@@ -9,7 +9,7 @@
 #include "s9/gl/video.hpp"
 
 using namespace std;
-#ifdef _GEAR_OPENCV
+#ifdef _SEBURO_OPENCV
 using namespace cv;
 #endif
 
@@ -23,7 +23,7 @@ VidCam::VidCam(std::string dev, size_t w, size_t h, size_t fps) {
 	_obj.reset(new SharedObj());
 	_obj->_texture = TextureStream(glm::vec2(w,h),TEXTURE_RGB);
 
-#ifdef _GEAR_LINUX
+#ifdef _SEBURO_LINUX
 	_obj->_cam.reset(new UVCVideo());
 	_obj->_cam->startCapture(dev,w,h,fps);
 #endif
@@ -42,20 +42,20 @@ void VidCam::update() {
 }
 
 void VidCam::stop(){
-#ifdef _GEAR_LINUX
+#ifdef _SEBURO_LINUX
 	_obj->_cam->stop();
 #endif	
 	_obj->_texture.stop();
 }
 
 void VidCam::setControl(unsigned int id, int value) {
-#ifdef _GEAR_LINUX
+#ifdef _SEBURO_LINUX
 	_obj->_cam->set_control(id,value);
 #endif	
 }
 
 
-#ifdef _GEAR_OPENCV
+#ifdef _SEBURO_OPENCV
 
 /*
  * CVCamera knows its place in the world and is undistorted we hope
@@ -140,7 +140,7 @@ bool CVVidCam::loadParameters(string filename) {
 	try {
 		FileStorage fs(filename.c_str(), CV_STORAGE_READ);
 		if(!fs.isOpened()) {
-			cout << "S9Gear - Failed to open intrinsic file "  << filename << endl;
+			cout << "Seburo - Failed to open intrinsic file "  << filename << endl;
 			return false;
 		}
 
@@ -152,17 +152,17 @@ bool CVVidCam::loadParameters(string filename) {
 			fs["T"] >> _obj->mP.T;
 		}
 		catch (...) {
-			cout << "S9Gear - failed to load world transforms in intrinsics." << endl;
+			cout << "Seburo - failed to load world transforms in intrinsics." << endl;
 		}
 		
-		cout << "S9Gear - Loaded camera Parameters " << filename << endl;
+		cout << "Seburo - Loaded camera Parameters " << filename << endl;
 		_obj->mP.mCalibrated = true;
 		fs.release();
 		computeNormal();
 		return true;
 		
 	} catch(...) {
-		cout << "S9Gear - failed to load intrinsic variables. You will need to calibrate." << endl;
+		cout << "Seburo - failed to load intrinsic variables. You will need to calibrate." << endl;
 	}
 
 	return false;
@@ -182,7 +182,7 @@ bool CVVidCam::saveParameters(string filename) {
         return true;
     }
     else
-        cout << "S9Gear: can not save the intrinsic parameters\n";
+        cout << "Seburo: can not save the intrinsic parameters\n";
     
     return false;
 }

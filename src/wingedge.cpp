@@ -34,7 +34,7 @@ void WingedEdge::make(DrawableGeometry geom) {
 	}
 	
 	
-	cerr << "S9Gear Winged Edge Vertices Count: " << vs.size() << endl;
+	cerr << "Seburo Winged Edge Vertices Count: " << vs.size() << endl;
 
 	// Now create proper winged edge and indices using a concatenated 32 bit index to a 64 bit key
 	// In addition we create a straight list of unique triangles
@@ -133,9 +133,9 @@ void WingedEdge::make(DrawableGeometry geom) {
 		}
 	}
 		
-	cerr << "S9Gear Winged Edge edges count: " << es.size() << endl;
-	cerr << "S9Gear Winged Edge Face Count: " << mObj->mWE.size() << endl;
-	cerr << "S9Gear Winged Edge Discarded Face Count: " << bw << endl;
+	cerr << "Seburo Winged Edge edges count: " << es.size() << endl;
+	cerr << "Seburo Winged Edge Face Count: " << mObj->mWE.size() << endl;
+	cerr << "Seburo Winged Edge Discarded Face Count: " << bw << endl;
 }
 
 /*

@@ -16,15 +16,15 @@
 #include "texture.hpp"
 #include "utils.hpp"
 
-#ifdef _GEAR_OPENCV
+#ifdef _SEBURO_OPENCV
 #include <opencv2/opencv.hpp>
 #endif
 
-#ifdef _GEAR_LINUX
+#ifdef _SEBURO_LINUX
 #include "s9/linux/uvc_camera.hpp"
 #endif
 
-#ifdef _GEAR_OSX
+#ifdef _SEBURO_OSX
 #include "s9/osx/quicktime_camera.hpp"
 #endif
 
@@ -64,7 +64,7 @@ namespace s9 {
 			struct SharedObj {
 			public:
 
-#ifdef _GEAR_LINUX
+#ifdef _SEBURO_LINUX
 				boost::shared_ptr<UVCVideo> _cam;
 #else
 				boost::shared_ptr<QuicktimeCamera> _cam;
@@ -78,7 +78,7 @@ namespace s9 {
 		};
 
 
-#ifdef _GEAR_OPENCV
+#ifdef _SEBURO_OPENCV
 		namespace compvis{
 
 			/*

@@ -136,7 +136,7 @@ namespace s9 {
 	inline Geometry<VertPNG>::Geometry(std::vector<glm::vec3> v, std::vector<glm::vec3> n) {
 		_obj.reset(new SharedObj());
 		
-		if (v.size() != n.size()) { std::cerr << "S9Gear - Counts do not match" << std::endl; throw; return; }
+		if (v.size() != n.size()) { std::cerr << "Seburo - Counts do not match" << std::endl; throw; return; }
 		
 		for (uint32_t i=0; i < v.size(); ++i){
 			VertPNG png = {v[i],n[i]};
@@ -150,7 +150,7 @@ namespace s9 {
 	inline Geometry<VertPNF>::Geometry (std::vector<float> v, std::vector<float> n) {
 		_obj.reset(new SharedObj());
 		
-		if (v.size() != n.size()) { std::cerr << "S9Gear - Counts do not match" << std::endl; throw; return; }
+		if (v.size() != n.size()) { std::cerr << "Seburo - Counts do not match" << std::endl; throw; return; }
 		
 		for (uint32_t i=0; i < v.size(); i+=3){
 			Float3 a = {v[i],v[i+1],v[i+2]}; 

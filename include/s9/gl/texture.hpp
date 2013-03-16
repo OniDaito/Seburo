@@ -14,7 +14,7 @@
 #include "s9/gl/utils.hpp"
 #include "s9/image.hpp"
 
-#ifdef _GEAR_OPENCV
+#ifdef _SEBURO_OPENCV
 #include <opencv2/opencv.hpp>
 #endif
 
@@ -72,7 +72,7 @@ namespace s9 {
       TextureTwo(Image image);       
     };
 
-#ifdef _GEAR_OPENCV
+#ifdef _SEBURO_OPENCV
     inline unsigned char * MatToGL(cv::Mat &mat) {
       return (unsigned char *)IplImage(mat).imageData; 
     };

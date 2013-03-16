@@ -45,7 +45,7 @@ namespace po = boost::program_options;
 
     _obj->_cv_result = cv::Mat(cv::Size(640,480),CV_8UC3);
 
-#ifdef _GEAR_LINUX
+#ifdef _SEBURO_LINUX
     _obj->_video = VidCam("/dev/video0",640, 480,60);
 #endif
 
@@ -242,7 +242,7 @@ void TouchwallApp::processEvent(KeyboardEvent e){
 
  int main (int argc, const char * argv[]) {
 
-#ifdef _GEAR_X11_GLX    
+#ifdef _SEBURO_X11_GLX    
     // Linux only - need equivalent for Mac / Windows
     Gtk::Main kit(&argc, (char***)&argv);
 #endif

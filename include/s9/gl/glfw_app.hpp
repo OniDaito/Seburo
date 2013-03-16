@@ -17,7 +17,7 @@
 #include <GL/glfw3.h>
 #include <anttweakbar/AntTweakBar.h>
 
-#ifdef _GEAR_X11_GLX	
+#ifdef _SEBURO_X11_GLX	
 #include <gtkmm.h>
 #endif
 
@@ -76,7 +76,7 @@ namespace s9 {
 
 			GLFWApp (WindowApp &app, const int w = 800, const int h = 600, 
 				bool fullscreen = false, int argc = 0, const char * argv[] = NULL, 
-				const char * title = "S9Gear", const int major = 4, const int minor = 0) : WindowSystem(app) {
+				const char * title = "Seburo", const int major = 4, const int minor = 0) : WindowSystem(app) {
 				if( !glfwInit() ){
 					fprintf( stderr, "Failed to initialize GLFW\n" );
 					exit( EXIT_FAILURE );

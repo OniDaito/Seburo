@@ -42,10 +42,10 @@ EQUALS = =
 CMAKE_EDIT_COMMAND = /usr/local/Cellar/cmake/2.8.10.1/bin/ccmake
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /Users/oni/Projects/S9Gear
+CMAKE_SOURCE_DIR = /Users/oni/Projects/Seburo
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /Users/oni/Projects/S9Gear/build
+CMAKE_BINARY_DIR = /Users/oni/Projects/Seburo/build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -113,9 +113,9 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/oni/Projects/S9Gear/build/CMakeFiles /Users/oni/Projects/S9Gear/build/CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/oni/Projects/Seburo/build/CMakeFiles /Users/oni/Projects/Seburo/build/CMakeFiles/progress.marks
 	$(MAKE) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/oni/Projects/S9Gear/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/oni/Projects/Seburo/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -143,17 +143,17 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named s9gear
+# Target rules for targets named Seburo
 
 # Build rule for target.
-s9gear: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 s9gear
-.PHONY : s9gear
+Seburo: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 Seburo
+.PHONY : Seburo
 
 # fast build rule for target.
-s9gear/fast:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/build
-.PHONY : s9gear/fast
+Seburo/fast:
+	$(MAKE) -f CMakeFiles/Seburo.dir/build.make CMakeFiles/Seburo.dir/build
+.PHONY : Seburo/fast
 
 #=============================================================================
 # Target rules for targets named basic
@@ -251,7 +251,7 @@ src/asset.o: src/asset.cpp.o
 
 # target to build an object file
 src/asset.cpp.o:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/asset.cpp.o
+	$(MAKE) -f CMakeFiles/Seburo.dir/build.make CMakeFiles/Seburo.dir/src/asset.cpp.o
 .PHONY : src/asset.cpp.o
 
 src/asset.i: src/asset.cpp.i
@@ -259,7 +259,7 @@ src/asset.i: src/asset.cpp.i
 
 # target to preprocess a source file
 src/asset.cpp.i:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/asset.cpp.i
+	$(MAKE) -f CMakeFiles/Seburo.dir/build.make CMakeFiles/Seburo.dir/src/asset.cpp.i
 .PHONY : src/asset.cpp.i
 
 src/asset.s: src/asset.cpp.s
@@ -267,7 +267,7 @@ src/asset.s: src/asset.cpp.s
 
 # target to generate assembly for a file
 src/asset.cpp.s:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/asset.cpp.s
+	$(MAKE) -f CMakeFiles/Seburo.dir/build.make CMakeFiles/Seburo.dir/src/asset.cpp.s
 .PHONY : src/asset.cpp.s
 
 src/camera.o: src/camera.cpp.o
@@ -275,7 +275,7 @@ src/camera.o: src/camera.cpp.o
 
 # target to build an object file
 src/camera.cpp.o:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/camera.cpp.o
+	$(MAKE) -f CMakeFiles/Seburo.dir/build.make CMakeFiles/Seburo.dir/src/camera.cpp.o
 .PHONY : src/camera.cpp.o
 
 src/camera.i: src/camera.cpp.i
@@ -283,7 +283,7 @@ src/camera.i: src/camera.cpp.i
 
 # target to preprocess a source file
 src/camera.cpp.i:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/camera.cpp.i
+	$(MAKE) -f CMakeFiles/Seburo.dir/build.make CMakeFiles/Seburo.dir/src/camera.cpp.i
 .PHONY : src/camera.cpp.i
 
 src/camera.s: src/camera.cpp.s
@@ -291,7 +291,7 @@ src/camera.s: src/camera.cpp.s
 
 # target to generate assembly for a file
 src/camera.cpp.s:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/camera.cpp.s
+	$(MAKE) -f CMakeFiles/Seburo.dir/build.make CMakeFiles/Seburo.dir/src/camera.cpp.s
 .PHONY : src/camera.cpp.s
 
 src/cvprocess.o: src/cvprocess.cpp.o
@@ -299,7 +299,7 @@ src/cvprocess.o: src/cvprocess.cpp.o
 
 # target to build an object file
 src/cvprocess.cpp.o:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/cvprocess.cpp.o
+	$(MAKE) -f CMakeFiles/Seburo.dir/build.make CMakeFiles/Seburo.dir/src/cvprocess.cpp.o
 .PHONY : src/cvprocess.cpp.o
 
 src/cvprocess.i: src/cvprocess.cpp.i
@@ -307,7 +307,7 @@ src/cvprocess.i: src/cvprocess.cpp.i
 
 # target to preprocess a source file
 src/cvprocess.cpp.i:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/cvprocess.cpp.i
+	$(MAKE) -f CMakeFiles/Seburo.dir/build.make CMakeFiles/Seburo.dir/src/cvprocess.cpp.i
 .PHONY : src/cvprocess.cpp.i
 
 src/cvprocess.s: src/cvprocess.cpp.s
@@ -315,15 +315,39 @@ src/cvprocess.s: src/cvprocess.cpp.s
 
 # target to generate assembly for a file
 src/cvprocess.cpp.s:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/cvprocess.cpp.s
+	$(MAKE) -f CMakeFiles/Seburo.dir/build.make CMakeFiles/Seburo.dir/src/cvprocess.cpp.s
 .PHONY : src/cvprocess.cpp.s
+
+src/file.o: src/file.cpp.o
+.PHONY : src/file.o
+
+# target to build an object file
+src/file.cpp.o:
+	$(MAKE) -f CMakeFiles/Seburo.dir/build.make CMakeFiles/Seburo.dir/src/file.cpp.o
+.PHONY : src/file.cpp.o
+
+src/file.i: src/file.cpp.i
+.PHONY : src/file.i
+
+# target to preprocess a source file
+src/file.cpp.i:
+	$(MAKE) -f CMakeFiles/Seburo.dir/build.make CMakeFiles/Seburo.dir/src/file.cpp.i
+.PHONY : src/file.cpp.i
+
+src/file.s: src/file.cpp.s
+.PHONY : src/file.s
+
+# target to generate assembly for a file
+src/file.cpp.s:
+	$(MAKE) -f CMakeFiles/Seburo.dir/build.make CMakeFiles/Seburo.dir/src/file.cpp.s
+.PHONY : src/file.cpp.s
 
 src/gl/fbo.o: src/gl/fbo.cpp.o
 .PHONY : src/gl/fbo.o
 
 # target to build an object file
 src/gl/fbo.cpp.o:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/gl/fbo.cpp.o
+	$(MAKE) -f CMakeFiles/Seburo.dir/build.make CMakeFiles/Seburo.dir/src/gl/fbo.cpp.o
 .PHONY : src/gl/fbo.cpp.o
 
 src/gl/fbo.i: src/gl/fbo.cpp.i
@@ -331,7 +355,7 @@ src/gl/fbo.i: src/gl/fbo.cpp.i
 
 # target to preprocess a source file
 src/gl/fbo.cpp.i:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/gl/fbo.cpp.i
+	$(MAKE) -f CMakeFiles/Seburo.dir/build.make CMakeFiles/Seburo.dir/src/gl/fbo.cpp.i
 .PHONY : src/gl/fbo.cpp.i
 
 src/gl/fbo.s: src/gl/fbo.cpp.s
@@ -339,7 +363,7 @@ src/gl/fbo.s: src/gl/fbo.cpp.s
 
 # target to generate assembly for a file
 src/gl/fbo.cpp.s:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/gl/fbo.cpp.s
+	$(MAKE) -f CMakeFiles/Seburo.dir/build.make CMakeFiles/Seburo.dir/src/gl/fbo.cpp.s
 .PHONY : src/gl/fbo.cpp.s
 
 src/gl/glew.o: src/gl/glew.c.o
@@ -347,7 +371,7 @@ src/gl/glew.o: src/gl/glew.c.o
 
 # target to build an object file
 src/gl/glew.c.o:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/gl/glew.c.o
+	$(MAKE) -f CMakeFiles/Seburo.dir/build.make CMakeFiles/Seburo.dir/src/gl/glew.c.o
 .PHONY : src/gl/glew.c.o
 
 src/gl/glew.i: src/gl/glew.c.i
@@ -355,7 +379,7 @@ src/gl/glew.i: src/gl/glew.c.i
 
 # target to preprocess a source file
 src/gl/glew.c.i:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/gl/glew.c.i
+	$(MAKE) -f CMakeFiles/Seburo.dir/build.make CMakeFiles/Seburo.dir/src/gl/glew.c.i
 .PHONY : src/gl/glew.c.i
 
 src/gl/glew.s: src/gl/glew.c.s
@@ -363,7 +387,7 @@ src/gl/glew.s: src/gl/glew.c.s
 
 # target to generate assembly for a file
 src/gl/glew.c.s:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/gl/glew.c.s
+	$(MAKE) -f CMakeFiles/Seburo.dir/build.make CMakeFiles/Seburo.dir/src/gl/glew.c.s
 .PHONY : src/gl/glew.c.s
 
 src/gl/glfw_app.o: src/gl/glfw_app.cpp.o
@@ -371,7 +395,7 @@ src/gl/glfw_app.o: src/gl/glfw_app.cpp.o
 
 # target to build an object file
 src/gl/glfw_app.cpp.o:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/gl/glfw_app.cpp.o
+	$(MAKE) -f CMakeFiles/Seburo.dir/build.make CMakeFiles/Seburo.dir/src/gl/glfw_app.cpp.o
 .PHONY : src/gl/glfw_app.cpp.o
 
 src/gl/glfw_app.i: src/gl/glfw_app.cpp.i
@@ -379,7 +403,7 @@ src/gl/glfw_app.i: src/gl/glfw_app.cpp.i
 
 # target to preprocess a source file
 src/gl/glfw_app.cpp.i:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/gl/glfw_app.cpp.i
+	$(MAKE) -f CMakeFiles/Seburo.dir/build.make CMakeFiles/Seburo.dir/src/gl/glfw_app.cpp.i
 .PHONY : src/gl/glfw_app.cpp.i
 
 src/gl/glfw_app.s: src/gl/glfw_app.cpp.s
@@ -387,7 +411,7 @@ src/gl/glfw_app.s: src/gl/glfw_app.cpp.s
 
 # target to generate assembly for a file
 src/gl/glfw_app.cpp.s:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/gl/glfw_app.cpp.s
+	$(MAKE) -f CMakeFiles/Seburo.dir/build.make CMakeFiles/Seburo.dir/src/gl/glfw_app.cpp.s
 .PHONY : src/gl/glfw_app.cpp.s
 
 src/gl/shader.o: src/gl/shader.cpp.o
@@ -395,7 +419,7 @@ src/gl/shader.o: src/gl/shader.cpp.o
 
 # target to build an object file
 src/gl/shader.cpp.o:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/gl/shader.cpp.o
+	$(MAKE) -f CMakeFiles/Seburo.dir/build.make CMakeFiles/Seburo.dir/src/gl/shader.cpp.o
 .PHONY : src/gl/shader.cpp.o
 
 src/gl/shader.i: src/gl/shader.cpp.i
@@ -403,7 +427,7 @@ src/gl/shader.i: src/gl/shader.cpp.i
 
 # target to preprocess a source file
 src/gl/shader.cpp.i:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/gl/shader.cpp.i
+	$(MAKE) -f CMakeFiles/Seburo.dir/build.make CMakeFiles/Seburo.dir/src/gl/shader.cpp.i
 .PHONY : src/gl/shader.cpp.i
 
 src/gl/shader.s: src/gl/shader.cpp.s
@@ -411,7 +435,7 @@ src/gl/shader.s: src/gl/shader.cpp.s
 
 # target to generate assembly for a file
 src/gl/shader.cpp.s:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/gl/shader.cpp.s
+	$(MAKE) -f CMakeFiles/Seburo.dir/build.make CMakeFiles/Seburo.dir/src/gl/shader.cpp.s
 .PHONY : src/gl/shader.cpp.s
 
 src/gl/texture.o: src/gl/texture.cpp.o
@@ -419,7 +443,7 @@ src/gl/texture.o: src/gl/texture.cpp.o
 
 # target to build an object file
 src/gl/texture.cpp.o:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/gl/texture.cpp.o
+	$(MAKE) -f CMakeFiles/Seburo.dir/build.make CMakeFiles/Seburo.dir/src/gl/texture.cpp.o
 .PHONY : src/gl/texture.cpp.o
 
 src/gl/texture.i: src/gl/texture.cpp.i
@@ -427,7 +451,7 @@ src/gl/texture.i: src/gl/texture.cpp.i
 
 # target to preprocess a source file
 src/gl/texture.cpp.i:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/gl/texture.cpp.i
+	$(MAKE) -f CMakeFiles/Seburo.dir/build.make CMakeFiles/Seburo.dir/src/gl/texture.cpp.i
 .PHONY : src/gl/texture.cpp.i
 
 src/gl/texture.s: src/gl/texture.cpp.s
@@ -435,7 +459,7 @@ src/gl/texture.s: src/gl/texture.cpp.s
 
 # target to generate assembly for a file
 src/gl/texture.cpp.s:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/gl/texture.cpp.s
+	$(MAKE) -f CMakeFiles/Seburo.dir/build.make CMakeFiles/Seburo.dir/src/gl/texture.cpp.s
 .PHONY : src/gl/texture.cpp.s
 
 src/gl/video.o: src/gl/video.cpp.o
@@ -443,7 +467,7 @@ src/gl/video.o: src/gl/video.cpp.o
 
 # target to build an object file
 src/gl/video.cpp.o:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/gl/video.cpp.o
+	$(MAKE) -f CMakeFiles/Seburo.dir/build.make CMakeFiles/Seburo.dir/src/gl/video.cpp.o
 .PHONY : src/gl/video.cpp.o
 
 src/gl/video.i: src/gl/video.cpp.i
@@ -451,7 +475,7 @@ src/gl/video.i: src/gl/video.cpp.i
 
 # target to preprocess a source file
 src/gl/video.cpp.i:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/gl/video.cpp.i
+	$(MAKE) -f CMakeFiles/Seburo.dir/build.make CMakeFiles/Seburo.dir/src/gl/video.cpp.i
 .PHONY : src/gl/video.cpp.i
 
 src/gl/video.s: src/gl/video.cpp.s
@@ -459,7 +483,7 @@ src/gl/video.s: src/gl/video.cpp.s
 
 # target to generate assembly for a file
 src/gl/video.cpp.s:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/gl/video.cpp.s
+	$(MAKE) -f CMakeFiles/Seburo.dir/build.make CMakeFiles/Seburo.dir/src/gl/video.cpp.s
 .PHONY : src/gl/video.cpp.s
 
 src/osx/quicktime_capture.o: src/osx/quicktime_capture.cpp.o
@@ -467,7 +491,7 @@ src/osx/quicktime_capture.o: src/osx/quicktime_capture.cpp.o
 
 # target to build an object file
 src/osx/quicktime_capture.cpp.o:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/osx/quicktime_capture.cpp.o
+	$(MAKE) -f CMakeFiles/Seburo.dir/build.make CMakeFiles/Seburo.dir/src/osx/quicktime_capture.cpp.o
 .PHONY : src/osx/quicktime_capture.cpp.o
 
 src/osx/quicktime_capture.i: src/osx/quicktime_capture.cpp.i
@@ -475,7 +499,7 @@ src/osx/quicktime_capture.i: src/osx/quicktime_capture.cpp.i
 
 # target to preprocess a source file
 src/osx/quicktime_capture.cpp.i:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/osx/quicktime_capture.cpp.i
+	$(MAKE) -f CMakeFiles/Seburo.dir/build.make CMakeFiles/Seburo.dir/src/osx/quicktime_capture.cpp.i
 .PHONY : src/osx/quicktime_capture.cpp.i
 
 src/osx/quicktime_capture.s: src/osx/quicktime_capture.cpp.s
@@ -483,7 +507,7 @@ src/osx/quicktime_capture.s: src/osx/quicktime_capture.cpp.s
 
 # target to generate assembly for a file
 src/osx/quicktime_capture.cpp.s:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/osx/quicktime_capture.cpp.s
+	$(MAKE) -f CMakeFiles/Seburo.dir/build.make CMakeFiles/Seburo.dir/src/osx/quicktime_capture.cpp.s
 .PHONY : src/osx/quicktime_capture.cpp.s
 
 src/primitive.o: src/primitive.cpp.o
@@ -491,7 +515,7 @@ src/primitive.o: src/primitive.cpp.o
 
 # target to build an object file
 src/primitive.cpp.o:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/primitive.cpp.o
+	$(MAKE) -f CMakeFiles/Seburo.dir/build.make CMakeFiles/Seburo.dir/src/primitive.cpp.o
 .PHONY : src/primitive.cpp.o
 
 src/primitive.i: src/primitive.cpp.i
@@ -499,7 +523,7 @@ src/primitive.i: src/primitive.cpp.i
 
 # target to preprocess a source file
 src/primitive.cpp.i:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/primitive.cpp.i
+	$(MAKE) -f CMakeFiles/Seburo.dir/build.make CMakeFiles/Seburo.dir/src/primitive.cpp.i
 .PHONY : src/primitive.cpp.i
 
 src/primitive.s: src/primitive.cpp.s
@@ -507,7 +531,7 @@ src/primitive.s: src/primitive.cpp.s
 
 # target to generate assembly for a file
 src/primitive.cpp.s:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/primitive.cpp.s
+	$(MAKE) -f CMakeFiles/Seburo.dir/build.make CMakeFiles/Seburo.dir/src/primitive.cpp.s
 .PHONY : src/primitive.cpp.s
 
 src/s9xml.o: src/s9xml.cpp.o
@@ -515,7 +539,7 @@ src/s9xml.o: src/s9xml.cpp.o
 
 # target to build an object file
 src/s9xml.cpp.o:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/s9xml.cpp.o
+	$(MAKE) -f CMakeFiles/Seburo.dir/build.make CMakeFiles/Seburo.dir/src/s9xml.cpp.o
 .PHONY : src/s9xml.cpp.o
 
 src/s9xml.i: src/s9xml.cpp.i
@@ -523,7 +547,7 @@ src/s9xml.i: src/s9xml.cpp.i
 
 # target to preprocess a source file
 src/s9xml.cpp.i:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/s9xml.cpp.i
+	$(MAKE) -f CMakeFiles/Seburo.dir/build.make CMakeFiles/Seburo.dir/src/s9xml.cpp.i
 .PHONY : src/s9xml.cpp.i
 
 src/s9xml.s: src/s9xml.cpp.s
@@ -531,7 +555,7 @@ src/s9xml.s: src/s9xml.cpp.s
 
 # target to generate assembly for a file
 src/s9xml.cpp.s:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/s9xml.cpp.s
+	$(MAKE) -f CMakeFiles/Seburo.dir/build.make CMakeFiles/Seburo.dir/src/s9xml.cpp.s
 .PHONY : src/s9xml.cpp.s
 
 src/shapes.o: src/shapes.cpp.o
@@ -539,7 +563,7 @@ src/shapes.o: src/shapes.cpp.o
 
 # target to build an object file
 src/shapes.cpp.o:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/shapes.cpp.o
+	$(MAKE) -f CMakeFiles/Seburo.dir/build.make CMakeFiles/Seburo.dir/src/shapes.cpp.o
 .PHONY : src/shapes.cpp.o
 
 src/shapes.i: src/shapes.cpp.i
@@ -547,7 +571,7 @@ src/shapes.i: src/shapes.cpp.i
 
 # target to preprocess a source file
 src/shapes.cpp.i:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/shapes.cpp.i
+	$(MAKE) -f CMakeFiles/Seburo.dir/build.make CMakeFiles/Seburo.dir/src/shapes.cpp.i
 .PHONY : src/shapes.cpp.i
 
 src/shapes.s: src/shapes.cpp.s
@@ -555,7 +579,7 @@ src/shapes.s: src/shapes.cpp.s
 
 # target to generate assembly for a file
 src/shapes.cpp.s:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/shapes.cpp.s
+	$(MAKE) -f CMakeFiles/Seburo.dir/build.make CMakeFiles/Seburo.dir/src/shapes.cpp.s
 .PHONY : src/shapes.cpp.s
 
 src/state.o: src/state.cpp.o
@@ -563,7 +587,7 @@ src/state.o: src/state.cpp.o
 
 # target to build an object file
 src/state.cpp.o:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/state.cpp.o
+	$(MAKE) -f CMakeFiles/Seburo.dir/build.make CMakeFiles/Seburo.dir/src/state.cpp.o
 .PHONY : src/state.cpp.o
 
 src/state.i: src/state.cpp.i
@@ -571,7 +595,7 @@ src/state.i: src/state.cpp.i
 
 # target to preprocess a source file
 src/state.cpp.i:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/state.cpp.i
+	$(MAKE) -f CMakeFiles/Seburo.dir/build.make CMakeFiles/Seburo.dir/src/state.cpp.i
 .PHONY : src/state.cpp.i
 
 src/state.s: src/state.cpp.s
@@ -579,7 +603,7 @@ src/state.s: src/state.cpp.s
 
 # target to generate assembly for a file
 src/state.cpp.s:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/state.cpp.s
+	$(MAKE) -f CMakeFiles/Seburo.dir/build.make CMakeFiles/Seburo.dir/src/state.cpp.s
 .PHONY : src/state.cpp.s
 
 src/tinystr.o: src/tinystr.cpp.o
@@ -587,7 +611,7 @@ src/tinystr.o: src/tinystr.cpp.o
 
 # target to build an object file
 src/tinystr.cpp.o:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/tinystr.cpp.o
+	$(MAKE) -f CMakeFiles/Seburo.dir/build.make CMakeFiles/Seburo.dir/src/tinystr.cpp.o
 .PHONY : src/tinystr.cpp.o
 
 src/tinystr.i: src/tinystr.cpp.i
@@ -595,7 +619,7 @@ src/tinystr.i: src/tinystr.cpp.i
 
 # target to preprocess a source file
 src/tinystr.cpp.i:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/tinystr.cpp.i
+	$(MAKE) -f CMakeFiles/Seburo.dir/build.make CMakeFiles/Seburo.dir/src/tinystr.cpp.i
 .PHONY : src/tinystr.cpp.i
 
 src/tinystr.s: src/tinystr.cpp.s
@@ -603,7 +627,7 @@ src/tinystr.s: src/tinystr.cpp.s
 
 # target to generate assembly for a file
 src/tinystr.cpp.s:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/tinystr.cpp.s
+	$(MAKE) -f CMakeFiles/Seburo.dir/build.make CMakeFiles/Seburo.dir/src/tinystr.cpp.s
 .PHONY : src/tinystr.cpp.s
 
 src/tinyxml.o: src/tinyxml.cpp.o
@@ -611,7 +635,7 @@ src/tinyxml.o: src/tinyxml.cpp.o
 
 # target to build an object file
 src/tinyxml.cpp.o:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/tinyxml.cpp.o
+	$(MAKE) -f CMakeFiles/Seburo.dir/build.make CMakeFiles/Seburo.dir/src/tinyxml.cpp.o
 .PHONY : src/tinyxml.cpp.o
 
 src/tinyxml.i: src/tinyxml.cpp.i
@@ -619,7 +643,7 @@ src/tinyxml.i: src/tinyxml.cpp.i
 
 # target to preprocess a source file
 src/tinyxml.cpp.i:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/tinyxml.cpp.i
+	$(MAKE) -f CMakeFiles/Seburo.dir/build.make CMakeFiles/Seburo.dir/src/tinyxml.cpp.i
 .PHONY : src/tinyxml.cpp.i
 
 src/tinyxml.s: src/tinyxml.cpp.s
@@ -627,7 +651,7 @@ src/tinyxml.s: src/tinyxml.cpp.s
 
 # target to generate assembly for a file
 src/tinyxml.cpp.s:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/tinyxml.cpp.s
+	$(MAKE) -f CMakeFiles/Seburo.dir/build.make CMakeFiles/Seburo.dir/src/tinyxml.cpp.s
 .PHONY : src/tinyxml.cpp.s
 
 src/tinyxmlerror.o: src/tinyxmlerror.cpp.o
@@ -635,7 +659,7 @@ src/tinyxmlerror.o: src/tinyxmlerror.cpp.o
 
 # target to build an object file
 src/tinyxmlerror.cpp.o:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/tinyxmlerror.cpp.o
+	$(MAKE) -f CMakeFiles/Seburo.dir/build.make CMakeFiles/Seburo.dir/src/tinyxmlerror.cpp.o
 .PHONY : src/tinyxmlerror.cpp.o
 
 src/tinyxmlerror.i: src/tinyxmlerror.cpp.i
@@ -643,7 +667,7 @@ src/tinyxmlerror.i: src/tinyxmlerror.cpp.i
 
 # target to preprocess a source file
 src/tinyxmlerror.cpp.i:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/tinyxmlerror.cpp.i
+	$(MAKE) -f CMakeFiles/Seburo.dir/build.make CMakeFiles/Seburo.dir/src/tinyxmlerror.cpp.i
 .PHONY : src/tinyxmlerror.cpp.i
 
 src/tinyxmlerror.s: src/tinyxmlerror.cpp.s
@@ -651,7 +675,7 @@ src/tinyxmlerror.s: src/tinyxmlerror.cpp.s
 
 # target to generate assembly for a file
 src/tinyxmlerror.cpp.s:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/tinyxmlerror.cpp.s
+	$(MAKE) -f CMakeFiles/Seburo.dir/build.make CMakeFiles/Seburo.dir/src/tinyxmlerror.cpp.s
 .PHONY : src/tinyxmlerror.cpp.s
 
 src/tinyxmlparser.o: src/tinyxmlparser.cpp.o
@@ -659,7 +683,7 @@ src/tinyxmlparser.o: src/tinyxmlparser.cpp.o
 
 # target to build an object file
 src/tinyxmlparser.cpp.o:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/tinyxmlparser.cpp.o
+	$(MAKE) -f CMakeFiles/Seburo.dir/build.make CMakeFiles/Seburo.dir/src/tinyxmlparser.cpp.o
 .PHONY : src/tinyxmlparser.cpp.o
 
 src/tinyxmlparser.i: src/tinyxmlparser.cpp.i
@@ -667,7 +691,7 @@ src/tinyxmlparser.i: src/tinyxmlparser.cpp.i
 
 # target to preprocess a source file
 src/tinyxmlparser.cpp.i:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/tinyxmlparser.cpp.i
+	$(MAKE) -f CMakeFiles/Seburo.dir/build.make CMakeFiles/Seburo.dir/src/tinyxmlparser.cpp.i
 .PHONY : src/tinyxmlparser.cpp.i
 
 src/tinyxmlparser.s: src/tinyxmlparser.cpp.s
@@ -675,7 +699,7 @@ src/tinyxmlparser.s: src/tinyxmlparser.cpp.s
 
 # target to generate assembly for a file
 src/tinyxmlparser.cpp.s:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/tinyxmlparser.cpp.s
+	$(MAKE) -f CMakeFiles/Seburo.dir/build.make CMakeFiles/Seburo.dir/src/tinyxmlparser.cpp.s
 .PHONY : src/tinyxmlparser.cpp.s
 
 src/visual_app.o: src/visual_app.cpp.o
@@ -683,7 +707,7 @@ src/visual_app.o: src/visual_app.cpp.o
 
 # target to build an object file
 src/visual_app.cpp.o:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/visual_app.cpp.o
+	$(MAKE) -f CMakeFiles/Seburo.dir/build.make CMakeFiles/Seburo.dir/src/visual_app.cpp.o
 .PHONY : src/visual_app.cpp.o
 
 src/visual_app.i: src/visual_app.cpp.i
@@ -691,7 +715,7 @@ src/visual_app.i: src/visual_app.cpp.i
 
 # target to preprocess a source file
 src/visual_app.cpp.i:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/visual_app.cpp.i
+	$(MAKE) -f CMakeFiles/Seburo.dir/build.make CMakeFiles/Seburo.dir/src/visual_app.cpp.i
 .PHONY : src/visual_app.cpp.i
 
 src/visual_app.s: src/visual_app.cpp.s
@@ -699,7 +723,7 @@ src/visual_app.s: src/visual_app.cpp.s
 
 # target to generate assembly for a file
 src/visual_app.cpp.s:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/visual_app.cpp.s
+	$(MAKE) -f CMakeFiles/Seburo.dir/build.make CMakeFiles/Seburo.dir/src/visual_app.cpp.s
 .PHONY : src/visual_app.cpp.s
 
 src/wingedge.o: src/wingedge.cpp.o
@@ -707,7 +731,7 @@ src/wingedge.o: src/wingedge.cpp.o
 
 # target to build an object file
 src/wingedge.cpp.o:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/wingedge.cpp.o
+	$(MAKE) -f CMakeFiles/Seburo.dir/build.make CMakeFiles/Seburo.dir/src/wingedge.cpp.o
 .PHONY : src/wingedge.cpp.o
 
 src/wingedge.i: src/wingedge.cpp.i
@@ -715,7 +739,7 @@ src/wingedge.i: src/wingedge.cpp.i
 
 # target to preprocess a source file
 src/wingedge.cpp.i:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/wingedge.cpp.i
+	$(MAKE) -f CMakeFiles/Seburo.dir/build.make CMakeFiles/Seburo.dir/src/wingedge.cpp.i
 .PHONY : src/wingedge.cpp.i
 
 src/wingedge.s: src/wingedge.cpp.s
@@ -723,7 +747,7 @@ src/wingedge.s: src/wingedge.cpp.s
 
 # target to generate assembly for a file
 src/wingedge.cpp.s:
-	$(MAKE) -f CMakeFiles/s9gear.dir/build.make CMakeFiles/s9gear.dir/src/wingedge.cpp.s
+	$(MAKE) -f CMakeFiles/Seburo.dir/build.make CMakeFiles/Seburo.dir/src/wingedge.cpp.s
 .PHONY : src/wingedge.cpp.s
 
 # Help Target
@@ -732,13 +756,13 @@ help:
 	@echo "... all (the default if no target is provided)"
 	@echo "... clean"
 	@echo "... depend"
+	@echo "... Seburo"
 	@echo "... edit_cache"
 	@echo "... install"
 	@echo "... install/local"
 	@echo "... install/strip"
 	@echo "... list_install_components"
 	@echo "... rebuild_cache"
-	@echo "... s9gear"
 	@echo "... basic"
 	@echo "... fbo"
 	@echo "... model"
@@ -755,6 +779,9 @@ help:
 	@echo "... src/cvprocess.o"
 	@echo "... src/cvprocess.i"
 	@echo "... src/cvprocess.s"
+	@echo "... src/file.o"
+	@echo "... src/file.i"
+	@echo "... src/file.s"
 	@echo "... src/gl/fbo.o"
 	@echo "... src/gl/fbo.i"
 	@echo "... src/gl/fbo.s"

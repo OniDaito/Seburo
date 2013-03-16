@@ -11,14 +11,14 @@ add_executable (basic
 ) 
 
 include_directories(
-  ${GEAR_INCLUDES}
+  ${SEBURO_INCLUDES}
 	${INCLUDES_SEARCH_PATHS}
 	${INCLUDES}
 )
 
 
 target_link_libraries( basic
-  s9gear 
+  Seburo 
 )
 
 

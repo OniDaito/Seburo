@@ -128,7 +128,7 @@ int main (int argc, const char * argv[]) {
     // Declare the supported options.
     po::options_description desc("Allowed options");
     desc.add_options()
-    ("help", "S9Gear Basic Application - No Options")
+    ("help", "Seburo Basic Application - No Options")
     ;
     
     po::variables_map vm;

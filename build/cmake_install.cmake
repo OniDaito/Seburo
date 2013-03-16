@@ -1,4 +1,4 @@
-# Install script for directory: /Users/oni/Projects/S9Gear
+# Install script for directory: /Users/oni/Projects/Seburo
 
 # Set the install prefix
 IF(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -29,13 +29,13 @@ ENDIF(NOT CMAKE_INSTALL_COMPONENT)
 
 IF(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
-  INCLUDE("/Users/oni/Projects/S9Gear/build/examples/basic/cmake_install.cmake")
-  INCLUDE("/Users/oni/Projects/S9Gear/build/examples/fbo/cmake_install.cmake")
-  INCLUDE("/Users/oni/Projects/S9Gear/build/examples/model/cmake_install.cmake")
-  INCLUDE("/Users/oni/Projects/S9Gear/build/examples/picking/cmake_install.cmake")
-  INCLUDE("/Users/oni/Projects/S9Gear/build/examples/video/cmake_install.cmake")
-  INCLUDE("/Users/oni/Projects/S9Gear/build/applications/template/cmake_install.cmake")
-  INCLUDE("/Users/oni/Projects/S9Gear/build/applications/touchwall/cmake_install.cmake")
+  INCLUDE("/Users/oni/Projects/Seburo/build/examples/basic/cmake_install.cmake")
+  INCLUDE("/Users/oni/Projects/Seburo/build/examples/fbo/cmake_install.cmake")
+  INCLUDE("/Users/oni/Projects/Seburo/build/examples/model/cmake_install.cmake")
+  INCLUDE("/Users/oni/Projects/Seburo/build/examples/picking/cmake_install.cmake")
+  INCLUDE("/Users/oni/Projects/Seburo/build/examples/video/cmake_install.cmake")
+  INCLUDE("/Users/oni/Projects/Seburo/build/applications/template/cmake_install.cmake")
+  INCLUDE("/Users/oni/Projects/Seburo/build/applications/touchwall/cmake_install.cmake")
 
 ENDIF(NOT CMAKE_INSTALL_LOCAL_ONLY)
 
@@ -45,7 +45,7 @@ ELSE(CMAKE_INSTALL_COMPONENT)
   SET(CMAKE_INSTALL_MANIFEST "install_manifest.txt")
 ENDIF(CMAKE_INSTALL_COMPONENT)
 
-FILE(WRITE "/Users/oni/Projects/S9Gear/build/${CMAKE_INSTALL_MANIFEST}" "")
+FILE(WRITE "/Users/oni/Projects/Seburo/build/${CMAKE_INSTALL_MANIFEST}" "")
 FOREACH(file ${CMAKE_INSTALL_MANIFEST_FILES})
-  FILE(APPEND "/Users/oni/Projects/S9Gear/build/${CMAKE_INSTALL_MANIFEST}" "${file}\n")
+  FILE(APPEND "/Users/oni/Projects/Seburo/build/${CMAKE_INSTALL_MANIFEST}" "${file}\n")
 ENDFOREACH(file)

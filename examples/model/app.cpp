@@ -27,9 +27,13 @@ namespace po = boost::program_options;
 
 void ModelApp::init(){
  
-    mShader.load("../../../shaders/basic_lighting.vert", "../../../shaders/basic_lighting.frag");
+#ifdef _SEBURO_LINUX
+    mShader.load( s9::File("./shaders/4/basic_lighting.vert").path(),  s9::File("./shaders/4/basic_lighting.frag").path());
+#elif _SEBURO_OSX
+    mShader.load( s9::File("./shaders/1.5/basic_lighting.vert").path(),  s9::File("./shaders/1.5/basic_lighting.frag").path());
+#endif
 
-    mGeometry = gl::Asset<GeometryPNF>( AssetImporter::load("../../../data/bunny.ply"));
+    mGeometry = gl::Asset<GeometryPNF>( AssetImporter::load( s9::File("./data/bunny.ply").path()));
     mGeometry.setScale(glm::vec3(30.0,30.0,30.0));
    
     mCamera.move(glm::vec3(0,0,20.0f));
@@ -98,11 +102,11 @@ void ModelApp::processEvent(KeyboardEvent e){
 
 int main (int argc, const char * argv[]) {
   
-#ifdef _GEAR_LINUX
+#ifdef _SEBURO_LINUX
     // Declare the supported options.
     po::options_description desc("Allowed options");
     desc.add_options()
-    ("help", "S9Gear Basic Application - No Options")
+    ("help", "Seburo Basic Application - No Options")
     ;
     
     po::variables_map vm;

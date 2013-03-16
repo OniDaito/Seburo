@@ -170,7 +170,7 @@ void TemplateApp::processEvent(KeyboardEvent e){
 
  int main (int argc, const char * argv[]) {
 
-#ifdef _GEAR_X11_GLX    
+#ifdef _SEBURO_X11_GLX    
     // Linux only - need equivalent for Mac / Windows
     Gtk::Main kit(&argc, (char***)&argv);
 #endif

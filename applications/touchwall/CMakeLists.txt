@@ -1,6 +1,6 @@
 
 #####################################################################
-# Application using S9Gear
+# Application using Seburo
 
 
 cmake_minimum_required (VERSION 2.8) 
@@ -33,11 +33,11 @@ file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/data DESTINATION ${CMAKE_CURRENT_BINARY_DI
 # Include Directories
 
 include_directories(${PROJECT_SOURCE_DIR}/include
-  ${GEAR_INCLUDES}
+  ${SEBURO_INCLUDES}
   ${INCLUDES_SEARCH_PATHS}
   ${INCLUDES}
 )
 
 target_link_libraries(touchwall 
-  s9gear
+  Seburo
 )

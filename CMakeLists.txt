@@ -1,33 +1,33 @@
 #####################################################################
-# Main CMake file for the S9Gear Project
+# Main CMake file for the Seburo Project
 
 cmake_minimum_required (VERSION 2.8) 
-project (S9Gear) 
+project (Seburo) 
 
-set(GEAR_VERSION_MAJOR "0")
-set(GEAR_VERSION_MINOR "2")
-set(GEAR_VERSION_PATCH "0")
-set(GEAR_VERSION_EXTRA "")
-set(GEAR_VERSION "${GEAR_VERSION_MAJOR}.${GEAR_VERSION_MINOR}")
-set(GEAR_VERSION_FULL "${GEAR_VERSION}.${GEAR_VERSION_PATCH}${GEAR_VERSION_EXTRA}")
+set(SEBURO_VERSION_MAJOR "0")
+set(SEBURO_VERSION_MINOR "2")
+set(SEBURO_VERSION_PATCH "0")
+set(SEBURO_VERSION_EXTRA "")
+set(SEBURO_VERSION "${SEBURO_VERSION_MAJOR}.${SEBURO_VERSION_MINOR}")
+set(SEBURO_VERSION_FULL "${SEBURO_VERSION}.${SEBURO_VERSION_PATCH}${SEBURO_VERSION_EXTRA}")
 
 
 #####################################################################
 # Detect OS 
 
 if (WIN32)
-    set(_GEAR_WIN32 1)
-    message(STATUS "Building Gear for WGL on a Win32 system") 
-    add_definitions(-D_GEAR_WIN32)
+    set(_SEBURO_WIN32 1)
+    message(STATUS "Building SEBURO for WGL on a Win32 system") 
+    add_definitions(-D_SEBURO_WIN32)
 elseif (UNIX AND APPLE)
-    set(_GEAR_OSX 1)
-    add_definitions(-D_GEAR_OSX)
-    message(STATUS "Building Gear for Cocoa and NSOpenGL on Mac OS X")
+    set(_SEBURO_OSX 1)
+    add_definitions(-D_SEBURO_OSX)
+    message(STATUS "Building SEBURO for Cocoa and NSOpenGL on Mac OS X")
     FILE(GLOB OSSources src/osx/*)
 elseif (UNIX AND NOT APPLE)
-    set(_GEAR_LINUX 1)
-    add_definitions(-D_GEAR_LINUX)
-    message(STATUS "Building Gear for X11 and GLX on a Unix-like system")
+    set(_SEBURO_LINUX 1)
+    add_definitions(-D_SEBURO_LINUX)
+    message(STATUS "Building SEBURO for X11 and GLX on a Unix-like system")
     FILE(GLOB OSSources src/linux/*)
 else()
     message(FATAL_ERROR "No supported platform was detected")
@@ -46,7 +46,7 @@ FILE(GLOB GLSources src/gl/*)
 #####################################################################
 # Macro to find libraries in the local lib directory then system wide
 
-macro(gear_find_library libname)
+macro(SEBURO_find_library libname)
   string(TOLOWER ${libname} libnamelow)
 
   find_library(${libname}_LIB NAMES ${libname} PATHS ${LOCAL_LIBRARIES_SEARCH_PATHS} NO_DEFAULT_PATH)
@@ -58,7 +58,7 @@ macro(gear_find_library libname)
     message(FATAL_ERROR "Cannot find '${libname}' library")
   else()
     message(STATUS "Found '${libname}' library in ${${libname}_LIB}")
-    set(GEAR_LIBRARIES ${GEAR_LIBRARIES} ${${libname}_LIB})
+    set(SEBURO_LIBRARIES ${SEBURO_LIBRARIES} ${${libname}_LIB})
   endif()
 endmacro()
 
@@ -91,29 +91,29 @@ if (UNIX AND NOT APPLE)
 
 
   # Setup pkgconfig macro for including extra things
-  macro(gear_find_pkgconfig_lib pkgname)
+  macro(SEBURO_find_pkgconfig_lib pkgname)
     include(FindPkgConfig)
     pkg_check_modules(${pkgname}_pkg REQUIRED ${pkgname})
     if ( DEFINED ${pkgname}_pkg_FOUND )
-      set (GEAR_LIBRARIES ${GEAR_LIBRARIES} ${${pkgname}_pkg_LIBRARIES}
+      set (SEBURO_LIBRARIES ${SEBURO_LIBRARIES} ${${pkgname}_pkg_LIBRARIES}
                                     ${${pkgname}_pkg_LDFLAGS} ${${pkgname}_pkg_LDFLAGS_OTHER})
-      set (GEAR_INCLUDES ${GEAR_INCLUDES} ${${pkgname}_pkg_INCLUDE_DIRS})
-      set (GEAR_CXX_FLAGS ${GEAR_CXX_FLAGS} ${${pkgname}_pkg_CFLAGS})
+      set (SEBURO_INCLUDES ${SEBURO_INCLUDES} ${${pkgname}_pkg_INCLUDE_DIRS})
+      set (SEBURO_CXX_FLAGS ${SEBURO_CXX_FLAGS} ${${pkgname}_pkg_CFLAGS})
     else()
       message( FATAL_ERROR "Cannot find pkgconfig file for ${pkgconfig}. Check your PKG_CONFIG_PATH environment variable.")
     endif()
-  endmacro(gear_find_pkgconfig_lib)
+  endmacro(SEBURO_find_pkgconfig_lib)
 
-  gear_find_pkgconfig_lib(gtkmm-3.0)
-  gear_find_pkgconfig_lib(gl)
+  SEBURO_find_pkgconfig_lib(gtkmm-3.0)
+  SEBURO_find_pkgconfig_lib(gl)
  
-  gear_find_library(glfw3)
-  gear_find_library(AntTweakBar)
-  gear_find_library(assimp)
-  gear_find_pkgconfig_lib(xxf86vm)
+  SEBURO_find_library(glfw3)
+  SEBURO_find_library(AntTweakBar)
+  SEBURO_find_library(assimp)
+  SEBURO_find_pkgconfig_lib(xxf86vm)
 
   include_directories(${PROJECT_SOURCE_DIR}/lib/linux
-    ${GEAR_INCLUDES}
+    ${SEBURO_INCLUDES}
   )
 
 elseif(UNIX AND APPLE)
@@ -147,9 +147,9 @@ elseif(UNIX AND APPLE)
     ${CMAKE_SOURCE_DIR}/lib/osx
     CACHE STRING "Local Library search paths")
 
-  gear_find_library(glfw3)
-  gear_find_library(AntTweakBar)
-  gear_find_library(AssImp)
+  SEBURO_find_library(glfw3)
+  SEBURO_find_library(AntTweakBar)
+  SEBURO_find_library(AssImp)
 
 else()
   message(FATAL_ERROR "No supported platform was detected")
@@ -169,20 +169,20 @@ include_directories(${BOOST_INCLUDE_DIR})
 option(USEOPENCV "useopencv" ON)
 
 if (USEOPENCV)
-  add_definitions(-D_GEAR_OPENCV)
-  gear_find_library(opencv_calib3d)
-  gear_find_library(opencv_contrib)
-  gear_find_library(opencv_core)
-  gear_find_library(opencv_features2d)
-  gear_find_library(opencv_gpu)
-#  gear_find_library(opencv_highgui)
-  gear_find_library(opencv_imgproc)
-  gear_find_library(opencv_legacy)
-  gear_find_library(opencv_ml)
-  gear_find_library(opencv_objdetect)
-#  gear_find_library(opencv_stitching)
-#  gear_find_library(opencv_ts)
-  gear_find_library(opencv_video)
+  add_definitions(-D_SEBURO_OPENCV)
+  SEBURO_find_library(opencv_calib3d)
+  SEBURO_find_library(opencv_contrib)
+  SEBURO_find_library(opencv_core)
+  SEBURO_find_library(opencv_features2d)
+  SEBURO_find_library(opencv_gpu)
+#  SEBURO_find_library(opencv_highgui)
+  SEBURO_find_library(opencv_imgproc)
+  SEBURO_find_library(opencv_legacy)
+  SEBURO_find_library(opencv_ml)
+  SEBURO_find_library(opencv_objdetect)
+#  SEBURO_find_library(opencv_stitching)
+#  SEBURO_find_library(opencv_ts)
+  SEBURO_find_library(opencv_video)
 endif(USEOPENCV)
 
 #####################################################################
@@ -190,16 +190,16 @@ endif(USEOPENCV)
 
 FILE(GLOB CommonSources src/*)
 
-add_library(s9gear SHARED
+add_library(Seburo SHARED
   ${CommonSources}
   ${GLSources}
   ${OSSources}
 ) 
 
-# Now link the found libraries to the gear library
+# Now link the found libraries to the SEBURO library
 
-target_link_libraries(s9gear 
-  ${GEAR_LIBRARIES}
+target_link_libraries(Seburo 
+  ${SEBURO_LIBRARIES}
   ${OPENGL_LIBRARY}
   ${Boost_FILESYSTEM_LIBRARY}
   ${Boost_SYSTEM_LIBRARY}
@@ -212,7 +212,7 @@ target_link_libraries(s9gear
 # seperate libs depending on OS
 
 if (UNIX AND APPLE)
-  target_link_libraries(s9gear 
+  target_link_libraries(Seburo 
     ${OSX_FRAMEWORKS}
   )
 endif()

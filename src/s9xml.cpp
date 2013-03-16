@@ -31,7 +31,7 @@ std::string find(std::vector<std::string> strs, TiXmlElement *pRoot){
 		TiXmlElement* pp = _find(pRoot,strs);
 		
 		if (pp == NULL){
-			cerr << "S9Gear - XML Not found: " <<  s << endl; 
+			cerr << "Seburo - XML Not found: " <<  s << endl; 
 			return "Failed";
 		}
 		
@@ -39,7 +39,7 @@ std::string find(std::vector<std::string> strs, TiXmlElement *pRoot){
 			cout << ((TiXmlNode*)pp)->Value() << endl;
 			return string(pp->GetText());
 		} catch(...){
-			cerr << "S9Gear - Error returning XML Value for: " <<  s << endl; 
+			cerr << "Seburo - Error returning XML Value for: " <<  s << endl; 
 			return "Failed";
 		}
 	}
@@ -47,13 +47,13 @@ std::string find(std::vector<std::string> strs, TiXmlElement *pRoot){
 		try{
 			return string(pRoot->GetText());
 		} catch(...){
-			cerr << "S9Gear - Error returning XML Value for: " << s << endl; 
+			cerr << "Seburo - Error returning XML Value for: " << s << endl; 
 			return "Failed";
 		}
 	}
 	else {
 		
-		cerr << "S9Gear - XML Not found: " << s << endl; 
+		cerr << "Seburo - XML Not found: " << s << endl; 
 		return "Failed";
 	}
 }
@@ -112,7 +112,7 @@ bool XMLSettings::loadFile(std::string filename){
 
 	mObj->mDoc.reset(new TiXmlDocument(filename.c_str()));
 	if (!mObj->mDoc->LoadFile()){
-		cerr << "S9Gear - XML Failed to load " << filename << endl;
+		cerr << "Seburo - XML Failed to load " << filename << endl;
 		return false;
 	}
 	return true;
@@ -137,7 +137,7 @@ XMLIterator XMLSettings::iterator(std::string s){
 		it.set(pRoot);
 	}
 	else {
-		cerr << "S9Gear - XML Not found: " << s << endl; 
+		cerr << "Seburo - XML Not found: " << s << endl; 
 	}
 	return it;
 }

@@ -7,7 +7,7 @@
 */
 
 
-#ifdef _GEAR_OPENCV
+#ifdef _SEBURO_OPENCV
 
 #include "s9/cvprocess.hpp"
 

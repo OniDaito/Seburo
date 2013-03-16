@@ -51,7 +51,7 @@ void Shader::load(std::string vert, std::string frag) {
 		vertexInfoLog = new char[maxLength];
 		glGetShaderInfoLog(mVS, maxLength, &maxLength, vertexInfoLog);
  
-		cerr << "S9Gear - Vertex Shader Error in " <<  vert << " - "<< vertexInfoLog << endl;
+		cerr << "Seburo - Vertex Shader Error in " <<  vert << " - "<< vertexInfoLog << endl;
  
 		delete [] vertexInfoLog;
 		return;
@@ -63,7 +63,7 @@ void Shader::load(std::string vert, std::string frag) {
 		glGetShaderiv(mFS, GL_INFO_LOG_LENGTH, &maxLength);
 		fragmentInfoLog = new char[maxLength];
 		glGetShaderInfoLog(mFS, maxLength, &maxLength, fragmentInfoLog);
-		cerr << "S9Gear - Fragment Shader Error in " << frag << " - " << fragmentInfoLog << endl;
+		cerr << "Seburo - Fragment Shader Error in " << frag << " - " << fragmentInfoLog << endl;
 		
 		delete [] fragmentInfoLog;
 		return;
@@ -80,7 +80,7 @@ void Shader::load(std::string vert, std::string frag) {
 		glGetProgramiv(mProgram, GL_INFO_LOG_LENGTH, &maxLength);
 		shaderProgramInfoLog = new char[maxLength];
 		glGetProgramInfoLog(mProgram, maxLength, &maxLength, shaderProgramInfoLog);
-		cerr << "S9Gear - Shader Program Error " << shaderProgramInfoLog << endl;
+		cerr << "Seburo - Shader Program Error " << shaderProgramInfoLog << endl;
 		free(shaderProgramInfoLog);
 		return;
 	}

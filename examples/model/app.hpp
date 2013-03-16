@@ -15,6 +15,7 @@
 #include "s9/gl/shader.hpp"
 #include "s9/gl/asset.hpp"
 #include "s9/gl/glfw_app.hpp"
+#include "s9/file.hpp"
 
 #include <anttweakbar/AntTweakBar.h>
 

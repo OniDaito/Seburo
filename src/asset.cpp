@@ -104,11 +104,11 @@ AssetBasic AssetImporter::load(std::string filename){
 		p = *(_load(pScene, pScene->mRootNode, AssetPtr()));
 	
 #ifdef DEBUG
-		cout << "S9Gear - " << filename << " loaded with " <<  p.getGeometry().size()  << " vertices." << endl;
+		cout << "Seburo - " << filename << " loaded with " <<  p.getGeometry().size()  << " vertices." << endl;
 #endif
 	
 	} else
-		cout << "S9Gear - Failed to load asset: " << filename << endl;
+		cout << "Seburo - Failed to load asset: " << filename << endl;
 
 	return p;
 }

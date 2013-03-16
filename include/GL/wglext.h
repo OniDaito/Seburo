@@ -514,12 +514,12 @@ typedef BOOL (WINAPI * PFNWGLQUERYPBUFFERARBPROC) (HPBUFFERARB hPbuffer, int iAt
 #ifndef WGL_ARB_render_texture
 #define WGL_ARB_render_texture 1
 #ifdef WGL_WGLEXT_PROTOTYPES
-extern BOOL WINAPI wglBindTexImageARB (HPBUFFERARB hPbuffer, int iBuffer);
-extern BOOL WINAPI wglReleaseTexImageARB (HPBUFFERARB hPbuffer, int iBuffer);
+extern BOOL WINAPI wglBindTexImaSEBUROB (HPBUFFERARB hPbuffer, int iBuffer);
+extern BOOL WINAPI wglReleaseTexImaSEBUROB (HPBUFFERARB hPbuffer, int iBuffer);
 extern BOOL WINAPI wglSetPbufferAttribARB (HPBUFFERARB hPbuffer, const int *piAttribList);
 #endif /* WGL_WGLEXT_PROTOTYPES */
-typedef BOOL (WINAPI * PFNWGLBINDTEXIMAGEARBPROC) (HPBUFFERARB hPbuffer, int iBuffer);
-typedef BOOL (WINAPI * PFNWGLRELEASETEXIMAGEARBPROC) (HPBUFFERARB hPbuffer, int iBuffer);
+typedef BOOL (WINAPI * PFNWGLBINDTEXIMASEBUROBPROC) (HPBUFFERARB hPbuffer, int iBuffer);
+typedef BOOL (WINAPI * PFNWGLRELEASETEXIMASEBUROBPROC) (HPBUFFERARB hPbuffer, int iBuffer);
 typedef BOOL (WINAPI * PFNWGLSETPBUFFERATTRIBARBPROC) (HPBUFFERARB hPbuffer, const int *piAttribList);
 #endif
 

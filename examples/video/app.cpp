@@ -29,7 +29,7 @@ void VideoApp::init(){
     _test_quad = gl::Quad(640.0,480.0);
     _shader.load("../../../shaders/3/quad_texture.vert", "../../../shaders/3/quad_texture.frag");
 
-#ifdef _GEAR_LINUX
+#ifdef _SEBURO_LINUX
     _video = VidCam("/dev/video0",640, 480,30);
 #endif
 
@@ -97,7 +97,7 @@ int main (int argc, const char * argv[]) {
     // Declare the supported options.
     po::options_description desc("Allowed options");
     desc.add_options()
-    ("help", "S9Gear Video Application - No Options")
+    ("help", "Seburo Video Application - No Options")
     ;
     
     po::variables_map vm;

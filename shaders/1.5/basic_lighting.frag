@@ -1,6 +1,6 @@
-in vec4 vLightPos;
-in vec4 vVertexNormal;
-in vec4 vVertexPosition;
+vec4 vLightPos;
+vec4 vVertexNormal;
+vec4 vVertexPosition;
 
 // Works with one light using the phong model
 

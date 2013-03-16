@@ -38,7 +38,7 @@ void GLFWApp::mainLoop() {
 		
 		glfwPollEvents();
 
-#ifdef _GEAR_X11_GLX
+#ifdef _SEBURO_X11_GLX
 		gtk_main_iteration_do(false);
 #endif
 		
@@ -188,7 +188,7 @@ void GLFWApp::_mouseWheelCallback(GLFWwindow window, double xpos, double ypos) {
 }
 
 
-GLFWwindow GLFWApp::createWindow(const char * title ="S9Gear", int w=800, int h=600) {
+GLFWwindow GLFWApp::createWindow(const char * title ="Seburo", int w=800, int h=600) {
 #ifdef MULTIWINDOW
   GLFWwindow win = glfwCreateWindow(w,h, GLFW_WINDOWED, title, NULL);
 #else
@@ -223,18 +223,20 @@ void GLFWApp::_update(){
  */
 
  void GLFWApp::initGL( const int w = 800, const int h =600,
- 		const int major = 3, const int minor = 3) {
+ 		const int major = 3, const int minor = 0) {
 
-	//glfwWindowHint(GLFW_OPENGL_VERSION_MAJOR, major);
-	//glfwWindowHint(GLFW_OPENGL_VERSION_MINOR, minor);
-	
+
 	///\todo fully switch to core profile - there is something causing an error in core
 	//glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_COMPAT_PROFILE);
 
 #ifdef MULTIWINDOW
+ 	glfwWindowHint(GLFW_OPENGL_VERSION_MAJOR, major);
+	glfwWindowHint(GLFW_OPENGL_VERSION_MINOR, minor);
  	glfwWindowHint(GLFW_DEPTH_BITS, 16);
 	glfwWindowHint(GLFW_FSAA_SAMPLES, 4);
 #else
+	glfwOpenWindowHint(GLFW_OPENGL_VERSION_MAJOR, major);
+	glfwOpenWindowHint(GLFW_OPENGL_VERSION_MINOR, minor);
   glfwOpenWindowHint(GLFW_DEPTH_BITS, 16);
   glfwOpenWindowHint(GLFW_FSAA_SAMPLES, 4);
 #endif

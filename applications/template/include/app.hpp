@@ -22,7 +22,7 @@
 
 #include <anttweakbar/AntTweakBar.h>
 
-#ifdef _GEAR_X11_GLX	
+#ifdef _SEBURO_X11_GLX	
 #include "s9/linux/gtk_functions.hpp"
 #include "s9/linux/defines.hpp"
 #endif
