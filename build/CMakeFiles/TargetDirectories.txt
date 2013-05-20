@@ -1,8 +1,0 @@
-/Users/oni/Projects/Seburo/build/CMakeFiles/Seburo.dir
-/Users/oni/Projects/Seburo/build/examples/basic/CMakeFiles/basic.dir
-/Users/oni/Projects/Seburo/build/examples/fbo/CMakeFiles/fbo.dir
-/Users/oni/Projects/Seburo/build/examples/model/CMakeFiles/model.dir
-/Users/oni/Projects/Seburo/build/examples/picking/CMakeFiles/picking.dir
-/Users/oni/Projects/Seburo/build/applications/template/CMakeFiles/template.dir
-/Users/oni/Projects/Seburo/build/applications/touchwall/CMakeFiles/touchwall.dir
-/Users/oni/Projects/Seburo/build/examples/video/CMakeFiles/video.dir

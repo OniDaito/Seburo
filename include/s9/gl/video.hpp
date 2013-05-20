@@ -6,10 +6,8 @@
 *
 */
 
-
 #ifndef S9_VIDEO_HPP
 #define S9_VIDEO_HPP
-
 
 #include "../common.hpp"
 #include "common.hpp"
@@ -28,6 +26,10 @@
 #include "s9/osx/quicktime_camera.hpp"
 #endif
 
+#ifdef _SEBURO_WIN32
+#include "s9/win32/windows_camera.hpp"
+#endif
+
 
 namespace s9 {
 
@@ -37,7 +39,7 @@ namespace s9 {
 		 * Access to a camera device - OS dependent and using OpenGL as the texture method
 		 */
 
-		class VidCam {
+		class SEBUROAPI VidCam {
 		public:
 			VidCam() {};
 			VidCam (std::string dev, size_t w, size_t h, size_t fps);
@@ -66,9 +68,16 @@ namespace s9 {
 
 #ifdef _SEBURO_LINUX
 				boost::shared_ptr<UVCVideo> _cam;
-#else
+#endif
+
+#ifdef _SEBURO_MACOSX
 				boost::shared_ptr<QuicktimeCamera> _cam;
 #endif
+
+#ifdef _SEBURO_WIN32
+				boost::shared_ptr<WindowsCamera> _cam;
+#endif
+
 				size_t _fps;
 				TextureStream _texture;
 			};

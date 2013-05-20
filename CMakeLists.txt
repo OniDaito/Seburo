@@ -11,27 +11,64 @@ set(SEBURO_VERSION_EXTRA "")
 set(SEBURO_VERSION "${SEBURO_VERSION_MAJOR}.${SEBURO_VERSION_MINOR}")
 set(SEBURO_VERSION_FULL "${SEBURO_VERSION}.${SEBURO_VERSION_PATCH}${SEBURO_VERSION_EXTRA}")
 
+#####################################################################
+# Options
+
+option(SEBURO_BUILD_EXAMPLES "Build the Seburo example programs" ON)
 
 #####################################################################
-# Detect OS 
+# Detect OS and Basic Compiler settings
+# Assume GCC under Linux, Clang under OSX and CL under Windows32
+# No target for Windows 64 as yet. 
+# Need to test for 64 bit Linux. OSX is 64 bit non universal by default
 
 if (WIN32)
     set(_SEBURO_WIN32 1)
-    message(STATUS "Building SEBURO for WGL on a Win32 system") 
+    message(STATUS "Building SEBURO Shared on a Win32 system") 
     add_definitions(-D_SEBURO_WIN32)
+    add_definitions(-D_SEBURO_BUILD_DLL)
+    SET(CMAKE_CXX_FLAGS "/EHsc")
+    FILE(GLOB OSSources src/win32/*)
+    #SET(CMAKE_MODULE_LINKER_FLAGS "/NODEFAULTLIB")
+
+    #CMAKE_EXE_LINKER_FLAGS
+    #CMAKE_SHARED_LINKER_FLAGS
+    #CMAKE_MODULE_LINKER_FLAGS
+ 
 elseif (UNIX AND APPLE)
     set(_SEBURO_OSX 1)
     add_definitions(-D_SEBURO_OSX)
-    message(STATUS "Building SEBURO for Cocoa and NSOpenGL on Mac OS X")
+    message(STATUS "Building SEBURO Shared on Mac OS X")
     FILE(GLOB OSSources src/osx/*)
+
 elseif (UNIX AND NOT APPLE)
     set(_SEBURO_LINUX 1)
     add_definitions(-D_SEBURO_LINUX)
-    message(STATUS "Building SEBURO for X11 and GLX on a Unix-like system")
+    message(STATUS "Building SEBURO Shared on a Unix-like system")
     FILE(GLOB OSSources src/linux/*)
 else()
     message(FATAL_ERROR "No supported platform was detected")
 endif()
+
+################################
+# DEBUG mode for Compilation
+# TODO - Should affect linking also
+
+option(DEBUG "Debug Mode" ON)
+if(DEBUG)
+  add_definitions(-DDEBUG)  
+  set(_SEBURO_DEBUG 1)
+  if (_SEBURO_OSX OR _SEBURO_LINUX)
+    SET(CMAKE_CXX_FLAGS_DEBUG "-g")
+  else()
+
+  endif()
+
+else()
+  
+endif()
+
+###########
 
 #####################################################################
 # S9 Includes
@@ -42,6 +79,7 @@ include_directories(include)
 # OpenGL for now
 
 FILE(GLOB GLSources src/gl/*)
+FILE(GLOB GLUtils src/gl/utils/*)
 
 #####################################################################
 # Macro to find libraries in the local lib directory then system wide
@@ -67,7 +105,7 @@ endmacro()
 #####################################################################
 # Extra Libraries and their paths
 
-if (UNIX AND NOT APPLE)
+if (_SEBURO_LINUX)
 
   set (CMAKE_FIND_LIBRARY_PREFIXES "lib" "")
   set (CMAKE_FIND_LIBRARY_SUFFIXES ".so" ".a")
@@ -106,17 +144,17 @@ if (UNIX AND NOT APPLE)
 
   SEBURO_find_pkgconfig_lib(gtkmm-3.0)
   SEBURO_find_pkgconfig_lib(gl)
+  SEBURO_find_pkgconfig_lib(xxf86vm)
  
   SEBURO_find_library(glfw3)
   SEBURO_find_library(AntTweakBar)
   SEBURO_find_library(assimp)
-  SEBURO_find_pkgconfig_lib(xxf86vm)
 
   include_directories(${PROJECT_SOURCE_DIR}/lib/linux
     ${SEBURO_INCLUDES}
   )
 
-elseif(UNIX AND APPLE)
+elseif(_SEBURO_OSX)
 
   link_directories(${PROJECT_SOURCE_DIR}/lib/osx)
 
@@ -151,6 +189,27 @@ elseif(UNIX AND APPLE)
   SEBURO_find_library(AntTweakBar)
   SEBURO_find_library(AssImp)
 
+elseif(_SEBURO_WIN32)
+  
+  if (DEBUG)
+    link_directories(${PROJECT_SOURCE_DIR}/lib/win32/Debug)
+    set(LOCAL_LIBRARIES_SEARCH_PATHS
+      ${CMAKE_SOURCE_DIR}/lib/win32/Debug
+      CACHE STRING "Local Library search paths")
+  elseif()
+    link_directories(${PROJECT_SOURCE_DIR}/lib/win32/Release)
+    set(LOCAL_LIBRARIES_SEARCH_PATHS
+      ${CMAKE_SOURCE_DIR}/lib/win32/Release
+      CACHE STRING "Local Library search paths")
+  endif()
+
+  find_package(OpenGL REQUIRED)
+
+  SEBURO_find_library(glfw3) # Built from the github version 3 build
+  SEBURO_find_library(AntTweakBar)
+  #SEBURO_find_library(AssImp)
+  #SEBURO_find_library(glew32)
+
 else()
   message(FATAL_ERROR "No supported platform was detected")
 endif()
@@ -158,15 +217,40 @@ endif()
 #####################################################################
 # Boost - Regular and installed
 
+# This assumes boost is built for static inclusion as libs for
+# MSVC 2010 in release mode
+# http://cpprocks.com/using-cmake-to-build-a-cross-platform-project-with-a-boost-dependency/
+
+if(WIN32)
+  SET(Boost_USE_STATIC_LIBS   ON)
+  SET(Boost_USE_MULTITHREADED ON)
+  SET(Boost_USE_STATIC_RUNTIME ON)
+  SET(BOOST_ALL_DYN_LINK  OFF)
+  #add_definitions(-DBOOST_ALL_NO_LIB)
+  #SET(CMAKE_SHARED_LINKER_FLAGS /NODEFAULTLIB:LIBC;LIBCMT;MSVCRT)
+endif()
+
 message("Looking for Installed BOOST Libraries")
 find_package(Boost COMPONENTS system filesystem signals iostreams program_options thread REQUIRED)
-include_directories(${BOOST_INCLUDE_DIR})
+
+include_directories(${Boost_INCLUDE_DIR})
+link_directories(${Boost_LIBRARY_DIRS})
+
+message(status "** Boost Include: ${Boost_INCLUDE_DIR}")
+message(status "** Boost Libraries: ${Boost_LIBRARY_DIRS}")
+message(status "** Boost Libraries: ${Boost_LIBRARIES}")
+
+
+######################################################################
+# Glob Source files
+
+FILE(GLOB CommonSources src/*)
 
 
 #####################################################################
-# OpenCV. Turned on by default as its very useful - Version 2+
+# OpenCV.
 
-option(USEOPENCV "useopencv" ON)
+option(USEOPENCV "useopencv" OFF)
 
 if (USEOPENCV)
   add_definitions(-D_SEBURO_OPENCV)
@@ -183,16 +267,42 @@ if (USEOPENCV)
 #  SEBURO_find_library(opencv_stitching)
 #  SEBURO_find_library(opencv_ts)
   SEBURO_find_library(opencv_video)
+
+else()
+  list(REMOVE_ITEM CommonSources src/cvprocess.cpp)
 endif(USEOPENCV)
 
 #####################################################################
-# Glob Source files and create
+# Create Target
 
-FILE(GLOB CommonSources src/*)
+# Final removals for Win32 until we add fixes
+if (_SEBURO_WIN32)
+  #list(REMOVE_ITEM GLSources ${PROJECT_SOURCE_DIR}/src/gl/glew.c)
+  list(REMOVE_ITEM GLUtils ${PROJECT_SOURCE_DIR}/src/gl/utils/glewinfo.c)
+  list(REMOVE_ITEM GLUtils ${PROJECT_SOURCE_DIR}/src/gl/utils/visualinfo.c)
+
+  # Make sure we are using /MT this time around. We may change to /MD
+  # but we MUST be consistent
+
+  set(CompilerFlags
+        CMAKE_CXX_FLAGS
+        CMAKE_CXX_FLAGS_DEBUG
+        CMAKE_CXX_FLAGS_RELEASE
+        CMAKE_C_FLAGS
+        CMAKE_C_FLAGS_DEBUG
+        CMAKE_C_FLAGS_RELEASE
+        )
+  foreach(CompilerFlag ${CompilerFlags})
+    string(REPLACE "/MD" "/MT" ${CompilerFlag} "${${CompilerFlag}}")
+  endforeach()
+
+endif()
+
 
 add_library(Seburo SHARED
   ${CommonSources}
   ${GLSources}
+  ${GLUtils}
   ${OSSources}
 ) 
 
@@ -219,30 +329,22 @@ endif()
 
 project(${PROJECT_NAME})
 
-################################
-# DEBUG mode
-
-option(DEBUG "Debug Mode" ON)
-if(DEBUG)
-  add_definitions(-DDEBUG)  
-  SET(CMAKE_BUILD_TYPE debug)
-  SET(CMAKE_CXX_FLAGS_DEBUG "-g")
-endif()
-
-#####################################################################
+##########################################################
 # GLFW Windowed mode (in case you want multiple windows in your GLFW3
 # Application)
 
-option(MULTIWINDOW "Multiple Window Support" OFF)
+#option(MULTIWINDOW "Multiple Window Support" OFF)
 
 #####################################################################
 # Go into examples directory and build these
 
-if (NOT TARGET examples)
-  FILE(GLOB examples examples/*)
-  foreach(example ${examples})
-    add_subdirectory(${example})
-  endforeach()
+if (SEBURO_BUILD_EXAMPLES) 
+  if (NOT TARGET examples) 
+    FILE(GLOB examples examples/*)
+    foreach(example ${examples})
+      add_subdirectory(${example})
+    endforeach()
+  endif()
 endif()
 
 

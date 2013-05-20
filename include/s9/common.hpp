@@ -20,7 +20,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+
+#ifdef _SEBURO_WIN32
+#include "win32/s9win32.hpp"
+#else
 #include <unistd.h>
+#endif
+
+#include <cstdlib>
+#include <cmath>
 #include <fstream>
 #include <stddef.h>
 

@@ -25,7 +25,7 @@ namespace s9 {
 	 * respond to these. This is a basic interface
 	 */
 
-	class WindowResponder {
+	SEBUROAPI class WindowResponder {
 	public:
 		virtual void processEvent(Event e) {};
 		virtual void processEvent(MouseEvent e) {};
@@ -41,7 +41,7 @@ namespace s9 {
 	 * and can also link things back to the underlying event system
 	 */
 
-	class WindowApp  {
+	class SEBUROAPI WindowApp  {
 	public:
 		virtual void init() {};
 		virtual void display(double_t dt) {};
@@ -68,7 +68,7 @@ namespace s9 {
 	 * in this case, GLFW. Sends events to the Windowed app
 	 */
 
-	class WindowSystem {
+	SEBUROAPI class WindowSystem {
 	public:
 		WindowSystem(WindowApp& app) : _app(app) { };
 

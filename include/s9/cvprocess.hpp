@@ -12,19 +12,16 @@
 #include "common.hpp"
 #include <opencv2/opencv.hpp>
 
-
 namespace s9{
 
   namespace compvis {
 
 
-    class Process;
-
     /*
      * A step in the processing - records a result
      */
 
-    class ProcessBlock {
+    class SEBUROAPI ProcessBlock {
     public:
 
       friend class Process;
@@ -70,7 +67,7 @@ namespace s9{
      * A Pipeline of image processing blocks
      */
 
-    class Process {
+    class SEBUROAPI Process {
     public:
       Process() { };
 
@@ -110,7 +107,7 @@ namespace s9{
 
     // Useful Blocks
 
-    class BlockGreyscale : public ProcessBlock {
+    class SEBUROAPI BlockGreyscale : public ProcessBlock {
   
     protected:
         cv::Mat& _process(cv::Mat &in);

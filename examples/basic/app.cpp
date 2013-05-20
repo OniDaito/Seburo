@@ -26,9 +26,9 @@ namespace po = boost::program_options;
 
 void BasicApp::init(){
     mTestQuad = gl::Quad(1.0,1.0);
-    mShader.load("../../../shaders/3/quad.vert", "../../../shaders/3/quad.frag");
+    //mShader.load("../../../shaders/3/quad.vert", "../../../shaders/3/quad.frag");
 
-    mTestQuad.move(glm::vec3(-0.5,-0.5,0.0));
+   // mTestQuad.move(glm::vec3(-0.5,-0.5,0.0));
     mCamera.move(glm::vec3(0,0,20.0f));
 
     link(*this);
@@ -46,15 +46,15 @@ void BasicApp::display(double_t dt){
     GLfloat depth = 1.0f;
     glClearBufferfv(GL_DEPTH, 0, &depth );
 
-    mShader.bind();
+   // mShader.bind();
 
     // Our matrix = the object * camera
-    glm::mat4 mvp = mCamera.getMatrix() * mTestQuad.getMatrix();
+   // glm::mat4 mvp = mCamera.getMatrix() * mTestQuad.getMatrix();
 
-    mShader.s("uMVPMatrix",mvp);
+   // mShader.s("uMVPMatrix",mvp);
 
-    mTestQuad.draw();
-    mShader.unbind();
+   // mTestQuad.draw();
+   // mShader.unbind();
 
     mCamera.update(dt);
 

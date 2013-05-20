@@ -32,7 +32,7 @@ namespace s9 {
      * Represents a texture in OpenGL. Use GL_TEXTURE_RECTANGLE
      */
 
-    class Texture{
+    class SEBUROAPI Texture{
     public:
       Texture() {};
       Texture(glm::vec2 size, TextureType format=TEXTURE_RGB, const char* data = NULL);

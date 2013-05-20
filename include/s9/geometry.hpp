@@ -25,7 +25,7 @@ namespace s9 {
 	 * \todo rather than use a dirty flag, register a listener or similar. Make implicit!
 	 */
 	 
-	class DrawableGeometry {
+	class SEBUROAPI DrawableGeometry {
 	public:
 		virtual bool isDirty(){ return false;}
 		virtual void setDirty(bool b) {}
@@ -48,7 +48,7 @@ namespace s9 {
 	 */
 	
 	template <class T>
-	class Geometry : public DrawableGeometry{
+	class SEBUROAPI Geometry : public DrawableGeometry{
 	public:
 		Geometry() {};
 		
@@ -133,7 +133,7 @@ namespace s9 {
 	// Specialist contructors for speed - basically, zipping from different vectors
 	
 	template<>
-	inline Geometry<VertPNG>::Geometry(std::vector<glm::vec3> v, std::vector<glm::vec3> n) {
+	 inline Geometry<VertPNG>::Geometry(std::vector<glm::vec3> v, std::vector<glm::vec3> n) {
 		_obj.reset(new SharedObj());
 		
 		if (v.size() != n.size()) { std::cerr << "Seburo - Counts do not match" << std::endl; throw; return; }

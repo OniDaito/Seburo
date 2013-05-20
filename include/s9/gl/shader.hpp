@@ -25,7 +25,7 @@ namespace s9 {
 
 	namespace gl {
 
-		class Shader {
+		class SEBUROAPI Shader {
 		public:
 			void load(std::string vert, std::string frag);
 			GLuint getProgram() { return mProgram; };

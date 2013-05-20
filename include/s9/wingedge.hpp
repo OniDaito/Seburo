@@ -21,7 +21,7 @@ namespace s9 {
 	class WE_Vertex;
 	class WE_Face;
 
-	class WE_Edge {
+	class SEBUROAPI WE_Edge {
 	public:
 		boost::shared_ptr<WE_Vertex> v0, v1;
 		boost::shared_ptr<WE_Face> face;
@@ -30,13 +30,13 @@ namespace s9 {
 	
 	typedef boost::shared_ptr<WE_Edge> WEP_Edge;
 
-	class WE_Vertex {
+	class SEBUROAPI WE_Vertex {
 	public:
 		std::vector< boost::shared_ptr<WE_Edge> > edges;
 		size_t idc; // Index into original data
 	};
 
-	class WE_Face {
+	class SEBUROAPI WE_Face {
 	public:
 		boost::shared_ptr<WE_Edge> edge;
 	};
@@ -44,7 +44,7 @@ namespace s9 {
 	typedef boost::shared_ptr<WE_Face> WEP_Face;
 
 
-	class WingedEdge {
+	class SEBUROAPI WingedEdge {
 	public:
 		WingedEdge(){};
 		void make(DrawableGeometry geom);

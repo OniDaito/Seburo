@@ -434,12 +434,12 @@ typedef BOOL (WINAPI * PFNWGLGETPIXELFORMATATTRIBIVARBPROC) (HDC hdc, int iPixel
 #define WGL_AUX8_ARB 0x208F
 #define WGL_AUX9_ARB 0x2090
 
-typedef BOOL (WINAPI * PFNWGLBINDTEXIMASEBUROBPROC) (HPBUFFERARB hPbuffer, int iBuffer);
-typedef BOOL (WINAPI * PFNWGLRELEASETEXIMASEBUROBPROC) (HPBUFFERARB hPbuffer, int iBuffer);
+typedef BOOL (WINAPI * PFNWGLBINDTEXIMAGEARBPROC) (HPBUFFERARB hPbuffer, int iBuffer);
+typedef BOOL (WINAPI * PFNWGLRELEASETEXIMAGEARBPROC) (HPBUFFERARB hPbuffer, int iBuffer);
 typedef BOOL (WINAPI * PFNWGLSETPBUFFERATTRIBARBPROC) (HPBUFFERARB hPbuffer, const int* piAttribList);
 
-#define wglBindTexImaSEBUROB WGLEW_GET_FUN(__wglewBindTexImaSEBUROB)
-#define wglReleaseTexImaSEBUROB WGLEW_GET_FUN(__wglewReleaseTexImaSEBUROB)
+#define wglBindTexImageARB WGLEW_GET_FUN(__wglewBindTexImageARB)
+#define wglReleaseTexImageARB WGLEW_GET_FUN(__wglewReleaseTexImageARB)
 #define wglSetPbufferAttribARB WGLEW_GET_FUN(__wglewSetPbufferAttribARB)
 
 #define WGLEW_ARB_render_texture WGLEW_GET_VAR(__WGLEW_ARB_render_texture)
@@ -480,6 +480,17 @@ typedef BOOL (WINAPI * PFNWGLSETPBUFFERATTRIBARBPROC) (HPBUFFERARB hPbuffer, con
 #define WGLEW_EXT_create_context_es2_profile WGLEW_GET_VAR(__WGLEW_EXT_create_context_es2_profile)
 
 #endif /* WGL_EXT_create_context_es2_profile */
+
+/* ------------------- WGL_EXT_create_context_es_profile ------------------- */
+
+#ifndef WGL_EXT_create_context_es_profile
+#define WGL_EXT_create_context_es_profile 1
+
+#define WGL_CONTEXT_ES_PROFILE_BIT_EXT 0x00000004
+
+#define WGLEW_EXT_create_context_es_profile WGLEW_GET_VAR(__WGLEW_EXT_create_context_es_profile)
+
+#endif /* WGL_EXT_create_context_es_profile */
 
 /* -------------------------- WGL_EXT_depth_float -------------------------- */
 
@@ -1184,8 +1195,8 @@ WGLEW_FUN_EXPORT PFNWGLCHOOSEPIXELFORMATARBPROC __wglewChoosePixelFormatARB;
 WGLEW_FUN_EXPORT PFNWGLGETPIXELFORMATATTRIBFVARBPROC __wglewGetPixelFormatAttribfvARB;
 WGLEW_FUN_EXPORT PFNWGLGETPIXELFORMATATTRIBIVARBPROC __wglewGetPixelFormatAttribivARB;
 
-WGLEW_FUN_EXPORT PFNWGLBINDTEXIMASEBUROBPROC __wglewBindTexImaSEBUROB;
-WGLEW_FUN_EXPORT PFNWGLRELEASETEXIMASEBUROBPROC __wglewReleaseTexImaSEBUROB;
+WGLEW_FUN_EXPORT PFNWGLBINDTEXIMAGEARBPROC __wglewBindTexImageARB;
+WGLEW_FUN_EXPORT PFNWGLRELEASETEXIMAGEARBPROC __wglewReleaseTexImageARB;
 WGLEW_FUN_EXPORT PFNWGLSETPBUFFERATTRIBARBPROC __wglewSetPbufferAttribARB;
 
 WGLEW_FUN_EXPORT PFNWGLBINDDISPLAYCOLORTABLEEXTPROC __wglewBindDisplayColorTableEXT;
@@ -1315,6 +1326,7 @@ WGLEW_VAR_EXPORT GLboolean __WGLEW_ARB_render_texture;
 WGLEW_VAR_EXPORT GLboolean __WGLEW_ATI_pixel_format_float;
 WGLEW_VAR_EXPORT GLboolean __WGLEW_ATI_render_texture_rectangle;
 WGLEW_VAR_EXPORT GLboolean __WGLEW_EXT_create_context_es2_profile;
+WGLEW_VAR_EXPORT GLboolean __WGLEW_EXT_create_context_es_profile;
 WGLEW_VAR_EXPORT GLboolean __WGLEW_EXT_depth_float;
 WGLEW_VAR_EXPORT GLboolean __WGLEW_EXT_display_color_table;
 WGLEW_VAR_EXPORT GLboolean __WGLEW_EXT_extensions_string;

@@ -25,7 +25,7 @@ namespace s9 {
 	 */
 
 	template<class T>
-	class Asset : public Primitive {
+	class SEBUROAPI Asset : public Primitive {
 	protected:
 		struct SharedObj{
 			T _geom;
@@ -50,8 +50,10 @@ namespace s9 {
  	 * A wrapper around the Assimp library
  	 * \todo do something better with pScene
  	 */
+
+#ifndef _SEBURO_WIN32
 	
-	class AssetImporter {
+	class SEBUROAPI AssetImporter {
 	public:
 		static AssetBasic load(std::string filename);
 		
@@ -63,6 +65,9 @@ namespace s9 {
 		static const struct aiScene* pScene;
 
 	};
+#endif
+
 }
+
 
 #endif

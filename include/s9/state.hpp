@@ -26,7 +26,7 @@ namespace s9{
    * shared_ptr but no need really
    */
 
-  class State {
+  class SEBUROAPI State {
 
   protected:
     StateInternalPtr _next;

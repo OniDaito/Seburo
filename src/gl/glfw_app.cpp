@@ -16,6 +16,31 @@ GLFWApp* GLFWApp::pThis;
 string GLFWApp::mTitle;
 
 
+#if defined(_SEBURO_BUILD_DLL)
+
+// SEBURO DLL entry point
+//
+BOOL WINAPI DllMain(HINSTANCE instance, DWORD reason, LPVOID reserved) {
+    return TRUE;
+}
+
+#endif // _SEBURO_BUILD_DLL
+
+GLFWApp::GLFWApp (WindowApp &app, const int w, const int h, 
+	bool fullscreen, int argc, const char * argv[], 
+	const char * title, const int major, const int minor) : WindowSystem(app) {
+	
+	if( !glfwInit() ){
+		fprintf( stderr, "Failed to initialize GLFW\n" );
+		exit( EXIT_FAILURE );
+	}
+	pThis = this;
+	mFlag = 0x00;
+	mTitle = title;
+	initGL(w,h,major,minor);
+}
+
+
 void GLFWApp::mainLoop() {
 	pThis->mRunning = true;
 
@@ -23,16 +48,11 @@ void GLFWApp::mainLoop() {
 
 		double_t t = glfwGetTime();
 
-#ifdef MULTIWINDOW
-		BOOST_FOREACH ( GLFWwindow b, pThis->vWindows) {	
+		BOOST_FOREACH ( GLFWwindow* b, pThis->vWindows) {	
 			glfwMakeContextCurrent(b);
 			_display(b);
 			glfwSwapBuffers(b);
 		}
-#else
-    _display();
-    glfwSwapBuffers();
-#endif
 
 		pThis->_dt = glfwGetTime() - t;
 		
@@ -54,7 +74,7 @@ void GLFWApp::mainLoop() {
  * GLFW Callback for resizing a window
  */
 
-void GLFWApp::_reshape(GLFWwindow window, int w, int h) {
+void GLFWApp::_reshape(GLFWwindow* window, int w, int h) {
 	ResizeEvent e (w,h,glfwGetTime());
 	TwWindowSize(e.mW, e.mH);
 	pThis->_app.fireEvent(e);
@@ -73,7 +93,7 @@ void GLFWApp::_shutdown() {
  * GLFW display
  */
 
-void GLFWApp::_display(GLFWwindow window) {
+void GLFWApp::_display(GLFWwindow* window) {
 	pThis->_app.display(pThis->_dt);
 	TwDraw();
 }
@@ -88,7 +108,7 @@ void GLFWApp::_display(){
  */
 
 
-void GLFWApp::_keyCallback(GLFWwindow window, int key, int action) {
+void GLFWApp::_keyCallback(GLFWwindow* window, int key, int action) {
 	KeyboardEvent e (key,action,glfwGetTime());
 	pThis->_app.fireEvent(e);
 }
@@ -97,7 +117,7 @@ void GLFWApp::_keyCallback(GLFWwindow window, int key, int action) {
  * GLFW Mouse button callback - sends a full event with current position as well
  */
 
-void GLFWApp::_mouseButtonCallback(GLFWwindow window, int button, int action) {
+void GLFWApp::_mouseButtonCallback(GLFWwindow* window, int button, int action) {
 	if (!TwEventMouseButtonGLFW(button,action)){
 		switch(button){
 			case 0: {
@@ -155,7 +175,7 @@ void GLFWApp::_mouseButtonCallback(GLFWwindow window, int button, int action) {
 }
 
 
-void GLFWApp::_mousePositionCallback(GLFWwindow window, int x, int y) {
+void GLFWApp::_mousePositionCallback(GLFWwindow* window, double x, double y){
 	if( !TwEventMousePosGLFW(x, y) ){  
 		pThis->mMX = x;
 		pThis->mMY = y;
@@ -165,13 +185,12 @@ void GLFWApp::_mousePositionCallback(GLFWwindow window, int x, int y) {
 
 }
 
-int GLFWApp::_window_close_callback(GLFWwindow window) {
+void GLFWApp::_window_close_callback(GLFWwindow* window) {
 	pThis->mRunning = GL_FALSE;
-	return GL_TRUE;
 }
 
 
-void GLFWApp::_mouseWheelCallback(GLFWwindow window, double xpos, double ypos) {
+void GLFWApp::_mouseWheelCallback(GLFWwindow* window, double xpos, double ypos) {
 
 	if (ypos == 1) {
 		pThis->mFlag |= MOUSE_WHEEL_UP;	
@@ -179,7 +198,7 @@ void GLFWApp::_mouseWheelCallback(GLFWwindow window, double xpos, double ypos) {
 		pThis->_app.fireEvent(e);
 		pThis->mFlag ^= MOUSE_WHEEL_UP;
 		
-	}else if (ypos == -1) {
+	} else if (ypos == -1) {
 		pThis->mFlag |= MOUSE_WHEEL_DOWN;
 		MouseEvent e (pThis->mMX,pThis->mMY,pThis->mFlag,glfwGetTime());
 		pThis->_app.fireEvent(e);
@@ -188,22 +207,19 @@ void GLFWApp::_mouseWheelCallback(GLFWwindow window, double xpos, double ypos) {
 }
 
 
-GLFWwindow GLFWApp::createWindow(const char * title ="Seburo", int w=800, int h=600) {
-#ifdef MULTIWINDOW
-  GLFWwindow win = glfwCreateWindow(w,h, GLFW_WINDOWED, title, NULL);
-#else
-  GLFWwindow win = glfwOpenWindow(w,h,GLFW_WINDOWED,title,NULL);
-#endif
+GLFWwindow* GLFWApp::createWindow(const char * title ="Seburo", int w=800, int h=600) {
+
+  GLFWwindow* win = glfwCreateWindow(w,h, title, NULL, NULL);
 
   if (!win){
-		std::cout << "Failed to open GLFW window: " << glfwErrorString(glfwGetError()) << std::endl;				
+		std::cout << "Seburo: Failed to open GLFW window" << std::endl;				
 		glfwTerminate();
 		exit(EXIT_FAILURE);
 	}
 
 	glfwSetWindowPos(win,100,100);
 	
-	return win;
+	return  win;
 }
 
 /*
@@ -217,33 +233,32 @@ void GLFWApp::_update(){
 
 
 
+void GLFWApp::_error_callback(int error, const char* description) {
+    fprintf(stderr, "Error: %s\n", description);
+}
+
 /*
  * Perform OpenGL initialisation using GLEW
  * \todo FULLSCREEN apps
  */
 
  void GLFWApp::initGL( const int w = 800, const int h =600,
- 		const int major = 3, const int minor = 0) {
+ 		const int major = 3, const int minor = 1) {
 
 
 	///\todo fully switch to core profile - there is something causing an error in core
 	//glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_COMPAT_PROFILE);
 
-#ifdef MULTIWINDOW
- 	glfwWindowHint(GLFW_OPENGL_VERSION_MAJOR, major);
-	glfwWindowHint(GLFW_OPENGL_VERSION_MINOR, minor);
+ 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, major);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, minor);
  	glfwWindowHint(GLFW_DEPTH_BITS, 16);
-	glfwWindowHint(GLFW_FSAA_SAMPLES, 4);
-#else
-	glfwOpenWindowHint(GLFW_OPENGL_VERSION_MAJOR, major);
-	glfwOpenWindowHint(GLFW_OPENGL_VERSION_MINOR, minor);
-  glfwOpenWindowHint(GLFW_DEPTH_BITS, 16);
-  glfwOpenWindowHint(GLFW_FSAA_SAMPLES, 4);
-#endif
+	//glfwWindowHint(GLFW_FSAA_SAMPLES, 4);
 
-	GLFWwindow window = createWindow(mTitle.c_str(),w, h);
+ 	glfwSetErrorCallback(_error_callback);
 
-	glfwSetWindowSizeCallback(_reshape);
+	GLFWwindow* window = createWindow(mTitle.c_str(),w, h);
+
+	glfwSetWindowSizeCallback(window, _reshape);
 	glfwMakeContextCurrent(window);
 	
 	CXGLERROR
@@ -251,18 +266,20 @@ void GLFWApp::_update(){
 	std::cout << "OpenGL Version: " << glGetString(GL_VERSION) << std::endl;
 
 	// Set Basic Callbacks
-	glfwSetKeyCallback(_keyCallback);
-	glfwSetCursorPosCallback(_mousePositionCallback);
-	glfwSetMouseButtonCallback(_mouseButtonCallback);
-	glfwSetScrollCallback(_mouseWheelCallback);
+	glfwSetKeyCallback(window, _keyCallback);
+	glfwSetCursorPosCallback(window, _mousePositionCallback);
+	glfwSetMouseButtonCallback(window, _mouseButtonCallback);
+	glfwSetScrollCallback(window, _mouseWheelCallback);
 	
-	glfwSetWindowCloseCallback( _window_close_callback );
+	glfwSetWindowCloseCallback(window, _window_close_callback );
 		
   glfwSwapInterval(1);
+
+
 	CXGLERROR
 
 	if( !window ) {
-		fprintf( stderr, "Failed to open GLFW window\n" );
+		std::cerr << "Seburo Failed to open GLFW window\n" << std::endl;
 		glfwTerminate();
 		exit( EXIT_FAILURE );
 	}
@@ -273,7 +290,7 @@ void GLFWApp::_update(){
 	GLenum err=glewInit();
 
 	if(err!=GLEW_OK) {
-		std::cout << "GLEWInit failed, aborting with error: " << err << std::endl;
+		std::cerr << "Seburo: GLEWInit failed, aborting with error: " << err << std::endl;
 		glfwTerminate();
 		exit( EXIT_FAILURE );
 	}

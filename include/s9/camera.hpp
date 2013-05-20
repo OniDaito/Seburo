@@ -23,7 +23,7 @@
  
 namespace s9{
 	 
-	class Camera : public Primitive, public WindowResponder{
+	class SEBUROAPI Camera : public Primitive, public WindowResponder{
 
 	public:
 
@@ -66,7 +66,7 @@ namespace s9{
 	 * Orbit camera revolves around one point as it were
 	 */
 	 
-	class OrbitCamera : public Camera{
+	class SEBUROAPI OrbitCamera : public Camera{
 	public:
 		OrbitCamera();
 		void zoom(float z);
@@ -118,7 +118,7 @@ namespace s9{
 	 * Screen Camera
 	 */
 	 
-	class ScreenCamera : public Camera {
+	class SEBUROAPI ScreenCamera : public Camera {
 	public:
 		ScreenCamera() {mW = 800; mH = 600; compute(); };
 		void setDim(size_t w, size_t h) {mW = w; mH = h; compute(); };
@@ -135,7 +135,7 @@ namespace s9{
 	 * \todo make implicit in the visual app somehow?
 	 */
 
-	class InertiaCam : public OrbitCamera {
+	class SEBUROAPI InertiaCam : public OrbitCamera {
 
 	protected:
 		glm::vec3 mNow;

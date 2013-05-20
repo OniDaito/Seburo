@@ -13,7 +13,7 @@
 
 namespace s9 {
 
-  class File {
+  class SEBUROAPI File {
   public:
     File();
 

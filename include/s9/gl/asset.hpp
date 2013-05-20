@@ -30,7 +30,7 @@ namespace s9 {
 		 */
 
 		template <class T>
-		class Asset : public s9::Asset<T> {
+		class SEBUROAPI Asset : public s9::Asset<T> {
 
 		protected:
 			virtual void _gen() {}
@@ -264,9 +264,6 @@ namespace s9 {
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,0);
 
 		}
-
-
-
 
 	}
 }

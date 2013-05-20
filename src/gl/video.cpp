@@ -16,8 +16,10 @@ using namespace cv;
 using namespace boost; 
 using namespace s9;
 using namespace s9::gl;
-using namespace s9::gl::compvis;
 
+#ifdef _SEBURO_OPENCV
+using namespace s9::gl::compvis;
+#endif
 
 VidCam::VidCam(std::string dev, size_t w, size_t h, size_t fps) {
 	_obj.reset(new SharedObj());

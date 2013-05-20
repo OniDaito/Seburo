@@ -6,9 +6,9 @@ set(SOURCE_FILES
 	app.cpp
 )
 
-add_executable (basic
-	${SOURCE_FILES} 
-) 
+if (WIN32)
+SET(CMAKE_CXX_FLAGS "/MD /EHsc")
+endif()
 
 include_directories(
   ${SEBURO_INCLUDES}
@@ -16,10 +16,10 @@ include_directories(
 	${INCLUDES}
 )
 
+link_libraries( Seburo
+${Boost_LIBRARIES} )
 
-target_link_libraries( basic
-  Seburo 
+
+add_executable (basic
+  ${SOURCE_FILES} 
 )
-
-
-

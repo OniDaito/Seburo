@@ -20,7 +20,7 @@ namespace s9 {
 	 * Essentially the same as Assets but they have special properties on their geometry
 	 */ 
 
-	class Quad : public Asset<GeometryFullFloat> {
+	class SEBUROAPI Quad : public Asset<GeometryFullFloat> {
 	public:
 		Quad(){};
 		Quad(float w, float h);
@@ -28,7 +28,7 @@ namespace s9 {
 
 	};
 
-	class Triangle : public Asset<GeometryFullFloat> {
+	class SEBUROAPI Triangle : public Asset<GeometryFullFloat> {
 	public:
 		Triangle(){};
 		Triangle(float w, float h);

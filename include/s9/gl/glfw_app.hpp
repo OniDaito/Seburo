@@ -36,12 +36,12 @@ namespace s9 {
 		 ///\todo we can even subclass this and add in basics for certain app types :P
 		 ///\todo this may need to be a service class - see the Modern C++ book
 
-		class GLFWApp : WindowSystem{
+		class SEBUROAPI GLFWApp : WindowSystem{
 
 		protected:
 
 			bool mRunning;
-			std::vector<GLFWwindow> vWindows;
+			std::vector<GLFWwindow* > vWindows;
 			double_t _dt;
 			size_t mMX, mMY;
 			uint16_t mFlag;
@@ -49,6 +49,7 @@ namespace s9 {
 			static void initGL(const int w, const int h,
 				const int major, const int minor);
 
+			static void _error_callback(int error, const char* description);
 
 			static void _shutdown();
 
@@ -56,40 +57,29 @@ namespace s9 {
 
 			static void _update();
 
-			static void _reshape(GLFWwindow window, int w, int h);
+			static void _reshape(GLFWwindow* window, int w, int h);
 
-			static void _display(GLFWwindow window);
+			static void _display(GLFWwindow* window);
   
       static void _display();
 
-			static void _keyCallback(GLFWwindow window, int key, int action);
+			static void _keyCallback(GLFWwindow* window, int key, int action);
 
-			static void _mouseButtonCallback(GLFWwindow window, int button, int action);
+			static void _mouseButtonCallback(GLFWwindow* window, int button, int action);
 
-			static int _window_close_callback(GLFWwindow window);
+			static void _window_close_callback(GLFWwindow* window);
 
-			static void _mousePositionCallback(GLFWwindow window, int x, int y);
+			static void _mousePositionCallback(GLFWwindow* window, double x, double y);
 
-			static void _mouseWheelCallback(GLFWwindow window, double xpos, double ypos);
+			static void _mouseWheelCallback(GLFWwindow* window, double xpos, double ypos);
 
 		public:
 
 			GLFWApp (WindowApp &app, const int w = 800, const int h = 600, 
 				bool fullscreen = false, int argc = 0, const char * argv[] = NULL, 
-				const char * title = "Seburo", const int major = 4, const int minor = 0) : WindowSystem(app) {
-				if( !glfwInit() ){
-					fprintf( stderr, "Failed to initialize GLFW\n" );
-					exit( EXIT_FAILURE );
-				}
-				pThis = this;
-				mFlag = 0x00;
-				mTitle = title;
-				initGL(w,h,major,minor);
-			}
+				const char * title = "Seburo", const int major = 3, const int minor = 0);
 
-
-
-			static GLFWwindow createWindow(const char * title, int w, int h);
+			static GLFWwindow* createWindow(const char * title, int w, int h);
 			
 		private:
 

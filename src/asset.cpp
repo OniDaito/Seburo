@@ -13,12 +13,15 @@ using namespace boost;
 using namespace boost::assign;
 using namespace s9;
 
+#ifndef _SEBURO_WIN32
 const struct aiScene* AssetImporter::pScene;
+#endif
 
 /*
  * Recursive load function. Dependent on the actual type of the geom
  */ 
 
+#ifndef _SEBURO_WIN32
 AssetPtr AssetImporter::_load (const struct aiScene *sc, const struct aiNode* nd, AssetPtr p ) {
 
 	vector<float> verts;
@@ -116,3 +119,5 @@ AssetBasic AssetImporter::load(std::string filename){
 AssetImporter::~AssetImporter() {
 	aiReleaseImport(pScene);
 }
+
+#endif

@@ -13,6 +13,7 @@ using namespace boost;
 using namespace boost::assign; 
 using namespace s9;
 
+using boost::shared_ptr;
 
 /*
  * Given a primtive, create a winged edge structure
@@ -28,7 +29,7 @@ void WingedEdge::make(DrawableGeometry geom) {
 	std::vector< boost::shared_ptr<WE_Vertex> > vs;
 
 	for (size_t i=0; i < mObj->mGeom.size(); i+=3){
-		shared_ptr<WE_Vertex> sv (new WE_Vertex);
+		boost::shared_ptr<WE_Vertex> sv (new WE_Vertex);
 		vs.push_back(sv);
 		sv->idc = i; // Copy the indices
 	}
@@ -39,7 +40,7 @@ void WingedEdge::make(DrawableGeometry geom) {
 	// Now create proper winged edge and indices using a concatenated 32 bit index to a 64 bit key
 	// In addition we create a straight list of unique triangles
 	
-	map< uint64_t, shared_ptr<WE_Edge> > es;
+	map< uint64_t, boost::shared_ptr<WE_Edge> > es;
 	
 	size_t bw = 0;
 
@@ -47,7 +48,7 @@ void WingedEdge::make(DrawableGeometry geom) {
 
 	for (size_t i = 0; i < mObj->mGeom.indexsize(); i+=3) {
 
-		shared_ptr<WE_Face>  f (new WE_Face());
+		boost::shared_ptr<WE_Face>  f (new WE_Face());
 		bool bf = false;
 		uint32_t idcs[3];
 
@@ -58,7 +59,7 @@ void WingedEdge::make(DrawableGeometry geom) {
 		idcs[2] = indices[i+2]; 
 
 		// Find Edges to add to face
-		map< uint64_t, shared_ptr<WE_Edge> >::iterator pi = es.end();
+		map< uint64_t, boost::shared_ptr<WE_Edge> >::iterator pi = es.end();
 		
 		boost::shared_ptr<WE_Edge> prev;
 		boost::shared_ptr<WE_Edge> current;
@@ -68,7 +69,7 @@ void WingedEdge::make(DrawableGeometry geom) {
 		
 		for (int j = 0; j < 3; j++){
 			
-			map< uint64_t, shared_ptr<WE_Edge> >::iterator fi;
+			map< uint64_t, boost::shared_ptr<WE_Edge> >::iterator fi;
 			
 			// create two keys and perform lookup
 			int k = j == 2 ? 0 : j + 1;
@@ -79,7 +80,7 @@ void WingedEdge::make(DrawableGeometry geom) {
 			kj |= idcs[j];
 						
 			// new edge	
-			shared_ptr<WE_Edge> sp (new WE_Edge);
+			boost::shared_ptr<WE_Edge> sp (new WE_Edge);
 			sp->face = f;
 			f->edge = sp;
 							
@@ -113,7 +114,7 @@ void WingedEdge::make(DrawableGeometry geom) {
 				break;
 			}
 			keys.push_back(jk);
-			es.insert( pair<uint64_t, shared_ptr<WE_Edge> > (jk, sp) );
+			es.insert( pair<uint64_t, boost::shared_ptr<WE_Edge> > (jk, sp) );
 			
 		}
 		
@@ -127,7 +128,7 @@ void WingedEdge::make(DrawableGeometry geom) {
 		}else {
 			// Delete any added edges for this badly wound face
 			for (size_t i = 0; i < keys.size(); i++){
-				map< uint64_t, shared_ptr<WE_Edge> >::iterator pi = es.find(keys[i]);
+				map< uint64_t, boost::shared_ptr<WE_Edge> >::iterator pi = es.find(keys[i]);
 				es.erase (pi);      
 			}
 		}
