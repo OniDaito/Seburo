@@ -246,6 +246,9 @@ message(status "** Boost Libraries: ${Boost_LIBRARIES}")
 
 FILE(GLOB CommonSources src/*)
 
+# Not sure why I have these?
+list(REMOVE_ITEM GLUtils ${PROJECT_SOURCE_DIR}/src/gl/utils/glewinfo.c)
+list(REMOVE_ITEM GLUtils ${PROJECT_SOURCE_DIR}/src/gl/utils/visualinfo.c)
 
 #####################################################################
 # OpenCV.
@@ -278,8 +281,7 @@ endif(USEOPENCV)
 # Final removals for Win32 until we add fixes
 if (_SEBURO_WIN32)
   #list(REMOVE_ITEM GLSources ${PROJECT_SOURCE_DIR}/src/gl/glew.c)
-  list(REMOVE_ITEM GLUtils ${PROJECT_SOURCE_DIR}/src/gl/utils/glewinfo.c)
-  list(REMOVE_ITEM GLUtils ${PROJECT_SOURCE_DIR}/src/gl/utils/visualinfo.c)
+ 
 
   # Make sure we are using /MT this time around. We may change to /MD
   # but we MUST be consistent

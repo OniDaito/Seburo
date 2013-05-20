@@ -27,6 +27,15 @@
 #include <unistd.h>
 #endif
 
+#if defined(_SEBURO_WIN32) && defined(_SEBURO_BUILD_DLL)
+  #define SEBUROAPI __declspec(dllexport)
+#elif defined(__GNUC__) && defined(_SEBURO_BUILD_DLL)
+  #define SEBUROAPI __attribute__((visibility("default")))
+#else
+  #define SEBUROAPI
+#endif
+
+
 #include <cstdlib>
 #include <cmath>
 #include <fstream>

@@ -70,7 +70,7 @@ namespace s9 {
 				boost::shared_ptr<UVCVideo> _cam;
 #endif
 
-#ifdef _SEBURO_MACOSX
+#ifdef _SEBURO_OSX
 				boost::shared_ptr<QuicktimeCamera> _cam;
 #endif
 

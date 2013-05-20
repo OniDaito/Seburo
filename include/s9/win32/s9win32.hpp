@@ -18,14 +18,5 @@
 
 #define WIN32_LEAN_AND_MEAN
 
-#if defined(_SEBURO_WIN32) && defined(_SEBURO_BUILD_DLL)
- /* We are building a Win32 DLL */
-  #define SEBUROAPI __declspec(dllexport)
-#elif defined(__GNUC__) && defined(_GLFW_BUILD_DLL)
-  #define SEBUROAPI __attribute__((visibility("default")))
-#else
-  #define SEBUROAPI
-#endif
-
 
 typedef double double_t;
