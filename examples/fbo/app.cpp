@@ -27,8 +27,14 @@ namespace po = boost::program_options;
 
 void FBOApp::init(){
     mTestQuad = gl::Quad(1.0,1.0);
-    mShader.load("../../../shaders/quad.vert", "../../../shaders/quad.frag");
-    mFBOShader.load("../../../shaders/quad_texture.vert", "../../../shaders/quad_texture.frag");
+
+#ifdef _SEBURO_OSX
+    mShader.load(s9::File("./shaders/3/quad.vert").path(), s9::File("./shaders/3/quad.frag").path());
+    mFBOShader.load(s9::File("./shaders/3/quad_texture.vert").path(), s9::File("./shaders/3/quad_texture.frag").path());
+#else
+    mShader.load(s9::File("./shaders/4/quad.vert").path(), s9::File("./shaders/4/quad.frag").path());
+    mFBOShader.load(s9::File("./shaders/4/quad_texture.vert").path(), s9::File("./shaders/4/quad_texture.frag").path());
+#endif
 
     mFBO = gl::FBO(640,480);
     mHudQuad = gl::Quad(640.0,480.0);
@@ -143,7 +149,11 @@ int main (int argc, const char * argv[]) {
   
     FBOApp b;
 
-    GLFWApp a(b, 800, 600, false, argc, argv, "FBO",4,0);
+#ifdef _SEBURO_OSX
+    GLFWApp a(b, 800, 600, false, argc, argv, "FBO",3,2);
+#else
+    GLFWApp a(b, 800, 600, false, argc, argv, "FBO");
+#endif
 
     return EXIT_SUCCESS;
 

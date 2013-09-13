@@ -48,7 +48,7 @@ std::string inline textFileRead(std::string filename) {
 		myfile.close();
 	}
 
-	else std::cerr << "Seburo - Unable to open shader file " << filename << std::endl;
+	else std::cerr << "OpenGLCourse - Unable to open shader file " << filename << std::endl;
 
 	return rval;
 }

@@ -4,7 +4,7 @@ project (model)
 
 set(SOURCE_FILES app.cpp)
 
-if (APPLE)
+if (_SEBURO_OSX)
   add_executable(model MACOSX_BUNDLE app.cpp)
   
   SET(MACOSX_BUNDLE_ICON_FILE ${CMAKE_SOURCE_DIR}/s9.icns) 
@@ -14,7 +14,7 @@ if (APPLE)
 
   set(DIRS ${CMAKE_SOURCE_DIR}/lib/osx
     ${CMAKE_SOURCE_DIR}/data
-    ${CMAKE_SOURCE_DIR}/shaders/3
+    ${CMAKE_SOURCE_DIR}/shaders
   ) 
 
   set(MACOSX_BUNDLE_INFO_STRING "${PROJECT_NAME}")
@@ -35,6 +35,12 @@ if (APPLE)
 
   add_custom_command (TARGET model PRE_BUILD
                       COMMAND cp -r ${CMAKE_SOURCE_DIR}/shaders ${CMAKE_CURRENT_BINARY_DIR}/model.app/Contents/Resources/.)
+
+  add_custom_command (TARGET model PRE_BUILD
+                      COMMAND cp ${CMAKE_BINARY_DIR}/../lib/osx/* ${CMAKE_CURRENT_BINARY_DIR}/model.app/Contents/Resources/.)
+
+  add_custom_command (TARGET model PRE_BUILD
+                      COMMAND cp ${CMAKE_BINARY_DIR}/libSeburo.dylib ${CMAKE_CURRENT_BINARY_DIR}/model.app/Contents/Resources/.)
 
   INSTALL(CODE "
     include(BundleUtilities)

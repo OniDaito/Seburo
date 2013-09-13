@@ -33,8 +33,8 @@ void ModelApp::init(){
     mShader.load( s9::File("./shaders/1.5/basic_lighting.vert").path(),  s9::File("./shaders/1.5/basic_lighting.frag").path());
 #endif
 
-    mGeometry = gl::Asset<GeometryPNF>( AssetImporter::load( s9::File("./data/bunny.ply").path()));
-    mGeometry.setScale(glm::vec3(30.0,30.0,30.0));
+    //mGeometry = gl::Asset<GeometryPNF>( AssetImporter::load( s9::File("./data/bunny.ply").path()));
+    //mGeometry.setScale(glm::vec3(30.0,30.0,30.0));
    
     mCamera.move(glm::vec3(0,0,20.0f));
     
@@ -55,7 +55,7 @@ void ModelApp::display(double_t dt){
     GLfloat depth = 1.0f;
     glClearBufferfv(GL_DEPTH, 0, &depth );
 
-    mShader.bind();
+    //mShader.bind();
 
     // Our matrix = the object * camera
     glm::mat4 mvp = mCamera.getMatrix() * mGeometry.getMatrix();
@@ -65,9 +65,9 @@ void ModelApp::display(double_t dt){
     mShader.s("uMVPMatrix",mvp).s("uShininess",128.0f).s("uMVMatrix",mv)
         .s("uNMatrix",mn).s("uLight0",glm::vec3(5.0,5.0,5.0));
 
-    mGeometry.draw();
+    //mGeometry.draw();
     
-    mShader.unbind();
+    //mShader.unbind();
 
     mCamera.update(dt);
 
@@ -122,7 +122,11 @@ int main (int argc, const char * argv[]) {
   
     ModelApp b;
 
-    GLFWApp a(b, 800, 600, false, argc, argv, "Bunny",2,1);
+#ifdef _SEBURO_OSX
+    GLFWApp a(b, 800, 600, false, argc, argv, "Model",3,2);
+#else
+    GLFWApp a(b, 800, 600, false, argc, argv, "Model");
+#endif
 
     return EXIT_SUCCESS;
 

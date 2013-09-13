@@ -10,6 +10,7 @@
 #define BASICAPP_HPP
 
 #include "s9/common.hpp"
+#include "s9/file.hpp"
 #include "s9/camera.hpp"
 #include "s9/gl/shapes.hpp"
 #include "s9/gl/shader.hpp"

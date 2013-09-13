@@ -151,8 +151,12 @@ int main (int argc, const char * argv[]) {
   
     PickingApp b;
 
-    GLFWApp a(b, 800, 600, false, argc, argv, "Picking",4,0);
-
+#ifdef _SEBURO_OSX
+    GLFWApp a(b, 800, 600, false, argc, argv, "Picking",3,2);
+#else
+    GLFWApp a(b, 800, 600, false, argc, argv, "Picking");
+#endif
+    
     return EXIT_SUCCESS;
 
 }

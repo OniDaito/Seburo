@@ -28,7 +28,7 @@ BOOL WINAPI DllMain(HINSTANCE instance, DWORD reason, LPVOID reserved) {
 
 GLFWApp::GLFWApp (WindowApp &app, const int w, const int h, 
 	bool fullscreen, int argc, const char * argv[], 
-	const char * title, const int major, const int minor) : WindowSystem(app) {
+	const char * title, const int major, const int minor, const int depthbits) : WindowSystem(app) {
 	
 	if( !glfwInit() ){
 		fprintf( stderr, "Failed to initialize GLFW\n" );
@@ -37,7 +37,7 @@ GLFWApp::GLFWApp (WindowApp &app, const int w, const int h,
 	pThis = this;
 	mFlag = 0x00;
 	mTitle = title;
-	initGL(w,h,major,minor);
+	initGL(w,h,major,minor,depthbits);
 }
 
 
@@ -50,6 +50,7 @@ void GLFWApp::mainLoop() {
 
 		BOOST_FOREACH ( GLFWwindow* b, pThis->vWindows) {	
 			glfwMakeContextCurrent(b);
+			glfwSwapInterval( 1 );
 			_display(b);
 			glfwSwapBuffers(b);
 		}
@@ -96,19 +97,34 @@ void GLFWApp::_shutdown() {
 void GLFWApp::_display(GLFWwindow* window) {
 	pThis->_app.display(pThis->_dt);
 	TwDraw();
+	//CXGLERROR
 }
 
 void GLFWApp::_display(){
   pThis->_app.display(pThis->_dt);
   TwDraw();
+ 	//CXGLERROR - TwDraw keeps throwing out invalid operations. Not so good! ><
 }
+
+
+/*
+ * GLFW Callback for the keyboard
+ */
+
+void GLFWApp::_scrollCallback(GLFWwindow* window, double xoffset, double yoffset) {
+	ScrollEvent e (xoffset,yoffset,glfwGetTime());
+	pThis->_app.fireEvent(e);
+
+}
+
+
 
 /*
  * GLFW Callback for the keyboard
  */
 
 
-void GLFWApp::_keyCallback(GLFWwindow* window, int key, int action) {
+void GLFWApp::_keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
 	KeyboardEvent e (key,action,glfwGetTime());
 	pThis->_app.fireEvent(e);
 }
@@ -117,7 +133,7 @@ void GLFWApp::_keyCallback(GLFWwindow* window, int key, int action) {
  * GLFW Mouse button callback - sends a full event with current position as well
  */
 
-void GLFWApp::_mouseButtonCallback(GLFWwindow* window, int button, int action) {
+void GLFWApp::_mouseButtonCallback(GLFWwindow* window, int button, int action, int mods) {
 	if (!TwEventMouseButtonGLFW(button,action)){
 		switch(button){
 			case 0: {
@@ -243,40 +259,23 @@ void GLFWApp::_error_callback(int error, const char* description) {
  */
 
  void GLFWApp::initGL( const int w = 800, const int h =600,
- 		const int major = 3, const int minor = 1) {
-
-
-	///\todo fully switch to core profile - there is something causing an error in core
-	//glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_COMPAT_PROFILE);
+ 		const int major = 4, const int minor = 1, const int depthbits = 16) {
 
  	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, major);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, minor);
- 	glfwWindowHint(GLFW_DEPTH_BITS, 16);
+ 	glfwWindowHint(GLFW_DEPTH_BITS, depthbits);
+
+#ifdef _SEBURO_OSX
+ 	// Forward compatible and CORE Profile
+ 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+ 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+#endif
+
 	//glfwWindowHint(GLFW_FSAA_SAMPLES, 4);
 
  	glfwSetErrorCallback(_error_callback);
 
 	GLFWwindow* window = createWindow(mTitle.c_str(),w, h);
-
-	glfwSetWindowSizeCallback(window, _reshape);
-	glfwMakeContextCurrent(window);
-	
-	CXGLERROR
-	
-	std::cout << "OpenGL Version: " << glGetString(GL_VERSION) << std::endl;
-
-	// Set Basic Callbacks
-	glfwSetKeyCallback(window, _keyCallback);
-	glfwSetCursorPosCallback(window, _mousePositionCallback);
-	glfwSetMouseButtonCallback(window, _mouseButtonCallback);
-	glfwSetScrollCallback(window, _mouseWheelCallback);
-	
-	glfwSetWindowCloseCallback(window, _window_close_callback );
-		
-  glfwSwapInterval(1);
-
-
-	CXGLERROR
 
 	if( !window ) {
 		std::cerr << "Seburo Failed to open GLFW window\n" << std::endl;
@@ -284,6 +283,23 @@ void GLFWApp::_error_callback(int error, const char* description) {
 		exit( EXIT_FAILURE );
 	}
 	CXGLERROR
+
+	glfwSetFramebufferSizeCallback(window, _reshape);
+	glfwMakeContextCurrent(window);
+	glfwSwapInterval( 1 );
+
+	CXGLERROR
+
+	std::cout << "OpenGL Version: " << glGetString(GL_VERSION) << std::endl;
+
+	// Set Basic Callbacks
+	glfwSetKeyCallback(window, _keyCallback);
+	glfwSetCursorPosCallback(window, _mousePositionCallback);
+	glfwSetMouseButtonCallback(window, _mouseButtonCallback);
+	glfwSetScrollCallback(window, _mouseWheelCallback);
+	glfwSetWindowCloseCallback(window, _window_close_callback );
+		
+
 	// Call only after one window / context has been created!
 	
 	glewExperimental = true;
@@ -294,21 +310,24 @@ void GLFWApp::_error_callback(int error, const char* description) {
 		glfwTerminate();
 		exit( EXIT_FAILURE );
 	}
-	
+
 	CXGLERROR
+	
 	pThis->vWindows.push_back(window);
+
 
 	TwInit(TW_OPENGL, NULL);
 	TwWindowSize(w, h);
 
+	pThis->_dt = 0.0;
 	pThis->_app.init();
+
 
 	// fire a cheeky resize event to make sure all is well
 	ResizeEvent e (w,h,glfwGetTime());
 	pThis->_app.fireEvent(e);
 
 	// Fire up the thread to keep update happy
-
 	// Use a thread for the updates
   pThis->_update_thread =  new boost::thread(&GLFWApp::_update);
 

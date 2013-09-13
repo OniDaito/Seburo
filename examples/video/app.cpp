@@ -111,8 +111,12 @@ int main (int argc, const char * argv[]) {
     }
   
     VideoApp b;
-
+    
+#ifdef _SEBURO_OSX
+    GLFWApp a(b, 800, 600, false, argc, argv, "Video",3,2);
+#else
     GLFWApp a(b, 800, 600, false, argc, argv, "Video");
+#endif
 
     return EXIT_SUCCESS;
 

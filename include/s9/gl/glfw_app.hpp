@@ -14,7 +14,7 @@
 #include "../visualapp.hpp"
 #include "utils.hpp"
 
-#include <GL/glfw3.h>
+#include <GLFW/glfw3.h>
 #include <anttweakbar/AntTweakBar.h>
 
 #ifdef _SEBURO_X11_GLX	
@@ -27,14 +27,11 @@ namespace s9 {
 
 	namespace gl {
 
-		/*
+		/**
 		 * A static wrapper around a C++ style class for GLFW - delgates to app class
 		 * Calls GLEW to setup the context
 		 * Considered a template but the static, C-Like nature of GLFW made this more annoying
 		 */
-
-		 ///\todo we can even subclass this and add in basics for certain app types :P
-		 ///\todo this may need to be a service class - see the Modern C++ book
 
 		class SEBUROAPI GLFWApp : WindowSystem{
 
@@ -47,7 +44,7 @@ namespace s9 {
 			uint16_t mFlag;
 
 			static void initGL(const int w, const int h,
-				const int major, const int minor);
+				const int major, const int minor, const int depthbits);
 
 			static void _error_callback(int error, const char* description);
 
@@ -63,9 +60,11 @@ namespace s9 {
   
       static void _display();
 
-			static void _keyCallback(GLFWwindow* window, int key, int action);
+			static void _keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
 
-			static void _mouseButtonCallback(GLFWwindow* window, int button, int action);
+			static void _mouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
+
+			static void _scrollCallback(GLFWwindow* window, double xoffset, double yoffset);
 
 			static void _window_close_callback(GLFWwindow* window);
 
@@ -77,7 +76,8 @@ namespace s9 {
 
 			GLFWApp (WindowApp &app, const int w = 800, const int h = 600, 
 				bool fullscreen = false, int argc = 0, const char * argv[] = NULL, 
-				const char * title = "Seburo", const int major = 3, const int minor = 0);
+				const char * title = "OpenGLCourse", const int major = 3, const int minor = 0, 
+				const int depthbits = 16 );
 
 			static GLFWwindow* createWindow(const char * title, int w, int h);
 			
