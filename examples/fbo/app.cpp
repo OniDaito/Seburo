@@ -49,7 +49,6 @@ void FBOApp::init(){
     link(mScreenCamera);
 
     CXGLERROR
-
 }
 
 
@@ -59,11 +58,9 @@ void FBOApp::init(){
 		
 void FBOApp::display(double_t dt){
     
-
     GLfloat depth = 1.0f;
     // Our matrix = the object * camera
     glm::mat4 mvp = mCamera.getMatrix() * mTestQuad.getMatrix();
-    
 
     // Bind to an FBO
     mFBO.bind();

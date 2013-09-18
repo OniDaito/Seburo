@@ -254,9 +254,9 @@ list(REMOVE_ITEM GLUtils ${PROJECT_SOURCE_DIR}/src/gl/utils/visualinfo.c)
 #####################################################################
 # OpenCV.
 
-option(USEOPENCV "useopencv" OFF)
+option(USE_OPENCV "use opencv" OFF)
 
-if (USEOPENCV)
+if (USE_OPENCV)
   add_definitions(-D_SEBURO_OPENCV)
   SEBURO_find_library(opencv_calib3d)
   SEBURO_find_library(opencv_contrib)
@@ -274,7 +274,23 @@ if (USEOPENCV)
 
 else()
   list(REMOVE_ITEM CommonSources src/cvprocess.cpp)
-endif(USEOPENCV)
+endif(USE_OPENCV)
+
+#####################################################################
+# OpenNI
+# \TODO we are working with OpenNI2 so does this need to change?
+
+option(USE_OPENNI "use openni" ON)
+if (USE_OPENNI)
+  
+  find_package(OpenNI)
+  if (OPENNI_FOUND)
+    set (HAVE_OPENNI ON)
+    add_definitions(-D_SEBURO_OPENNI)
+    include_directories(${OPENNI_INCLUDE_DIRS})
+  endif(OPENNI_FOUND)
+
+endif(USE_OPENNI)
 
 #####################################################################
 # Create Target
