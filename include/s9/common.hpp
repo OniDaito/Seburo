@@ -21,18 +21,16 @@
 #include <stdlib.h>
 #include <time.h>
 
-#ifdef _SEBURO_WIN32
+#ifdef _OPENGLCOURSE_WIN32
 #include "win32/s9win32.hpp"
 #else
 #include <unistd.h>
 #endif
 
-#if defined(_SEBURO_WIN32) && defined(_SEBURO_BUILD_DLL)
-  #define SEBUROAPI __declspec(dllexport)
-#elif defined(__GNUC__) && defined(_SEBURO_BUILD_DLL)
-  #define SEBUROAPI __attribute__((visibility("default")))
+#if defined(_OPENGLCOURSE_WIN32) && defined(_OPENGLCOURSE_BUILD_DLL)
+  #define OPENGLCOURSEAPI __declspec(dllexport)
 #else
-  #define SEBUROAPI
+  #define OPENGLCOURSEAPI
 #endif
 
 

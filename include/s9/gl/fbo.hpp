@@ -27,7 +27,7 @@ namespace s9 {
 		 * Basic FBO Class with depth and colour attachments
 		 */
 		 
-		class SEBUROAPI FBO {
+		class OPENGLCOURSEAPI FBO {
 
 		protected:
 			struct SharedObj {

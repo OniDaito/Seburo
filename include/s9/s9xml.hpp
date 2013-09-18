@@ -22,7 +22,7 @@ namespace s9{
 	/*
 	 * Basic iterator for multiple values
 	 */
-	class SEBUROAPI XMLIterator {
+	class OPENGLCOURSEAPI XMLIterator {
 	public:
 		XMLIterator() {pElement = NULL; };
 		std::string operator[](const char *s); // There is an implicit built in!
@@ -39,7 +39,7 @@ namespace s9{
 	 * to values inside a tinyxml document
 	 */
 
-	class SEBUROAPI XMLSettings {
+	class OPENGLCOURSEAPI XMLSettings {
 	public:
 		bool loadFile(std::string filename);
 		std::string operator[](std::string s);

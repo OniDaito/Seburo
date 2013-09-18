@@ -13,7 +13,7 @@
 
 namespace s9 {
 
-  class SEBUROAPI Image {
+  class OPENGLCOURSEAPI Image {
   public:
     Image(){};
   };

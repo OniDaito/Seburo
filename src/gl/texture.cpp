@@ -9,7 +9,7 @@
 #include "s9/gl/texture.hpp"
 
 using namespace std;
-#ifdef _SEBURO_OPENCV
+#ifdef _OPENGLCOURSE_OPENCV
 using namespace cv;
 #endif
 

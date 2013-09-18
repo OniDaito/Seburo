@@ -26,7 +26,7 @@ namespace s9{
    * shared_ptr but no need really
    */
 
-  class SEBUROAPI State {
+  class OPENGLCOURSEAPI State {
 
   protected:
     StateInternalPtr _next;
@@ -83,7 +83,7 @@ namespace s9{
       
       // this is therefore the first state so fail
       if (_next != NULL){
-        std::cerr << "Seburo - FATAL - Attempted to remove first state" << std::endl;
+        std::cerr << "OpenGLCourse - FATAL - Attempted to remove first state" << std::endl;
         assert(false);
       }
       _active = false;

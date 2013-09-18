@@ -16,19 +16,19 @@ GLFWApp* GLFWApp::pThis;
 string GLFWApp::mTitle;
 
 
-#if defined(_SEBURO_BUILD_DLL)
+#if defined(_OPENGLCOURSE_BUILD_DLL)
 
-// SEBURO DLL entry point
+// OPENGLCOURSE DLL entry point
 //
 BOOL WINAPI DllMain(HINSTANCE instance, DWORD reason, LPVOID reserved) {
     return TRUE;
 }
 
-#endif // _SEBURO_BUILD_DLL
+#endif // _OPENGLCOURSE_BUILD_DLL
 
 GLFWApp::GLFWApp (WindowApp &app, const int w, const int h, 
 	bool fullscreen, int argc, const char * argv[], 
-	const char * title, const int major, const int minor) : WindowSystem(app) {
+	const char * title, const int major, const int minor, const int depthbits) : WindowSystem(app) {
 	
 	if( !glfwInit() ){
 		fprintf( stderr, "Failed to initialize GLFW\n" );
@@ -37,7 +37,7 @@ GLFWApp::GLFWApp (WindowApp &app, const int w, const int h,
 	pThis = this;
 	mFlag = 0x00;
 	mTitle = title;
-	initGL(w,h,major,minor);
+	initGL(w,h,major,minor,depthbits);
 }
 
 
@@ -58,7 +58,7 @@ void GLFWApp::mainLoop() {
 		
 		glfwPollEvents();
 
-#ifdef _SEBURO_X11_GLX
+#ifdef _OPENGLCOURSE_X11_GLX
 		gtk_main_iteration_do(false);
 #endif
 		
@@ -103,12 +103,25 @@ void GLFWApp::_display(){
   TwDraw();
 }
 
+
+/*
+ * GLFW Callback for the keyboard
+ */
+
+void GLFWApp::_scrollCallback(GLFWwindow* window, double xoffset, double yoffset) {
+	ScrollEvent e (xoffset,yoffset,glfwGetTime());
+	pThis->_app.fireEvent(e);
+
+}
+
+
+
 /*
  * GLFW Callback for the keyboard
  */
 
 
-void GLFWApp::_keyCallback(GLFWwindow* window, int key, int action) {
+void GLFWApp::_keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
 	KeyboardEvent e (key,action,glfwGetTime());
 	pThis->_app.fireEvent(e);
 }
@@ -117,7 +130,7 @@ void GLFWApp::_keyCallback(GLFWwindow* window, int key, int action) {
  * GLFW Mouse button callback - sends a full event with current position as well
  */
 
-void GLFWApp::_mouseButtonCallback(GLFWwindow* window, int button, int action) {
+void GLFWApp::_mouseButtonCallback(GLFWwindow* window, int button, int action, int mods) {
 	if (!TwEventMouseButtonGLFW(button,action)){
 		switch(button){
 			case 0: {
@@ -207,12 +220,12 @@ void GLFWApp::_mouseWheelCallback(GLFWwindow* window, double xpos, double ypos) 
 }
 
 
-GLFWwindow* GLFWApp::createWindow(const char * title ="Seburo", int w=800, int h=600) {
+GLFWwindow* GLFWApp::createWindow(const char * title ="OpenGLCourse", int w=800, int h=600) {
 
   GLFWwindow* win = glfwCreateWindow(w,h, title, NULL, NULL);
 
   if (!win){
-		std::cout << "Seburo: Failed to open GLFW window" << std::endl;				
+		std::cout << "OpenGLCourse: Failed to open GLFW window" << std::endl;				
 		glfwTerminate();
 		exit(EXIT_FAILURE);
 	}
@@ -243,7 +256,7 @@ void GLFWApp::_error_callback(int error, const char* description) {
  */
 
  void GLFWApp::initGL( const int w = 800, const int h =600,
- 		const int major = 3, const int minor = 1) {
+ 		const int major = 4, const int minor = 1, const int depthbits = 16) {
 
 
 	///\todo fully switch to core profile - there is something causing an error in core
@@ -251,7 +264,14 @@ void GLFWApp::_error_callback(int error, const char* description) {
 
  	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, major);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, minor);
- 	glfwWindowHint(GLFW_DEPTH_BITS, 16);
+ 	glfwWindowHint(GLFW_DEPTH_BITS, depthbits);
+
+#ifdef _OPENGLCOURSE_OSX
+ 	// Forward compatible and CORE Profile
+ 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+ 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+#endif
+
 	//glfwWindowHint(GLFW_FSAA_SAMPLES, 4);
 
  	glfwSetErrorCallback(_error_callback);
@@ -279,7 +299,7 @@ void GLFWApp::_error_callback(int error, const char* description) {
 	CXGLERROR
 
 	if( !window ) {
-		std::cerr << "Seburo Failed to open GLFW window\n" << std::endl;
+		std::cerr << "OpenGLCourse Failed to open GLFW window\n" << std::endl;
 		glfwTerminate();
 		exit( EXIT_FAILURE );
 	}
@@ -290,7 +310,7 @@ void GLFWApp::_error_callback(int error, const char* description) {
 	GLenum err=glewInit();
 
 	if(err!=GLEW_OK) {
-		std::cerr << "Seburo: GLEWInit failed, aborting with error: " << err << std::endl;
+		std::cerr << "OpenGLCourse: GLEWInit failed, aborting with error: " << err << std::endl;
 		glfwTerminate();
 		exit( EXIT_FAILURE );
 	}
@@ -302,6 +322,8 @@ void GLFWApp::_error_callback(int error, const char* description) {
 	TwWindowSize(w, h);
 
 	pThis->_app.init();
+
+	pThis->_dt = 0.0;
 
 	// fire a cheeky resize event to make sure all is well
 	ResizeEvent e (w,h,glfwGetTime());

@@ -33,7 +33,6 @@ void Camera::reset() {
 	compute();
 }
 
- 
 
 void Camera::setRatio(float r) {
 	mR = r;

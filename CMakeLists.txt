@@ -144,10 +144,11 @@ if (_SEBURO_LINUX)
 
   SEBURO_find_pkgconfig_lib(gtkmm-3.0)
   SEBURO_find_pkgconfig_lib(gl)
-  SEBURO_find_pkgconfig_lib(xxf86vm)
- 
-  SEBURO_find_library(glfw3)
+  SEBURO_find_library(glfw)
   SEBURO_find_library(AntTweakBar)
+  SEBURO_find_pkgconfig_lib(xxf86vm)
+  SEBURO_find_pkgconfig_lib(xrandr)
+  SEBURO_find_pkgconfig_lib(xi)
   SEBURO_find_library(assimp)
 
   include_directories(${PROJECT_SOURCE_DIR}/lib/linux
@@ -185,7 +186,7 @@ elseif(_SEBURO_OSX)
     ${CMAKE_SOURCE_DIR}/lib/osx
     CACHE STRING "Local Library search paths")
 
-  SEBURO_find_library(glfw3)
+  SEBURO_find_library(glfw)
   SEBURO_find_library(AntTweakBar)
   SEBURO_find_library(AssImp)
 
@@ -205,7 +206,7 @@ elseif(_SEBURO_WIN32)
 
   find_package(OpenGL REQUIRED)
 
-  SEBURO_find_library(glfw3) # Built from the github version 3 build
+  SEBURO_find_library(glfw) # Built from the github version 3 build
   SEBURO_find_library(AntTweakBar)
   #SEBURO_find_library(AssImp)
   #SEBURO_find_library(glew32)
@@ -250,30 +251,36 @@ FILE(GLOB CommonSources src/*)
 list(REMOVE_ITEM GLUtils ${PROJECT_SOURCE_DIR}/src/gl/utils/glewinfo.c)
 list(REMOVE_ITEM GLUtils ${PROJECT_SOURCE_DIR}/src/gl/utils/visualinfo.c)
 
-#####################################################################
+##########################################################
+# Options for further libraries and includes
+
+# OpenNI 
+option(OPENNI "Compile and use OpenNI Librares" OFF)
+  
+if (USE_OPENNI)
+  find_package(OpenNI)
+  if (OPENNI_FOUND)
+    set(HAVE_OPENNI ON)
+    add_definitions(-D_SEBURO_OPENNI)
+    include_directories(${OPENNI_INCLUDE_DIRS})
+  endif()
+
+endif(USE_OPENNI)
+
 # OpenCV.
 
-option(USEOPENCV "useopencv" OFF)
+option(USE_OPENCV "useopencv" OFF)
 
-if (USEOPENCV)
-  add_definitions(-D_SEBURO_OPENCV)
-  SEBURO_find_library(opencv_calib3d)
-  SEBURO_find_library(opencv_contrib)
-  SEBURO_find_library(opencv_core)
-  SEBURO_find_library(opencv_features2d)
-  SEBURO_find_library(opencv_gpu)
-#  SEBURO_find_library(opencv_highgui)
-  SEBURO_find_library(opencv_imgproc)
-  SEBURO_find_library(opencv_legacy)
-  SEBURO_find_library(opencv_ml)
-  SEBURO_find_library(opencv_objdetect)
-#  SEBURO_find_library(opencv_stitching)
-#  SEBURO_find_library(opencv_ts)
-  SEBURO_find_library(opencv_video)
-
+if (USE_OPENCV)
+  find_package(OpenCV)
+  if (OPENCV_FOUND)
+    add_definitions(-D_SEBURO_OPENCV)
+    set(HAVE_OPENCV ON)
+    include_directories(${OPENCV_INCLUDE_DIRS})
+  endif()
 else()
   list(REMOVE_ITEM CommonSources src/cvprocess.cpp)
-endif(USEOPENCV)
+endif(USE_OPENCV)
 
 #####################################################################
 # Create Target
@@ -298,8 +305,10 @@ if (_SEBURO_WIN32)
     string(REPLACE "/MD" "/MT" ${CompilerFlag} "${${CompilerFlag}}")
   endforeach()
 
-endif()
+elseif(_SEBURO_LINUX)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC") 
 
+endif()
 
 add_library(Seburo SHARED
   ${CommonSources}
@@ -331,11 +340,55 @@ endif()
 
 project(${PROJECT_NAME})
 
-##########################################################
-# GLFW Windowed mode (in case you want multiple windows in your GLFW3
-# Application)
 
-#option(MULTIWINDOW "Multiple Window Support" OFF)
+
+
+##########################################################
+# Define a bundling Macro for OSX only
+
+if (_SEBURO_OSX)
+
+  macro(SEBURO_bundler)
+    add_executable(${PROJECT_NAME} MACOSX_BUNDLE app.cpp)
+    
+    SET(MACOSX_BUNDLE_ICON_FILE ${CMAKE_SOURCE_DIR}/s9.icns) 
+    SET_SOURCE_FILES_PROPERTIES(${CMAKE_SOURCE_DIR}/s9.icns PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
+
+    set_target_properties(${PROJECT_NAME} PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "${PROJECT_NAME}")
+
+    set(DIRS ${CMAKE_SOURCE_DIR}/lib/osx
+      ${CMAKE_SOURCE_DIR}/data
+      ${CMAKE_SOURCE_DIR}/shaders/3
+    ) 
+
+    set(MACOSX_BUNDLE_INFO_STRING "${PROJECT_NAME}")
+    set(MACOSX_BUNDLE_GUI_IDENTIFIER "uk.co.section9.SEBURO.${PROJECT_NAME}")
+    set(MACOSX_BUNDLE_LONG_VERSION_STRING "${PROJECT_NAME}")
+    set(MACOSX_BUNDLE_BUNDLE_NAME ${PROJECT_NAME})
+    set(MACOSX_BUNDLE_SHORT_VERSION_STRING ${VTK_VERSION})
+    set(MACOSX_BUNDLE_BUNDLE_VERSION ${VTK_VERSION})
+    set(MACOSX_BUNDLE_COPYRIGHT "Copyright 2013. All Rights Reserved.")
+
+    # Setup the Bundle Files
+
+    #add_custom_command (TARGET ${PROJECT_NAME} PRE_BUILD
+    #                    COMMAND mkdir -p ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}.app/Contents/Resources)
+
+  
+    #add_custom_command (TARGET ${PROJECT_NAME} PRE_BUILD
+    #                    COMMAND cp -r ${CMAKE_SOURCE_DIR}/shaders ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}.app/Contents/Resources/.)
+
+    add_custom_command (TARGET ${PROJECT_NAME} PRE_BUILD
+                        COMMAND cp ${CMAKE_SOURCE_DIR}/lib/osx/* ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}.app/Contents/MacOS/.)
+
+    INSTALL(CODE "
+      include(BundleUtilities)
+      fixup_bundle( ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}.app \"\"   \"${DIRS}\")
+      " COMPONENT Runtime)
+  endmacro(SEBURO_bundler)
+
+endif()
+
 
 #####################################################################
 # Go into examples directory and build these
@@ -347,15 +400,4 @@ if (SEBURO_BUILD_EXAMPLES)
       add_subdirectory(${example})
     endforeach()
   endif()
-endif()
-
-
-#####################################################################
-# Build Applications
-
-if (NOT TARGET applications)
-  FILE(GLOB applications applications/*)
-  foreach(application ${applications})
-    add_subdirectory(${application})
-  endforeach()
 endif()

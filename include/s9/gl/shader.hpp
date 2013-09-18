@@ -16,16 +16,13 @@
 
 /*
  * Basic Shader class - loads and binds
- * \todo fluent and shorthand interface
- * \todo geometry shader
- * \todo compiled in shaders within the code
  */
 
 namespace s9 {
 
 	namespace gl {
 
-		class SEBUROAPI Shader {
+		class OPENGLCOURSEAPI Shader {
 		public:
 			void load(std::string vert, std::string frag);
 			GLuint getProgram() { return mProgram; };

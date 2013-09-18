@@ -14,19 +14,19 @@
 #include "texture.hpp"
 #include "utils.hpp"
 
-#ifdef _SEBURO_OPENCV
+#ifdef _OPENGLCOURSE_OPENCV
 #include <opencv2/opencv.hpp>
 #endif
 
-#ifdef _SEBURO_LINUX
+#ifdef _OPENGLCOURSE_LINUX
 #include "s9/linux/uvc_camera.hpp"
 #endif
 
-#ifdef _SEBURO_OSX
+#ifdef _OPENGLCOURSE_OSX
 #include "s9/osx/quicktime_camera.hpp"
 #endif
 
-#ifdef _SEBURO_WIN32
+#ifdef _OPENGLCOURSE_WIN32
 #include "s9/win32/windows_camera.hpp"
 #endif
 
@@ -39,7 +39,7 @@ namespace s9 {
 		 * Access to a camera device - OS dependent and using OpenGL as the texture method
 		 */
 
-		class SEBUROAPI VidCam {
+		class OPENGLCOURSEAPI VidCam {
 		public:
 			VidCam() {};
 			VidCam (std::string dev, size_t w, size_t h, size_t fps);
@@ -66,15 +66,15 @@ namespace s9 {
 			struct SharedObj {
 			public:
 
-#ifdef _SEBURO_LINUX
+#ifdef _OPENGLCOURSE_LINUX
 				boost::shared_ptr<UVCVideo> _cam;
 #endif
 
-#ifdef _SEBURO_OSX
+#ifdef _OPENGLCOURSE_OSX
 				boost::shared_ptr<QuicktimeCamera> _cam;
 #endif
 
-#ifdef _SEBURO_WIN32
+#ifdef _OPENGLCOURSE_WIN32
 				boost::shared_ptr<WindowsCamera> _cam;
 #endif
 
@@ -87,7 +87,7 @@ namespace s9 {
 		};
 
 
-#ifdef _SEBURO_OPENCV
+#ifdef _OPENGLCOURSE_OPENCV
 		namespace compvis{
 
 			/*

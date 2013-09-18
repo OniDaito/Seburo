@@ -18,6 +18,7 @@ namespace s9{
 		EVENT_MOUSE,
 		EVENT_KEY,
 		EVENT_RESIZE,
+		EVENT_SCROLL
 	}EventType;
 
 	typedef enum{
@@ -70,6 +71,17 @@ namespace s9{
 		}
 
 		size_t mW,mH;
+	};
+
+	struct ScrollEvent : public Event {
+		ScrollEvent (double_t xoffset, double_t yoffset, double_t t=0) {
+			mXd = xoffset;
+			mYd = yoffset;
+			mT = t;
+			mType = EVENT_SCROLL;
+		}
+
+		double_t mXd,mYd;
 	};
 }
 

@@ -13,6 +13,7 @@ using namespace boost;
 using namespace std;
 
 
+
 void WindowApp::fireEvent(Event e){
   BOOST_FOREACH(boost::shared_ptr<WindowResponder> p, _listeners){
     p->processEvent(e);
