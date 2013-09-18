@@ -22,16 +22,3 @@ So far, we have basic Linux and OSX support and hopefully, I'll have Windows sup
 * Attempts to be quite decoupled; you can use as much or as little as you want.
 * Built around CMake rather than XCode or Codeblocks, because, quite frankly, it is superior and less hassle in the long run. 
 * Similar to Cinder in using the Shared Object Model
-
-## Todo
-
-* Shader version control with OpenGL
-  * Shaders to be hard-coded and ready made as strings inside the app
-* Resource loading cross platform
-* Add QHull Library
-* Add Freeimage Library for textures
-* Add Lighting solutions
-* Add Links to Blender
-* More Shaders including Geometry
-* Support for external application bundling
-* Current Directory cross platform function

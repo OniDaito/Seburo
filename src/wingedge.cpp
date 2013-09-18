@@ -35,7 +35,7 @@ void WingedEdge::make(DrawableGeometry geom) {
 	}
 	
 	
-	cerr << "OpenGLCourse Winged Edge Vertices Count: " << vs.size() << endl;
+	cerr << "SEBURO Winged Edge Vertices Count: " << vs.size() << endl;
 
 	// Now create proper winged edge and indices using a concatenated 32 bit index to a 64 bit key
 	// In addition we create a straight list of unique triangles
@@ -134,9 +134,9 @@ void WingedEdge::make(DrawableGeometry geom) {
 		}
 	}
 		
-	cerr << "OpenGLCourse Winged Edge edges count: " << es.size() << endl;
-	cerr << "OpenGLCourse Winged Edge Face Count: " << mObj->mWE.size() << endl;
-	cerr << "OpenGLCourse Winged Edge Discarded Face Count: " << bw << endl;
+	cerr << "SEBURO Winged Edge edges count: " << es.size() << endl;
+	cerr << "SEBURO Winged Edge Face Count: " << mObj->mWE.size() << endl;
+	cerr << "SEBURO Winged Edge Discarded Face Count: " << bw << endl;
 }
 
 /*

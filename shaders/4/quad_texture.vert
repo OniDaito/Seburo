@@ -1,4 +1,4 @@
-#version 420 compatibility
+#version 420
 
 out vec4 vVertexPosition;
 out vec2 vTexCoord;

@@ -46,9 +46,8 @@ if (_SEBURO_OSX)
     fixup_bundle( ${CMAKE_CURRENT_BINARY_DIR}/video.app \"\"   \"${DIRS}\")
     " COMPONENT Runtime)
 
-
-
-else() 
+  
+else()
   add_executable (video ${SOURCE_FILES} ) 
 endif()
 
@@ -56,6 +55,7 @@ include_directories(${SEBURO_INCLUDES}
   ${INCLUDES_SEARCH_PATHS}
   ${INCLUDES}
 )
+
 
 target_link_libraries(video 
   Seburo

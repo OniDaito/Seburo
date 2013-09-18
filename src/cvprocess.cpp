@@ -7,7 +7,7 @@
 */
 
 
-#ifdef _OPENGLCOURSE_OPENCV
+#ifdef _SEBURO_OPENCV
 
 #include "s9/cvprocess.hpp"
 

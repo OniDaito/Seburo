@@ -28,11 +28,11 @@ File::File(std::string path){
   } 
   else if (path.find(".") == 0){
     // relative path - setup the data dir
-#ifdef _OPENGLCOURSE_OSX 
+#ifdef _SEBURO_OSX 
     _finalPath = "../Resources/" + ltrim(path);
 #endif
 
-#ifdef _OPENGLCOURSE_LINUX
+#ifdef _SEBURO_LINUX
     _finalPath = "../../../" + path;
 #endif
 

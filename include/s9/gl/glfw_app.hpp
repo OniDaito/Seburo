@@ -17,7 +17,7 @@
 #include <GLFW/glfw3.h>
 #include <anttweakbar/AntTweakBar.h>
 
-#ifdef _OPENGLCOURSE_X11_GLX	
+#ifdef _SEBURO_LINUX	
 #include <gtkmm.h>
 #endif
 
@@ -33,12 +33,8 @@ namespace s9 {
 		 * Considered a template but the static, C-Like nature of GLFW made this more annoying
 		 */
 
-<<<<<<< HEAD
-		class OPENGLCOURSEAPI GLFWApp : WindowSystem{
-=======
 		class SEBUROAPI GLFWApp : WindowSystem{
->>>>>>> 437ab78ab0911146bf75d2a4d68fb7ff849b15cd
-
+			
 		protected:
 
 			bool mRunning;
@@ -80,7 +76,7 @@ namespace s9 {
 
 			GLFWApp (WindowApp &app, const int w = 800, const int h = 600, 
 				bool fullscreen = false, int argc = 0, const char * argv[] = NULL, 
-				const char * title = "OpenGLCourse", const int major = 3, const int minor = 0, 
+				const char * title = "SEBURO", const int major = 3, const int minor = 0, 
 				const int depthbits = 16 );
 
 			static GLFWwindow* createWindow(const char * title, int w, int h);

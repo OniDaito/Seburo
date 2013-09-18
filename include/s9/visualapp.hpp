@@ -41,7 +41,7 @@ namespace s9 {
 	 * and can also link things back to the underlying event system
 	 */
 
-	class OPENGLCOURSEAPI WindowApp  {
+	class SEBUROAPI WindowApp  {
 	public:
 		virtual void init() {};
 		virtual void display(double_t dt) {};

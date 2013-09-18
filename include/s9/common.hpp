@@ -21,7 +21,7 @@
 #include <stdlib.h>
 #include <time.h>
 
-#ifdef _OPENGLCOURSE_WIN32
+#ifdef _SEBURO_WIN32
 #include "win32/s9win32.hpp"
 #else
 #include <unistd.h>
@@ -31,7 +31,7 @@
 #if defined(_SEBURO_WIN32) && defined(_SEBURO_BUILD_DLL)
   #define SEBUROAPI __declspec(dllexport)
 #else
-  #define OPENGLCOURSEAPI
+  #define SEBUROAPI
 #endif
 
 
@@ -63,5 +63,11 @@
 #include <glm/gtc/swizzle.hpp>
 #include <glm/gtx/matrix_interpolation.hpp>
 #include <glm/gtx/string_cast.hpp>
+
+#if defined(_SEBURO_WIN32) && defined(_SEBURO_BUILD_DLL)
+  #define SEBUROAPI __declspec(dllexport)
+#else
+  #define SEBUROAPI
+#endif
 
 #endif

@@ -13,7 +13,7 @@
 
 namespace s9 {
 
-  class OPENGLCOURSEAPI File {
+  class SEBUROAPI File {
   public:
     File();
 

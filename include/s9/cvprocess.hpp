@@ -21,7 +21,7 @@ namespace s9{
      * A step in the processing - records a result
      */
 
-    class OPENGLCOURSEAPI ProcessBlock {
+    class SEBUROAPI ProcessBlock {
     public:
 
       friend class Process;
@@ -67,7 +67,7 @@ namespace s9{
      * A Pipeline of image processing blocks
      */
 
-    class OPENGLCOURSEAPI Process {
+    class SEBUROAPI Process {
     public:
       Process() { };
 
@@ -107,7 +107,7 @@ namespace s9{
 
     // Useful Blocks
 
-    class OPENGLCOURSEAPI BlockGreyscale : public ProcessBlock {
+    class SEBUROAPI BlockGreyscale : public ProcessBlock {
   
     protected:
         cv::Mat& _process(cv::Mat &in);

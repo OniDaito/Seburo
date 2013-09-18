@@ -25,7 +25,7 @@ namespace s9 {
 		 * Extends the basic Quad for OpenGL stuff
 		 */
 
-		class OPENGLCOURSEAPI Quad : public s9::gl::Asset<GeometryFullFloat> {
+		class SEBUROAPI Quad : public s9::gl::Asset<GeometryFullFloat> {
 
 		public:
 			Quad(){};

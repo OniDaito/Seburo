@@ -16,15 +16,15 @@ GLFWApp* GLFWApp::pThis;
 string GLFWApp::mTitle;
 
 
-#if defined(_OPENGLCOURSE_BUILD_DLL)
+#if defined(_SEBURO_BUILD_DLL)
 
-// OPENGLCOURSE DLL entry point
+// SEBURO DLL entry point
 //
 BOOL WINAPI DllMain(HINSTANCE instance, DWORD reason, LPVOID reserved) {
     return TRUE;
 }
 
-#endif // _OPENGLCOURSE_BUILD_DLL
+#endif // _SEBURO_BUILD_DLL
 
 GLFWApp::GLFWApp (WindowApp &app, const int w, const int h, 
 	bool fullscreen, int argc, const char * argv[], 
@@ -59,7 +59,7 @@ void GLFWApp::mainLoop() {
 		
 		glfwPollEvents();
 
-#ifdef _OPENGLCOURSE_X11_GLX
+#ifdef _SEBURO_X11_GLX
 		gtk_main_iteration_do(false);
 #endif
 		
@@ -116,15 +116,6 @@ void GLFWApp::_scrollCallback(GLFWwindow* window, double xoffset, double yoffset
 	pThis->_app.fireEvent(e);
 
 }
-
-
-void GLFWApp::_scrollCallback(GLFWwindow* window, double xoffset, double yoffset) {
-	ScrollEvent e (xoffset,yoffset,glfwGetTime());
-	pThis->_app.fireEvent(e);
-
-}
-
-
 
 
 /*
@@ -231,12 +222,12 @@ void GLFWApp::_mouseWheelCallback(GLFWwindow* window, double xpos, double ypos) 
 }
 
 
-GLFWwindow* GLFWApp::createWindow(const char * title ="OpenGLCourse", int w=800, int h=600) {
+GLFWwindow* GLFWApp::createWindow(const char * title ="SEBURO", int w=800, int h=600) {
 
   GLFWwindow* win = glfwCreateWindow(w,h, title, NULL, NULL);
 
   if (!win){
-		std::cout << "OpenGLCourse: Failed to open GLFW window" << std::endl;				
+		std::cout << "SEBURO: Failed to open GLFW window" << std::endl;				
 		glfwTerminate();
 		exit(EXIT_FAILURE);
 	}
@@ -267,10 +258,13 @@ void GLFWApp::_error_callback(int error, const char* description) {
  */
 
  void GLFWApp::initGL( const int w = 800, const int h =600,
- 		const int major = 4, const int minor = 1, const int depthbits = 16) {
+ 		const int major = -1, const int minor = -1, const int depthbits = 16) {
 
- 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, major);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, minor);
+ 	if (major == -1 or minor == -1) {
+ 		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, major);
+		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, minor);
+ 	}
+
  	glfwWindowHint(GLFW_DEPTH_BITS, depthbits);
 
 #ifdef _SEBURO_OSX
@@ -309,7 +303,7 @@ void GLFWApp::_error_callback(int error, const char* description) {
 		
 
 	if( !window ) {
-		std::cerr << "OpenGLCourse Failed to open GLFW window\n" << std::endl;
+		std::cerr << "SEBURO Failed to open GLFW window\n" << std::endl;
 		glfwTerminate();
 		exit( EXIT_FAILURE );
 	}
@@ -323,7 +317,7 @@ void GLFWApp::_error_callback(int error, const char* description) {
 	CXGLERROR
 
 	if(err!=GLEW_OK) {
-		std::cerr << "OpenGLCourse: GLEWInit failed, aborting with error: " << err << std::endl;
+		std::cerr << "SEBURO: GLEWInit failed, aborting with error: " << err << std::endl;
 		glfwTerminate();
 		exit( EXIT_FAILURE );
 	}

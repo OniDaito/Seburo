@@ -152,6 +152,8 @@ if (_SEBURO_LINUX)
   SEBURO_find_pkgconfig_lib(xi)
   SEBURO_find_library(assimp)
 
+  #set (CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "-Wl")
+
   include_directories(${PROJECT_SOURCE_DIR}/lib/linux
     ${SEBURO_INCLUDES}
   )
@@ -215,6 +217,20 @@ elseif(_SEBURO_WIN32)
 
 else()
   message(FATAL_ERROR "No supported platform was detected")
+endif()
+
+#####################################################################
+# Clang stuff
+
+if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+  SET(CMAKE_COMPILER_IS_CLANG 1)
+  if("${CMAKE_C_FLAGS}" STREQUAL "")
+    SET(CMAKE_C_FLAGS "-Qunused-arguments")
+  endif()
+  if("${CMAKE_CXX_FLAGS}" STREQUAL "")
+    SET(CMAKE_CXX_FLAGS "-Qunused-arguments -Wno-invalid-offsetof ${SSE_FLAGS}") # Unfortunately older Clang versions do not have this: -Wno-unnamed-type-template-args
+  endif()
+  SET(CLANG_LIBRARIES "stdc++")
 endif()
 
 #####################################################################
@@ -335,15 +351,13 @@ target_link_libraries(Seburo
 
 # seperate libs depending on OS
 
-if (UNIX AND APPLE)
+if (_SEBURO_WIN32)
   target_link_libraries(Seburo 
     ${OSX_FRAMEWORKS}
   )
 endif()
 
 project(${PROJECT_NAME})
-
-
 
 
 ##########################################################

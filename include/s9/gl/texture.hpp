@@ -14,7 +14,7 @@
 #include "s9/gl/utils.hpp"
 #include "s9/image.hpp"
 
-#ifdef _OPENGLCOURSE_OPENCV
+#ifdef _SEBURO_OPENCV
 #include <opencv2/opencv.hpp>
 #endif
 
@@ -32,7 +32,7 @@ namespace s9 {
      * Represents a texture in OpenGL. Use GL_TEXTURE_RECTANGLE
      */
 
-    class OPENGLCOURSEAPI Texture{
+    class SEBUROAPI Texture{
     public:
       Texture() {};
       Texture(glm::vec2 size, TextureType format=TEXTURE_RGB, const char* data = NULL);
@@ -72,7 +72,7 @@ namespace s9 {
       TextureTwo(Image image);       
     };
 
-#ifdef _OPENGLCOURSE_OPENCV
+#ifdef _SEBURO_OPENCV
     inline unsigned char * MatToGL(cv::Mat &mat) {
       return (unsigned char *)IplImage(mat).imageData; 
     };
