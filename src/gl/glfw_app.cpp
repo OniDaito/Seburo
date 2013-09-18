@@ -16,15 +16,15 @@ GLFWApp* GLFWApp::pThis;
 string GLFWApp::mTitle;
 
 
-#if defined(_SEBURO_BUILD_DLL)
+#if defined(_OPENGLCOURSE_BUILD_DLL)
 
-// SEBURO DLL entry point
+// OPENGLCOURSE DLL entry point
 //
 BOOL WINAPI DllMain(HINSTANCE instance, DWORD reason, LPVOID reserved) {
     return TRUE;
 }
 
-#endif // _SEBURO_BUILD_DLL
+#endif // _OPENGLCOURSE_BUILD_DLL
 
 GLFWApp::GLFWApp (WindowApp &app, const int w, const int h, 
 	bool fullscreen, int argc, const char * argv[], 
@@ -59,7 +59,7 @@ void GLFWApp::mainLoop() {
 		
 		glfwPollEvents();
 
-#ifdef _SEBURO_X11_GLX
+#ifdef _OPENGLCOURSE_X11_GLX
 		gtk_main_iteration_do(false);
 #endif
 		
@@ -116,6 +116,14 @@ void GLFWApp::_scrollCallback(GLFWwindow* window, double xoffset, double yoffset
 	pThis->_app.fireEvent(e);
 
 }
+
+
+void GLFWApp::_scrollCallback(GLFWwindow* window, double xoffset, double yoffset) {
+	ScrollEvent e (xoffset,yoffset,glfwGetTime());
+	pThis->_app.fireEvent(e);
+
+}
+
 
 
 
@@ -223,12 +231,12 @@ void GLFWApp::_mouseWheelCallback(GLFWwindow* window, double xpos, double ypos) 
 }
 
 
-GLFWwindow* GLFWApp::createWindow(const char * title ="Seburo", int w=800, int h=600) {
+GLFWwindow* GLFWApp::createWindow(const char * title ="OpenGLCourse", int w=800, int h=600) {
 
   GLFWwindow* win = glfwCreateWindow(w,h, title, NULL, NULL);
 
   if (!win){
-		std::cout << "Seburo: Failed to open GLFW window" << std::endl;				
+		std::cout << "OpenGLCourse: Failed to open GLFW window" << std::endl;				
 		glfwTerminate();
 		exit(EXIT_FAILURE);
 	}
@@ -300,6 +308,12 @@ void GLFWApp::_error_callback(int error, const char* description) {
 	glfwSetWindowCloseCallback(window, _window_close_callback );
 		
 
+	if( !window ) {
+		std::cerr << "OpenGLCourse Failed to open GLFW window\n" << std::endl;
+		glfwTerminate();
+		exit( EXIT_FAILURE );
+	}
+
 	// Call only after one window / context has been created!
 	
 	glewExperimental = true;
@@ -309,7 +323,7 @@ void GLFWApp::_error_callback(int error, const char* description) {
 	CXGLERROR
 
 	if(err!=GLEW_OK) {
-		std::cerr << "Seburo: GLEWInit failed, aborting with error: " << err << std::endl;
+		std::cerr << "OpenGLCourse: GLEWInit failed, aborting with error: " << err << std::endl;
 		glfwTerminate();
 		exit( EXIT_FAILURE );
 	}
@@ -327,14 +341,13 @@ void GLFWApp::_error_callback(int error, const char* description) {
 	pThis->_app.init();
 
 	CXGLERROR
-
 	// fire a cheeky resize event to make sure all is well
 	ResizeEvent e (w,h,glfwGetTime());
 	pThis->_app.fireEvent(e);
 
 	// Fire up the thread to keep update happy
 	// Use a thread for the updates
-  pThis->_update_thread =  new boost::thread(&GLFWApp::_update);
+ 	pThis->_update_thread =  new boost::thread(&GLFWApp::_update);
 
 	mainLoop();
 

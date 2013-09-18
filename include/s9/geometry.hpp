@@ -25,7 +25,7 @@ namespace s9 {
 	 * \todo rather than use a dirty flag, register a listener or similar. Make implicit!
 	 */
 	 
-	class SEBUROAPI DrawableGeometry {
+	class OPENGLCOURSEAPI DrawableGeometry {
 	public:
 		virtual bool isDirty(){ return false;}
 		virtual void setDirty(bool b) {}
@@ -48,7 +48,7 @@ namespace s9 {
 	 */
 	
 	template <class T>
-	class SEBUROAPI Geometry : public DrawableGeometry{
+	class OPENGLCOURSEAPI Geometry : public DrawableGeometry{
 	public:
 		Geometry() {};
 		

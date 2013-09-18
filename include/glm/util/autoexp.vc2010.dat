@@ -3243,9 +3243,9 @@ Concurrency::choice<*>{
 }
 
 ;------------------------------------------------------------------------------
-;  Concurrency::join<*,*>::_MessaSEBUROray from <agents.h>
+;  Concurrency::join<*,*>::_MessaOPENGLCOURSEray from <agents.h>
 ;------------------------------------------------------------------------------
-Concurrency::join<*,*>::_MessaSEBUROray{
+Concurrency::join<*,*>::_MessaOPENGLCOURSEray{
 	preview (
 		#(
 			"[",
@@ -3305,9 +3305,9 @@ Concurrency::join<*,*>{
 	preview (
 		#(
 			"[",
-			$e._M_messaSEBUROray._M_count - $e._M_messagesRemaining,
+			$e._M_messaOPENGLCOURSEray._M_count - $e._M_messagesRemaining,
 			"/",
-			$e._M_messaSEBUROray._M_count,
+			$e._M_messaOPENGLCOURSEray._M_count,
 			"](",
 			#array(
 				expr: *($e._M_connectedSources._M_links._M_vector._M_array[$i]),
@@ -3320,10 +3320,10 @@ Concurrency::join<*,*>{
 	children (
 		#(
 			#([join_type]: (Concurrency::join_type)$T2),
-			#([offer_count]: $e._M_messaSEBUROray._M_count - $e._M_messagesRemaining),
+			#([offer_count]: $e._M_messaOPENGLCOURSEray._M_count - $e._M_messagesRemaining),
 			#(offer_IDs: $e._M_savedMessageIdArray),
-			#([input_count]: $e._M_messaSEBUROray._M_count),
-			#(input_values: $e._M_messaSEBUROray),
+			#([input_count]: $e._M_messaOPENGLCOURSEray._M_count),
+			#(input_values: $e._M_messaOPENGLCOURSEray),
 			#(messages: $e._M_messageBuffer),
 			#(message_filter: *($e._M_pFilter)),
 			#(linked_sources: $e._M_connectedSources._M_links),

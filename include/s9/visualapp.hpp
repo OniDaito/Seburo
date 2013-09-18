@@ -41,7 +41,7 @@ namespace s9 {
 	 * and can also link things back to the underlying event system
 	 */
 
-	class SEBUROAPI WindowApp  {
+	class OPENGLCOURSEAPI WindowApp  {
 	public:
 		virtual void init() {};
 		virtual void display(double_t dt) {};
@@ -67,6 +67,7 @@ namespace s9 {
 	 * Visual System is implemented by the underlying system
 	 * in this case, GLFW. Sends events to the Windowed app
 	 */
+
 
 	class SEBUROAPI WindowSystem {
 	public:

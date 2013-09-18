@@ -26,7 +26,7 @@ namespace s9 {
 	
 	typedef boost::shared_ptr<Primitive> PrimPtr;
 
-	class SEBUROAPI Primitive {
+	class OPENGLCOURSEAPI Primitive {
 		
 	protected:
 	

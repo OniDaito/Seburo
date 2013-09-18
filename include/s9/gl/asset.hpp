@@ -30,7 +30,7 @@ namespace s9 {
 		 */
 
 		template <class T>
-		class SEBUROAPI Asset : public s9::Asset<T> {
+		class OPENGLCOURSEAPI Asset : public s9::Asset<T> {
 
 		protected:
 			virtual void _gen() {}

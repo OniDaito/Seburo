@@ -25,7 +25,7 @@ namespace s9 {
 	 */
 
 	template<class T>
-	class SEBUROAPI Asset : public Primitive {
+	class OPENGLCOURSEAPI Asset : public Primitive {
 	protected:
 		struct SharedObj{
 			T _geom;

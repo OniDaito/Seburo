@@ -28,7 +28,7 @@ namespace s9 {
 		 * \TODO - needs more options! Many more options
 		 */
 		 
-		class SEBUROAPI FBO {
+		class OPENGLCOURSEAPI FBO {
 
 		protected:
 			struct SharedObj {

@@ -42,7 +42,7 @@ namespace s9 {
 					ErrorString = "UNKNOWN";
 					break;
 				}
-				std::cerr << "Seburo - OpenGL Error " << ErrorString << " at " << line << " in " << func << " in " <<  file << std::endl;
+				std::cerr << "OpenGLCourse - OpenGL Error " << ErrorString << " at " << line << " in " << func << " in " <<  file << std::endl;
 			}
 			return Error == GL_NO_ERROR;
 		}

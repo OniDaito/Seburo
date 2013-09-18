@@ -18,9 +18,11 @@ using namespace s9;
 const struct aiScene* AssetImporter::pScene;
 #endif
 
+
 /*
  * Recursive load function. Dependent on the actual type of the geom
  */ 
+
 
 #ifndef _SEBURO_WIN32
 AssetPtr AssetImporter::_load (const struct aiScene *sc, const struct aiNode* nd, AssetPtr p ) {
@@ -122,3 +124,4 @@ AssetImporter::~AssetImporter() {
 }
 
 #endif
+

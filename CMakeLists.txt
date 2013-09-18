@@ -145,9 +145,11 @@ if (_SEBURO_LINUX)
   SEBURO_find_pkgconfig_lib(gtkmm-3.0)
   SEBURO_find_pkgconfig_lib(gl)
   SEBURO_find_pkgconfig_lib(xxf86vm)
- 
   SEBURO_find_library(glfw)
   SEBURO_find_library(AntTweakBar)
+  SEBURO_find_pkgconfig_lib(xxf86vm)
+  SEBURO_find_pkgconfig_lib(xrandr)
+  SEBURO_find_pkgconfig_lib(xi)
   SEBURO_find_library(assimp)
 
   include_directories(${PROJECT_SOURCE_DIR}/lib/linux
@@ -251,46 +253,37 @@ FILE(GLOB CommonSources src/*)
 list(REMOVE_ITEM GLUtils ${PROJECT_SOURCE_DIR}/src/gl/utils/glewinfo.c)
 list(REMOVE_ITEM GLUtils ${PROJECT_SOURCE_DIR}/src/gl/utils/visualinfo.c)
 
-#####################################################################
+##########################################################
+# Options for further libraries and includes
+
+# OpenNI 
+option(OPENNI "Compile and use OpenNI Librares" OFF)
+  
+if (USE_OPENNI)
+  find_package(OpenNI)
+  if (OPENNI_FOUND)
+    add_definitions(-D_SEBURO_OPENNI)
+    include_directories(${OPENNI_INCLUDE_DIRS})
+  endif()
+
+endif(USE_OPENNI)
+
 # OpenCV.
 
 option(USE_OPENCV "use opencv" OFF)
 
-if (USE_OPENCV)
-  add_definitions(-D_SEBURO_OPENCV)
-  SEBURO_find_library(opencv_calib3d)
-  SEBURO_find_library(opencv_contrib)
-  SEBURO_find_library(opencv_core)
-  SEBURO_find_library(opencv_features2d)
-  SEBURO_find_library(opencv_gpu)
-#  SEBURO_find_library(opencv_highgui)
-  SEBURO_find_library(opencv_imgproc)
-  SEBURO_find_library(opencv_legacy)
-  SEBURO_find_library(opencv_ml)
-  SEBURO_find_library(opencv_objdetect)
-#  SEBURO_find_library(opencv_stitching)
-#  SEBURO_find_library(opencv_ts)
-  SEBURO_find_library(opencv_video)
 
+if (USE_OPENCV)
+  find_package(OpenCV)
+  if (OPENCV_FOUND)
+    add_definitions(-D_SEBURO_OPENCV)
+    include_directories(${OPENCV_INCLUDE_DIRS})
+  endif()
 else()
   list(REMOVE_ITEM CommonSources src/cvprocess.cpp)
 endif(USE_OPENCV)
 
-#####################################################################
-# OpenNI
-# \TODO we are working with OpenNI2 so does this need to change?
 
-option(USE_OPENNI "use openni" ON)
-if (USE_OPENNI)
-  
-  find_package(OpenNI)
-  if (OPENNI_FOUND)
-    set (HAVE_OPENNI ON)
-    add_definitions(-D_SEBURO_OPENNI)
-    include_directories(${OPENNI_INCLUDE_DIRS})
-  endif(OPENNI_FOUND)
-
-endif(USE_OPENNI)
 
 #####################################################################
 # Create Target
@@ -315,8 +308,10 @@ if (_SEBURO_WIN32)
     string(REPLACE "/MD" "/MT" ${CompilerFlag} "${${CompilerFlag}}")
   endforeach()
 
-endif()
+elseif(_SEBURO_LINUX)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC") 
 
+endif()
 
 add_library(Seburo SHARED
   ${CommonSources}
@@ -348,6 +343,9 @@ endif()
 
 project(${PROJECT_NAME})
 
+
+
+
 ##########################################################
 # Define a bundling Macro for OSX only
 
@@ -363,11 +361,12 @@ if (_SEBURO_OSX)
 
     set(DIRS ${CMAKE_SOURCE_DIR}/lib/osx
       ${CMAKE_SOURCE_DIR}/data
-      ${CMAKE_SOURCE_DIR}/shaders/1.5
+      ${CMAKE_SOURCE_DIR}/shaders/3
     ) 
 
     set(MACOSX_BUNDLE_INFO_STRING "${PROJECT_NAME}")
-    set(MACOSX_BUNDLE_GUI_IDENTIFIER "uk.co.section9.seburo.${PROJECT_NAME}")
+    set(MACOSX_BUNDLE_GUI_IDENTIFIER "uk.co.section9.SEBURO.${PROJECT_NAME}")
+
     set(MACOSX_BUNDLE_LONG_VERSION_STRING "${PROJECT_NAME}")
     set(MACOSX_BUNDLE_BUNDLE_NAME ${PROJECT_NAME})
     set(MACOSX_BUNDLE_SHORT_VERSION_STRING ${VTK_VERSION})
@@ -394,6 +393,7 @@ if (_SEBURO_OSX)
 
 endif()
 
+
 #####################################################################
 # Post Build
 
@@ -405,6 +405,7 @@ if (_SEBURO_OSX)
     COMMAND ${CMAKE_CURRENT_BINARY_DIR}/osx_paths.sh)
 
 endif()
+
 
 
 #####################################################################
@@ -420,3 +421,4 @@ if (SEBURO_BUILD_EXAMPLES)
     endforeach()
   endif()
 endif()
+

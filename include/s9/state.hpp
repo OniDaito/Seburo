@@ -26,7 +26,7 @@ namespace s9{
    * shared_ptr but no need really
    */
 
-  class SEBUROAPI State {
+  class OPENGLCOURSEAPI State {
 
   protected:
     StateInternalPtr _next;
