@@ -260,7 +260,7 @@ void GLFWApp::_error_callback(int error, const char* description) {
  void GLFWApp::initGL( const int w = 800, const int h =600,
  		const int major = -1, const int minor = -1, const int depthbits = 16) {
 
- 	if (major == -1 or minor == -1) {
+ 	if (major != -1 and minor != -1) {
  		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, major);
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, minor);
  	}
