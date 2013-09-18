@@ -23,8 +23,9 @@ namespace s9 {
 
 	namespace gl {
 
-		/*
-		 * Basic FBO Class with depth and colour attachments
+		/**
+		 * Basic FBO Class with depth buffer and colour texture attachments
+		 * \TODO - needs more options! Many more options
 		 */
 		 
 		class SEBUROAPI FBO {
@@ -43,8 +44,8 @@ namespace s9 {
 
 			virtual operator int() const { return _obj.use_count() > 0; };
 
-			void bind() { glBindFramebuffer(GL_FRAMEBUFFER, _obj->mID); glViewport(0,0,_obj->mW,_obj->mH); };
-			void unbind() { glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0); } ;
+			void bind() { glBindFramebuffer(GL_DRAW_FRAMEBUFFER, _obj->mID);  glViewport(0,0,_obj->mW,_obj->mH); };
+			void unbind() { glBindFramebuffer(GL_FRAMEBUFFER, 0); } ;
 			bool checkStatus();
 			void printFramebufferInfo();
 			void resize(size_t w, size_t h);

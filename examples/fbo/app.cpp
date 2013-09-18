@@ -31,6 +31,7 @@ void FBOApp::init(){
 #ifdef _SEBURO_OSX
     mShader.load(s9::File("./shaders/3/quad.vert").path(), s9::File("./shaders/3/quad.frag").path());
     mFBOShader.load(s9::File("./shaders/3/quad_texture.vert").path(), s9::File("./shaders/3/quad_texture.frag").path());
+    CXGLERROR
 #else
     mShader.load(s9::File("./shaders/4/quad.vert").path(), s9::File("./shaders/4/quad.frag").path());
     mFBOShader.load(s9::File("./shaders/4/quad_texture.vert").path(), s9::File("./shaders/4/quad_texture.frag").path());
@@ -47,7 +48,7 @@ void FBOApp::init(){
     link(*this);
     link(mScreenCamera);
 
-    glEnable(GL_TEXTURE_RECTANGLE);
+    CXGLERROR
 
 }
 
@@ -62,6 +63,7 @@ void FBOApp::display(double_t dt){
     GLfloat depth = 1.0f;
     // Our matrix = the object * camera
     glm::mat4 mvp = mCamera.getMatrix() * mTestQuad.getMatrix();
+    
 
     // Bind to an FBO
     mFBO.bind();
@@ -80,6 +82,7 @@ void FBOApp::display(double_t dt){
 
     glClearBufferfv(GL_COLOR, 0, &glm::vec4(0.9f, 0.9f, 0.9f, 1.0f)[0]);
     glClearBufferfv(GL_DEPTH, 0, &depth );
+    
 
     mShader.bind();
     mShader.s("uMVPMatrix",mvp);
@@ -131,6 +134,8 @@ void FBOApp::processEvent(KeyboardEvent e){
 
 int main (int argc, const char * argv[]) {
   
+
+#ifdef _SEBURO_LINUX
     // Declare the supported options.
     po::options_description desc("Allowed options");
     desc.add_options()
@@ -146,6 +151,8 @@ int main (int argc, const char * argv[]) {
         cout << desc << "\n";
         return 1;
     }
+
+#endif
   
     FBOApp b;
 

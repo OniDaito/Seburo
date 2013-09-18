@@ -1,6 +1,6 @@
 /**
-* @brief Camera Manager that deals with the control of the 8 cameras
-* @file camera_manager.cpp
+* @brief Basic Textures
+* @file texture.cpp
 * @author Benjamin Blundell <oni@section9.co.uk>
 * @date 03/05/2012
 *
@@ -20,22 +20,27 @@ using namespace s9::gl;
 
 /*
  * Basic Texture Rectangle Creation with data supplied
+ * \TODO - Need more options! A lot more options! :O
  */
 
 Texture::Texture(glm::vec2 size, TextureType format, const char* data) {
   _obj.reset(new SharedObj());
   _obj->_size = size;
   _obj->_format = format;
-  glGenTextures(1, &(_obj->_id));
-  glBindTexture(GL_TEXTURE_RECTANGLE, _obj->_id);
 
+  glGenTextures(1, &(_obj->_id));
+  CXGLERROR
+
+  glBindTexture(GL_TEXTURE_RECTANGLE, _obj->_id);
+  CXGLERROR
   switch(format){
     case TEXTURE_RGB:{
-      glTexImage2D(GL_TEXTURE_RECTANGLE, 0, 3, size.x, size.y, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+      glTexImage2D(GL_TEXTURE_RECTANGLE, 0, GL_RGB, size.x, size.y, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+      CXGLERROR
       break;
     }
     case TEXTURE_GREY:{
-      glTexImage2D(GL_TEXTURE_RECTANGLE, 0, 1, size.x, size.y, 0, GL_RED, GL_UNSIGNED_BYTE, NULL);
+      glTexImage2D(GL_TEXTURE_RECTANGLE, 0, GL_RED, size.x, size.y, 0, GL_RED, GL_UNSIGNED_BYTE, NULL);
       break;
     }
     default: {
@@ -44,6 +49,7 @@ Texture::Texture(glm::vec2 size, TextureType format, const char* data) {
     }
 
   }
+  CXGLERROR
 }
 
 /*

@@ -96,13 +96,13 @@ void GLFWApp::_shutdown() {
 
 void GLFWApp::_display(GLFWwindow* window) {
 	pThis->_app.display(pThis->_dt);
-	TwDraw();
+	//TwDraw();
 	//CXGLERROR
 }
 
 void GLFWApp::_display(){
   pThis->_app.display(pThis->_dt);
-  TwDraw();
+  //TwDraw();
  	//CXGLERROR - TwDraw keeps throwing out invalid operations. Not so good! ><
 }
 
@@ -305,13 +305,17 @@ void GLFWApp::_error_callback(int error, const char* description) {
 	glewExperimental = true;
 	GLenum err=glewInit();
 
+	// Problem here - see http://www.opengl.org/wiki/OpenGL_Loading_Library
+	CXGLERROR
+
 	if(err!=GLEW_OK) {
 		std::cerr << "Seburo: GLEWInit failed, aborting with error: " << err << std::endl;
 		glfwTerminate();
 		exit( EXIT_FAILURE );
 	}
-
 	CXGLERROR
+
+	
 	
 	pThis->vWindows.push_back(window);
 
@@ -322,6 +326,7 @@ void GLFWApp::_error_callback(int error, const char* description) {
 	pThis->_dt = 0.0;
 	pThis->_app.init();
 
+	CXGLERROR
 
 	// fire a cheeky resize event to make sure all is well
 	ResizeEvent e (w,h,glfwGetTime());
