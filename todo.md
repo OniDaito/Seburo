@@ -6,3 +6,5 @@ Things that need to be added
   Lighting!
   A better route for Deferred Shading
   Procedural, 2 triangle stuff
+
+  Error checking for 4.3 callback - http://blog.nobel-joergensen.com/2013/02/17/debugging-opengl-part-2-using-gldebugmessagecallback/

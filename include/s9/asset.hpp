@@ -45,6 +45,29 @@ namespace s9 {
 	typedef boost::shared_ptr<Asset<GeometryPNF> > AssetPtr;
 	typedef Asset<GeometryPNF> AssetBasic;
 	typedef Asset<GeometryFullFloat> AssetFull;
+
+
+	/*
+ 	 * A wrapper around the Assimp library
+ 	 * \todo do something better with pScene
+ 	 */
+
+#ifndef _SEBURO_WIN32
+
+		class SEBUROAPI AssetImporter {
+		public:
+			static AssetBasic load(std::string filename);
+
+			virtual ~AssetImporter();
+
+		protected:
+
+			static AssetPtr _load (const struct aiScene *sc, const struct aiNode* nd, AssetPtr p);
+			static const struct aiScene* pScene;
+
+		};
+
+#endif
 	
 
 }

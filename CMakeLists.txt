@@ -5,7 +5,7 @@ cmake_minimum_required (VERSION 2.8)
 project (Seburo) 
 
 set(SEBURO_VERSION_MAJOR "0")
-set(SEBURO_VERSION_MINOR "2")
+set(SEBURO_VERSION_MINOR "3")
 set(SEBURO_VERSION_PATCH "0")
 set(SEBURO_VERSION_EXTRA "")
 set(SEBURO_VERSION "${SEBURO_VERSION_MAJOR}.${SEBURO_VERSION_MINOR}")
@@ -144,6 +144,7 @@ if (_SEBURO_LINUX)
 
   SEBURO_find_pkgconfig_lib(gtkmm-3.0)
   SEBURO_find_pkgconfig_lib(gl)
+  SEBURO_find_pkgconfig_lib(xxf86vm)
   SEBURO_find_library(glfw)
   SEBURO_find_library(AntTweakBar)
   SEBURO_find_pkgconfig_lib(xxf86vm)
@@ -189,6 +190,7 @@ elseif(_SEBURO_OSX)
   SEBURO_find_library(glfw)
   SEBURO_find_library(AntTweakBar)
   SEBURO_find_library(AssImp)
+
 
 elseif(_SEBURO_WIN32)
   
@@ -363,6 +365,7 @@ if (_SEBURO_OSX)
 
     set(MACOSX_BUNDLE_INFO_STRING "${PROJECT_NAME}")
     set(MACOSX_BUNDLE_GUI_IDENTIFIER "uk.co.section9.SEBURO.${PROJECT_NAME}")
+
     set(MACOSX_BUNDLE_LONG_VERSION_STRING "${PROJECT_NAME}")
     set(MACOSX_BUNDLE_BUNDLE_NAME ${PROJECT_NAME})
     set(MACOSX_BUNDLE_SHORT_VERSION_STRING ${VTK_VERSION})
@@ -391,13 +394,30 @@ endif()
 
 
 #####################################################################
+# Post Build
+
+if (_SEBURO_OSX)
+  add_custom_command (TARGET Seburo PRE_BUILD
+    COMMAND cp ${CMAKE_CURRENT_BINARY_DIR}/../scripts/osx_paths.sh ${CMAKE_CURRENT_BINARY_DIR}/. )
+
+  add_custom_command (TARGET Seburo POST_BUILD
+    COMMAND ${CMAKE_CURRENT_BINARY_DIR}/osx_paths.sh)
+
+endif()
+
+
+
+#####################################################################
 # Go into examples directory and build these
 
 if (SEBURO_BUILD_EXAMPLES) 
   if (NOT TARGET examples) 
     FILE(GLOB examples examples/*)
     foreach(example ${examples})
-      add_subdirectory(${example})
+      if(IS_DIRECTORY ${example})
+        add_subdirectory(${example})
+      endif()
     endforeach()
   endif()
 endif()
+

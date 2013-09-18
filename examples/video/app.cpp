@@ -94,6 +94,7 @@ void VideoApp::processEvent(KeyboardEvent e){
 
 int main (int argc, const char * argv[]) {
   
+#ifdef _SEBURO_LINUX
     // Declare the supported options.
     po::options_description desc("Allowed options");
     desc.add_options()
@@ -109,10 +110,16 @@ int main (int argc, const char * argv[]) {
         cout << desc << "\n";
         return 1;
     }
-  
-    VideoApp b;
+#endif
 
+    
+    VideoApp b;
+    
+#ifdef _SEBURO_OSX
+    GLFWApp a(b, 800, 600, false, argc, argv, "Video",3,2);
+#else
     GLFWApp a(b, 800, 600, false, argc, argv, "Video");
+#endif
 
     return EXIT_SUCCESS;
 

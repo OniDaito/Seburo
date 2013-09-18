@@ -33,7 +33,11 @@ namespace s9 {
 		 * Considered a template but the static, C-Like nature of GLFW made this more annoying
 		 */
 
+<<<<<<< HEAD
 		class OPENGLCOURSEAPI GLFWApp : WindowSystem{
+=======
+		class SEBUROAPI GLFWApp : WindowSystem{
+>>>>>>> 437ab78ab0911146bf75d2a4d68fb7ff849b15cd
 
 		protected:
 

@@ -25,25 +25,27 @@ FBO::FBO (size_t w, size_t h){
 	_obj->mH = h;
 	
 	glGenFramebuffers(1, &(_obj->mID));
-	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, _obj->mID);
- 
+  
+	glBindFramebuffer(GL_FRAMEBUFFER, _obj->mID);
+  
 	// Create depth renderbuffer
 	glGenRenderbuffers(1, &(_obj->mDepth));
-	glBindRenderbuffer(GL_RENDERBUFFER, _obj->mDepth);
-	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, w, h);
- 
+  glBindRenderbuffer(GL_RENDERBUFFER, _obj->mDepth);
+  glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, w, h);
+  
 	// Create the texture
 
   _obj->_colour = Texture(glm::vec2(w,h));
 	
 	// Attach texture to first color attachment and the depth to the depth attachment
 	glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_RECTANGLE,_obj->_colour.id(), 0);
-	glFramebufferRenderbuffer(GL_DRAW_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, _obj->mDepth);
- 
+  glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, _obj->mDepth);
+  
 	if (checkStatus() )  {
 		_obj->mOk = true;
-		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	}
+  CXGLERROR
 }
 
 

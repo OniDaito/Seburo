@@ -27,8 +27,9 @@
 #include <unistd.h>
 #endif
 
-#if defined(_OPENGLCOURSE_WIN32) && defined(_OPENGLCOURSE_BUILD_DLL)
-  #define OPENGLCOURSEAPI __declspec(dllexport)
+
+#if defined(_SEBURO_WIN32) && defined(_SEBURO_BUILD_DLL)
+  #define SEBUROAPI __declspec(dllexport)
 #else
   #define OPENGLCOURSEAPI
 #endif

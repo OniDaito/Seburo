@@ -133,6 +133,7 @@ void PickingApp::processEvent(KeyboardEvent e){
 
 int main (int argc, const char * argv[]) {
   
+#ifdef _SEBURO_LINUX
     // Declare the supported options.
     po::options_description desc("Allowed options");
     desc.add_options()
@@ -148,11 +149,17 @@ int main (int argc, const char * argv[]) {
         cout << desc << "\n";
         return 1;
     }
+
+#endif
   
     PickingApp b;
 
-    GLFWApp a(b, 800, 600, false, argc, argv, "Picking",4,0);
-
+#ifdef _SEBURO_OSX
+    GLFWApp a(b, 800, 600, false, argc, argv, "Picking",3,2);
+#else
+    GLFWApp a(b, 800, 600, false, argc, argv, "Picking");
+#endif
+    
     return EXIT_SUCCESS;
 
 }
