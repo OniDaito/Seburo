@@ -1,5 +1,6 @@
 #####################################################################
 # Main CMake file for the Seburo Project
+# http://www.cmake.org/Wiki/CMake_Useful_Variables
 
 cmake_minimum_required (VERSION 2.8) 
 project (Seburo) 
@@ -68,7 +69,6 @@ else()
   
 endif()
 
-###########
 
 #####################################################################
 # S9 Includes
@@ -249,15 +249,15 @@ if(WIN32)
   #SET(CMAKE_SHARED_LINKER_FLAGS /NODEFAULTLIB:LIBC;LIBCMT;MSVCRT)
 endif()
 
-message("Looking for Installed BOOST Libraries")
+#message("Looking for Installed BOOST Libraries")
 find_package(Boost COMPONENTS system filesystem signals iostreams program_options thread REQUIRED)
 
 include_directories(${Boost_INCLUDE_DIR})
 link_directories(${Boost_LIBRARY_DIRS})
 
-message(status "** Boost Include: ${Boost_INCLUDE_DIR}")
-message(status "** Boost Libraries: ${Boost_LIBRARY_DIRS}")
-message(status "** Boost Libraries: ${Boost_LIBRARIES}")
+#message(status "** Boost Include: ${Boost_INCLUDE_DIR}")
+#message(status "** Boost Libraries: ${Boost_LIBRARY_DIRS}")
+#message(status "** Boost Libraries: ${Boost_LIBRARIES}")
 
 
 ######################################################################
@@ -271,23 +271,60 @@ list(REMOVE_ITEM GLUtils ${PROJECT_SOURCE_DIR}/src/gl/utils/visualinfo.c)
 
 ##########################################################
 # Options for further libraries and includes
+# \TODO Should really be library dirs not actual libraries
 
 # OpenNI 
-option(OPENNI "Compile and use OpenNI Librares" OFF)
+option(USE_OPENNI "Compile and use OpenNI Librares" ON)
   
 if (USE_OPENNI)
-  find_package(OpenNI)
-  if (OPENNI_FOUND)
-    add_definitions(-D_SEBURO_OPENNI)
-    include_directories(${OPENNI_INCLUDE_DIRS})
+
+  # OPENNI_INCLUDE_DIRS - Directories containing the OPENNI include files.
+  # OPENNI_LIBRARIES - Libraries needed to use OPENNI.
+
+  # This setup includes NITE by default
+ 
+  find_path(OPENNI_INCLUDE_DIR XnStatus.h
+            HINTS  /usr/include/openni /usr/include/ni
+            PATHS "$ENV{PROGRAMFILES}/OpenNI/Include" "$ENV{PROGRAMW6432}/OpenNI/Include"
+            PATH_SUFFIXES openni)
+
+  find_library(OPENNI_LIBRARY
+               NAMES OpenNI64 OpenNI
+               HINTS /usr/lib
+               PATHS "$ENV{PROGRAMFILES}/OpenNI/Lib${OPENNI_SUFFIX}" "$ENV{PROGRAMW6432}/OpenNI/Lib${OPENNI_SUFFIX}"
+               PATH_SUFFIXES lib
+  )
+
+  find_library(NITE_LIBRARY
+               NAMES XnVNite XnVNITE_1_3_1 XnVNITE_1_4_0 XnVNite_1_4_2 XnVNite_1_5_2
+               HINTS /usr/lib
+               PATHS "$ENV{PROGRAMFILES}/PrimeSense/NITE/Lib${OPENNI_SUFFIX}" "$ENV{PROGRAMW6432}/PrimeSense/NITE/Lib${OPENNI_SUFFIX}"
+               PATH_SUFFIXES lib
+  )
+ 
+  find_path(NITE_INCLUDE_DIR XnVSessionManager.h
+            HINTS /usr/include/openni /usr/include/nite
+            PATHS "$ENV{PROGRAMFILES}/PrimeSense/NITE/Include" "$ENV{PROGRAMW6432}/PrimeSense/NITE/Include"
+            PATH_SUFFIXES openni)
+   
+  set(OPENNI_INCLUDE_DIRS ${OPENNI_INCLUDE_DIR} ${NITE_INCLUDE_DIR})
+  
+  if(_SEBURO_OSX)
+    set(OPENNI_LIBRARIES ${OPENNI_LIBRARY} ${NITE_LIBRARY} usb)
+  else()
+    set(OPENNI_LIBRARIES ${OPENNI_LIBRARY} ${NITE_LIBRARY})
   endif()
+ 
+  add_definitions(-D_SEBURO_OPENNI)
+  include_directories(${OPENNI_INCLUDE_DIRS})
+
+  FILE(GLOB OpenNISources src/openni/*)
 
 endif(USE_OPENNI)
 
 # OpenCV.
 
 option(USE_OPENCV "use opencv" OFF)
-
 
 if (USE_OPENCV)
   find_package(OpenCV)
@@ -300,6 +337,41 @@ else()
 endif(USE_OPENCV)
 
 
+# Oculus Rift
+
+option(USE_OCULUS "Link in the Oculus Rift SDK Librares" ON)
+  
+if (USE_OCULUS)
+
+  # OCULUS_INCLUDE_DIR - Directories containing the OCULUS include files.
+  # OCULUS_LIBRARY - Libraries needed to use OCULUS.
+
+ 
+  find_path(OCULUS_INCLUDE_DIR OVR.h
+            HINTS  /opt/OculusSDK/libOVR/Include
+            PATHS "$ENV{PROGRAMFILES}/OculusSDK/LibOVR/Include" "$ENV{PROGRAMW6432}/OculusSDK/LibOVR/Include"
+            PATH_SUFFIXES OculusSDK
+  )
+
+  
+  # There are two libs, one for debug and release but for now, we just use Debug
+
+  find_library(OCULUS_LIBRARY
+               NAMES libovr
+               HINTS /usr/lib
+               PATHS "$ENV{PROGRAMFILES}/OpenNI/Lib${OPENNI_SUFFIX}" "$ENV{PROGRAMW6432}/OpenNI/Lib${OPENNI_SUFFIX}"
+               PATH_SUFFIXES lib
+  )
+
+
+  add_definitions(-D_SEBURO_OCULUS)
+  include_directories(${OCULUS_INCLUDE_DIR})
+
+  FILE(GLOB OculusSources src/oculus/*)
+
+endif(USE_OCULUS)
+
+
 
 #####################################################################
 # Create Target
@@ -308,7 +380,6 @@ endif(USE_OPENCV)
 if (_SEBURO_WIN32)
   #list(REMOVE_ITEM GLSources ${PROJECT_SOURCE_DIR}/src/gl/glew.c)
  
-
   # Make sure we are using /MT this time around. We may change to /MD
   # but we MUST be consistent
 
@@ -331,6 +402,8 @@ endif()
 
 add_library(Seburo SHARED
   ${CommonSources}
+  ${OpenNISources}
+  ${OculusSources}
   ${GLSources}
   ${GLUtils}
   ${OSSources}
@@ -341,6 +414,8 @@ add_library(Seburo SHARED
 target_link_libraries(Seburo 
   ${SEBURO_LIBRARIES}
   ${OPENGL_LIBRARY}
+  ${OPENNI_LIBRARIES}
+  ${OCULUS_LIBRARY}
   ${Boost_FILESYSTEM_LIBRARY}
   ${Boost_SYSTEM_LIBRARY}
   ${Boost_THREAD_LIBRARY}

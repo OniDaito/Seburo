@@ -48,7 +48,6 @@ if (_SEBURO_OSX)
     " COMPONENT Runtime)
 
 
-
 else() 
   add_executable (basic ${SOURCE_FILES} ) 
 endif()
