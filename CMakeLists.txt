@@ -495,6 +495,22 @@ if (_SEBURO_OSX)
   add_custom_command (TARGET Seburo POST_BUILD
     COMMAND ${CMAKE_CURRENT_BINARY_DIR}/osx_paths.sh)
 
+  # Pathing for OpenNI and NITE which are included externally
+  # Should really be included further up but doesnt appear to work
+  if (USE_OPENNI)
+
+    get_filename_component(OPENNI_LIBRARY_FILE ${OPENNI_LIBRARY} NAME) 
+    get_filename_component(NITE_LIBRARY_FILE ${NITE_LIBRARY} NAME) 
+
+    add_custom_command (TARGET Seburo POST_BUILD
+                      COMMAND install_name_tool -change ${OPENNI_LIBRARY_FILE} @executable_path/../Resources/${OPENNI_LIBRARY_FILE} libSeburo.dylib)
+  
+    add_custom_command (TARGET Seburo POST_BUILD
+                      COMMAND install_name_tool -change ${NITE_LIBRARY_FILE} @executable_path/../Resources/${NITE_LIBRARY_FILE} libSeburo.dylib)
+  
+
+  endif()
+
 endif()
 
 

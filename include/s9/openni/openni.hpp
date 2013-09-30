@@ -15,6 +15,8 @@
 
 #include <OpenNI.h>
 
+#define S9_OPENNI_MAX_DEPTH 10000
+
 namespace s9 {
 
 
@@ -42,6 +44,8 @@ namespace s9 {
         uint16_t     mWidth;
         uint16_t     mHeight;
 
+        float         mDepthHist[S9_OPENNI_MAX_DEPTH];
+
         SharedObj( openni::Device& d,  openni::VideoStream& ds,
          openni::VideoStream&  cs ) : mDevice(d), mDepthStream(ds), mColourStream(cs) {}
 
@@ -52,10 +56,12 @@ namespace s9 {
       int init(openni::Device& d, openni::VideoStream&  ds, openni::VideoStream&  cs );
 
     public:
-      OpenNIBase();
-      OpenNIBase(std::string device_name);
+      OpenNIBase(); 
+      OpenNIBase(const char * deviceURI); // openni::ANY_DEVICE normally
       ~OpenNIBase();
+      void update();
 
+      static void calculateHistogram(float* pHistogram, int histogramSize, const openni::VideoFrameRef& frame);
    
     };
   }

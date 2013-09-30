@@ -46,8 +46,6 @@ if (_SEBURO_OSX)
     fixup_bundle( ${CMAKE_CURRENT_BINARY_DIR}/fbo.app \"\"   \"${DIRS}\")
     " COMPONENT Runtime)
 
-
-
 else() 
   add_executable (fbo ${SOURCE_FILES} ) 
 endif()
