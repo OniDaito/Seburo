@@ -47,7 +47,7 @@ namespace s9 {
 
       };
 
-      boost::shared_ptr<SharedObj> _obj;
+      std::shared_ptr<SharedObj> _obj;
 
       int init(openni::Device& d, openni::VideoStream&  ds, openni::VideoStream&  cs );
 

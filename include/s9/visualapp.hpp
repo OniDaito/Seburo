@@ -54,12 +54,12 @@ namespace s9 {
 		void fireEvent(KeyboardEvent e);
 
 		void link(WindowResponder &responder) { 
-			boost::shared_ptr<WindowResponder> p (&responder);
+			std::shared_ptr<WindowResponder> p (&responder);
 			_listeners.push_back(p);
 		};
 
 	protected:
-		std::vector< boost::shared_ptr<WindowResponder> > _listeners;
+		std::vector< std::shared_ptr<WindowResponder> > _listeners;
 
 	};
 

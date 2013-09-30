@@ -41,12 +41,14 @@ elseif (UNIX AND APPLE)
     add_definitions(-D_SEBURO_OSX)
     message(STATUS "Building SEBURO Shared on Mac OS X")
     FILE(GLOB OSSources src/osx/*)
+    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -stdlib=libc++")
 
 elseif (UNIX AND NOT APPLE)
     set(_SEBURO_LINUX 1)
     add_definitions(-D_SEBURO_LINUX)
     message(STATUS "Building SEBURO Shared on a Unix-like system")
     FILE(GLOB OSSources src/linux/*)
+    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -stdlib=libc++")
 else()
     message(FATAL_ERROR "No supported platform was detected")
 endif()
@@ -344,7 +346,7 @@ option(USE_OCULUS "Link in the Oculus Rift SDK Librares" ON)
 if (USE_OCULUS)
 
   # OCULUS_INCLUDE_DIR - Directories containing the OCULUS include files.
-  # OCULUS_LIBRARY - Libraries needed to use OCULUS.
+  # OCULUS_LIBRARIES - Libraries needed to use OCULUS.
 
  
   find_path(OCULUS_INCLUDE_DIR OVR.h
@@ -356,7 +358,7 @@ if (USE_OCULUS)
   
   # There are two libs, one for debug and release but for now, we just use Debug
 
-  find_library(OCULUS_LIBRARY
+  find_library(OCULUS_LIBRARIES
                NAMES libovr
                HINTS /usr/lib
                PATHS "$ENV{PROGRAMFILES}/OpenNI/Lib${OPENNI_SUFFIX}" "$ENV{PROGRAMW6432}/OpenNI/Lib${OPENNI_SUFFIX}"
@@ -415,7 +417,7 @@ target_link_libraries(Seburo
   ${SEBURO_LIBRARIES}
   ${OPENGL_LIBRARY}
   ${OPENNI_LIBRARIES}
-  ${OCULUS_LIBRARY}
+  ${OCULUS_LIBRARIES}
   ${Boost_FILESYSTEM_LIBRARY}
   ${Boost_SYSTEM_LIBRARY}
   ${Boost_THREAD_LIBRARY}

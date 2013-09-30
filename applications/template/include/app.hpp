@@ -69,7 +69,7 @@ namespace TemplateNamespace {
 			XMLSettings _settings;
 		};	
 
-		boost::shared_ptr<SharedObj> _obj;
+		std::shared_ptr<SharedObj> _obj;
 		TwBar *_bar; 
 
 	};

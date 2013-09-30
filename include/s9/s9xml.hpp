@@ -51,11 +51,11 @@ namespace s9{
 		class SharedObj{
 		public:
 			std::string mFilename;
-			boost::shared_ptr<TiXmlDocument> mDoc;
+			std::shared_ptr<TiXmlDocument> mDoc;
 			std::map < std::string, std::string > mCache;
 		};
 		
-		boost::shared_ptr<SharedObj> mObj;
+		std::shared_ptr<SharedObj> mObj;
 	};
 }
 

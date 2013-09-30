@@ -18,7 +18,7 @@ namespace s9{
   class State;
 
   typedef State* StateInternalPtr;
-  typedef boost::shared_ptr<State> StatePtr;
+  typedef std::shared_ptr<State> StatePtr;
 
   /*
    * State class. Basically a linked list with overriden
@@ -31,7 +31,7 @@ namespace s9{
   protected:
     StateInternalPtr _next;
     StateInternalPtr _prev;
-    boost::shared_ptr<void> _data;
+    std::shared_ptr<void> _data;
 
     bool _skip,_blocking,_active;
 
@@ -39,7 +39,7 @@ namespace s9{
     virtual void _draw(double_t dt){};
   
   public:
-    State(boost::shared_ptr<void> a){ 
+    State(std::shared_ptr<void> a){ 
       _data = a;
       _blocking = false;
       _active = false;

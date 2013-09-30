@@ -48,7 +48,7 @@ void GLFWApp::mainLoop() {
 
 		double_t t = glfwGetTime();
 
-		BOOST_FOREACH ( GLFWwindow* b, pThis->vWindows) {	
+		for ( GLFWwindow* b : pThis->vWindows) {	
 			glfwMakeContextCurrent(b);
 			glfwSwapInterval( 1 );
 			_display(b);
@@ -341,7 +341,7 @@ void GLFWApp::_error_callback(int error, const char* description) {
 
 	// Fire up the thread to keep update happy
 	// Use a thread for the updates
- 	pThis->_update_thread =  new boost::thread(&GLFWApp::_update);
+ 	pThis->_update_thread =  new std::thread(&GLFWApp::_update);
 
 	mainLoop();
 

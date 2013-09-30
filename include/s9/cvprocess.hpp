@@ -31,13 +31,13 @@ namespace s9{
 
       template <class T>
       void setValue(std::string tag, T value) {
-        std::map<std::string,boost::shared_ptr<void> >::iterator it = _obj->_values.find(tag);
+        std::map<std::string,std::shared_ptr<void> >::iterator it = _obj->_values.find(tag);
         if(it != _obj->_values.end()){
-          boost::shared_ptr<T> tp = boost::static_pointer_cast<T>(_obj->_values[tag]);
+          std::shared_ptr<T> tp = boost::static_pointer_cast<T>(_obj->_values[tag]);
           *tp = value;
         }
         else
-          _obj->_values[tag] = boost::shared_ptr<T>(new T(value));
+          _obj->_values[tag] = std::shared_ptr<T>(new T(value));
       }
 
       cv::Mat& getResult() { return _obj->_result; };
@@ -45,7 +45,7 @@ namespace s9{
       ///\todo wrong key should not fall over but warn
       template <class T>
       T getValue(std::string tag) {      
-        boost::shared_ptr<void> tp = _obj->_values[tag];
+        std::shared_ptr<void> tp = _obj->_values[tag];
         return *(boost::static_pointer_cast<T>( tp ));
       }
 
@@ -56,10 +56,10 @@ namespace s9{
 
       struct SharedObj {
         cv::Mat _result;
-        std::map< std::string, boost::shared_ptr<void> > _values;
+        std::map< std::string, std::shared_ptr<void> > _values;
       };
 
-      boost::shared_ptr<SharedObj> _obj;
+      std::shared_ptr<SharedObj> _obj;
 
     };
 
@@ -81,12 +81,12 @@ namespace s9{
       template<class T>
         Process& addBlock() {
 
-          if (_obj == boost::shared_ptr<SharedObj>()) {
+          if (_obj == std::shared_ptr<SharedObj>()) {
              _obj.reset(new SharedObj());
              _obj->_processed = false;
            }
 
-          _obj->_blocks.push_back( boost::shared_ptr<T>(new T));
+          _obj->_blocks.push_back( std::shared_ptr<T>(new T));
           _obj->_blocks.back()->_init();
           return *this;
       }
@@ -97,11 +97,11 @@ namespace s9{
 
     protected:
       struct SharedObj {
-        std::vector<boost::shared_ptr<ProcessBlock> > _blocks;
+        std::vector<std::shared_ptr<ProcessBlock> > _blocks;
         bool _processed;
       };
 
-      boost::shared_ptr<SharedObj> _obj;
+      std::shared_ptr<SharedObj> _obj;
 
     };
 

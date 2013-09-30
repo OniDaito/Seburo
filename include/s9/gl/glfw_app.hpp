@@ -21,7 +21,7 @@
 #include <gtkmm.h>
 #endif
 
-#include <boost/thread.hpp>
+#include <thread>
 
 namespace s9 {
 
@@ -85,7 +85,7 @@ namespace s9 {
 
 			static GLFWApp *pThis;
 			static std::string mTitle;
-			boost::thread *_update_thread;
+			std::thread *_update_thread;
 
 		};
 

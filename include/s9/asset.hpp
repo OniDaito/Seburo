@@ -30,7 +30,7 @@ namespace s9 {
 		struct SharedObj{
 			T _geom;
 		};
-		boost::shared_ptr<SharedObj> _obj;
+		std::shared_ptr<SharedObj> _obj;
 
 	public:
 		Asset() {};
@@ -42,7 +42,7 @@ namespace s9 {
 
 	// Handy typedefs
 
-	typedef boost::shared_ptr<Asset<GeometryPNF> > AssetPtr;
+	typedef std::shared_ptr<Asset<GeometryPNF> > AssetPtr;
 	typedef Asset<GeometryPNF> AssetBasic;
 	typedef Asset<GeometryFullFloat> AssetFull;
 

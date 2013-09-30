@@ -9,31 +9,29 @@
 #include "s9/visualapp.hpp"
 
 using namespace s9;
-using namespace boost;
 using namespace std;
 
 
-
 void WindowApp::fireEvent(Event e){
-  BOOST_FOREACH(boost::shared_ptr<WindowResponder> p, _listeners){
+  for(std::shared_ptr<WindowResponder> p : _listeners){
     p->processEvent(e);
   }
 }
 
 void WindowApp::fireEvent(MouseEvent e){
-   BOOST_FOREACH(boost::shared_ptr<WindowResponder> p, _listeners){
+   for(std::shared_ptr<WindowResponder> p : _listeners){
     p->processEvent(e);
   }
 }
 
 void WindowApp::fireEvent(ResizeEvent e){
-   BOOST_FOREACH(boost::shared_ptr<WindowResponder> p, _listeners){
+   for(std::shared_ptr<WindowResponder> p : _listeners){
     p->processEvent(e);
   }
 }
 
 void WindowApp::fireEvent(KeyboardEvent e){
-   BOOST_FOREACH(boost::shared_ptr<WindowResponder> p, _listeners){
+   for(std::shared_ptr<WindowResponder> p : _listeners){
     p->processEvent(e);
   }
 

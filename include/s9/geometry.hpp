@@ -65,7 +65,7 @@ namespace s9 {
 			uint32_t _range;
 		};
 		
-		boost::shared_ptr<SharedObj> _obj;
+		std::shared_ptr<SharedObj> _obj;
 	
 	public:
 		

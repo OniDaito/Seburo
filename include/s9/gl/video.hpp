@@ -67,22 +67,22 @@ namespace s9 {
 			public:
 
 #ifdef _SEBURO_LINUX
-				boost::shared_ptr<UVCVideo> _cam;
+				std::shared_ptr<UVCVideo> _cam;
 #endif
 
 #ifdef _SEBURO_OSX
-				boost::shared_ptr<QuicktimeCamera> _cam;
+				std::shared_ptr<QuicktimeCamera> _cam;
 #endif
 
 #ifdef _SEBURO_WIN32
-				boost::shared_ptr<WindowsCamera> _cam;
+				std::shared_ptr<WindowsCamera> _cam;
 #endif
 
 				size_t _fps;
 				TextureStream _texture;
 			};
 			
-			boost::shared_ptr<SharedObj> _obj;
+			std::shared_ptr<SharedObj> _obj;
 			
 		};
 
@@ -155,7 +155,7 @@ namespace s9 {
 
 				};
 
-				boost::shared_ptr<SharedObj> _obj;
+				std::shared_ptr<SharedObj> _obj;
 
 			};
 		}

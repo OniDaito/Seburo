@@ -52,7 +52,7 @@ namespace s9 {
         TextureType _format;
       };
 
-      boost::shared_ptr <SharedObj> _obj;
+      std::shared_ptr <SharedObj> _obj;
 
     public:
       glm::vec2 getSize() {return _obj->_size;};
@@ -111,7 +111,7 @@ namespace s9 {
         void *_pboMemory,*_texData;
       };
 
-      boost::shared_ptr <SharedObj> _obj;
+      std::shared_ptr <SharedObj> _obj;
 
     };
 

@@ -31,7 +31,7 @@ namespace s9 {
       struct SharedObj {
  
       };
-      boost::shared_ptr<SharedObj> _obj;
+      std::shared_ptr<SharedObj> _obj;
 
   
     public:
