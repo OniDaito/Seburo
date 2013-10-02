@@ -429,11 +429,6 @@ target_link_libraries(Seburo
   ${OPENGL_LIBRARY}
   ${OPENNI_LIBRARIES}
   #${OCULUS_LIBRARIES} - causes errors with linux when turned off for some reason?
-  ${Boost_FILESYSTEM_LIBRARY}
-  ${Boost_SYSTEM_LIBRARY}
-  ${Boost_IOSTREAMS_LIBRARY}
-  ${Boost_SIGNALS_LIBRARY}
-  ${Boost_PROGRAM_OPTIONS_LIBRARY}
 )
 
 # seperate libs depending on OS

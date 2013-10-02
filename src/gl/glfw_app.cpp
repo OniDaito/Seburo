@@ -38,12 +38,20 @@ GLFWApp::GLFWApp (WindowApp &app, const int w, const int h,
 	mFlag = 0x00;
 	mTitle = title;
 	initGL(w,h,major,minor,depthbits);
+
+	pThis->_app.init();
+
+	// Fire up the thread to keep update happy
+	// Use a thread for the updates
+ 	pThis->_update_thread =  new std::thread(&GLFWApp::_update);
+
+	mainLoop();
 }
 
 
 void GLFWApp::mainLoop() {
 	pThis->mRunning = true;
-
+	
 	while (pThis->mRunning){
 
 		double_t t = glfwGetTime();
@@ -59,8 +67,8 @@ void GLFWApp::mainLoop() {
 		
 		glfwPollEvents();
 
-#ifdef _SEBURO_X11_GLX
-		gtk_main_iteration_do(false);
+#ifdef _SEBURO_LINUX
+		//gtk_main_iteration_do(false);
 #endif
 		
  	}
@@ -103,7 +111,7 @@ void GLFWApp::_display(GLFWwindow* window) {
 void GLFWApp::_display(){
   pThis->_app.display(pThis->_dt);
   //TwDraw();
- 	//CXGLERROR - TwDraw keeps throwing out invalid operations. Not so good! ><
+ //CXGLERROR - TwDraw keeps throwing out invalid operations. Not so good! ><
 }
 
 
@@ -227,7 +235,7 @@ GLFWwindow* GLFWApp::createWindow(const char * title ="SEBURO", int w=800, int h
   GLFWwindow* win = glfwCreateWindow(w,h, title, NULL, NULL);
 
   if (!win){
-		std::cout << "SEBURO: Failed to open GLFW window" << std::endl;				
+		std::cerr << "SEBURO: Failed to open GLFW window" << std::endl;				
 		glfwTerminate();
 		exit(EXIT_FAILURE);
 	}
@@ -249,7 +257,7 @@ void GLFWApp::_update(){
 
 
 void GLFWApp::_error_callback(int error, const char* description) {
-    fprintf(stderr, "Error: %s\n", description);
+    std::cerr << "SEBURO - GLFW Error: " <<  error << " - " << description << std::endl;
 }
 
 /*
@@ -281,7 +289,7 @@ void GLFWApp::_error_callback(int error, const char* description) {
 	GLFWwindow* window = createWindow(mTitle.c_str(),w, h);
 
 	if( !window ) {
-		std::cerr << "Seburo Failed to open GLFW window\n" << std::endl;
+		std::cerr << "SEBURO Failed to open GLFW window\n" << std::endl;
 		glfwTerminate();
 		exit( EXIT_FAILURE );
 	}
@@ -302,13 +310,6 @@ void GLFWApp::_error_callback(int error, const char* description) {
 	glfwSetScrollCallback(window, _mouseWheelCallback);
 	glfwSetWindowCloseCallback(window, _window_close_callback );
 		
-
-	if( !window ) {
-		std::cerr << "SEBURO Failed to open GLFW window\n" << std::endl;
-		glfwTerminate();
-		exit( EXIT_FAILURE );
-	}
-
 	// Call only after one window / context has been created!
 	
 	glewExperimental = true;
@@ -318,7 +319,7 @@ void GLFWApp::_error_callback(int error, const char* description) {
 	CXGLERROR
 
 	if(err!=GLEW_OK) {
-		std::cerr << "SEBURO: GLEWInit failed, aborting with error: " << err << std::endl;
+		std::cerr << "SEBURO: GLEW init failed! Aborting with error: " << err << std::endl;
 		glfwTerminate();
 		exit( EXIT_FAILURE );
 	}
@@ -330,18 +331,13 @@ void GLFWApp::_error_callback(int error, const char* description) {
 	TwWindowSize(w, h);
 
 	pThis->_dt = 0.0;
-	pThis->_app.init();
-
+	
 	CXGLERROR
 	// fire a cheeky resize event to make sure all is well
 	ResizeEvent e (w,h,glfwGetTime());
 	pThis->_app.fireEvent(e);
 
-	// Fire up the thread to keep update happy
-	// Use a thread for the updates
- 	pThis->_update_thread =  new std::thread(&GLFWApp::_update);
 
-	mainLoop();
 
 }
 

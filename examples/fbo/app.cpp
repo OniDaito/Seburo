@@ -129,7 +129,7 @@ int main (int argc, const char * argv[]) {
     FBOApp b;
 
 #ifdef _SEBURO_OSX
-    GLFWApp a(b, 800, 600, false, argc, argv, "FBO",3,2);
+    GLFWApp a(b, 800, 600, false, argc, argv, "FBO",3,2)
 #else
     GLFWApp a(b, 800, 600, false, argc, argv, "FBO");
 #endif
