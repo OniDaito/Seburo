@@ -17,9 +17,9 @@
 #include <GLFW/glfw3.h>
 #include <anttweakbar/AntTweakBar.h>
 
-#ifdef _SEBURO_LINUX	
-#include <gtkmm.h>
-#endif
+//#ifdef _SEBURO_LINUX	
+//#include <gtkmm.h>
+//#endif
 
 #include <thread>
 
@@ -76,7 +76,7 @@ namespace s9 {
 
 			GLFWApp (WindowApp &app, const int w = 800, const int h = 600, 
 				bool fullscreen = false, int argc = 0, const char * argv[] = NULL, 
-				const char * title = "SEBURO", const int major = 3, const int minor = 0, 
+				const char * title = "SEBURO", const int major = -1, const int minor = -1, 
 				const int depthbits = 16 );
 
 			static GLFWwindow* createWindow(const char * title, int w, int h);
@@ -91,7 +91,7 @@ namespace s9 {
 
 	}
 
-}
 
+}
 #endif
 

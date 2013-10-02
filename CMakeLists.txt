@@ -41,14 +41,14 @@ elseif (UNIX AND APPLE)
     add_definitions(-D_SEBURO_OSX)
     message(STATUS "Building SEBURO Shared on Mac OS X")
     FILE(GLOB OSSources src/osx/*)
-    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -stdlib=libc++")
+    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
 elseif (UNIX AND NOT APPLE)
     set(_SEBURO_LINUX 1)
     add_definitions(-D_SEBURO_LINUX)
     message(STATUS "Building SEBURO Shared on a Unix-like system")
     FILE(GLOB OSSources src/linux/*)
-    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -stdlib=libc++")
+    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -pthread")
 else()
     message(FATAL_ERROR "No supported platform was detected")
 endif()
@@ -68,7 +68,17 @@ if(DEBUG)
   endif()
 
 else()
-  
+  # TODO - add optimisations here
+endif()
+
+################################
+# Verbose mode for Compilation
+
+option(VERBOSE "Verbose Compiler Output" OFF)
+if(VERBOSE)
+  if (_SEBURO_OSX OR _SEBURO_LINUX)
+    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -v")
+  endif()
 endif()
 
 
@@ -223,16 +233,15 @@ endif()
 
 #####################################################################
 # Clang stuff
+# Apple will be clang but also Linux in this case. If using Clang we
+# MUST have libc++ installed as we get problems otherwise
 
 if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+  message (STATUS "Using CLANG to build Seburo")
   SET(CMAKE_COMPILER_IS_CLANG 1)
-  if("${CMAKE_C_FLAGS}" STREQUAL "")
-    SET(CMAKE_C_FLAGS "-Qunused-arguments")
-  endif()
-  if("${CMAKE_CXX_FLAGS}" STREQUAL "")
-    SET(CMAKE_CXX_FLAGS "-Qunused-arguments -Wno-invalid-offsetof ${SSE_FLAGS}") # Unfortunately older Clang versions do not have this: -Wno-unnamed-type-template-args
-  endif()
-  SET(CLANG_LIBRARIES "stdc++")
+  SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Qunused-arguments")
+  SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++ -Qunused-arguments -Wno-invalid-offsetof ${SSE_FLAGS}")
+  SET(CLANG_LIBRARIES "c++")
 endif()
 
 #####################################################################
@@ -241,6 +250,8 @@ endif()
 # This assumes boost is built for static inclusion as libs for
 # MSVC 2010 in release mode
 # http://cpprocks.com/using-cmake-to-build-a-cross-platform-project-with-a-boost-dependency/
+# TODO - threading is now taken care of with std::thread but maybe not under windows
+# possibly not with GCC either under Linux / Apple
 
 if(WIN32)
   SET(Boost_USE_STATIC_LIBS   ON)
@@ -252,7 +263,7 @@ if(WIN32)
 endif()
 
 #message("Looking for Installed BOOST Libraries")
-find_package(Boost COMPONENTS system filesystem signals iostreams program_options thread REQUIRED)
+find_package(Boost COMPONENTS system filesystem signals iostreams program_options REQUIRED)
 
 include_directories(${Boost_INCLUDE_DIR})
 link_directories(${Boost_LIBRARY_DIRS})
@@ -345,7 +356,7 @@ option(USE_OCULUS "Link in the Oculus Rift SDK Librares" ON)
   
 if (USE_OCULUS)
 
-  # OCULUS_INCLUDE_DIR - Directories containing the OCULUS include files.
+  # OCULUS_INCLUDE_DIR - Directories containing the OCULUS include files
   # OCULUS_LIBRARIES - Libraries needed to use OCULUS.
 
  
@@ -417,10 +428,9 @@ target_link_libraries(Seburo
   ${SEBURO_LIBRARIES}
   ${OPENGL_LIBRARY}
   ${OPENNI_LIBRARIES}
-  ${OCULUS_LIBRARIES}
+  #${OCULUS_LIBRARIES} - causes errors with linux when turned off for some reason?
   ${Boost_FILESYSTEM_LIBRARY}
   ${Boost_SYSTEM_LIBRARY}
-  ${Boost_THREAD_LIBRARY}
   ${Boost_IOSTREAMS_LIBRARY}
   ${Boost_SIGNALS_LIBRARY}
   ${Boost_PROGRAM_OPTIONS_LIBRARY}

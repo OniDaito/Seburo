@@ -59,4 +59,5 @@ include_directories(${SEBURO_INCLUDES}
 
 target_link_libraries(video 
   Seburo
+  ${Boost_PROGRAM_OPTIONS_LIBRARY}
 )

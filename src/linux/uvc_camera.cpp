@@ -396,7 +396,7 @@ bool UVCVideo::startCapture(string devname, unsigned int width, unsigned int hei
 	video_enable(dev, 1);
 	mFPS = fps;
 	mRunning = true;
-	pWorkerThread =  new boost::thread(&UVCVideo::capture, this);
+	pWorkerThread =  new std::thread(&UVCVideo::capture, this);
 
 }
 

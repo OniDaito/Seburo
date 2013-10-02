@@ -255,6 +255,7 @@ void GLFWApp::_error_callback(int error, const char* description) {
 /*
  * Perform OpenGL initialisation using GLEW
  * \todo FULLSCREEN apps
+ * \todo pass params as a struct perhaps?
  */
 
  void GLFWApp::initGL( const int w = 800, const int h =600,
@@ -323,10 +324,7 @@ void GLFWApp::_error_callback(int error, const char* description) {
 	}
 	CXGLERROR
 
-	
-	
 	pThis->vWindows.push_back(window);
-
 
 	TwInit(TW_OPENGL, NULL);
 	TwWindowSize(w, h);

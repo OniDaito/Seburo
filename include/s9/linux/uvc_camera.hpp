@@ -15,6 +15,7 @@
 #include <sstream>
 #include <iomanip>
 #include <stdexcept>
+#include <thread>
 
 #include <stdio.h>
 #include <string.h>
@@ -28,8 +29,6 @@
 #include <sys/mman.h>
 #include <sys/select.h>
 #include <sys/time.h>
-
-#include <boost/thread.hpp>
 
 // videodev2 under ubuntu apparently
 #include <linux/videodev2.h>
@@ -107,8 +106,8 @@ protected:
 
 	void capture();
 	bool mRunning;
-	boost::thread *pWorkerThread;
-	boost::mutex mMutex;
+	std::thread *pWorkerThread;
+	std::mutex mMutex;
 	
 	bool mT;
 	int mWidth, mHeight;

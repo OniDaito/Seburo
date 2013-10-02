@@ -13,13 +13,9 @@
 #include <signal.h>
 
 using namespace std;
-using namespace boost;
-using namespace boost::assign;
 using namespace s9;
 using namespace s9::gl;
 using namespace s9::oni;
-
-namespace po = boost::program_options;
 
 
 /*
@@ -115,27 +111,7 @@ void OpenNIApp::processEvent(KeyboardEvent e){
  */
 
 int main (int argc, const char * argv[]) {
-  
-
-#ifdef _SEBURO_LINUX
-    // Declare the supported options.
-    po::options_description desc("Allowed options");
-    desc.add_options()
-    ("help", "Seburo Basic Application - No Options")
-    ;
     
-    po::variables_map vm;
-    po::store(po::parse_command_line(argc, argv, desc), vm);
-    po::notify(vm);
-    
-
-    if (vm.count("help")) {
-        cout << desc << "\n";
-        return 1;
-    }
-
-#endif
-  
     OpenNIApp b;
 
 #ifdef _SEBURO_OSX

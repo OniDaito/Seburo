@@ -13,12 +13,8 @@
 #include <signal.h>
 
 using namespace std;
-using namespace boost;
-using namespace boost::assign;
 using namespace s9;
 using namespace s9::gl;
-
-namespace po = boost::program_options;
 
 
 /*
@@ -93,26 +89,7 @@ void VideoApp::processEvent(KeyboardEvent e){
  */
 
 int main (int argc, const char * argv[]) {
-  
-#ifdef _SEBURO_LINUX
-    // Declare the supported options.
-    po::options_description desc("Allowed options");
-    desc.add_options()
-    ("help", "Seburo Video Application - No Options")
-    ;
-    
-    po::variables_map vm;
-    po::store(po::parse_command_line(argc, argv, desc), vm);
-    po::notify(vm);
-    
-
-    if (vm.count("help")) {
-        cout << desc << "\n";
-        return 1;
-    }
-#endif
-
-    
+      
     VideoApp b;
     
 #ifdef _SEBURO_OSX

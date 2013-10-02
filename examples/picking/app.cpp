@@ -133,24 +133,6 @@ void PickingApp::processEvent(KeyboardEvent e){
 
 int main (int argc, const char * argv[]) {
   
-#ifdef _SEBURO_LINUX
-    // Declare the supported options.
-    po::options_description desc("Allowed options");
-    desc.add_options()
-    ("help", "Seburo Basic Application - No Options")
-    ;
-    
-    po::variables_map vm;
-    po::store(po::parse_command_line(argc, argv, desc), vm);
-    po::notify(vm);
-    
-
-    if (vm.count("help")) {
-        cout << desc << "\n";
-        return 1;
-    }
-
-#endif
   
     PickingApp b;
 
