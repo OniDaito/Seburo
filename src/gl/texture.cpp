@@ -13,7 +13,6 @@ using namespace std;
 using namespace cv;
 #endif
 
-using namespace boost; 
 using namespace s9;
 using namespace s9::gl;
 
@@ -23,8 +22,7 @@ using namespace s9::gl;
  * \TODO - Need more options! A lot more options! :O
  */
 
-Texture::Texture(glm::vec2 size, TextureType format, const char* data) {
-  _obj.reset(new SharedObj());
+Texture::Texture(glm::vec2 size, TextureType format, const char* data) : _obj( shared_ptr<SharedObj> (new SharedObj())){
   _obj->_size = size;
   _obj->_format = format;
 
@@ -114,9 +112,8 @@ TextureTwo::TextureTwo(Image image) {
  * Texture Streamer with a PBO
  */
 
-TextureStream::TextureStream(glm::vec2 size, TextureType format){
+TextureStream::TextureStream(glm::vec2 size, TextureType format) : _obj( shared_ptr<SharedObj> (new SharedObj())){
 
-  _obj.reset(new SharedObj());
   _obj->_size = size;
   _obj->_format = format;
  

@@ -37,12 +37,10 @@ namespace s9 {
     void processEvent(MouseEvent e);
     void processEvent(KeyboardEvent e);
     void processEvent(ResizeEvent e);
-    
+
+
   protected:
-    gl::Quad mTestQuad;
-    gl::Quad mHudQuad;
-    gl::Shader mShader;
-    gl::Shader mFBOShader;
+  
 
     s9::oni::OpenNIBase mOpenNI;
 

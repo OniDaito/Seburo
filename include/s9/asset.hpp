@@ -35,7 +35,7 @@ namespace s9 {
 	public:
 		Asset() {};
 		virtual operator int() const { return _obj.use_count() > 0; };
-		Asset(T geom) {_obj.reset(new SharedObj()); _obj->_geom = geom; }
+		Asset(T geom) : _obj( std::shared_ptr<SharedObj> (new SharedObj())) { _obj->_geom = geom; }
 		T getGeometry() { return _obj->_geom; };
 
 	};

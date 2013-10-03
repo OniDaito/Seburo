@@ -9,20 +9,17 @@
 #include "s9/wingedge.hpp"
 
 using namespace std;
-using namespace boost;
-using namespace boost::assign; 
 using namespace s9;
 
 using std::shared_ptr;
 
 /*
  * Given a primtive, create a winged edge structure
- * This assumes that primitives have buffer 0 as vertices and buffer 1 as indices
+ * This assumes primitives that have buffer 0 as vertices and buffer 1 as indices
  */
 
-void WingedEdge::make(DrawableGeometry geom) {
+WingedEdge::WingedEdge(DrawableGeometry geom) : mObj( shared_ptr<SharedObj> (new SharedObj())) {
 	
-	mObj.reset(new SharedObj());
 	mObj->mGeom = geom;
 	
 	// Create a temporary array of vertices for now. 

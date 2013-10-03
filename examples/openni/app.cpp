@@ -23,21 +23,8 @@ using namespace s9::oni;
  */
 
 void OpenNIApp::init(){
-    mTestQuad = gl::Quad(1.0,1.0);
+   
 
-#ifdef _SEBURO_OSX
-    mShader.load(s9::File("./shaders/3/quad.vert").path(), s9::File("./shaders/3/quad.frag").path());
-    mFBOShader.load(s9::File("./shaders/3/quad_texture.vert").path(), s9::File("./shaders/3/quad_texture.frag").path());
-    CXGLERROR
-#else
-    mShader.load(s9::File("./shaders/4/quad.vert").path(), s9::File("./shaders/4/quad.frag").path());
-    mFBOShader.load(s9::File("./shaders/4/quad_texture.vert").path(), s9::File("./shaders/4/quad_texture.frag").path());
-#endif
-
-    mHudQuad = gl::Quad(640.0,480.0);
-    mHudQuad.setScale(glm::vec3(0.5,0.5,0.5));
-
-    mTestQuad.move(glm::vec3(-0.5,-0.5,0.0));
     mCamera.move(glm::vec3(0,0,10.0f));
 
     link(mCamera);
@@ -54,7 +41,7 @@ void OpenNIApp::init(){
  */
 
 void OpenNIApp::update(double_t dt) {
-    
+    mOpenNI.update();
 }
 
 
@@ -64,21 +51,15 @@ void OpenNIApp::update(double_t dt) {
     
 void OpenNIApp::display(double_t dt){
 
-    mOpenNI.update();
-
     GLfloat depth = 1.0f;
     // Our matrix = the object * camera
-    glm::mat4 mvp = mCamera.getMatrix() * mTestQuad.getMatrix();
 
     // Now draw to the screen
 
     glClearBufferfv(GL_COLOR, 0, &glm::vec4(0.9f, 0.9f, 0.9f, 1.0f)[0]);
     glClearBufferfv(GL_DEPTH, 0, &depth );
     
-    mShader.bind();
-    mShader.s("uMVPMatrix",mvp);
-    mTestQuad.draw();
-    mShader.unbind();
+    
 
     mCamera.update(dt);
     
@@ -115,9 +96,9 @@ int main (int argc, const char * argv[]) {
     OpenNIApp b;
 
 #ifdef _SEBURO_OSX
-    GLFWApp a(b, 800, 600, false, argc, argv, "FBO",3,2);
+    GLFWApp a(b, 800, 600, false, argc, argv, "OpenNI",3,2);
 #else
-    GLFWApp a(b, 800, 600, false, argc, argv, "FBO");
+    GLFWApp a(b, 800, 600, false, argc, argv, "OpenNI");
 #endif
 
     return EXIT_SUCCESS;

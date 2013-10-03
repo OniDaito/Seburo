@@ -47,7 +47,7 @@ namespace s9 {
 	class SEBUROAPI WingedEdge {
 	public:
 		WingedEdge(){};
-		void make(DrawableGeometry geom);
+		WingedEdge(DrawableGeometry geom);
 		std::vector<WEP_Face> getFaces() {return mObj->mWE; };
 		virtual operator int() const { return mObj.use_count() > 0; };
 	

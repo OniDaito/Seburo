@@ -33,8 +33,7 @@ namespace s9 {
 		virtual bool isIndexed(){return false; }
 		virtual uint32_t* indexaddr(){return NULL; }
 		virtual uint32_t size() {return 0;}
-		virtual uint32_t indexsize() {return 0;}
-	};
+		virtual uint32_t indexsize() {return 0;}	};
 	
 	
 
@@ -50,11 +49,11 @@ namespace s9 {
 	template <class T>
 	class SEBUROAPI Geometry : public DrawableGeometry{
 	public:
-		Geometry() {};
+		Geometry() : _obj( std::shared_ptr<SharedObj> (new SharedObj())) {};
 		
-		Geometry(std::vector<glm::vec3> v, std::vector<glm::vec3> n) {};
-		Geometry (std::vector<float> v, std::vector<float> n) {};
-		Geometry(std::vector<float> v, std::vector<float> n, std::vector<float> t, std::vector<float> c) {};
+		Geometry(std::vector<glm::vec3> v, std::vector<glm::vec3> n) : _obj( std::shared_ptr<SharedObj> (new SharedObj())) {};
+		Geometry (std::vector<float> v, std::vector<float> n) : _obj( std::shared_ptr<SharedObj> (new SharedObj())) {};
+		Geometry(std::vector<float> v, std::vector<float> n, std::vector<float> t, std::vector<float> c) : _obj( std::shared_ptr<SharedObj> (new SharedObj())) {};
 
 	protected:
 	
@@ -69,15 +68,13 @@ namespace s9 {
 	
 	public:
 		
-		Geometry(std::vector<T> v) {
-			_obj.reset(new SharedObj());
+		Geometry(std::vector<T> v) : _obj( std::shared_ptr<SharedObj> (new SharedObj())) {
 			_obj->_buffer = v;
 			_obj->_range = v.size();
 			setResized(true);
 		};
 
-		void createEmpty() {_obj.reset(new SharedObj()); };
-
+		
 		template<class U>
 		U convert() {};
  

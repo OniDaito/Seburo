@@ -16,10 +16,8 @@ using namespace s9::gl;
  * A Basic FBO with Rectangular textures FBO
  */
 
-FBO::FBO (size_t w, size_t h){
+FBO::FBO (size_t w, size_t h) : _obj( shared_ptr<SharedObj> (new SharedObj())){
 		
-	_obj.reset(new SharedObj());
-
 	_obj->mW = w;
 	_obj->mH = h;
 	

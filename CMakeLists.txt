@@ -54,7 +54,7 @@ else()
 endif()
 
 ################################
-# DEBUG mode for Compilation
+# DEBUG / Release mode for Compilation
 # TODO - Should affect linking also
 
 option(DEBUG "Debug Mode" ON)
@@ -62,9 +62,9 @@ if(DEBUG)
   add_definitions(-DDEBUG)  
   set(_SEBURO_DEBUG 1)
   if (_SEBURO_OSX OR _SEBURO_LINUX)
-    SET(CMAKE_CXX_FLAGS_DEBUG "-g")
+    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g")
   else()
-
+    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g")
   endif()
 
 else()

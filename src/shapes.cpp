@@ -9,15 +9,12 @@
 #include "s9/shapes.hpp"
 
 using namespace std;
-using namespace boost;
 using namespace boost::assign; 
 
 using namespace s9;
 
 Quad::Quad(float w, float h) {
 	
-	_obj.reset(new SharedObj);
-
 	vector<uint32_t> indices;
 	vector<float> verts;
 	vector<float> texcoords;
@@ -25,6 +22,7 @@ Quad::Quad(float w, float h) {
 	vector<float> normals;
 	
 	// Quad for Camera drawing
+	// TODO - += is a boost thing but is there a C++11 thing?
 	indices += 0,3,1,3,2,1;
 	verts += 0.0f,0.0f,0.0f,
 		w, 0.0f,0.0f, 
@@ -59,8 +57,6 @@ void Quad::resize(float w, float h){
 
 
 Triangle::Triangle(float w, float h){
-	
-	_obj.reset(new SharedObj);
 	
 	vector<float> verts;
 	vector<float> texcoords;

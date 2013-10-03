@@ -9,12 +9,15 @@
 #include "s9/openni/openni.hpp"
 
 using namespace std;
-using namespace boost; 
 using namespace s9;
 using namespace s9::oni;
 
 
-OpenNIBase::OpenNIBase() { }
+OpenNIBase::SharedObj::~SharedObj() {
+  mDepthStream.destroy();
+  mColourStream.destroy();
+  openni::OpenNI::shutdown(); // Assuming there is only one base ;)
+}
 
 
 // Taken from the OpenNI Libraries
@@ -28,85 +31,77 @@ void OpenNIBase::calculateHistogram(float* pHistogram, int histogramSize, const 
   int width = frame.getWidth();
 
   unsigned int nNumberOfPoints = 0;
-  for (int y = 0; y < height; ++y)
-  {
-    for (int x = 0; x < width; ++x, ++pDepth)
-    {
-      if (*pDepth != 0)
-      {
+  for (int y = 0; y < height; ++y) {
+    for (int x = 0; x < width; ++x, ++pDepth) {
+      if (*pDepth != 0) {
         pHistogram[*pDepth]++;
         nNumberOfPoints++;
       }
     }
     pDepth += restOfRow;
   }
-  for (int nIndex=1; nIndex<histogramSize; nIndex++)
-  {
+  for (int nIndex=1; nIndex<histogramSize; nIndex++){
     pHistogram[nIndex] += pHistogram[nIndex-1];
   }
-  if (nNumberOfPoints)
-  {
-    for (int nIndex=1; nIndex<histogramSize; nIndex++)
-    {
+  if (nNumberOfPoints) {
+    for (int nIndex=1; nIndex<histogramSize; nIndex++) {
       pHistogram[nIndex] = (256 * (1.0f - (pHistogram[nIndex] / nNumberOfPoints)));
     }
   }
 }
 
-OpenNIBase::OpenNIBase( const char* deviceURI) {
+OpenNIBase::OpenNIBase( const char* deviceURI) : _obj( shared_ptr<SharedObj> (new SharedObj())) {
   openni::Status rc = openni::STATUS_OK;
-  openni::Device device;
-  openni::VideoStream depth, color;
 
   rc = openni::OpenNI::initialize();
 
   cout << "SEBURO OpenNI: After initialization: " << openni::OpenNI::getExtendedError() << endl;
 
-  rc = device.open(deviceURI);
+  rc = _obj->mDevice.open(deviceURI);
   if (rc != openni::STATUS_OK) {
-    cout << "SEBURO OpenNI: Device open failed: " <<  openni::OpenNI::getExtendedError() << endl;
+    cerr << "SEBURO OpenNI: Device open failed: " <<  openni::OpenNI::getExtendedError() << endl;
     openni::OpenNI::shutdown();
 
   }
 
-  rc = depth.create(device, openni::SENSOR_DEPTH);
+  rc = _obj->mDepthStream.create(_obj->mDevice, openni::SENSOR_DEPTH);
   if (rc == openni::STATUS_OK) {
-    rc = depth.start();
+    rc = _obj->mDepthStream.start();
     if (rc != openni::STATUS_OK) {
-      cout << "SEBURO OpenNI: Couldn't start depth stream: " << openni::OpenNI::getExtendedError() << endl;
-      depth.destroy();
+      cerr << "SEBURO OpenNI: Couldn't start depth stream: " << openni::OpenNI::getExtendedError() << endl;
+      _obj->mDepthStream.destroy();
     }
   }
   else {
-    cout << "SEBURO OpenNI: Couldn't find depth stream: " << openni::OpenNI::getExtendedError() << endl;
+    cerr << "SEBURO OpenNI: Couldn't find depth stream: " << openni::OpenNI::getExtendedError() << endl;
   }
 
-  rc = color.create(device, openni::SENSOR_COLOR);
+
+  rc = _obj->mColourStream.create(_obj->mDevice, openni::SENSOR_COLOR);
   if (rc == openni::STATUS_OK) {
-    rc = color.start();
+    rc = _obj->mColourStream.start();
     if (rc != openni::STATUS_OK) {
-      cout <<  "SEBURO OpenNI: Couldn't start color stream: " << openni::OpenNI::getExtendedError() << endl;
-      color.destroy();
+      cerr <<  "SEBURO OpenNI: Couldn't start color stream: " << openni::OpenNI::getExtendedError() << endl;
+      _obj->mColourStream.destroy();
     }
   }
   else {
-    cout << "SEBURO OpenNI: Couldn't find color stream: " << openni::OpenNI::getExtendedError() << endl;
+    cerr << "SEBURO OpenNI: Couldn't find color stream: " << openni::OpenNI::getExtendedError() << endl;
   }
 
-  if (!depth.isValid() || !color.isValid()) {
-    cout << "SEBURO OpenNI: No valid streams. Exiting." << endl;
+  if (!(_obj->mDepthStream.isValid()) || !(_obj->mColourStream.isValid())) {
+    cerr << "SEBURO OpenNI: No valid streams. Exiting." << endl;
     openni::OpenNI::shutdown();
   }
   
-  _obj.reset(new SharedObj(device,depth,color));
-
-  init(device,depth,color);
+  init();
 }
 
-int OpenNIBase::init(openni::Device& d, openni::VideoStream&  ds, openni::VideoStream&  cs ) {
+void OpenNIBase::init( ) {
 
   openni::VideoMode depthVideoMode;
   openni::VideoMode colorVideoMode;
+
 
   if (_obj->mDepthStream.isValid() && _obj->mColourStream.isValid()) {
     depthVideoMode = _obj->mDepthStream.getVideoMode();
@@ -121,9 +116,9 @@ int OpenNIBase::init(openni::Device& d, openni::VideoStream&  ds, openni::VideoS
       _obj->mWidth = depthWidth;
       _obj->mHeight = depthHeight;
     } else {
-      cout << "Error - expect color and depth to be in same resolution: D:" << depthWidth 
+      cout << "SEBURO OpenNI Error: expect color and depth to be in same resolution: D:" << depthWidth 
         << "x" << depthHeight << " C: " << colorWidth << "x" << depthWidth << endl;
-      return openni::STATUS_ERROR;
+      return;
     }
   } else if (_obj->mDepthStream.isValid()) {
     depthVideoMode = _obj->mDepthStream.getVideoMode();
@@ -136,8 +131,8 @@ int OpenNIBase::init(openni::Device& d, openni::VideoStream&  ds, openni::VideoS
     _obj->mHeight = colorVideoMode.getResolutionY();
   }
   else {
-    cout <<  "Error - expects at least one of the streams to be valid." << endl;
-    return openni::STATUS_ERROR;
+    cout <<  "SEBURO OpenNI Error: expects at least one of the streams to be valid." << endl;
+    return;
   }
 
   _obj->mStreams = new openni::VideoStream*[2];
@@ -149,13 +144,15 @@ int OpenNIBase::init(openni::Device& d, openni::VideoStream&  ds, openni::VideoS
   //m_nTexMapY = MIN_CHUNKS_SIZE(m_height, TEXTURE_SIZE);
   //m_pTexMap = new openni::RGB888Pixel[m_nTexMapX * m_nTexMapY];
 
+
+
 }
 
 void OpenNIBase::update() {
   int changedIndex;
   openni::Status rc = openni::OpenNI::waitForAnyStream(_obj->mStreams, 2, &changedIndex);
   if (rc != openni::STATUS_OK) {
-    cout << "SEBURO OpenNI - Wait failed" << endl;
+    cout << "SEBURO OpenNI Error: Wait failed" << endl;
     return;
   }
   switch (changedIndex){
@@ -164,15 +161,11 @@ void OpenNIBase::update() {
     case 1:
       _obj->mColourStream.readFrame(&(_obj->mColourFrame)); break;
     default:
-      cout << "SEBURO OpenNI - Wait error" << endl;
+      cout << "SEBURO OpenNI Error: Wait error" << endl;
   }
 
   if (_obj->mDepthFrame.isValid()) {
     calculateHistogram(_obj->mDepthHist, S9_OPENNI_MAX_DEPTH, _obj->mDepthFrame);
   }
-  cout << "OpenNI Update" << endl;
-}
-
-OpenNIBase::~OpenNIBase() {
 
 }

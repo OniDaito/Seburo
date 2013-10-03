@@ -13,7 +13,6 @@ using namespace std;
 using namespace cv;
 #endif
 
-using namespace boost; 
 using namespace s9;
 using namespace s9::gl;
 
@@ -21,8 +20,8 @@ using namespace s9::gl;
 using namespace s9::gl::compvis;
 #endif
 
-VidCam::VidCam(std::string dev, size_t w, size_t h, size_t fps) {
-	_obj.reset(new SharedObj());
+VidCam::VidCam(std::string dev, size_t w, size_t h, size_t fps) : _obj( shared_ptr<SharedObj> (new SharedObj())) {
+
 	_obj->_texture = TextureStream(glm::vec2(w,h),TEXTURE_RGB);
 
 #ifdef _SEBURO_LINUX
@@ -66,10 +65,8 @@ void VidCam::setControl(unsigned int id, int value) {
 
 CVVidCam::CVVidCam(){}
 
-CVVidCam::CVVidCam(VidCam &cam){
+CVVidCam::CVVidCam(VidCam &cam) : _obj( shared_ptr<SharedObj> (new SharedObj(cam))){
 	
-	_obj.reset(new SharedObj(cam));
-
 	cv::Size size (_obj->mCam.getSize().x,  _obj->mCam.getSize().y);
 	_obj->mImage = Mat(size, CV_8UC3);
 	_obj->mImageRectified = Mat(size, CV_8UC3);

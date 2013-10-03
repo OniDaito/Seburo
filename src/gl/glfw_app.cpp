@@ -75,7 +75,8 @@ void GLFWApp::mainLoop() {
  	_shutdown();
   // Exiting state
 	glfwTerminate();
-	exit( EXIT_SUCCESS );
+	
+	// return to mainloop in the application for shutdown
 }
 
 

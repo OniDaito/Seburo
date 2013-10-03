@@ -54,7 +54,7 @@ namespace s9 {
 		void fireEvent(KeyboardEvent e);
 
 		void link(WindowResponder &responder) { 
-			std::shared_ptr<WindowResponder> p (&responder);
+			std::shared_ptr<WindowResponder> p = std::make_shared<WindowResponder>(responder);
 			_listeners.push_back(p);
 		};
 
