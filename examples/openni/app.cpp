@@ -33,7 +33,7 @@ void OpenNIApp::init(){
 
     CXGLERROR
 
-    mOpenNI = OpenNIBase(openni::ANY_DEVICE);
+    mOpenNI = OpenNISkeleton(openni::ANY_DEVICE);
 }
 
 /*

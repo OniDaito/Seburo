@@ -14,8 +14,10 @@
 #include "../common.hpp"
 
 #include <OpenNI.h>
+#include <NiTE.h>
 
 #define S9_OPENNI_MAX_DEPTH 10000
+#define S9_NITE_MAX_USERS 10
 
 namespace s9 {
 
@@ -29,8 +31,9 @@ namespace s9 {
      
     class SEBUROAPI OpenNIBase {
     
-    public:
-      struct SharedObj {
+    protected:
+      class SharedObj {
+      public:
 
         openni::VideoFrameRef   mDepthFrame;
         openni::VideoFrameRef   mColourFrame;
@@ -40,11 +43,20 @@ namespace s9 {
         openni::VideoStream     mColourStream;
         openni::VideoStream**   mStreams;
 
-        openni::RGB888Pixel*    pTexMap;
+        // TODO - Depth could be a bit less?
+        openni::RGB888Pixel*    pTexMapBuffer;
+
+        // TODO - Add s9 textures
+
         uint16_t     mWidth;
         uint16_t     mHeight;
 
-        float         mDepthHist[S9_OPENNI_MAX_DEPTH];
+        float       mDepthHist[S9_OPENNI_MAX_DEPTH];
+
+        bool        mReady = false;
+
+        // NiTE functionality
+        NiteUserTrackerHandle mUserTrackerHandle = nullptr;
 
         ~SharedObj();
 
@@ -52,7 +64,6 @@ namespace s9 {
 
       std::shared_ptr<SharedObj> _obj;
 
-      void init();
 
     public:
       OpenNIBase() {};
@@ -61,6 +72,25 @@ namespace s9 {
 
       static void calculateHistogram(float* pHistogram, int histogramSize, const openni::VideoFrameRef& frame);
    
+    };
+
+    /**
+     * NiTE 2 Tracker that builds on the base and tracks the skeleton
+     * Would have extended the nite UserTracker class but decided to poll instead
+     */
+     
+    class SEBUROAPI OpenNISkeleton : public OpenNIBase {
+      
+    public:
+      
+      OpenNISkeleton() {};
+      OpenNISkeleton(const char * deviceURI);
+
+    protected:
+      static bool sVisibleUsers[S9_NITE_MAX_USERS];
+      static nite::SkeletonState sSkeletonStates[S9_NITE_MAX_USERS];
+
+
     };
   }
 
