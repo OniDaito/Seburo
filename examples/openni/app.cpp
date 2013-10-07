@@ -59,7 +59,6 @@ void OpenNIApp::display(double_t dt){
     glClearBufferfv(GL_COLOR, 0, &glm::vec4(0.9f, 0.9f, 0.9f, 1.0f)[0]);
     glClearBufferfv(GL_DEPTH, 0, &depth );
     
-    
 
     mCamera.update(dt);
     

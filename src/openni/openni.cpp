@@ -17,6 +17,10 @@ bool OpenNISkeleton::sVisibleUsers[S9_NITE_MAX_USERS] = {false};
 nite::SkeletonState OpenNISkeleton::sSkeletonStates[S9_NITE_MAX_USERS] = {nite::SKELETON_NONE};
 
 
+inline void USER_MESSAGE (const nite::UserData& user, std::string msg) {
+  cout << "SEBURO Nite - User: " << user.getId() << ", " << msg << endl;
+}
+
 OpenNIBase::SharedObj::~SharedObj() {
 
   niteShutdownUserTracker(mUserTrackerHandle);
@@ -250,7 +254,153 @@ OpenNISkeleton::OpenNISkeleton(const char * deviceURI) : OpenNIBase(deviceURI) {
     return;
   }
 
+  pFrameListener = std::shared_ptr<NewFrameListener>(new NewFrameListener(*this));
+  pFrame = std::shared_ptr<OpenNISkeletonFrame>(new OpenNISkeletonFrame());
 
 }
 
+// Listener class internal callback function
 
+void  OpenNISkeleton::NewFrameListener::onNewFrame( OpenNISkeleton &skeleton) {
+
+}
+
+/**
+ * Read a frame from NiTE and slot it into our member frame class
+ */
+
+nite::Status OpenNISkeleton::readFrame() {
+  NiteUserTrackerFrame *pNiteFrame = NULL;
+  nite::Status rc = (nite::Status)niteReadUserTrackerFrame(_obj->mUserTrackerHandle, &pNiteFrame);
+  
+  /*// Set our frame class
+  pFrame->pNiteFrame = pNiteFrame;
+  pFrame->mDepthFrame._setFrame(pNiteFrame->pDepthFrame);
+  pFrame->aUsers.clear();
+
+  nite::UserData* pv = (nite::UserData*)pNiteFrame->pUser;
+  for (uint16_t i = 0; i < pNiteFrame->userCount; i++){
+    pFrame->aUsers.push_back(pv);
+    pv += sizeof(nite::UserData);
+  }*/
+
+  if (pNiteFrame->userCount > 0)
+    cout << "Users " << pNiteFrame->userCount << endl;
+
+
+  //pFrame->aUsers.setData(pNiteFrame->userCount, (nite::UserData*)pNiteFrame->pUser);
+
+
+  return rc;
+}
+
+nite::Status OpenNISkeleton::startSkeletonTracking(nite::UserId id) {
+    return (nite::Status)niteStartSkeletonTracking(_obj->mUserTrackerHandle, id);
+}
+
+void OpenNISkeleton::stopSkeletonTracking(nite::UserId id) {
+  niteStopSkeletonTracking(_obj->mUserTrackerHandle, id);
+}
+
+nite::Status OpenNISkeleton::startPoseDetection(nite::UserId user, nite::PoseType type) {
+    return (nite::Status)niteStartPoseDetection(_obj->mUserTrackerHandle, (NiteUserId)user, (NitePoseType)type);
+}
+
+void OpenNISkeleton::stopPoseDetection(nite::UserId user, nite::PoseType type){
+    niteStopPoseDetection(_obj->mUserTrackerHandle, (NiteUserId)user, (NitePoseType)type);
+}
+
+/* TODO - sort shared pointer
+void addNewFrameListener(NewFrameListener* pListener) {
+  niteRegisterUserTrackerCallbacks(_obj->mUserTrackerHandle, &pListener->getCallbacks(), pListener);
+  pListener->setUserTracker(this);
+}
+
+void removeNewFrameListener(NewFrameListener* pListener){
+  niteUnregisterUserTrackerCallbacks(_obj->mUserTrackerHandle, &pListener->getCallbacks());
+  pListener->setUserTracker(NULL);
+}*/
+
+nite::Status OpenNISkeleton::convertJointCoordinatesToDepth(float x, float y, float z, float* pOutX, float* pOutY) const {
+  return (nite::Status)niteConvertJointCoordinatesToDepth(_obj->mUserTrackerHandle, x, y, z, pOutX, pOutY);
+}
+
+nite::Status OpenNISkeleton::convertDepthCoordinatesToJoint(int x, int y, int z, float* pOutX, float* pOutY) const {
+  return (nite::Status)niteConvertDepthCoordinatesToJoint(_obj->mUserTrackerHandle, x, y, z, pOutX, pOutY);
+}
+
+float OpenNISkeleton::getSkeletonSmoothingFactor() const {
+  float factor;
+  nite::Status rc = (nite::Status)niteGetSkeletonSmoothing(_obj->mUserTrackerHandle, &factor);
+  if (rc != nite::STATUS_OK) {
+    factor = 0;
+  }
+  return factor;
+}
+
+nite::Status OpenNISkeleton::setSkeletonSmoothingFactor(float factor) {
+  return (nite::Status)niteSetSkeletonSmoothing(_obj->mUserTrackerHandle, factor);
+}
+
+void OpenNISkeleton::updateUserState(const nite::UserData& user, unsigned long long ts) {
+  if (user.isNew())
+    USER_MESSAGE(user, "New");
+  else if (user.isVisible() && !sVisibleUsers[user.getId()])
+    USER_MESSAGE(user,"Visible");
+  else if (!user.isVisible() && sVisibleUsers[user.getId()])
+    USER_MESSAGE(user,"Out of Scene");
+  else if (user.isLost())
+    USER_MESSAGE(user,"Lost");
+
+  sVisibleUsers[user.getId()] = user.isVisible();
+
+
+  if(sSkeletonStates[user.getId()] != user.getSkeleton().getState())  {
+    switch(sSkeletonStates[user.getId()] = user.getSkeleton().getState()) {
+    case nite::SKELETON_NONE:
+      USER_MESSAGE(user,"Stopped tracking.");
+      break;
+    case nite::SKELETON_CALIBRATING:
+      USER_MESSAGE(user,"Calibrating...");
+      break;
+    case nite::SKELETON_TRACKED:
+      USER_MESSAGE(user,"Tracking!");
+      break;
+    case nite::SKELETON_CALIBRATION_ERROR_NOT_IN_POSE:
+    case nite::SKELETON_CALIBRATION_ERROR_HANDS:
+    case nite::SKELETON_CALIBRATION_ERROR_LEGS:
+    case nite::SKELETON_CALIBRATION_ERROR_HEAD:
+    case nite::SKELETON_CALIBRATION_ERROR_TORSO:
+      USER_MESSAGE(user,"Calibration Failed... :-|");
+      break;
+    }
+  }
+}
+
+/**
+ * Called as often as possible to grab a new frame and update the user data
+ */
+
+void OpenNISkeleton::update() {
+
+  nite::Status niteRc = readFrame();
+  if (niteRc != nite::STATUS_OK) {
+    cerr << "SEBURO NITE Error - Get next frame failed" << endl;
+    return;
+  }
+
+ /* const std::list<nite::UserData*>& users = pFrame->getUsers();
+
+  for (nite::UserData* user : users) {
+
+    updateUserState(*user,pFrame->getTimestamp());
+    if (user->isNew()) {
+      startSkeletonTracking(user->getId());
+    }
+    else if (user->getSkeleton().getState() == nite::SKELETON_TRACKED) {
+      const nite::SkeletonJoint& head = user->getSkeleton().getJoint(nite::JOINT_HEAD);
+      if (head.getPositionConfidence() > .5)
+        cout << user->getId() << "," << head.getPosition().x << "," << head.getPosition().y << "," << head.getPosition().z << endl;
+    }
+  }*/
+}

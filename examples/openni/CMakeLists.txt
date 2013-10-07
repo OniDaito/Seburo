@@ -6,6 +6,11 @@ set(SOURCE_FILES app.cpp)
 
 if (USE_OPENNI)
 
+  get_filename_component(OPENNI_LIBRARY_FILE ${OPENNI_LIBRARY} NAME) 
+  get_filename_component(OPENNI_LIBRARY_PATH ${OPENNI_LIBRARY} PATH) 
+  get_filename_component(NITE_LIBRARY_FILE ${NITE_LIBRARY} NAME) 
+  get_filename_component(NITE_LIBRARY_PATH ${NITE_LIBRARY} PATH) 
+
   if (_SEBURO_OSX)
     add_executable(openni MACOSX_BUNDLE app.cpp)
     
@@ -58,9 +63,14 @@ if (USE_OPENNI)
     add_custom_command (TARGET openni PRE_BUILD
                       COMMAND cp ${NITE_LIBRARY} ${CMAKE_CURRENT_BINARY_DIR}/openni.app/Contents/Resources/.)
   
-    get_filename_component(OPENNI_LIBRARY_FILE ${OPENNI_LIBRARY} NAME) 
-    get_filename_component(OPENNI_LIBRARY_PATH ${OPENNI_LIBRARY} PATH) 
-    get_filename_component(NITE_LIBRARY_FILE ${NITE_LIBRARY} NAME) 
+
+    # TODO - replace the ini file to actually move the nite2 dir into Resources
+    add_custom_command (TARGET openni POST_BUILD
+                        COMMAND cp -r ${NITE_LIBRARY_PATH}/NiTE2 ${CMAKE_CURRENT_BINARY_DIR}/openni.app/Contents/MacOS/.)
+
+    add_custom_command (TARGET openni POST_BUILD
+                        COMMAND cp -r ${NITE_LIBRARY_PATH}/NiTE2 ${CMAKE_CURRENT_BINARY_DIR}/openni.app/Contents/MacOS/.)
+
 
     add_custom_command (TARGET openni PRE_BUILD
                       COMMAND cp -r ${OPENNI_LIBRARY_PATH}/OpenNI2 ${CMAKE_CURRENT_BINARY_DIR}/openni.app/Contents/Resources/.)
@@ -81,14 +91,29 @@ if (USE_OPENNI)
                       COMMAND install_name_tool -change ${OPENNI_LIBRARY_FILE} @executable_path/../Resources/${OPENNI_LIBRARY_FILE} ${CMAKE_CURRENT_BINARY_DIR}/openni.app/Contents/Resources/${NITE_LIBRARY_FILE})
   
 
-
     INSTALL(CODE "
       include(BundleUtilities)
       fixup_bundle( ${CMAKE_CURRENT_BINARY_DIR}/openni.app \"\"   \"${DIRS}\")
       " COMPONENT Runtime)
 
-  else() 
+  elseif(_SEBURO_LINUX)
+ 
     add_executable (openni ${SOURCE_FILES} ) 
+
+    target_link_libraries(openni 
+      Seburo
+    )
+
+    # Package up for linux.
+
+    # Now Copy NiTE2 and OpenNI data files
+    add_custom_command (TARGET openni POST_BUILD
+      COMMAND cp ARGS ${NITE_LIBRARY_PATH}/NiTE.ini ${CMAKE_CURRENT_BINARY_DIR} WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR} COMMENT "Copy NiTE.ini"
+      COMMAND cp ARGS -r  ${NITE_LIBRARY_PATH}/NiTE2 ${CMAKE_CURRENT_BINARY_DIR} WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR} COMMENT "Copy NiTE2 Data"
+    )
+
+
+  
   endif()
 
   include_directories(${SEBURO_INCLUDES}
@@ -96,8 +121,8 @@ if (USE_OPENNI)
     ${INCLUDES}
   )
 
-  target_link_libraries(openni 
-    Seburo
-  )
+  
+
+   
 
 endif()

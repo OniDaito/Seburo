@@ -1,5 +1,6 @@
 ## Todo
 
+* Consider CPack with CMake for packaging examples and applications
 * FILE Sorting and packaging linux vs osx vs windows
 * Sponza Atrium Model
 * Shadow maps and shadow volumes
