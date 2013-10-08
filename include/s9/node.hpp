@@ -1,5 +1,5 @@
 /**
-* @brief Primitive Classes
+* @brief Node Classes
 * @file primitive.hpp
 * @author Benjamin Blundell <oni@section9.co.uk>
 * @date 05/07/2012
@@ -7,33 +7,34 @@
 */
 
 
-#ifndef S9_PRIMITIVE_HPP
-#define S9_PRIMITIVE_HPP
+#ifndef S9_NODE_HPP
+#define S9_NODE_HPP
 
 #include "common.hpp"
 #include "visualapp.hpp"
 
 
 /*
- * Primitive represents a *thing* that has a position in space and time (though not a size)
- * it also has a colour for picking and several subclasses
+ * Node represents a *thing* that has a position in space and time (though not a size)
+ * Node combines geometry with matrices to represent position in space. It can be matched with a shader
+ * to create something that is drawable. It can also have children and thus create a scene graph
  * \todo SharedObj model is not needed here as the parameters can be copied with no real loss but CX this
  */
  
 namespace s9 {
 
-	class Primitive;
+	class Node;
 	
-	typedef std::shared_ptr<Primitive> PrimPtr;
+	typedef std::shared_ptr<Node> NodePtr;
 
-	class SEBUROAPI Primitive {
+	class SEBUROAPI Node {
 		
 	protected:
 	
-		glm::mat4 _getMatrix(PrimPtr p, glm::mat4 m);
+		glm::mat4 _getMatrix(NodePtr p, glm::mat4 m);
 	
-		PrimPtr pParent;
-		std::vector<PrimPtr> vChildren;
+		NodePtr pParent;
+		std::vector<NodePtr> vChildren;
 		glm::vec3 mPos;
 		glm::vec3 mUp;
 		glm::vec3 mLook;
@@ -47,7 +48,7 @@ namespace s9 {
 
 		
 	public:
-		Primitive() {
+		Node() {
 			// Initial state of the world
 			mPos = glm::vec3(0,0,0);
 			mLook = glm::vec3(0,0,-1);
@@ -65,7 +66,7 @@ namespace s9 {
 
 	//	virtual operator int() const { return mObj.use_count() > 0; };
 
-		virtual ~Primitive(); 
+		virtual ~Node(); 
 		
 		virtual void move(glm::vec3 p) { mPos += p; compute(); };
 		virtual void rotate(glm::vec3 r);
@@ -81,8 +82,8 @@ namespace s9 {
 		virtual void setScale(glm::vec3 v) {mScale = v; compute(); };
 		virtual void setColour(glm::vec4 v) {mColour = v; };
 		
-		int addChild(PrimPtr p) { vChildren.push_back(p); p->pParent = PrimPtr(this); return vChildren.size()-1; };
-		void removeChild(PrimPtr p){};
+		int addChild(NodePtr p) { vChildren.push_back(p); p->pParent = NodePtr(this); return vChildren.size()-1; };
+		void removeChild(NodePtr p){};
 		
 		virtual void compute();
 		
@@ -97,7 +98,7 @@ namespace s9 {
 		virtual void roll(float a);
 				
 	
-		PrimPtr getParent(){return pParent; };
+		NodePtr getParent(){return pParent; };
 			
 	};
 

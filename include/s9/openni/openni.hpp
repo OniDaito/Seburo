@@ -15,7 +15,8 @@
 
 #include <OpenNI.h>
 #include <NiTE.h>
-#include <list>
+#include <vector>
+#include <set>
 
 #define S9_OPENNI_MAX_DEPTH 10000
 #define S9_NITE_MAX_USERS 10
@@ -75,58 +76,79 @@ namespace s9 {
    
     };
 
-    /**
-     * A reference to a frame caught by the Skeleton tracker
-     * Essentially a wrapper class around Nite User Frame
-     */
+    
+/**
+ * Relevent data structures from NiTE
+typedef struct {
+  float x, y, z;
+} NitePoint3f;
 
 
-    class OpenNISkeletonFrame {
-    public:
- 
-      OpenNISkeletonFrame() {} 
-      ~OpenNISkeletonFrame() {}
+typedef struct  {
+  float x, y, z, w;
+} NiteQuaternion;
 
- 
-      bool isValid() const {
-        return pNiteFrame != nullptr;
-      }
+typedef struct  {
+  NiteJointType jointType;
+  NitePoint3f position;
+  float positionConfidence;
+  NiteQuaternion orientation;
+  float orientationConfidence;
+} NiteSkeletonJoint;
 
+typedef struct  {
+  NitePoint3f min;
+  NitePoint3f max;
+} NiteBoundingBox;
 
-      nite::UserData* getUserById(nite::UserId id) const {
-        for (nite::UserData* pid : aUsers){
-          if (pid->getId() == id) {
-            return pid;
-          }
-        }
-        return aUsers.front(); // Default behaviour
-      }
+typedef struct{
+  NitePoseType type;
+  int state;
+} NitePoseData;
 
- 
-      const std::list<nite::UserData*>& getUsers() const {return aUsers;}
+typedef struct  {
+  NiteSkeletonJoint joints[NITE_JOINT_COUNT];
+  NiteSkeletonState state;
+} NiteSkeleton;
 
- 
-      float getFloorConfidence() const {return pNiteFrame->floorConfidence;}
+typedef struct  {
+  NiteUserId id;
+  NiteBoundingBox boundingBox;
+  NitePoint3f centerOfMass;
 
-      const nite::Plane& getFloor() const {return (const nite::Plane&)pNiteFrame->floor;}
+  int state;
 
+  NiteSkeleton skeleton;
 
-      openni::VideoFrameRef getDepthFrame() {return mDepthFrame;}
- 
-      uint64_t getTimestamp() const {return pNiteFrame->timestamp;}
+  NitePoseData poses[NITE_POSE_COUNT];
+} NiteUserData;
 
-      int getFrameIndex() const {return pNiteFrame->frameIndex;}
+typedef struct{
+  NiteUserId* pixels;
 
-    private:
-      friend class User;
-      friend class OpenNISkeleton;
+  int width;
+  int height;
 
-      std::list<nite::UserData*> aUsers; // Nasty - pointers within a memory location
+  int stride;
+} NiteUserMap;
 
-      NiteUserTrackerFrame *pNiteFrame = nullptr;
-      openni::VideoFrameRef mDepthFrame;
-    };
+typedef struct  {
+  NitePoint3f point;
+  NitePoint3f normal;
+} NitePlane;
 
+typedef struct  {
+  int userCount;
+  NiteUserData* pUser;
+  NiteUserMap userMap;
+  OniFrame* pDepthFrame;
+  unsigned long long timestamp;
+  int frameIndex;
+  float floorConfidence;
+  NitePlane floor;
+} NiteUserTrackerFrame;
+
+*/
 
 
     /**
@@ -140,56 +162,77 @@ namespace s9 {
       
       OpenNISkeleton() {};
       OpenNISkeleton(const char * deviceURI);
+      ~OpenNISkeleton();
       void update();
+
+      /**
+       * A Decorator class around the NiteUserData providing convinience funtions
+       */
+      struct User : public NiteUserData {
+
+        User (NiteUserData niteuser){
+          id = niteuser.id;
+          boundingBox = niteuser.boundingBox;
+          centerOfMass = niteuser.centerOfMass;
+          state = niteuser.state;
+          skeleton = niteuser.skeleton;
+          poses[0] = niteuser.poses[0];
+          poses[1] = niteuser.poses[1];      
+        }
+
+        User operator=(NiteUserData niteuser) {
+          id = niteuser.id;
+          boundingBox = niteuser.boundingBox;
+          centerOfMass = niteuser.centerOfMass;
+          state = niteuser.state;
+          skeleton = niteuser.skeleton;
+          poses[0] = niteuser.poses[0];
+          poses[1] = niteuser.poses[1];    
+        }
+
+        nite::UserId getId() const {return id;}
+
+       // const BoundingBox& getBoundingBox() const {return (const BoundingBox&)boundingBox;}
+
+        
+       // const Point3f& getCenterOfMass() const {return (const Point3f&)centerOfMass;}
+
+
+        bool isNew() const {return (state & NITE_USER_STATE_NEW) != 0;}
+        bool isVisible() const {return (state & NITE_USER_STATE_VISIBLE) != 0;}
+        bool isLost() const {return (state & NITE_USER_STATE_LOST) != 0;}
+        
+        const nite::Skeleton& getSkeleton() const {return (const nite::Skeleton&)skeleton;}
+        const nite::PoseData& getPose(nite::PoseType type) const {return (const nite::PoseData&)poses[type];}
+      
+
+      };
 
     protected:
       static bool sVisibleUsers[S9_NITE_MAX_USERS];
       static nite::SkeletonState sSkeletonStates[S9_NITE_MAX_USERS];
 
       nite::Status readFrame();
-      nite::Status startSkeletonTracking(nite::UserId id);
-      void stopSkeletonTracking(nite::UserId id);
-      nite::Status startPoseDetection(nite::UserId user, nite::PoseType type);
-      void stopPoseDetection(nite::UserId user, nite::PoseType type);
       nite::Status convertJointCoordinatesToDepth(float x, float y, float z, float* pOutX, float* pOutY) const;
       nite::Status convertDepthCoordinatesToJoint(int x, int y, int z, float* pOutX, float* pOutY) const;
       float getSkeletonSmoothingFactor() const;
       nite::Status setSkeletonSmoothingFactor(float factor);
-      void updateUserState(const nite::UserData& user, unsigned long long ts);
+      void updateUsersState(const User& user, unsigned long long ts);
 
 
-      /**
-       * Internal Class that provides callbacks for new frames
-       */
+      // This assumes just one stream / frame as you can imagine
+      // I.e one timestamp etc
 
-      class NewFrameListener {
-      public:
-     
-        NewFrameListener(OpenNISkeleton &tracker) : mUserTracker(tracker) {
-          mUserTrackerCallbacks.readyForNextFrame = newFrameCallback;
-        }
+      std::vector<User> vUsers; // Collection of current users
 
-        void onNewFrame(OpenNISkeleton&);
+      NitePlane   mFloor;
+      float       mFloorConfidence;
+      NiteUserMap         mUserMap;
+      unsigned long long  mTimeStamp;
 
-      private:
-        NiteUserTrackerCallbacks mUserTrackerCallbacks;
-        NiteUserTrackerCallbacks& getCallbacks() {return mUserTrackerCallbacks;}
-
-        static void ONI_CALLBACK_TYPE newFrameCallback(void* pCookie) {
-          NewFrameListener* pListener = (NewFrameListener*)pCookie;
-          pListener->onNewFrame(pListener->mUserTracker);
-        }
-
-        friend class OpenNISkeleton;
-
-        OpenNISkeleton &mUserTracker;
-      };
+      NiteUserTrackerFrame *pNiteFrame = nullptr; // Current frame
 
 
-      std::shared_ptr<NewFrameListener> pFrameListener;
-      std::shared_ptr<OpenNISkeletonFrame> pFrame;
-
-  
     };
   }
 

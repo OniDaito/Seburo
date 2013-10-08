@@ -96,6 +96,9 @@ void GLFWApp::_reshape(GLFWwindow* window, int w, int h) {
  */
 
 void GLFWApp::_shutdown() {
+	pThis->mRunning = false;
+	if (pThis->_update_thread->joinable())
+		pThis->_update_thread->join();
 	pThis->_app.shutdown();
 }
 
@@ -209,8 +212,9 @@ void GLFWApp::_mousePositionCallback(GLFWwindow* window, double x, double y){
 
 }
 
+// TODO - Just the single window at present
 void GLFWApp::_window_close_callback(GLFWwindow* window) {
-	pThis->mRunning = GL_FALSE;
+	GLFWApp::_shutdown();
 }
 
 

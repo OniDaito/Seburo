@@ -1,24 +1,22 @@
 /**
-* @brief Primitive Classes
-* @file primitive.cpp
+* @brief Node Class
+* @file node.cpp
 * @author Benjamin Blundell <oni@section9.co.uk>
-* @date 05/07/2012
+* @date 08/10/2013
 *
 */
 
-#include "s9/primitive.hpp"
+#include "s9/node.hpp"
 
 using namespace std;
-using namespace boost;
-using namespace boost::assign; 
 using namespace s9;
 
 
 
-Primitive::~Primitive() {}
+Node::~Node() {}
 
 
-void Primitive::rotate(glm::vec3 r){
+void Node::rotate(glm::vec3 r){
 	glm::quat q_rotate;
 	
 	q_rotate = glm::rotate( q_rotate, r.x, glm::vec3( 1, 0, 0 ) );
@@ -37,7 +35,7 @@ void Primitive::rotate(glm::vec3 r){
  * Recompute the matrices on the primitive
  */
  
-void Primitive::compute() {
+void Node::compute() {
 	mTransMatrix = glm::translate(glm::mat4(1.0f), mPos);
 	mScaleMatrix = glm::scale(glm::mat4(1.0f), mScale);
 }
@@ -47,14 +45,14 @@ void Primitive::compute() {
  * Get Matrix - a recursive call all the way up the hierarchy
  */
  
-glm::mat4 Primitive::getMatrix() {
+glm::mat4 Node::getMatrix() {
 	glm::mat4 m = getLocalMatrix();
 	if (getParent())
 		m = _getMatrix(getParent(),m);
 	return m;
 }
 
-glm::mat4 Primitive::_getMatrix(PrimPtr p, glm::mat4 m) {
+glm::mat4 Node::_getMatrix(PrimPtr p, glm::mat4 m) {
 	m = p->getLocalMatrix() * m;
 	if (p->getParent()){
 		_getMatrix(p->getParent(),m);
@@ -64,7 +62,7 @@ glm::mat4 Primitive::_getMatrix(PrimPtr p, glm::mat4 m) {
  
 
 
-void Primitive::pitch(float a){
+void Node::pitch(float a){
 	glm::quat q_rotate;
 	
 	glm::vec3 right = glm::cross(mUp,mLook);
@@ -76,7 +74,7 @@ void Primitive::pitch(float a){
 	compute();
 }
 
-void Primitive::roll(float a){
+void Node::roll(float a){
 	glm::quat q_rotate;
 	q_rotate = glm::rotate( q_rotate, a, mLook);
 	mLook = q_rotate * mLook;
@@ -87,7 +85,7 @@ void Primitive::roll(float a){
 }
 
 
-void Primitive::yaw(float a){
+void Node::yaw(float a){
 	glm::quat q_rotate;
 	q_rotate = glm::rotate( q_rotate, a, mUp );
 	mLook = q_rotate * mLook;
