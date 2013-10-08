@@ -37,13 +37,13 @@ namespace s9 {
 	
 	template <class T, class U>
 	struct VertexT {
-		T mP; // position
-		T mN; // normal
-		T mC; // colour
-		U mU; // texture uv
-		T mT; // tangent
+		T p_; // position
+		T n_; // normal
+		T c_; // colour
+		U u_; // texture uv
+		T t_; // tangent
 
-		uint8_t mF &= 0x1F; // Default - all on! :)
+		uint8_t f_ = 0x1F; // Default - all on! :)
 
 		// TODO - Flatten function -> spit out for OpenGL
 	};
@@ -54,36 +54,67 @@ namespace s9 {
 	typedef VertexT<glm::vec2, glm::vec2> Vertex2;
 	typedef VertexT<glm::vec3, glm::vec2> Vertex3;
 	typedef VertexT<glm::vec4, glm::vec2> Vertex4;
+ 
+  /**
+   * Geometry template baseclass. Any grouping of vertices is classed as geometry
+   * We can build more complex geometries from these
+   */
 
-	/**
-	 * Template for a basic Quad. Used in the Geometry class
-	 */
+   template <class T>
+   struct GeometryT {
 
-	template <class T>
-	struct QuadT {
-
-		QuadT(T &a, T &b, T &c, T &d) : mA(a), mB(b), mC(c), mD(d) {
-		}
-
-		T &mA;
-		T &mB;
-		T &mC;
-		T &mD;
-
-		T operator [] (int x){
-			if (x < 4 && x > -1){
-				T a[4] = {mA,mB,mC,mD};
-				return a[x];	
+   		std::vector<T> &vertices_;	/// \todo Even mega large meshes will depend on this! 
+   		/// :S Potential bottle neck if EVERY triangle has one
+   
+   		T operator [] (int x){
+			if (x < vertices_.size() && x > -1){
+				return vertices_.at(x);	
 			}
-
 			assert(false);
 		}
 
+   };
+
+
+
+
+	/**
+	 * Template for a basic Quad. Used in the Geometry class. References a set of vertices
+	 * This is essentially a *view* on a few vertices
+	 */
+
+	template <class T>
+	struct QuadT : GeometryT<T> {
+
+		QuadT(std::vector<T> &v) : GeometryT<T>(v) {
+			assert (v.size() == 4);	
+		}
+
+	
 	};
 
 	typedef QuadT<Vertex2> Quad2;
 	typedef QuadT<Vertex3> Quad3;
 	typedef QuadT<Vertex4> Quad4;
+
+
+	/**
+	 * Template for a basic Triangle. Used in the Geometry class. References a set of vertices
+	 * This is essentially a *view* on a few vertices
+	 */
+
+	template <class T>
+	struct TriangleT : GeometryT<T> {
+
+		TriangleT(std::vector<T> &v) : GeometryT<T>(v) {
+			assert (v.size() == 3);	
+		}
+
+	};
+
+	typedef TriangleT<Vertex2> Tri2;
+	typedef TriangleT<Vertex3> Tri3;
+	typedef TriangleT<Vertex4> Tr4;
 
 
 #pragma pack(pop)  

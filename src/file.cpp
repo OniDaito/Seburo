@@ -11,8 +11,6 @@
 #include "s9/utils.hpp"
 
 using namespace std;
-using namespace boost;
-using namespace boost::assign; 
 
 using namespace s9;
 

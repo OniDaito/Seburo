@@ -9,10 +9,7 @@
 #include "s9/camera.hpp"
 
 using namespace std;
-using namespace boost;
-using namespace boost::assign;
 using namespace s9; 
-
 
 /*
  * Basic Camera - Simply extends a primitive with viewports
@@ -23,32 +20,32 @@ Camera::Camera() {
 }
 
 void Camera::reset() {
-	mUp = glm::vec3(0,1,0);
-	mPos = glm::vec3(0,0,1.0);
-	mLook = glm::vec3(0,0,-1.0);
-	mNear = 1.0f;
-	mField = 55.0f;
-	mFar = 100.0f;
-	mR = 1.0;
+	up_ = glm::vec3(0,1,0);
+	pos_ = glm::vec3(0,0,1.0);
+	look_ = glm::vec3(0,0,-1.0);
+	near_ = 1.0f;
+	field_ = 55.0f;
+	far_ = 100.0f;
+	r_ = 1.0;
 	compute();
 }
 
 
 void Camera::setRatio(float r) {
-	mR = r;
+	r_ = r;
 	compute();
 }
 
-void Camera::align(Primitive &p) { 
-	mLook = p.getLook();
-	mUp = p.getUp();
-	mPos = p.getPos();
+void Camera::align(Node &p) { 
+	look_ = p.getLook();
+	up_ = p.getUp();
+	pos_ = p.getPos();
 	compute();	
 }
 	
 void Camera::compute() {
-	mViewMatrix = glm::lookAt(mPos, mPos + mLook, mUp);
-	mProjectionMatrix = glm::perspective(mField,mR,mNear, mFar);
+	view_matrix_ = glm::lookAt(pos_, pos_ + look_, up_);
+	projection_matrix_ = glm::perspective(field_,r_,near_, far_);
 }
 
 /*
@@ -60,65 +57,65 @@ OrbitCamera::OrbitCamera() : Camera() {
 }
 
 void OrbitCamera::reset() {
-	mPos = glm::vec3(0,0,1.0);
-	mLook = glm::vec3(0,0,0);
-	mUp = glm::vec3(0,1,0);
-	mNear = 1.0f;
-	mField = 55.0f;
-	mFar = 100.0f;
-	_sense = 0.1f;
+	pos_ = glm::vec3(0,0,1.0);
+	look_ = glm::vec3(0,0,0);
+	up_ = glm::vec3(0,1,0);
+	near_ = 1.0f;
+	field_ = 55.0f;
+	far_ = 100.0f;
+	sense_ = 0.1f;
 }
 
 void OrbitCamera::compute() {
-	mViewMatrix = glm::lookAt(mPos, mLook, mUp);
-	mProjectionMatrix = glm::perspective(mField, mR, mNear, mFar);
+	view_matrix_ = glm::lookAt(pos_, look_, up_);
+	projection_matrix_ = glm::perspective(field_, r_, near_, far_);
 }
 
 void OrbitCamera::zoom(float z) {
-	glm::vec3 dir = mPos - mLook;
+	glm::vec3 dir = pos_ - look_;
 	dir = glm::normalize(dir);
 	dir *= z;
-	mPos += dir;
+	pos_ += dir;
 	compute();
 }
 
 void OrbitCamera::shift(glm::vec2 s) {
-	glm::vec3 dir = mPos - mLook;
+	glm::vec3 dir = pos_ - look_;
 	dir = glm::normalize(dir);
-	glm::vec3 shiftx = glm::cross(dir,mUp);
+	glm::vec3 shiftx = glm::cross(dir,up_);
 	shiftx *= s.x;
-	glm::vec3 shifty = mUp * s.y;
+	glm::vec3 shifty = up_ * s.y;
 
-	mPos += shiftx + shifty;
-	mLook += shiftx + shifty;
+	pos_ += shiftx + shifty;
+	look_ += shiftx + shifty;
 	
 	compute();
 }
 
 void OrbitCamera::yaw(float a){
 	glm::quat q_rotate;
-	q_rotate = glm::rotate( q_rotate, a, mUp );
-	mUp = q_rotate * mUp;
-	mPos = q_rotate *mPos;
+	q_rotate = glm::rotate( q_rotate, a, up_ );
+	up_ = q_rotate * up_;
+	pos_ = q_rotate *pos_;
 	compute();
 }
 
 void OrbitCamera::pitch(float a){
 	glm::quat q_rotate;
 	
-	glm::vec3 right = glm::normalize(glm::cross(mUp, glm::normalize(mLook - mPos)));
+	glm::vec3 right = glm::normalize(glm::cross(up_, glm::normalize(look_ - pos_)));
 	
 	q_rotate = glm::rotate( q_rotate, a, right );
-	mUp = q_rotate * mUp;
-	mPos = q_rotate * mPos;
+	up_ = q_rotate * up_;
+	pos_ = q_rotate * pos_;
 	
 	compute();
 }
 
 void OrbitCamera::roll(float a){
 	glm::quat q_rotate;
-	q_rotate = glm::rotate( q_rotate, a,  glm::normalize(mLook - mPos));
-	mUp = q_rotate * mUp;
+	q_rotate = glm::rotate( q_rotate, a,  glm::normalize(look_ - pos_));
+	up_ = q_rotate * up_;
 	
 	compute();
 }
@@ -128,9 +125,9 @@ void OrbitCamera::roll(float a){
  */
  
 void ScreenCamera::compute() {
-	mViewMatrix = glm::mat4(1.0f);
-	mProjectionMatrix = glm::ortho(static_cast<float>(0.0), static_cast<float>(mW), 
-			static_cast<float>(mH), static_cast<float>(0.0));
+	view_matrix_ = glm::mat4(1.0f);
+	projection_matrix_ = glm::ortho(static_cast<float>(0.0), static_cast<float>(w_), 
+			static_cast<float>(h_), static_cast<float>(0.0));
 }
 
 

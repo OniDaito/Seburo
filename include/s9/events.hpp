@@ -33,55 +33,55 @@ namespace s9{
 	}MouseAction;
 
 	struct Event {
-		EventType mType;
-		double_t mT;
+		EventType type;
+		double_t t;
 	};
 
 	struct MouseEvent : public Event {
-		MouseEvent(int x, int y, uint16_t flag, double_t t=0 ) {
-			mFlag = flag;
-			mX = x;
-			mY = y;
-			mType = EVENT_MOUSE;
-			mT = t;
+		MouseEvent(int xp, int yp, uint16_t flagp, double_t tp=0 ) {
+			flag = flagp;
+			x = xp;
+			y = yp;
+			type = EVENT_MOUSE;
+			t = tp;
 		}
 
-		uint16_t mFlag;
+		uint16_t flag;
 	
-		int mX, mY;
+		int x, y;
 	}; 
 
 	struct KeyboardEvent : public Event {
-		KeyboardEvent(int key, int action, double_t t=0){
-			mKey = key;
-			mAction = action;
-			mType = EVENT_KEY;
-			mT = t;
+		KeyboardEvent(int keyp, int actionp, double_t tp=0){
+			key = keyp;
+			action = actionp;
+			type = EVENT_KEY;
+			t = tp;
 		}
-		int mKey;
-		int mAction;
+		int key;
+		int action;
 	};
 
 	struct ResizeEvent : public Event {
-		ResizeEvent(size_t w, size_t h, double_t t=0){
-			mW = w;
-			mH = h;
-			mT = t;
-			mType = EVENT_RESIZE;
+		ResizeEvent(size_t wp, size_t hp, double_t tp=0){
+			w = wp;
+			h = hp;
+			t = tp;
+			type = EVENT_RESIZE;
 		}
 
-		size_t mW,mH;
+		size_t w,h;
 	};
 
 	struct ScrollEvent : public Event {
-		ScrollEvent (double_t xoffset, double_t yoffset, double_t t=0) {
-			mXd = xoffset;
-			mYd = yoffset;
-			mT = t;
-			mType = EVENT_SCROLL;
+		ScrollEvent (double_t xoffset, double_t yoffset, double_t tp=0) {
+			xd = xoffset;
+			yd = yoffset;
+			t = tp;
+			type = EVENT_SCROLL;
 		}
 
-		double_t mXd,mYd;
+		double_t xd,yd;
 	};
 }
 

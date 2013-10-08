@@ -1,0 +1,123 @@
+/**
+* @brief Geometry Classes
+* @file geom.hpp
+* @author Benjamin Blundell <oni@section9.co.uk>
+* @date 16/07/2012
+*
+*/
+
+
+#ifndef S9_GEOMETRY_HPP
+#define S9_GEOMETRY_HPP
+
+#include "common.hpp"
+
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
+#include "primitives.hpp"
+
+namespace s9 {
+
+	/*
+	 * Basic Geometry Class - Passed up to the node. Created in various ways
+	 * This is essentially a collection of types of vertices with addition and deletion
+	 * taken care of. Geometry has vertices as a minimum but can have quads or triangles
+	 * organising these things
+	 *
+	 * Geometry is combined with a node to be drawn. Geometry on its own is converted to
+	 * a series of OpenGL buffers as needed.
+	 * 
+	 * For speed we pass in references to our data, held via our object
+	 *
+	 * \todo potential here for a 64bit set of indices at some point
+	 */
+	
+	template <class T>
+	class SEBUROAPI GeometryT {
+
+	protected:
+	
+		struct SharedObj {
+
+			SharedObj(std::vector<T> v) : vertices_(v) {}
+			
+			std::vector<T>	 						&vertices_;
+			std::vector<uint32_t> 			indices_;  // Potential bottle-neck in not passing by ref
+			
+
+			bool dirty_, resized_;
+		};
+		
+		std::shared_ptr<SharedObj> obj_;
+
+		/// function for indexing the soup
+		void indexSoup();
+	
+	public:
+
+		typedef enum {
+			GEOMETRY_POINTS,
+			GEOMETRY_TRIANGLES,
+			GEOMETRY_QUADS
+		} IndexingMethod;
+
+		GeometryT() {};
+		GeometryT (std::vector<T> &vertices);
+		GeometryT (std::vector<T> &vertices, std::vector<uint32_t> indices, IndexingMethod method );
+
+		
+
+		std::vector<T> getBuffer() {return obj_->_vertices; };
+	
+		virtual operator int() const { return obj_.use_count() > 0; };
+	
+		/// Return the address of the data
+		void* addr() { return &(obj_->_vertices[0]); };
+
+		/// Return the address of the index
+		uint32_t* addrIndices() { return &(obj_->_indices[0]); };
+		
+		/// Return the size of the data buffer
+		uint32_t size() { return obj_->_vertices.size(); };
+		uint32_t indexSize() { return obj_->_indices.size(); };
+		int elementSize() { return sizeof(T); };
+		
+		/// Is this geometry indexed
+		bool isIndexed() {return obj_->_indices.size() > 0; };
+	
+		/// Have any values been changed
+		bool isDirty() {return obj_->dirty_;};
+
+		/// Set the dirty/values changed flag
+		void setDirty(bool b) {obj_->dirty_ = b; };
+
+		/// Has this geometry been resized
+		bool isResized() {return obj_->resized_;};
+
+		/// Set the geometry resize flag
+		void setResized(bool b){ obj_->resized_ = b; };
+
+
+		std::vector<uint32_t>  getIndices() {return obj_->_indices; };
+
+		void addVertex(T v) {obj_->_vertices.push_back(v); setResized(true); };
+		void setVertex(T v, uint32_t p) { obj_->_vertices[p] = v; setDirty(true); };
+		void delVertex(uint32_t p) { obj_->_vertices.erase( obj_->_vertices.begin() + p); setResized(true); };
+		void addIndices(std::vector<uint32_t> idx) { obj_->_indices = idx; setNumElements(idx.size()); setResized(true); };
+		T getVertex(uint32_t i) { return obj_->_vertices[i]; };
+	};
+
+
+
+	// Handy Typedefs
+	
+	typedef GeometryT<Vertex2> Geometry2;
+	typedef GeometryT<Vertex3> Geometry3;
+	typedef GeometryT<Vertex4> Geometry4;
+
+}
+
+
+#endif

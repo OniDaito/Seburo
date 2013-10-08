@@ -10,8 +10,6 @@
 #define S9_ASSET_HPP
 
 #include "common.hpp"
-#include "geometry.hpp"
-#include "primitive.hpp"
 
 #include <assimp/cimport.h>
 #include <assimp/scene.h>
@@ -20,31 +18,6 @@
 
 namespace s9 {
 
-	/*
-	 * A class that combines a primitive with any geometry set - basic 3D building block outside of a shape
-	 */
-
-	template<class T>
-	class SEBUROAPI Asset : public Primitive {
-	protected:
-		struct SharedObj{
-			T _geom;
-		};
-		std::shared_ptr<SharedObj> _obj;
-
-	public:
-		Asset() {};
-		virtual operator int() const { return _obj.use_count() > 0; };
-		Asset(T geom) : _obj( std::shared_ptr<SharedObj> (new SharedObj())) { _obj->_geom = geom; }
-		T getGeometry() { return _obj->_geom; };
-
-	};
-
-	// Handy typedefs
-
-	typedef std::shared_ptr<Asset<GeometryPNF> > AssetPtr;
-	typedef Asset<GeometryPNF> AssetBasic;
-	typedef Asset<GeometryFullFloat> AssetFull;
 
 
 	/*

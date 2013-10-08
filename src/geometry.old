@@ -12,41 +12,53 @@ using namespace std;
 using namespace s9;
 
 /**
- * GeometryT constructor with no indices passed (assume not indexed therefore)
+ * GeometryT constructor with no indices passed so assume not indexed
  */
 
 template <class T>
-GeometryT::GeometryT (std::vector<T> &vertices) : _obj( std::shared_ptr<SharedObj> (new SharedObj())) {
-	_obj->vertices = vertices;
-	_obj->_dirty = true;
-	_obj->_resized = true;
+GeometryT::GeometryT (std::vector<T> &vertices) : obj_( std::shared_ptr<SharedObj> (new SharedObj(vertices))) {
+
+	obj_->_dirty = true;
+	obj_->_resized = true;
 }
 
 /**
- * GeometryT constructor with indices passed in
+ * GeometryT constructor with indices passed in and a method for indexing
+ * Convinience method as lots of data comes as indexed triangle soup
  */
 
 template <class T>
-GeometryT::GeometryT (std::vector<T> vertices, std::vector<uint32_t> indices ) {
-	_obj->vertices = vertices;
-	_obj->indices = indices;
-	_obj->_dirty = true;
-	_obj->_resized = true;
+GeometryT::GeometryT (std::vector<T> vertices, std::vector<uint32_t> indices,  
+	IndexingMethod method = GEOMETRY_TRIANGLES  ) : obj_( std::shared_ptr<SharedObj> (new SharedObj(vertices))) {
+
+	obj_->indices_ = indices;
+	obj_->dirty_ = true;
+	obj_->resized_ = true;
 }
 
+
+/**
+ * Given a reference to indices and a load of quads / triangles, index the soup
+ */
+
+
+template <class T>
+void GeometryT::indexSoup() {
+	
+}
 
 
 	// Specialist contructors for speed - basically, zipping from different vectors
 	
 	template<>
 	 inline Geometry<VertPNG>::Geometry(std::vector<glm::vec3> v, std::vector<glm::vec3> n) {
-		_obj.reset(new SharedObj());
+		obj_.reset(new SharedObj());
 		
 		if (v.size() != n.size()) { std::cerr << "SEBURO - Counts do not match" << std::endl; throw; return; }
 		
 		for (uint32_t i=0; i < v.size(); ++i){
 			VertPNG png = {v[i],n[i]};
-			_obj->_buffer.push_back( png );
+			obj_->_buffer.push_back( png );
 		}
 		setNumElements(v.size());
 		setResized(true);
@@ -54,7 +66,7 @@ GeometryT::GeometryT (std::vector<T> vertices, std::vector<uint32_t> indices ) {
 	
 	template<>
 	inline Geometry<VertPNF>::Geometry (std::vector<float> v, std::vector<float> n) {
-		_obj.reset(new SharedObj());
+		obj_.reset(new SharedObj());
 		
 		if (v.size() != n.size()) { std::cerr << "SEBURO - Counts do not match" << std::endl; throw; return; }
 		
@@ -62,7 +74,7 @@ GeometryT::GeometryT (std::vector<T> vertices, std::vector<uint32_t> indices ) {
 			Float3 a = {v[i],v[i+1],v[i+2]}; 
 			Float3 b = {n[i],n[i+1],n[i+2]};
 			VertPNF p = {a,b}; 
-			_obj->_buffer.push_back(p);	
+			obj_->_buffer.push_back(p);	
 		}
 		setNumElements(v.size());
 		setResized(true);
@@ -71,7 +83,7 @@ GeometryT::GeometryT (std::vector<T> vertices, std::vector<uint32_t> indices ) {
 
 	template<>
 	inline Geometry<VertPNCTF>::Geometry(std::vector<float> v, std::vector<float> n, std::vector<float> t, std::vector<float> c) {
-		_obj.reset(new SharedObj());
+		obj_.reset(new SharedObj());
 		///\todo add size checking heres
 		
 		for (uint32_t i=0; i < v.size() / 3; i++){
@@ -81,7 +93,7 @@ GeometryT::GeometryT (std::vector<T> vertices, std::vector<uint32_t> indices ) {
 			Float2 v3 = {t[i*2],t[i*2+1]};
 			
 			VertPNCTF p = {v0,v1,v2,v3};
-			_obj->_buffer.push_back(p);
+			obj_->_buffer.push_back(p);
 		}
 		setNumElements(v.size());
 		setResized(true);
@@ -98,7 +110,7 @@ GeometryT::GeometryT (std::vector<T> vertices, std::vector<uint32_t> indices ) {
 	inline Geometry<VertPNT8F> Geometry<VertPNF>::convert() {
 
 		std::vector<VertPNT8F> vtemp;
-		std::vector<VertPNF> vstart = this->_obj->_buffer;
+		std::vector<VertPNF> vstart = this->obj_->_buffer;
 		for (std::vector<VertPNF>::iterator it = vstart.begin(); it != vstart.end(); it++) {
 			VertPNF p = *it;
 			VertPNT8F tp;
@@ -127,7 +139,7 @@ GeometryT::GeometryT (std::vector<T> vertices, std::vector<uint32_t> indices ) {
 	template <>
 	inline Geometry<VertPNCTF> Geometry<VertPNF>::convert() {
 		std::vector<VertPNCTF> vtemp;
-		std::vector<VertPNF> vstart = this->_obj->_buffer;
+		std::vector<VertPNF> vstart = this->obj_->_buffer;
 		for (std::vector<VertPNF>::iterator it = vstart.begin(); it != vstart.end(); it++) {
 			VertPNF p = *it;
 			VertPNCTF tp;

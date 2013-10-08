@@ -11,10 +11,12 @@
 #define S9_CAMERA_HPP
 
 #include "common.hpp"
-#include "primitive.hpp"
 #include "events.hpp"
-/* 
+#include "node.hpp"
+
+/** 
  * Camera Class for a camera that pitches and yaws whilst keeping up always parallel with y
+ * \todo ORTHO Camera! 
  * \todo certain camera classes could listen for events but we need to set a precidence (as sometimes we want
  * \todo update and resize hooks on all cameras
  * \todo create GL Cameras that extend this so we get viewport and such for free
@@ -23,7 +25,7 @@
  
 namespace s9{
 	 
-	class SEBUROAPI Camera : public Primitive, public WindowResponder{
+	class SEBUROAPI Camera : public WindowResponder{
 
 	public:
 
@@ -31,34 +33,36 @@ namespace s9{
 		
 		virtual void reset();
 		
-		virtual void align(Primitive &p);
+		virtual void align(Node &p);
 
 		virtual void processEvent(ResizeEvent e) { 
-			setRatio( static_cast<float>(e.mW) / e.mH);
+			setRatio( static_cast<float>(e.w) / e.h);
 		}
 
-		void setNear(float n) {mNear = n; compute(); };
-		void setFar(float n) {mFar = n; compute(); };
+		void setNear(float n) {near_ = n; compute(); };
+		void setFar(float n) {far_ = n; compute(); };
 		
 		void setRatio(float r);
-		void setField(float a) {mField = a; compute(); };
+		void setField(float a) {field_ = a; compute(); };
 		
-		glm::vec3 getPos() {return mPos; };
-		glm::vec3 getLook() {return mLook; };
-		glm::vec3 getUp() {return mUp; };
+		glm::vec3 getPos() {return pos_; };
+		glm::vec3 getLook() {return look_; };
+		glm::vec3 getUp() {return up_; };
 		
-		glm::mat4 getViewMatrix() { return mViewMatrix; };
-		glm::mat4 getProjMatrix() { return mProjectionMatrix; };
-		glm::mat4 getMatrix() {return mProjectionMatrix * mViewMatrix; };
+		glm::mat4 getViewMatrix() { return view_matrix_; };
+		glm::mat4 getProjMatrix() { return projection_matrix_; };
+		glm::mat4 getMatrix() {return projection_matrix_ * view_matrix_; };
 
 	protected:
 		virtual void compute();
 		
-		glm::mat4 mViewMatrix;
-		glm::mat4 mProjectionMatrix;
+		glm::mat4 view_matrix_;
+		glm::mat4 projection_matrix_;
 
-		float mR,mFar,mNear, mField;
+		float r_,far_,near_, field_;
 		
+		glm::vec3 pos_, look_, up_;
+
 		
 	};
 
@@ -71,7 +75,7 @@ namespace s9{
 		OrbitCamera();
 		void zoom(float z);
 		void shift(glm::vec2 s);
-		void align(Primitive &p){};
+		void align(Node &p){};
 		
 		void yaw(float a);
 		void pitch(float a);
@@ -83,25 +87,25 @@ namespace s9{
 		 */
 
 		virtual void processEvent(MouseEvent e) { 
-			if(e.mFlag & MOUSE_LEFT_DOWN){
-				glm::vec2 mouse_d = glm::vec2(e.mX,e.mY) - _mouse_pre;
-				yaw(static_cast<float>(mouse_d.x) * _sense);
-				pitch(static_cast<float>(mouse_d.y) * _sense);
+			if(e.flag & MOUSE_LEFT_DOWN){
+				glm::vec2 mouse_d = glm::vec2(e.x,e.y) - mouse_pre_;
+				yaw(static_cast<float>(mouse_d.x) * sense_);
+				pitch(static_cast<float>(mouse_d.y) * sense_);
 			}
 
-			if (e.mFlag & MOUSE_WHEEL_DOWN){
-				zoom(-_sense * 2);
+			if (e.flag & MOUSE_WHEEL_DOWN){
+				zoom(-sense_ * 2);
 			}
-			else if (e.mFlag & MOUSE_WHEEL_UP){
-				zoom(_sense * 2);
-			}
-
-			if (e.mFlag & MOUSE_MIDDLE_DOWN){
-				shift(glm::vec2(static_cast<float>(e.mX - _mouse_pre.x) * _sense * 0.8, 
-						static_cast<float>(e.mY - _mouse_pre.y) * _sense * 0.8));
+			else if (e.flag & MOUSE_WHEEL_UP){
+				zoom(sense_ * 2);
 			}
 
-			_mouse_pre = glm::vec2(e.mX,e.mY);
+			if (e.flag & MOUSE_MIDDLE_DOWN){
+				shift(glm::vec2(static_cast<float>(e.x - mouse_pre_.x) * sense_ * 0.8, 
+						static_cast<float>(e.y - mouse_pre_.y) * sense_ * 0.8));
+			}
+
+			mouse_pre_ = glm::vec2(e.x, e.y);
 		}
 
 
@@ -109,8 +113,8 @@ namespace s9{
 	protected:
 		void compute();
 
-		float _sense;
-		glm::vec2 _mouse_pre;
+		float sense_;
+		glm::vec2 mouse_pre_;
 		
 	};
 	
@@ -120,14 +124,14 @@ namespace s9{
 	 
 	class SEBUROAPI ScreenCamera : public Camera {
 	public:
-		ScreenCamera() {mW = 800; mH = 600; compute(); };
-		void setDim(size_t w, size_t h) {mW = w; mH = h; compute(); };
-		void align(Primitive &p){};
-		virtual void processEvent(ResizeEvent e) { setDim(e.mW, e.mH); };		
+		ScreenCamera() {w_ = 800; h_ = 600; compute(); };
+		void setDim(size_t w, size_t h) {w_ = w; h_ = h; compute(); };
+		void align(Node &p){};
+		virtual void processEvent(ResizeEvent e) { setDim(e.w, e.h); };		
 		
 	protected:
 		void compute();
-		size_t mW, mH;
+		size_t w_, h_;
 	};
 
 	/*
@@ -138,58 +142,58 @@ namespace s9{
 	class SEBUROAPI InertiaCam : public OrbitCamera {
 
 	protected:
-		glm::vec3 mNow;
-		glm::vec3 mPrev;
-		float mAngle, mDegrade;
-		glm::vec3 mP;
-		double_t mDT;
-		bool mHeld;
-		float mZoom, mShift;
+		glm::vec3 now_;
+		glm::vec3 prev_;
+		float angle_, degrade_;
+		glm::vec3 p_;
+		double_t dt_;
+		bool held_;
+		float zoom_, shift_;
 
 	public:
 
 		InertiaCam() { 
-			mNow = glm::vec3(0.0f,0.0f,0.0f); 
-		 	mAngle = 50.0;
-			mDegrade = 2.0;
-			mDT = 0;
-			mHeld = false;
-			mZoom = 0.5;
-			mShift = 0.001;
+			now_ = glm::vec3(0.0f,0.0f,0.0f); 
+		 	angle_ = 50.0;
+			degrade_ = 2.0;
+			dt_ = 0;
+			held_ = false;
+			zoom_ = 0.5;
+			shift_ = 0.001;
 		}
 
 		void processEvent(ResizeEvent e) { 
-			setRatio( static_cast<float>(e.mW) / e.mH);
+			setRatio( static_cast<float>(e.w) / e.h);
 		}
 
 		void processEvent(MouseEvent e){
 
-			if (e.mFlag & MOUSE_LEFT_DOWN){
+			if (e.flag & MOUSE_LEFT_DOWN){
 
-				if (glm::length(mP) > 0){
+				if (glm::length(p_) > 0){
 
-					mNow = glm::vec3(static_cast<float>(e.mX - mP.x), static_cast<float>(e.mY - mP.y),0.0f);
-					mHeld = true;
+					now_ = glm::vec3(static_cast<float>(e.x - p_.x), static_cast<float>(e.y - p_.y),0.0f);
+					held_ = true;
 				}
 
 			}
-			else if (e.mFlag & MOUSE_LEFT_UP ){
-				mP = glm::vec3(0.0f,0.0f,0.0f);
-				mHeld = false;
+			else if (e.flag & MOUSE_LEFT_UP ){
+				p_ = glm::vec3(0.0f,0.0f,0.0f);
+				held_ = false;
 			}
-			if (e.mFlag & MOUSE_WHEEL_DOWN){
-				this->zoom(-mZoom);
+			if (e.flag & MOUSE_WHEEL_DOWN){
+				this->zoom(-zoom_);
 			}
-			else if (e.mFlag & MOUSE_WHEEL_UP){
-				this->zoom(mZoom);
-			}
-
-			if (e.mFlag & MOUSE_MIDDLE_DOWN){
-				this->shift(glm::vec2(static_cast<float>(e.mX - mP.x) * mShift, 
-						static_cast<float>(e.mY - mP.y) * mShift));
+			else if (e.flag & MOUSE_WHEEL_UP){
+				this->zoom(zoom_);
 			}
 
-			mP = glm::vec3(static_cast<float>(e.mX), static_cast<float>(e.mY),0.0f);
+			if (e.flag & MOUSE_MIDDLE_DOWN){
+				this->shift(glm::vec2(static_cast<float>(e.x - p_.x) * shift_, 
+						static_cast<float>(e.y - p_.y) * shift_));
+			}
+
+			p_ = glm::vec3(static_cast<float>(e.x), static_cast<float>(e.y),0.0f);
 		}
 
 		/*
@@ -199,18 +203,18 @@ namespace s9{
 
 		void update(double_t dt){
 			
-			double_t ds = mAngle * dt;
+			double_t ds = angle_ * dt;
 
-			if (glm::length(mNow) < 0.01){
-				 mNow = glm::vec3(0.0f,0.0f,0.0f);
+			if (glm::length(now_) < 0.01){
+				 now_ = glm::vec3(0.0f,0.0f,0.0f);
 			}	
 			else {
-				this->yaw(mNow.x * ds);
-				this->pitch(mNow.y * ds);
+				this->yaw(now_.x * ds);
+				this->pitch(now_.y * ds);
 			}
 
-			if (!mHeld) {
-				mNow *= 1.0 - (dt * mDegrade);
+			if (!held_) {
+				now_ *= 1.0 - (dt * degrade_);
 			}
 		}
 	};
