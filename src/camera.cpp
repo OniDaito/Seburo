@@ -37,10 +37,7 @@ void Camera::setRatio(float r) {
 }
 
 void Camera::align(Node &p) { 
-	look_ = p.getLook();
-	up_ = p.getUp();
-	pos_ = p.getPos();
-	compute();	
+	///\todo align with a node
 }
 	
 void Camera::compute() {

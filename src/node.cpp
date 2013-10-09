@@ -15,80 +15,75 @@ using namespace s9;
 
 Node::~Node() {}
 
+NodePtr Node::removeChild(NodePtr p) {
+	for (std::vector<NodePtr>::iterator it = children_.begin(); it != children_.end(); ){
+		if  (*it == p){
+			children_.erase(it);
+		} else {
+			++it;
+		}
+	}
 
-void Node::rotate(glm::vec3 r){
+	return std::shared_ptr<Node>(this);
+}
+
+
+NodePtr Node::rotate(glm::vec3 r){
 	glm::quat q_rotate;
 	
 	q_rotate = glm::rotate( q_rotate, r.x, glm::vec3( 1, 0, 0 ) );
 	q_rotate = glm::rotate( q_rotate, r.y, glm::vec3( 0, 1, 0 ) );
 	q_rotate = glm::rotate( q_rotate, r.z, glm::vec3( 0, 0, 1 ) );
 
-	mLook = q_rotate * mLook;
-	mUp = q_rotate * mUp;
+	matrix_ *= glm::toMat4(q_rotate);
 
-	///\todo the maths here may not be correct
-	mRotMatrix = glm::axisAngleMatrix(mLook, glm::dot(glm::vec3(0,1,0), mUp) );
+	return std::shared_ptr<Node>(this);
 }
 
 
-/*
- * Recompute the matrices on the primitive
+Node& Node::translate(glm::vec3 p) {
+	glm::mat4 trans = glm::mat4(1.0f);
+	glm::translate(trans,p);
+	matrix_ *= trans;
+	return *this;
+}
+
+
+
+/**
+ * Pitch around global x axis
  */
- 
-void Node::compute() {
-	mTransMatrix = glm::translate(glm::mat4(1.0f), mPos);
-	mScaleMatrix = glm::scale(glm::mat4(1.0f), mScale);
+
+NodePtr Node::pitch(float a){
+	rotate(glm::vec3(1.0,0.0,0.0));
+	return std::shared_ptr<Node>(this);
 }
 
-
-/*
- * Get Matrix - a recursive call all the way up the hierarchy
+/**
+ * Pitch around global z axis
  */
- 
-glm::mat4 Node::getMatrix() {
-	glm::mat4 m = getLocalMatrix();
-	if (getParent())
-		m = _getMatrix(getParent(),m);
-	return m;
-}
 
-glm::mat4 Node::_getMatrix(PrimPtr p, glm::mat4 m) {
-	m = p->getLocalMatrix() * m;
-	if (p->getParent()){
-		_getMatrix(p->getParent(),m);
-	}
-	return m;
-}
- 
-
-
-void Node::pitch(float a){
-	glm::quat q_rotate;
-	
-	glm::vec3 right = glm::cross(mUp,mLook);
-	
-	q_rotate = glm::rotate( q_rotate, a, right );
-	mLook = q_rotate * mLook;
-	mUp = q_rotate * mUp;
-	
-	compute();
-}
-
-void Node::roll(float a){
-	glm::quat q_rotate;
-	q_rotate = glm::rotate( q_rotate, a, mLook);
-	mLook = q_rotate * mLook;
-	mLook = glm::normalize(mLook);
-	mUp = q_rotate * mUp;
-	
-	compute();
+NodePtr Node::roll(float a){
+	rotate(glm::vec3(0.0,0.0,1.0));
+	return std::shared_ptr<Node>(this);
 }
 
 
-void Node::yaw(float a){
-	glm::quat q_rotate;
-	q_rotate = glm::rotate( q_rotate, a, mUp );
-	mLook = q_rotate * mLook;
-	mUp = q_rotate * mUp;
-	compute();
+/**
+ * Pitch around global y axis
+ */
+
+NodePtr Node::yaw(float a){
+	rotate(glm::vec3(0.0,1.0,0.0));
+	return std::shared_ptr<Node>(this);
+}
+
+
+
+/**
+ * Draw - recursive function that composes a final node that is actually drawn
+ */
+
+void Node::draw() {
+	
 }

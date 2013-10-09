@@ -9,7 +9,6 @@
 #include "s9/gl/fbo.hpp"
 
 using namespace std;
-using namespace boost::assign;
 using namespace s9::gl;
 
 /*

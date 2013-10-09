@@ -1,6 +1,6 @@
 /**
 * @brief GLFW Bit
-* @file glfwpThis->_app.cpp
+* @file glfwpp_->_app.cpp
 * @author Benjamin Blundell <oni@section9.co.uk>
 * @date 25/07/2012
 *
@@ -12,8 +12,8 @@ using namespace s9;
 using namespace s9::gl;
 using namespace std;
 
-GLFWApp* GLFWApp::pThis;
-string GLFWApp::mTitle;
+GLFWApp* GLFWApp::pp_;
+string GLFWApp::title_;
 
 
 #if defined(_SEBURO_BUILD_DLL)
@@ -34,36 +34,36 @@ GLFWApp::GLFWApp (WindowApp &app, const int w, const int h,
 		fprintf( stderr, "Failed to initialize GLFW\n" );
 		exit( EXIT_FAILURE );
 	}
-	pThis = this;
-	mFlag = 0x00;
-	mTitle = title;
+	pp_ = this;
+	flag_ = 0x00;
+	title_ = title;
 	initGL(w,h,major,minor,depthbits);
 
-	pThis->_app.init();
+	pp_->_app.init();
 
 	// Fire up the thread to keep update happy
 	// Use a thread for the updates
- 	pThis->_update_thread =  new std::thread(&GLFWApp::_update);
+ 	pp_->update_thread_ =  new std::thread(&GLFWApp::_update);
 
 	mainLoop();
 }
 
 
 void GLFWApp::mainLoop() {
-	pThis->mRunning = true;
+	pp_->running_ = true;
 	
-	while (pThis->mRunning){
+	while (pp_->running_){
 
 		double_t t = glfwGetTime();
 
-		for ( GLFWwindow* b : pThis->vWindows) {	
+		for ( GLFWwindow* b : pp_->windows_) {	
 			glfwMakeContextCurrent(b);
 			glfwSwapInterval( 1 );
 			_display(b);
 			glfwSwapBuffers(b);
 		}
 
-		pThis->_dt = glfwGetTime() - t;
+		pp_->dt_ = glfwGetTime() - t;
 		
 		glfwPollEvents();
 
@@ -86,8 +86,8 @@ void GLFWApp::mainLoop() {
 
 void GLFWApp::_reshape(GLFWwindow* window, int w, int h) {
 	ResizeEvent e (w,h,glfwGetTime());
-	TwWindowSize(e.mW, e.mH);
-	pThis->_app.fireEvent(e);
+	TwWindowSize(e.w, e.h);
+	pp_->_app.fireEvent(e);
 }
 
 
@@ -96,10 +96,10 @@ void GLFWApp::_reshape(GLFWwindow* window, int w, int h) {
  */
 
 void GLFWApp::_shutdown() {
-	pThis->mRunning = false;
-	if (pThis->_update_thread->joinable())
-		pThis->_update_thread->join();
-	pThis->_app.shutdown();
+	pp_->running_ = false;
+	if (pp_->update_thread_->joinable())
+		pp_->update_thread_->join();
+	pp_->_app.shutdown();
 }
 
 /*
@@ -107,13 +107,13 @@ void GLFWApp::_shutdown() {
  */
 
 void GLFWApp::_display(GLFWwindow* window) {
-	pThis->_app.display(pThis->_dt);
+	pp_->_app.display(pp_->dt_);
 	//TwDraw();
 	//CXGLERROR
 }
 
 void GLFWApp::_display(){
-  pThis->_app.display(pThis->_dt);
+  pp_->_app.display(pp_->dt_);
   //TwDraw();
  //CXGLERROR - TwDraw keeps throwing out invalid operations. Not so good! ><
 }
@@ -125,7 +125,7 @@ void GLFWApp::_display(){
 
 void GLFWApp::_scrollCallback(GLFWwindow* window, double xoffset, double yoffset) {
 	ScrollEvent e (xoffset,yoffset,glfwGetTime());
-	pThis->_app.fireEvent(e);
+	pp_->_app.fireEvent(e);
 
 }
 
@@ -137,7 +137,7 @@ void GLFWApp::_scrollCallback(GLFWwindow* window, double xoffset, double yoffset
 
 void GLFWApp::_keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
 	KeyboardEvent e (key,action,glfwGetTime());
-	pThis->_app.fireEvent(e);
+	pp_->_app.fireEvent(e);
 }
 
 /*
@@ -149,51 +149,51 @@ void GLFWApp::_mouseButtonCallback(GLFWwindow* window, int button, int action, i
 		switch(button){
 			case 0: {
 				if (action){
-					pThis->mFlag |= MOUSE_LEFT_DOWN;
-					pThis->mFlag ^= MOUSE_LEFT_UP;
-					MouseEvent e (pThis->mMX,pThis->mMY,pThis->mFlag,glfwGetTime());
-					pThis->_app.fireEvent(e);
+					pp_->flag_ |= MOUSE_LEFT_DOWN;
+					pp_->flag_ ^= MOUSE_LEFT_UP;
+					MouseEvent e (pp_->mx_, pp_->my_, pp_->flag_,glfwGetTime());
+					pp_->_app.fireEvent(e);
 				}
 				else{
-					pThis->mFlag |= MOUSE_LEFT_UP;
-					pThis->mFlag ^= MOUSE_LEFT_DOWN;
-					MouseEvent e (pThis->mMX,pThis->mMY,pThis->mFlag,glfwGetTime());
-					pThis->_app.fireEvent(e);
-					pThis->mFlag ^= MOUSE_LEFT_UP;
+					pp_->flag_ |= MOUSE_LEFT_UP;
+					pp_->flag_ ^= MOUSE_LEFT_DOWN;
+					MouseEvent e (pp_->mx_, pp_->my_, pp_->flag_,glfwGetTime());
+					pp_->_app.fireEvent(e);
+					pp_->flag_ ^= MOUSE_LEFT_UP;
 				}
 				break;
 			}
 			case 1: {
 				if (action){
-					pThis->mFlag |= MOUSE_RIGHT_DOWN;
-					pThis->mFlag ^= MOUSE_RIGHT_UP;
-					MouseEvent e (pThis->mMX,pThis->mMY,pThis->mFlag,glfwGetTime());
-					pThis->_app.fireEvent(e);
+					pp_->flag_ |= MOUSE_RIGHT_DOWN;
+					pp_->flag_ ^= MOUSE_RIGHT_UP;
+					MouseEvent e (pp_->mx_, pp_->my_, pp_->flag_,glfwGetTime());
+					pp_->_app.fireEvent(e);
 				}
 				else{
-					pThis->mFlag |= MOUSE_RIGHT_UP;
-					pThis->mFlag ^= MOUSE_RIGHT_DOWN;
-					MouseEvent e (pThis->mMX,pThis->mMY,pThis->mFlag,glfwGetTime());
-					pThis->_app.fireEvent(e);
-					pThis->mFlag ^= MOUSE_RIGHT_UP;
+					pp_->flag_ |= MOUSE_RIGHT_UP;
+					pp_->flag_ ^= MOUSE_RIGHT_DOWN;
+					MouseEvent e (pp_->mx_, pp_->my_, pp_->flag_,glfwGetTime());
+					pp_->_app.fireEvent(e);
+					pp_->flag_ ^= MOUSE_RIGHT_UP;
 				}
 				break;
 			}
 			case 2: {
 				if (action) {
-					pThis->mFlag |= MOUSE_MIDDLE_DOWN;
-					pThis->mFlag ^= MOUSE_MIDDLE_UP;
-					MouseEvent e (pThis->mMX,pThis->mMY,pThis->mFlag,glfwGetTime());
-					pThis->_app.fireEvent(e);
+					pp_->flag_ |= MOUSE_MIDDLE_DOWN;
+					pp_->flag_ ^= MOUSE_MIDDLE_UP;
+					MouseEvent e (pp_->mx_, pp_->my_, pp_->flag_,glfwGetTime());
+					pp_->_app.fireEvent(e);
 				}
 					
 				else{
 
-					pThis->mFlag |= MOUSE_MIDDLE_UP;
-					pThis->mFlag ^= MOUSE_MIDDLE_DOWN;
-					MouseEvent e (pThis->mMX,pThis->mMY,pThis->mFlag,glfwGetTime());
-					pThis->_app.fireEvent(e);
-					pThis->mFlag ^= MOUSE_MIDDLE_UP;
+					pp_->flag_ |= MOUSE_MIDDLE_UP;
+					pp_->flag_ ^= MOUSE_MIDDLE_DOWN;
+					MouseEvent e (pp_->mx_,pp_->my_,pp_->flag_,glfwGetTime());
+					pp_->_app.fireEvent(e);
+					pp_->flag_ ^= MOUSE_MIDDLE_UP;
 				}
 				break;
 			}
@@ -204,10 +204,10 @@ void GLFWApp::_mouseButtonCallback(GLFWwindow* window, int button, int action, i
 
 void GLFWApp::_mousePositionCallback(GLFWwindow* window, double x, double y){
 	if( !TwEventMousePosGLFW(x, y) ){  
-		pThis->mMX = x;
-		pThis->mMY = y;
-		MouseEvent e (pThis->mMX,pThis->mMY,pThis->mFlag,glfwGetTime());
-		pThis->_app.fireEvent(e);
+		pp_->mx_ = x;
+		pp_->my_ = y;
+		MouseEvent e (pp_->mx_,pp_->my_,pp_->flag_,glfwGetTime());
+		pp_->_app.fireEvent(e);
 	}
 
 }
@@ -221,16 +221,16 @@ void GLFWApp::_window_close_callback(GLFWwindow* window) {
 void GLFWApp::_mouseWheelCallback(GLFWwindow* window, double xpos, double ypos) {
 
 	if (ypos == 1) {
-		pThis->mFlag |= MOUSE_WHEEL_UP;	
-		MouseEvent e (pThis->mMX,pThis->mMY,pThis->mFlag,glfwGetTime());
-		pThis->_app.fireEvent(e);
-		pThis->mFlag ^= MOUSE_WHEEL_UP;
+		pp_->flag_ |= MOUSE_WHEEL_UP;	
+		MouseEvent e (pp_->mx_,pp_->my_,pp_->flag_,glfwGetTime());
+		pp_->_app.fireEvent(e);
+		pp_->flag_ ^= MOUSE_WHEEL_UP;
 		
 	} else if (ypos == -1) {
-		pThis->mFlag |= MOUSE_WHEEL_DOWN;
-		MouseEvent e (pThis->mMX,pThis->mMY,pThis->mFlag,glfwGetTime());
-		pThis->_app.fireEvent(e);
-		pThis->mFlag ^= MOUSE_WHEEL_DOWN;
+		pp_->flag_ |= MOUSE_WHEEL_DOWN;
+		MouseEvent e (pp_->mx_,pp_->my_,pp_->flag_,glfwGetTime());
+		pp_->_app.fireEvent(e);
+		pp_->flag_ ^= MOUSE_WHEEL_DOWN;
 	}	
 }
 
@@ -255,8 +255,8 @@ GLFWwindow* GLFWApp::createWindow(const char * title ="SEBURO", int w=800, int h
  */
 
 void GLFWApp::_update(){
-	while(pThis->mRunning)
-		pThis->_app.update(pThis->_dt);
+	while(pp_->running_)
+		pp_->_app.update(pp_->dt_);
 }
 
 
@@ -291,7 +291,7 @@ void GLFWApp::_error_callback(int error, const char* description) {
 
  	glfwSetErrorCallback(_error_callback);
 
-	GLFWwindow* window = createWindow(mTitle.c_str(),w, h);
+	GLFWwindow* window = createWindow(title_.c_str(),w, h);
 
 	if( !window ) {
 		std::cerr << "SEBURO Failed to open GLFW window\n" << std::endl;
@@ -330,17 +330,17 @@ void GLFWApp::_error_callback(int error, const char* description) {
 	}
 	CXGLERROR
 
-	pThis->vWindows.push_back(window);
+	pp_->windows_.push_back(window);
 
 	TwInit(TW_OPENGL, NULL);
 	TwWindowSize(w, h);
 
-	pThis->_dt = 0.0;
+	pp_->dt_ = 0.0;
 	
 	CXGLERROR
 	// fire a cheeky resize event to make sure all is well
 	ResizeEvent e (w,h,glfwGetTime());
-	pThis->_app.fireEvent(e);
+	pp_->_app.fireEvent(e);
 
 
 

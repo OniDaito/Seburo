@@ -37,11 +37,11 @@ namespace s9 {
 			
 		protected:
 
-			bool mRunning;
-			std::vector<GLFWwindow* > vWindows;
-			double_t _dt;
-			size_t mMX, mMY;
-			uint16_t mFlag;
+			bool running_;
+			std::vector<GLFWwindow* > windows_;
+			double_t dt_;
+			size_t mx_, my_;
+			uint16_t flag_;
 
 			static void initGL(const int w, const int h,
 				const int major, const int minor, const int depthbits);
@@ -83,9 +83,9 @@ namespace s9 {
 			
 		private:
 
-			static GLFWApp *pThis;
-			static std::string mTitle;
-			std::thread *_update_thread;
+			static GLFWApp *pp_;
+			static std::string title_;
+			std::thread *update_thread_;
 
 		};
 

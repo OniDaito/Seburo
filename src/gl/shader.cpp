@@ -9,10 +9,7 @@
 #include "s9/gl/shader.hpp"
 
 using namespace std;
-using namespace boost;
-using namespace boost::assign; 
 using namespace s9::gl;
-
 
 
 /*
