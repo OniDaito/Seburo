@@ -9,6 +9,7 @@
 #include "s9/gl/drawable.hpp"
 
 using namespace std;
+using namespace s9;
 using namespace s9::gl;
 
 /**
@@ -16,7 +17,7 @@ using namespace s9::gl;
  */
 
 template <class T, class U>
-DrawableT::DrawableT (ShapeT<T,U> &shape) : obj_(new shared_otr<SharedObj>(SharedObj(shape))) {
+DrawableT<T,U>::DrawableT (ShapeT<T,U> &shape) : obj_(new shared_ptr<SharedObj>(SharedObj(shape))) {
 
   obj_->vao = 0;
   obj_->handle = nullptr;
@@ -30,7 +31,7 @@ DrawableT::DrawableT (ShapeT<T,U> &shape) : obj_(new shared_otr<SharedObj>(Share
  */
 
 template <class T, class U>
-void DrawableT::generate(BrewFlags b) {
+void DrawableT<T,U>::generate(BrewFlags b) {
   
   // Generate the number and kind of buffers required
 
@@ -94,7 +95,7 @@ void DrawableT::generate(BrewFlags b) {
  */
 
 template <class T, class U>
-void DrawableT::allocateIndexBuffer(GLint method, int handle) {
+void DrawableT<T,U>::allocateIndexBuffer(GLint method, int handle) {
 
   /// the last buffer is always the index buffer
 
@@ -102,31 +103,34 @@ void DrawableT::allocateIndexBuffer(GLint method, int handle) {
   glBufferData(GL_ELEMENT_ARRAY_BUFFER, obj_->shape.indices.size() * sizeof(uint32_t), &(obj_->shape.indices[0]), method);
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0); 
 
-  getGeometry().setResized(false);
 }
 
+/**
+ * allocateDataBuffer - create a data buffer
+ */
 
 template <class T, class U>
-void DrawableT::allocateDataBuffer (GLint method, bool interleaved, int handle) {
-    GLint method = GL_STATIC_DRAW;
-    
-  /// \todo method allocation
-  //method = GL_DYNAMIC_DRAW;
+void DrawableT<T,U>::allocateDataBuffer (GLint method, int handle, BufferRole role) { }
 
-  glBindBuffer(GL_ARRAY_BUFFER, obj_->handle[0]);
+template <class U>
+void DrawableT< Vertex2, U>::allocateDataBuffer (GLint method, int handle, BufferRole role) { }
 
-  glBufferData(GL_ARRAY_BUFFER, getGeometry().size() * getGeometry().elementsize(), getGeometry().addr(), method);
 
-  glBindBuffer(GL_ARRAY_BUFFER, 0);
+template <class U>
+void DrawableT< Vertex3, U>::allocateDataBuffer (GLint method, int handle, BufferRole role) { }
 
-}
+
+template <class U>
+void DrawableT< Vertex4, U>::allocateDataBuffer (GLint method, int handle, BufferRole role) { }
+
+
 
 /**
  * brew - actually create the buffers now we are setup
  */
 
 template <class T, class U>
-void DrawableT::brew(BrewFlags b) {
+void DrawableT<T,U>::brew(BrewFlags b) {
   
   // Has this been brewed already?
   if (obj_->vao == 0 ){
@@ -153,7 +157,7 @@ void DrawableT::brew(BrewFlags b) {
  */
 
 template <class T, class U>
-void DrawableT::draw( ) {
+void DrawableT<T,U>::draw( ) {
 
 }
 

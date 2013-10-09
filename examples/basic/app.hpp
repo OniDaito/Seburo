@@ -12,7 +12,8 @@
 #include "s9/common.hpp"
 #include "s9/file.hpp"
 #include "s9/camera.hpp"
-#include "s9/gl/shapes.hpp"
+#include "s9/shapes.hpp"
+#include "s9/gl/drawable.hpp"
 #include "s9/gl/shader.hpp"
 #include "s9/gl/glfw_app.hpp"
 
@@ -37,7 +38,7 @@ namespace s9 {
 		void processEvent(ResizeEvent e);
 		
 	protected:
-		gl::Quad mTestQuad;
+		
 		gl::Shader mShader;
 		InertiaCam mCamera;
 		

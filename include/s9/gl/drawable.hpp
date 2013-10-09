@@ -6,8 +6,8 @@
 *
 */
 
-#ifndef S9_GL_BREWER_HPP
-#define S9_GL_BREWER_HPP
+#ifndef S9_GL_DRAWABLE_HPP
+#define S9_GL_DRAWABLE_HPP
 
 #include "../common.hpp"
 #include "common.hpp"
@@ -19,6 +19,18 @@
 namespace s9{
   
   namespace gl {
+
+      /// BufferRole - what each buffer actually represents. Per Vertex buffers.
+      typedef enum {
+        INTERLEAVED_BUFFER,
+        INDEX_BUFFER,
+        POSITION_BUFFER,
+        COLOUR_BUFFER,
+        NORMAL_BUFFER,
+        UV_BUFFER,
+        TANGENT_BUFFER
+      } BufferRole;
+
 
     /**
      * DrawableBase - this provides an interface for other classes to play with DrawableT
@@ -49,21 +61,11 @@ namespace s9{
         GLint access = GL_STATIC_DRAW;
       };
 
-      /// BufferRole - what each buffer actually represents. Per Vertex buffers.
-      typedef enum {
-        INTERLEAVED_BUFFER,
-        INDEX_BUFFER,
-        POSITION_BUFFER,
-        COLOUR_BUFFER,
-        NORMAL_BUFFER,
-        UV_BUFFER,
-        TANGENT_BUFFER
-      } BufferRole;
 
       void brew(BrewFlags b);
 
       /// Bind the vao to the OpenGL Context
-      inline void bind() { glBindVertexArray(obj_->vao) } ;
+      inline void bind() { glBindVertexArray(obj_->vao); } ;
 
       /// Unbind the context
       inline void unbind() { glBindVertexArray(0); };
@@ -72,8 +74,11 @@ namespace s9{
 
     protected:
 
-      void allocateIndexBuffer(GLint method);
-      void allocateDataBuffer(GLint method, bool interleaved, int handle);
+      void allocateIndexBuffer(GLint method, int handle);
+
+
+      void allocateDataBuffer(GLint method, int handle, BufferRole role);
+      
       void generate(BrewFlags b);
 
       struct SharedObj {
@@ -89,8 +94,30 @@ namespace s9{
       };
 
       std::shared_ptr<SharedObj> obj_;
-
     };
+
+    /**
+     * Specialiased template classes for the different vertex types
+     */
+
+    template <class U>
+    class SEBUROAPI DrawableT<Vertex2, U> : DrawableBase {
+    public:
+      void allocateDataBuffer (GLint method, int handle, BufferRole role);
+    };
+
+    template <class U>
+    class SEBUROAPI DrawableT<Vertex3, U> : DrawableBase {
+    public:
+      void allocateDataBuffer (GLint method, int handle, BufferRole role);
+    };
+
+    template <class U>
+    class SEBUROAPI DrawableT<Vertex4, U> : DrawableBase {
+    public:
+      void allocateDataBuffer (GLint method, int handle, BufferRole role);
+    };
+
 
     /**
      * DNode - A node composed with a drawable to create something that can be drawn to the screen

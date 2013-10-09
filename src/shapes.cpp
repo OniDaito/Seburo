@@ -44,8 +44,6 @@ template <class T, class U>
 void ShapeT<T,U>::generateGeometryFromIndices() {}
 
 
-
-
 /**
  * Build a Cuboid with w,h,d centred at the origin
  */
