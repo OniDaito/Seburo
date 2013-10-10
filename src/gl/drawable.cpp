@@ -17,7 +17,7 @@ using namespace s9::gl;
  */
 
 template <class T, class U>
-DrawableT<T,U>::DrawableT (GeometryT<T,U> &shape) : obj_(new shared_ptr<SharedObj>(SharedObj(shape))) {
+DrawableT<T,U>::DrawableT (GeometryT<T,U> shape) : obj_(new shared_ptr<SharedObj>(SharedObj(shape))) {
 
   obj_->vao = 0;
   obj_->handle = nullptr;

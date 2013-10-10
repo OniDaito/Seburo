@@ -13,7 +13,6 @@
 #include "common.hpp"
 #include "utils.hpp"
 #include "../geometry.hpp"
-#include "../node.hpp"
 
 
 namespace s9{
@@ -49,11 +48,10 @@ namespace s9{
     /**
      * The DrawbleT Template class. Uses composition to create OpenGL Buffers
      */
-
-    template<class T, class U>
-    class SEBUROAPI DrawableT : DrawableBase {
+  
+    class SEBUROAPI Drawable  {
     public:
-      DrawableT( GeometryT<T,U> &shape );
+      Drawable();
       
       /// Options for brewing that may need to be specified
       struct BrewFlags {
@@ -80,9 +78,9 @@ namespace s9{
 
       struct SharedObj {
 
-        SharedObj (  GeometryT<T,U> &shape ) : shape(shape) {};
+        SharedObj (  )  {};
 
-        GeometryT<T,U> &shape;
+      
         GLuint vao;
         unsigned int *handle;
         uint8_t numbuffers;
@@ -116,21 +114,6 @@ namespace s9{
     };
 
 
-    /**
-     * DNode - A node composed with a drawable to create something that can be drawn to the screen
-     * Like Node, DNode has no sharable object. Maybe not the best idea?
-     */
-
-    class DNode : public Node {
-    public:
-      DNode (DrawableBase &dbase) : drawable_(dbase), Node() {}
-
-
-    protected:
-      void drawToScreen();
-      DrawableBase &drawable_;
-
-    };
 
 
   }

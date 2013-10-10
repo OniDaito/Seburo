@@ -16,13 +16,33 @@
 namespace s9 {
 
 	/**
+	 * Geometry - the base class for our typed geometry. Keeps basic flags on dirty levels etc
+	 */
+
+	class Geometry {
+
+		protected:
+			Geometry () { dirty_ = true; resized_ = true; };
+
+			bool dirty_;
+			bool resized_;
+
+		public:
+			bool dirty() { return dirty_; };
+			bool resized() { return resized_; };
+
+			void set_dirty(bool b) { dirty_ = b; };
+			void set_resized(bool b) { resized_ = b; };
+	};
+
+	/**
 	 * GeometryT is the template for the basic class that forms geometry
 	 * It looks after the memory and is the work horse for all geometry
 	 * GeometryT can contain either quads or tris but not both, or neither.
 	 */
 
 	template <class T, class U>
-	class SEBUROAPI GeometryT {
+	class SEBUROAPI GeometryT : Geometry {
 	protected:
 
 		struct SharedObj {
@@ -40,7 +60,6 @@ namespace s9 {
 		void generateIndicesFromGeometry();
 		void generateGeometryFromIndices();
 
-	
 
 		std::shared_ptr<SharedObj> obj_;
 	};

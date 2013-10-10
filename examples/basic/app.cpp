@@ -23,14 +23,17 @@ using namespace s9::gl;
  */
 
 void BasicApp::init(){
-    mShader.load( s9::File("./shaders/3/quad.vert").path(),  s9::File("./shaders/3/quad.frag").path());
+    shader_.load( s9::File("./shaders/3/quad.vert").path(),  s9::File("./shaders/3/quad.frag").path());
 
     //mCamera.move(glm::vec3(0,0,20.0f));
 
     link(*this);
-    link(mCamera);
+    link(camera_);
 
     cuboid_ = Cuboid(1.0,1.0,2.0);
+
+    Node n;
+    n.add (cuboid_);
 
 }
 
@@ -54,7 +57,7 @@ void BasicApp::display(double_t dt){
 
     mShader.unbind();*/
 
-    mCamera.update(dt);
+    camera_.update(dt);
 }
 
 

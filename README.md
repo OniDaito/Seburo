@@ -18,5 +18,6 @@ A Collection of cross-platform C++ Code for OpenGL and General Graphics.
 * Supported in Clang and probably GCC. Working on Visual Studio
 * Currently support MacOSX and Linux with Windows Partially
 * Working towards OpenGL 4+ (with 3.2 support for OSX)
+* Attempting to follow the [Google Style Guide](http://google-styleguide.googlecode.com/svn/trunk/cppguide.xml)
 
 

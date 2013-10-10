@@ -13,6 +13,7 @@
 #include "s9/file.hpp"
 #include "s9/camera.hpp"
 #include "s9/geometry.hpp"
+#include "s9/node.hpp"
 #include "s9/gl/drawable.hpp"
 #include "s9/gl/shader.hpp"
 #include "s9/gl/glfw_app.hpp"
@@ -39,8 +40,8 @@ namespace s9 {
 		
 	protected:
 		Cuboid cuboid_;
-		gl::Shader mShader;
-		InertiaCam mCamera;
+		gl::Shader shader_;
+		InertiaCam camera_;
 		
 	};
 }

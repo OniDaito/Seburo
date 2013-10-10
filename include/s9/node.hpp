@@ -12,6 +12,7 @@
 
 #include "common.hpp"
 #include "visualapp.hpp"
+#include "gl/drawable.hpp"
 
 
 /*
@@ -34,18 +35,31 @@ namespace s9 {
 		
 	protected:
 
-		/// This is overridden by nodes with attached drawables - the DNode
+
 		virtual void drawToScreen() {};  
 	
+		struct SharedObj {
+			std::vector<NodePtr> children_;	
+			glm::mat4 matrix_;
+      	};
+
+      	std::shared_ptr<SharedObj> obj_;
+
+
 		glm::mat4 _getMatrix(NodePtr p, glm::mat4 m);
-		std::vector<NodePtr> children_;	
-		glm::mat4 matrix_;
+		
 
 		
 	public:
 		Node() {
 			matrix_ = glm::mat4(1.0f);
 		}
+
+
+		template<class T, class U>
+		void add(GeometryT<T,U> geometry) {};
+
+		templat
 
 	//	virtual operator int() const { return mObj.use_count() > 0; };
 
