@@ -38,7 +38,7 @@ namespace s9 {
 		void processEvent(ResizeEvent e);
 		
 	protected:
-		
+		Cuboid cuboid_;
 		gl::Shader mShader;
 		InertiaCam mCamera;
 		

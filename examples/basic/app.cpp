@@ -29,6 +29,9 @@ void BasicApp::init(){
 
     link(*this);
     link(mCamera);
+
+    cuboid_ = Cuboid(1.0,1.0,2.0);
+
 }
 
 

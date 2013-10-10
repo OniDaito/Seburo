@@ -25,7 +25,7 @@ namespace s9 {
 	class SEBUROAPI ShapeT : public GeometryT<T>  {
 	protected:
 
-		ShapeT() : obj_( std::shared_ptr<SharedObj> (new SharedObj())), GeometryT<T>(obj_->indices_by_ref) {}
+		ShapeT() : obj_( std::shared_ptr<SharedObj> (new SharedObj())), GeometryT<T>(obj_->indices_by_ref) { std::cout << "called" << std::endl;}
 
 		void generateIndicesFromGeometry();
 		void generateGeometryFromIndices();
@@ -52,6 +52,9 @@ namespace s9 {
 
 	class SEBUROAPI Cuboid : public ShapeT<Vertex3, Quad3>  {
 	public:
+
+		Cuboid() {};
+
 		Cuboid(float w, float h, float d);
 
 	};
