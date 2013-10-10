@@ -12,7 +12,7 @@
 #include "../common.hpp"
 #include "common.hpp"
 #include "utils.hpp"
-#include "../shapes.hpp"
+#include "../geometry.hpp"
 #include "../node.hpp"
 
 
@@ -53,7 +53,7 @@ namespace s9{
     template<class T, class U>
     class SEBUROAPI DrawableT : DrawableBase {
     public:
-      DrawableT( ShapeT<T,U> &shape );
+      DrawableT( GeometryT<T,U> &shape );
       
       /// Options for brewing that may need to be specified
       struct BrewFlags {
@@ -75,17 +75,14 @@ namespace s9{
     protected:
 
       void allocateIndexBuffer(GLint method, int handle);
-
-
       void allocateDataBuffer(GLint method, int handle, BufferRole role);
-      
       void generate(BrewFlags b);
 
       struct SharedObj {
 
-        SharedObj (  ShapeT<T,U> &shape ) : shape(shape) {};
+        SharedObj (  GeometryT<T,U> &shape ) : shape(shape) {};
 
-        ShapeT<T,U> &shape;
+        GeometryT<T,U> &shape;
         GLuint vao;
         unsigned int *handle;
         uint8_t numbuffers;

@@ -25,7 +25,7 @@ using namespace s9::oni;
 void OpenNIApp::init(){
    
 
-    mCamera.move(glm::vec3(0,0,10.0f));
+    //mCamera.move(glm::vec3(0,0,10.0f));
 
     link(mCamera);
     link(*this);
@@ -79,11 +79,11 @@ void OpenNIApp::processEvent(MouseEvent e){
  */
 
 void OpenNIApp::processEvent(ResizeEvent e){
-    glViewport(0,0,e.mW,e.mH);
+    glViewport(0, 0, e.w, e.h);
 }
 
 void OpenNIApp::processEvent(KeyboardEvent e){
-    cout << "Key Pressed: " << e.mKey << endl;
+    cout << "Key Pressed: " << e.key << endl;
 }
 
 /*

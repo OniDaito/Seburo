@@ -16,28 +16,31 @@
 namespace s9 {
 
 	/**
-	 * ShapeT is the template for the basic class that forms geometry
+	 * GeometryT is the template for the basic class that forms geometry
 	 * It looks after the memory and is the work horse for all geometry
-	 * Shapes can contain several geometries of one kind (we dont mix quad and tri)
+	 * GeometryT can contain either quads or tris but not both, or neither.
 	 */
 
 	template <class T, class U>
-	class SEBUROAPI ShapeT : public GeometryT<T>  {
+	class SEBUROAPI GeometryT {
 	protected:
 
-		ShapeT() : obj_( std::shared_ptr<SharedObj> (new SharedObj())), GeometryT<T>(obj_->indices_by_ref) { std::cout << "called" << std::endl;}
+		struct SharedObj {
+			std::vector<T> 			vertices;
+			///\todo we have duplication here. Somewhat annoying
+			std::vector<T*>			indices_by_ref;
+			std::vector<uint32_t> 	indices;	/// numbered indices into the array of vertices
+			std::vector<U>			primitives;
+
+		};
+
+		GeometryT() {};
+		GeometryT(std::shared_ptr<SharedObj> a) : obj_(a) {};
 
 		void generateIndicesFromGeometry();
 		void generateGeometryFromIndices();
 
-		struct SharedObj {
-			std::vector<T> 					vertices;
-			///\todo we have duplication here. Somewhat annoying
-			std::vector<T*>					indices_by_ref;
-			std::vector<uint32_t> 	indices;	/// numbered indices into the array of vertices
-			std::vector<U>					geometry;
-
-		};
+	
 
 		std::shared_ptr<SharedObj> obj_;
 	};
@@ -50,7 +53,7 @@ namespace s9 {
 	 * indices match the quads
 	 */ 
 
-	class SEBUROAPI Cuboid : public ShapeT<Vertex3, Quad3>  {
+	class SEBUROAPI Cuboid : public GeometryT<Vertex3, Quad3>  {
 	public:
 
 		Cuboid() {};

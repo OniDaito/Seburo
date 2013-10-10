@@ -4,6 +4,8 @@
 * @author Benjamin Blundell <oni@section9.co.uk>
 * @date 16/07/2012
 *
+* \todo triangle fan and other such bits
+*
 */
 
 
@@ -69,53 +71,25 @@ namespace s9 {
 
 	typedef VertexT<glm::vec4, glm::vec2> Vertex4;
  
-  /**
-   * Geometry template baseclass. Any grouping of vertices is classed as geometry
-   * We can build more complex geometries from these
-   */
-
-   template <class T>
-   struct GeometryT {
-
-   		GeometryT (std::vector<T*> &i) : indices(i) {}
-
-   		std::vector<T*> &indices;	/// \todo Even mega large meshes will depend on this! 
-   		/// :S Potential bottle neck if EVERY triangle has one
-   		/// \todo is oldschool T* a good idea?
-   		bool indexed_ = true;
-
-   		T* operator [] (int x){
-			if (x < indices.size() && x > -1){
-				return indices.at(x);	
-			}
-			assert(false);
-		}
-
-		/// \todo face operations?
-
-   };
-
-
-
-
+ 
 	/**
-	 * Template for a basic Quad. Used in the Geometry class. References a set of vertices
-	 * This is essentially a *view* on a few vertices
+	 * Template for a basic Quad. Used in the Geometry class. Points to a set of vertices
+	 * This is essentially a *view* on a few vertices and doesnt retain ownership of the vertices
 	 */
 
 	template <class T>
-	struct QuadT : GeometryT<T> {
+	struct QuadT {
 
-		QuadT(T *a, T *b, T *c, T *d) : GeometryT<T>(indices) {
-			indices.push_back(a);
-			indices.push_back(b);
-			indices.push_back(c);
-			indices.push_back(d);
+		QuadT(T *a, T *b, T *c, T *d) {
 
-			assert (indices.size() == 4);	
+			indices_by_ref[0] = a;
+			indices_by_ref[1] = b;
+			indices_by_ref[2] = c;
+			indices_by_ref[3] = d;
+
 		}
 
-		std::vector<T*> indices;
+		T* indices_by_ref[4];
 
 		/// \todo face operations?
 			
@@ -132,16 +106,16 @@ namespace s9 {
 	 */
 
 	template <class T>
-	struct TriangleT : GeometryT<T> {
+	struct TriangleT {
 
-		TriangleT(T *a, T *b, T *c) : GeometryT<T>(indices) {
-			indices.push_back(a);
-			indices.push_back(b);
-			indices.push_back(c);
-			assert (indices.size() == 3);	
+		TriangleT(T *a, T *b, T *c) {
+			indices_by_ref[0] = a;
+			indices_by_ref[1] = b;
+			indices_by_ref[2] = c;
+		
 		}
 
-		std::vector<T*> indices;
+		T* indices_by_ref[3];
 
 		/// \todo face operations?
 
