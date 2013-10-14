@@ -7,19 +7,36 @@
 */
 
 
-///\todo precompile!
+///\todo precompile! :P
 
-#ifndef COMMON_HPP
-#define COMMON_HPP
+#ifndef S9_COMMON_HPP
+#define S9_COMMON_HPP
 
+// STL C++
+#include <vector>
 #include <iostream>
 #include <string>
 #include <sstream>
 #include <iomanip>
 #include <stdexcept>
+#include <cmath>
+#include <fstream>
+
+#include <algorithm> 
+#include <functional> 
+#include <cctype>
+#include <locale>
+
+
+// Basic C like headers
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <cstdlib>
+#include <stddef.h>
+#include <stdint.h> 
+
 
 #ifdef _SEBURO_WIN32
 #include "win32/s9win32.hpp"
@@ -33,16 +50,6 @@
 #else
   #define SEBUROAPI
 #endif
-
-
-#include <cstdlib>
-#include <cmath>
-#include <fstream>
-#include <stddef.h>
-
-#include <stdint.h> 
-#include <boost/program_options.hpp>
-#include <boost/algorithm/string.hpp>
 
 
 ///\todo check if GLM relies on OpenGL at some point

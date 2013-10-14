@@ -9,10 +9,11 @@
 */
 
 
-#ifndef PRIMITIVES_HPP
-#define PRIMITIVES_HPP
+#ifndef S9_PRIMITIVES_HPP
+#define S9_PRIMITIVES_HPP
 
 #include "common.hpp"
+#include "utils.hpp"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -41,21 +42,21 @@ namespace s9 {
 	template <class T = glm::vec3, class U = glm::vec2>
 	struct VertexT {
 
-		VertexT(const T p = glm::vec3(1.0f), const T n = glm::vec3(1.0f), 
-			const T c = glm::vec3(1.0f), const U u = glm::vec2(1.0f), 
-			const T t = glm::vec3(1.0f)){
-			p_ = p;
-			n_ = n;
-			c_ = c;
-			u_ = u;
-			t_ = t;
+		VertexT(const T pp = T(1.0f), const T pn = T(1.0f), 
+			const T pc = T(1.0f), const U pu = U(1.0f), 
+			const T pt = T(1.0f)){
+			p = pp;
+			n = pn;
+			c = pc;
+			u = pu;
+			t = pt;
 		}
 
-		T p_; // position
-		T n_; // normal
-		T c_; // colour
-		U u_; // texture uv
-		T t_; // tangent
+		T p; // position
+		T n; // normal
+		T c; // colour
+		U u; // texture uv
+		T t; // tangent
 
 		uint8_t f_ = 0x1F; // Default - LSB is position - MSB is tangent
 
@@ -66,64 +67,64 @@ namespace s9 {
 	// By Default just use the GLM Float values as they mesh well with OpenGL buffers and shaders
 
 	typedef VertexT<glm::vec2, glm::vec2> Vertex2;
-
 	typedef VertexT<glm::vec3, glm::vec2> Vertex3;
-
 	typedef VertexT<glm::vec4, glm::vec2> Vertex4;
- 
- 
-	/**
-	 * Template for a basic Quad. Used in the Geometry class. Points to a set of vertices
-	 * This is essentially a *view* on a few vertices and doesnt retain ownership of the vertices
-	 */
-
-	template <class T>
-	struct QuadT {
-
-		QuadT(T *a, T *b, T *c, T *d) {
-
-			indices_by_ref[0] = a;
-			indices_by_ref[1] = b;
-			indices_by_ref[2] = c;
-			indices_by_ref[3] = d;
-
-		}
-
-		T* indices_by_ref[4];
-
-		/// \todo face operations?
-			
-	};
-
-	typedef QuadT<Vertex2> Quad2;
-	typedef QuadT<Vertex3> Quad3;
-	typedef QuadT<Vertex4> Quad4;
 
 
 	/**
-	 * Template for a basic Triangle. Used in the Geometry class. References a set of vertices
-	 * This is essentially a *view* on a few vertices
+	 * Template for just position vectors
 	 */
 
-	template <class T>
-	struct TriangleT {
+	template <class T = glm::vec3>
+	struct VertexPT {
+		VertexPT(const T pp = glm::vec3(1.0f)){
+			p = pp;	
+		} 
 
-		TriangleT(T *a, T *b, T *c) {
-			indices_by_ref[0] = a;
-			indices_by_ref[1] = b;
-			indices_by_ref[2] = c;
-		
-		}
-
-		T* indices_by_ref[3];
-
-		/// \todo face operations?
-
+		T p;
 	};
 
-	typedef TriangleT<Vertex2> Triangle2;
-	typedef TriangleT<Vertex3> Triangle3;
-	typedef TriangleT<Vertex4> Triangle4;
+	typedef VertexPT<glm::vec2> Vertex2P;
+	typedef VertexPT<glm::vec3> Vertex3P;
+	typedef VertexPT<glm::vec4> Vertex4P;
+
+
+	/**
+	 * Template for basic position, normal and texture
+	 */
+
+	template <class T = glm::vec3, class U = glm::vec2>	
+	struct VertexPNUT {
+		VertexPNUT(const T pp = glm::vec3(1.0f), const T pn = glm::vec3(1.0f), 
+			const U pu = glm::vec2(1.0f)){
+			p = pp;
+			n = pn;
+			u = pu;
+		}
+
+		T p; // position
+		T n; // normal
+		U u; // texture uv
+	};
+
+
+	typedef VertexPNUT<glm::vec2, glm::vec2> Vertex2PNU;
+	typedef VertexPNUT<glm::vec3, glm::vec2> Vertex3PNU;
+	typedef VertexPNUT<glm::vec4, glm::vec2> Vertex4PNU;
+ 	
+ 	/**
+ 	 * Template for basic face data
+ 	 */
+
+ 	template <class T = glm::vec3 >
+ 	struct FaceT {
+ 		T normal;
+ 		T colour;
+ 	};
+ 
+	
+ 	typedef FaceT<glm::vec3> Face3;
+ 	typedef FaceT<glm::vec4> Face4;
 
 
 #pragma pack(pop)  

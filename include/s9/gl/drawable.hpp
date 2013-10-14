@@ -36,88 +36,21 @@ namespace s9{
      * It is composed with Node to make the Drawable Node (DNode)
      */
 
-    class DrawableBase {
+    class Drawable {
     public:
-      virtual void draw() = 0;
-      virtual void brew() = 0;
-      virtual inline void bind() = 0;
-      virtual inline void unbind() = 0;
 
-    };
-
-    /**
-     * The DrawbleT Template class. Uses composition to create OpenGL Buffers
-     */
-  
-    class SEBUROAPI Drawable  {
-    public:
-      Drawable();
-      
       /// Options for brewing that may need to be specified
       struct BrewFlags {
         bool interleaved = true;
         GLint access = GL_STATIC_DRAW;
       };
 
-
-      void brew(BrewFlags b);
-
-      /// Bind the vao to the OpenGL Context
-      inline void bind() { glBindVertexArray(obj_->vao); } ;
-
-      /// Unbind the context
-      inline void unbind() { glBindVertexArray(0); };
-
-      virtual void draw();
-
-    protected:
-
-      void allocateIndexBuffer(GLint method, int handle);
-      void allocateDataBuffer(GLint method, int handle, BufferRole role);
-      void generate(BrewFlags b);
-
-      struct SharedObj {
-
-        SharedObj (  )  {};
-
-      
-        GLuint vao;
-        unsigned int *handle;
-        uint8_t numbuffers;
-        BufferRole *buffer_roles;
-
-      };
-
-      std::shared_ptr<SharedObj> obj_;
+      virtual void draw() {};
+      virtual void brew(BrewFlags b) {};
+      virtual void test() {};
     };
-
-    /**
-     * Specialiased template classes for the different vertex types
-     */
-
-    template <class U>
-    class SEBUROAPI DrawableT<Vertex2, U> : DrawableBase {
-    public:
-      void allocateDataBuffer (GLint method, int handle, BufferRole role);
-    };
-
-    template <class U>
-    class SEBUROAPI DrawableT<Vertex3, U> : DrawableBase {
-    public:
-      void allocateDataBuffer (GLint method, int handle, BufferRole role);
-    };
-
-    template <class U>
-    class SEBUROAPI DrawableT<Vertex4, U> : DrawableBase {
-    public:
-      void allocateDataBuffer (GLint method, int handle, BufferRole role);
-    };
-
-
-
 
   }
-
 
 }
 

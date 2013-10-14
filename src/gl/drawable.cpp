@@ -15,21 +15,16 @@ using namespace s9::gl;
 /**
  * DrawableT Constructor
  */
-
+/*
 template <class T, class U>
-DrawableT<T,U>::DrawableT (GeometryT<T,U> shape) : obj_(new shared_ptr<SharedObj>(SharedObj(shape))) {
-
-  obj_->vao = 0;
-  obj_->handle = nullptr;
-  obj_->numbuffers = 0;
-}
-
+DrawableT<T,U>::DrawableT (GeometryT<T,U> geometry) : obj_( shared_ptr<SharedObj>(new SharedObj(geometry))) {}
+*/
 
 
 /**
  * Generate - generate a vao and some buffers depending on geometry
  */
-
+/*
 template <class T, class U>
 void DrawableT<T,U>::generate(BrewFlags b) {
   
@@ -56,11 +51,11 @@ void DrawableT<T,U>::generate(BrewFlags b) {
   if (b.interleaved){
     if (obj_->shape.indexed_){
       /// index is the last buffer
-      allocateIndexBuffer(b.method, obj_->numbuffers-1);
+      allocateIndexBuffer(b.access, obj_->numbuffers-1);
       obj_->buffer_roles[obj_->numbuffers-1] = INDEX_BUFFER;
     }
   }
-  
+  */
 
   // Allocation of memory on the card
 
@@ -85,7 +80,7 @@ void DrawableT<T,U>::generate(BrewFlags b) {
 
   glBindBuffer(GL_ARRAY_BUFFER, 0);
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,0);*/
-}
+//}
 
 
 
@@ -93,43 +88,45 @@ void DrawableT<T,U>::generate(BrewFlags b) {
 /**
  * allocate - move geometry data into the VAO
  */
-
+/*
 template <class T, class U>
-void DrawableT<T,U>::allocateIndexBuffer(GLint method, int handle) {
+void DrawableT<T,U>::allocateIndexBuffer(GLint access, int handle) {
 
   /// the last buffer is always the index buffer
 
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, obj_->handle[handle]);
-  glBufferData(GL_ELEMENT_ARRAY_BUFFER, obj_->shape.indices.size() * sizeof(uint32_t), &(obj_->shape.indices[0]), method);
+  glBufferData(GL_ELEMENT_ARRAY_BUFFER, obj_->shape.indices.size() * sizeof(uint32_t), &(obj_->shape.indices[0]), access);
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0); 
 
-}
+}*/
 
 /**
  * allocateDataBuffer - create a data buffer
  */
 
+
+/*
 template <class T, class U>
-void DrawableT<T,U>::allocateDataBuffer (GLint method, int handle, BufferRole role) { }
+void DrawableT<T,U>::allocateDataBuffer (GLint access, int handle, BufferRole role) { }
 
 template <class U>
-void DrawableT< Vertex2, U>::allocateDataBuffer (GLint method, int handle, BufferRole role) { }
-
-
-template <class U>
-void DrawableT< Vertex3, U>::allocateDataBuffer (GLint method, int handle, BufferRole role) { }
+void DrawableT< Vertex2, U>::allocateDataBuffer (GLint access, int handle, BufferRole role) { }
 
 
 template <class U>
-void DrawableT< Vertex4, U>::allocateDataBuffer (GLint method, int handle, BufferRole role) { }
+void DrawableT< Vertex3, U>::allocateDataBuffer (GLint access, int handle, BufferRole role) { }
 
 
+template <class U>
+void DrawableT< Vertex4, U>::allocateDataBuffer (GLint access, int handle, BufferRole role) { }
+
+*/
 
 /**
  * brew - actually create the buffers now we are setup
  */
 
-template <class T, class U>
+/*template <class T, class U>
 void DrawableT<T,U>::brew(BrewFlags b) {
   
   // Has this been brewed already?
@@ -139,7 +136,7 @@ void DrawableT<T,U>::brew(BrewFlags b) {
 
   /// \todo check the flags on the geometry for dirty or resized
 
-}
+}*/
 
 /*
   virtual void _update() {
@@ -156,10 +153,10 @@ void DrawableT<T,U>::brew(BrewFlags b) {
  * draw - Traverse the hierarchy and perform drawing and composition
  */
 
-template <class T, class U>
+/*template <class T, class U>
 void DrawableT<T,U>::draw( ) {
 
-}
+}*/
 
 
 /**

@@ -9,7 +9,6 @@
 #include "s9/s9xml.hpp"
 
 using namespace std;
-using namespace boost;
 using namespace s9; 
 
 
@@ -72,10 +71,10 @@ bool XMLIterator::next() {
 
 
 std::string XMLIterator::operator[](const char *s) {
-	//split string via '/' into levels
+	//split_string string via '/' into levels
 	string ss(s);
 	std::vector<std::string> strs;
-	boost::split(strs, ss, boost::is_any_of("/: "));
+	strs = split_string(s, "/: ");
 	TiXmlElement *pRoot = pElement->FirstChildElement(strs[0].c_str());
 	return find(strs,pRoot);
 	
@@ -93,10 +92,9 @@ std::string XMLSettings::operator[](std::string s) {
 	map< string,string>::iterator it;
 	it = mObj->mCache.find(s);
 	if (it == mObj->mCache.end()){
-		//split string via '/' into levels
+		//split_string string via '/' into levels
 		std::vector<std::string> strs;
-		boost::split(strs, s, boost::is_any_of("/: "));
-
+		strs = split_string(s, "/: ");
 		TiXmlElement *pRoot = mObj->mDoc->FirstChildElement(strs[0].c_str());
 		string result = find(strs,pRoot);
 		mObj->mCache[s] = result;
@@ -122,7 +120,7 @@ bool XMLSettings::loadFile(std::string filename){
 
 XMLIterator XMLSettings::iterator(std::string s){
 	std::vector<std::string> strs;
-	boost::split(strs, s, boost::is_any_of("/: "));
+	strs = split_string(s, "/: ");
 	
 	XMLIterator it;
 	

@@ -15,6 +15,7 @@
 
 #include "tinyxml.h"
 #include "common.hpp"
+#include "utils.hpp"
 
 
 namespace s9{

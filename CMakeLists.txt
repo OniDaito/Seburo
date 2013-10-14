@@ -69,6 +69,7 @@ if(DEBUG)
 
 else()
   # TODO - add optimisations here
+  SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -NDEBUG")
 endif()
 
 ################################

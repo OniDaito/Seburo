@@ -12,7 +12,7 @@
 
 #include "common.hpp"
 #include "events.hpp"
-#include "node.hpp"
+#include "visualapp.hpp"
 
 /** 
  * Camera Class for a camera that pitches and yaws whilst keeping up always parallel with y
@@ -33,7 +33,6 @@ namespace s9{
 		
 		virtual void reset();
 		
-		virtual void align(Node &p);
 
 		virtual void processEvent(ResizeEvent e) { 
 			setRatio( static_cast<float>(e.w) / e.h);
@@ -75,7 +74,6 @@ namespace s9{
 		OrbitCamera();
 		void zoom(float z);
 		void shift(glm::vec2 s);
-		void align(Node &p){};
 		
 		void yaw(float a);
 		void pitch(float a);
@@ -126,7 +124,6 @@ namespace s9{
 	public:
 		ScreenCamera() {w_ = 800; h_ = 600; compute(); };
 		void setDim(size_t w, size_t h) {w_ = w; h_ = h; compute(); };
-		void align(Node &p){};
 		virtual void processEvent(ResizeEvent e) { setDim(e.w, e.h); };		
 		
 	protected:

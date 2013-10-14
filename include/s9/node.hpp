@@ -35,48 +35,45 @@ namespace s9 {
 		
 	protected:
 
-
 		virtual void drawToScreen() {};  
 	
 		struct SharedObj {
-			std::vector<NodePtr> children_;	
-			glm::mat4 matrix_;
+			std::vector<NodePtr> 	children;	
+			glm::mat4 				matrix;
       	};
 
       	std::shared_ptr<SharedObj> obj_;
-
-
-		glm::mat4 _getMatrix(NodePtr p, glm::mat4 m);
-		
-
 		
 	public:
-		Node() {
-			matrix_ = glm::mat4(1.0f);
-		}
+		Node() : obj_ ( std::shared_ptr<SharedObj>(new SharedObj())) {};
+
+		// Defaulting to GL for now
 
 
-		template<class T, class U>
-		void add(GeometryT<T,U> geometry) {};
+		virtual ~Node() {}; 
 
-		templat
-
-	//	virtual operator int() const { return mObj.use_count() > 0; };
-
-		virtual ~Node(); 
 		
 		Node& translate(glm::vec3 p);
-		NodePtr rotate(glm::vec3 r);
+		Node& rotate(glm::vec3 r);
 
-		NodePtr addChild(NodePtr p) { children_.push_back(p); return std::shared_ptr<Node>(this); };
-		NodePtr removeChild(NodePtr p);
+		Node& addChild(NodePtr p) { obj_->children.push_back(p); return *this; };
+		Node& removeChild(NodePtr p);
 		
-		NodePtr yaw(float a);
-		NodePtr pitch(float a);
-		NodePtr roll(float a);
+		Node& yaw(float a);
+		Node& pitch(float a);
+		Node& roll(float a);
 
+		glm::mat4 matrix() { return obj_->matrix; } ;
+		void set_matrix(const glm::mat4 &matrix) { obj_->matrix = matrix; } ;
 
 		virtual void draw();
+
+		//@{
+		//! Emulates shared_ptr-like behavior
+		typedef std::shared_ptr<SharedObj> Node::*unspecified_bool_type;
+		operator unspecified_bool_type() const { return ( obj_.get() == 0 ) ? 0 : &Node::obj_; }
+		void reset() { obj_.reset(); }
+		//@} 
 						
 	};
 

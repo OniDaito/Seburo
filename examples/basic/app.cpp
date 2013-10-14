@@ -31,10 +31,10 @@ void BasicApp::init(){
     link(camera_);
 
     cuboid_ = Cuboid(1.0,1.0,2.0);
-
     Node n;
-    n.add (cuboid_);
+    /*n.add (cuboid_);
 
+    n.test();*/
 }
 
 

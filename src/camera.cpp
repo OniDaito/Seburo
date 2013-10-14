@@ -36,10 +36,7 @@ void Camera::setRatio(float r) {
 	compute();
 }
 
-void Camera::align(Node &p) { 
-	///\todo align with a node
-}
-	
+
 void Camera::compute() {
 	view_matrix_ = glm::lookAt(pos_, pos_ + look_, up_);
 	projection_matrix_ = glm::perspective(field_,r_,near_, far_);
