@@ -22,6 +22,7 @@ namespace s9 {
 	class Shape {
 
 	public:
+		virtual void draw(GeometryPrimitive g = TRIANGLES) = 0;
 		virtual void brew(gl::BrewFlags b=gl::BrewFlagsDefault) = 0;
 
 	};
@@ -37,6 +38,7 @@ namespace s9 {
 		Quad(float w, float h);
 
 		void brew(gl::BrewFlags b=gl::BrewFlagsDefault) { obj_->brew(b);}
+		void draw(GeometryPrimitive g = TRIANGLES)  { obj_->drawable.draw(obj_->geometry, g); }
 
 	protected:
 
@@ -76,7 +78,7 @@ namespace s9 {
 		Cuboid(float w, float h, float d);
 
 		void brew(gl::BrewFlags b=gl::BrewFlagsDefault) { obj_->brew(b);}
-		void test() { std::cout << obj_->geometry.vertices()[0].p.z << std::endl; }
+		void draw(GeometryPrimitive g = TRIANGLES)  { obj_->drawable.draw(obj_->geometry, g); }
 
 	protected:
 

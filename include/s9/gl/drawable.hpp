@@ -53,12 +53,48 @@ namespace s9{
     class Drawable {
     public:
 
-      Drawable(){}
-  
-
+      Drawable(){ vao_ = 0;}
+      
+      /// \todo unbrew method for cleaning data off the card
       /// Options for brewing that may need to be specified
-     
-      virtual void draw() {};
+      template< typename VertexType, typename FaceType, typename AllocationPolicy> 
+      void draw(GeometryT<VertexType, FaceType, AllocationPolicy> &g, GeometryPrimitive gp = NONE) {
+        if (vao_ == 0){
+          std::cerr << "SEBURO DRAWABLE ERROR - attempting to draw a shape that is not brewed." << std::endl;
+          return; 
+        }
+
+        bind();
+        // Choose type based on the geometry  (no override)
+        GLint type;
+        if (gp == NONE){
+          switch (g.prim_type()){
+            case TRIANGLES:
+              type = GL_TRIANGLES;
+              break;
+            
+            case QUADS:
+              type = GL_QUADS;
+              break;
+
+            case POINTS:
+              type = GL_POINTS;
+              break;
+
+            default:
+              assert(false);
+          }
+        }
+
+        if ( g.indexed() ){
+          /// \todo indices type matching GL_UNSIGNED_INT
+          glDrawElements(type, g.size_indices(), GL_UNSIGNED_INT, 0);
+        } else {
+          glDrawArrays(type,0, g.size_vertices());
+        }
+
+        unbind();
+      };
       
       // Template functions for the brewing of Geometry
       template< typename VertexType, typename FaceType, typename AllocationPolicy> 
@@ -73,17 +109,19 @@ namespace s9{
           assert(false);
         }
 
+        /// Last handle is always the indices
+
         if (g.indexed()) {
           handles_.push_back(0);
         }
 
         glGenBuffers(handles_.size(), &(handles_[0]));
-
         allocate(g,b);
-
-        bind();
+        setPointers(g,b);
 
       }
+
+
 
       void bind() { glBindVertexArray(vao_);}
 
@@ -91,10 +129,12 @@ namespace s9{
       
     protected:
 
+      /// allocation of the data into the buffer - copy to the card
+      /// default template function should never be called.
 
       template< typename VertexType, typename FaceType, typename AllocationPolicy> 
       void allocate (GeometryT<VertexType,FaceType,AllocationPolicy> &g, BrewFlags b){
-        assert(false);
+        STATIC_CHECK(false, Allocate_must_be_specialized_with_geometry);
       }
 
       template< typename AllocationPolicy> 
@@ -124,6 +164,64 @@ namespace s9{
 
       template< typename AllocationPolicy> 
       void allocate(GeometryT<Vertex4, Face4, AllocationPolicy> &g, BrewFlags b) {
+      
+        glBindBuffer(GL_ARRAY_BUFFER, handles_[0]);
+        glBufferData(GL_ARRAY_BUFFER, g.size_vertices() * sizeof(Vertex4), &(g.vertices()[0]), b.access);
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+        if (g.indexed()){
+          glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, handles_[1]);
+          glBufferData(GL_ELEMENT_ARRAY_BUFFER, g.size_indices() * sizeof(IndicesType), &(g.indices()[0]), b.access);
+          glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+        }
+      }
+
+
+      template< typename VertexType, typename FaceType, typename AllocationPolicy> 
+      void setPointers(GeometryT<VertexType,FaceType,AllocationPolicy> &g, BrewFlags b) {
+        assert(false);
+      }
+
+      template<typename AllocationPolicy> 
+      void setPointers(GeometryT<Vertex4, Face4, AllocationPolicy> &g, BrewFlags b) {
+      
+        bind();
+
+        if (b.interleaved) {
+
+          glBindBuffer(GL_ARRAY_BUFFER, handles_[0]);
+          glEnableVertexAttribArray(0); // Pos
+          glEnableVertexAttribArray(1); // Normal
+          glEnableVertexAttribArray(2); // colour
+          glEnableVertexAttribArray(3); // texture
+          glEnableVertexAttribArray(4); // tangent
+
+          uint32_t idx = 0;
+
+          glVertexAttribPointer(idx++,4, GL_FLOAT, GL_FALSE, sizeof(Vertex4), (GLvoid*)offsetof(Vertex4,p) );
+          glVertexAttribPointer(idx++,4, GL_FLOAT, GL_FALSE, sizeof(Vertex4), (GLvoid*)offsetof(Vertex4,n) );
+          glVertexAttribPointer(idx++,4, GL_FLOAT, GL_FALSE, sizeof(Vertex4), (GLvoid*)offsetof(Vertex4,c) );
+          glVertexAttribPointer(idx++,2, GL_FLOAT, GL_FALSE, sizeof(Vertex4), (GLvoid*)offsetof(Vertex4,u) );
+          glVertexAttribPointer(idx++,4, GL_FLOAT, GL_FALSE, sizeof(Vertex4), (GLvoid*)offsetof(Vertex4,t) );
+
+          // Indices
+          if (g.indexed()){
+            glEnableVertexAttribArray(idx++); // Indices
+            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, handles_[1]);
+
+            ///\todo GL_UNSIGNED_INT must match the IndiciesType
+
+            glVertexAttribPointer(idx, 1, GL_UNSIGNED_INT, GL_FALSE,0, (GLubyte*) NULL);
+          } 
+        }
+
+
+        unbind();
+
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,0);
+
+
       }
 
   

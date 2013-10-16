@@ -49,14 +49,9 @@ void BasicApp::display(double_t dt){
     GLfloat depth = 1.0f;
     glClearBufferfv(GL_DEPTH, 0, &depth );
 
-/*    mShader.bind();
 
-    // Our matrix = the object * camera
-    glm::mat4 mvp = mCamera.getMatrix() * mTestQuad.getMatrix();
+    cuboid_.draw();
 
-    mShader.s("uMVPMatrix",mvp);
-
-    mShader.unbind();*/
 
     camera_.update(dt);
 }

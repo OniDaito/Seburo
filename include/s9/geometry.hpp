@@ -28,7 +28,8 @@ namespace s9 {
 		QUADS,
 		TRIANGLE_STRIP,
 		TRIANGLE_FAN,
-		POINTS
+		POINTS,
+    NONE
 	}GeometryPrimitive;
 
 
@@ -167,6 +168,10 @@ namespace s9 {
 
     bool indexed() {return indexed_; }
 
+    IndicesType size_vertices() { return size_vertices_; }
+    IndicesType size_indices() { return size_indices_; }
+    IndicesType size_faces() { return size_faces_; }
+    GeometryPrimitive prim_type() { return prim_type_; }
 	
 	protected:
 
