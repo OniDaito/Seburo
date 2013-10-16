@@ -49,9 +49,9 @@ void BasicApp::display(double_t dt){
     GLfloat depth = 1.0f;
     glClearBufferfv(GL_DEPTH, 0, &depth );
 
-
+    shader_.bind();
     cuboid_.draw();
-
+    shader_.unbind();
 
     camera_.update(dt);
 }
