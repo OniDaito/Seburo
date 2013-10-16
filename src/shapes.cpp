@@ -13,6 +13,16 @@ using namespace std;
 using namespace s9;
 using namespace s9::gl;
 
+/**
+ * Build a Quad with w,h
+ */
+
+
+Quad::Quad (float w, float h) {
+	float w2 = w/2;
+	float h2 = h/2;
+
+}
 
 
 /**
@@ -35,25 +45,45 @@ Cuboid::Cuboid (float w, float h, float d) : obj_(std::shared_ptr<SharedObj> (ne
 	Vertex4 bc ( glm::vec4( w2, -h2, -d2, 1));
 	Vertex4 bd ( glm::vec4( w2, -h2,  d2, 1));
 
+	obj_->geometry[0] = aa;
+	obj_->geometry[1] = ab;
+	obj_->geometry[2] = ac;
+	obj_->geometry[3] = ac;
 
+	obj_->geometry[4] = ba;
+	obj_->geometry[5] = bb;
+	obj_->geometry[6] = bc;
+	obj_->geometry[7] = bc;
 
+	IndicesType idx = 0;
+	obj_->geometry.setIndex(idx++,0);
+	obj_->geometry.setIndex(idx++,1);
+	obj_->geometry.setIndex(idx++,2);
+	obj_->geometry.setIndex(idx++,3);
+
+	obj_->geometry.setIndex(idx++,7);
+	obj_->geometry.setIndex(idx++,6);
+	obj_->geometry.setIndex(idx++,5);
+	obj_->geometry.setIndex(idx++,5);
+
+	obj_->geometry.setIndex(idx++,0);
+	obj_->geometry.setIndex(idx++,3);
+	obj_->geometry.setIndex(idx++,7);
+	obj_->geometry.setIndex(idx++,4);
+
+	obj_->geometry.setIndex(idx++,1);
+	obj_->geometry.setIndex(idx++,5);
+	obj_->geometry.setIndex(idx++,6);
+	obj_->geometry.setIndex(idx++,2);
+
+	obj_->geometry.setIndex(idx++,0);
+	obj_->geometry.setIndex(idx++,4);
+	obj_->geometry.setIndex(idx++,5);
+	obj_->geometry.setIndex(idx++,1);
+
+	obj_->geometry.setIndex(idx++,2);
+	obj_->geometry.setIndex(idx++,6);
+	obj_->geometry.setIndex(idx++,7);
+	obj_->geometry.setIndex(idx++,3);
 	
-	// Add the quads
-/*
-	Quad3 front (&(obj_->vertices[0]), &(obj_->vertices[1]), &(obj_->vertices[2]), &(obj_->vertices[3]));
-	Quad3 back	(&(obj_->vertices[7]), &(obj_->vertices[6]), &(obj_->vertices[5]), &(obj_->vertices[4]));
-	Quad3 left	(&(obj_->vertices[0]), &(obj_->vertices[3]), &(obj_->vertices[7]), &(obj_->vertices[4]));
-	Quad3 right	(&(obj_->vertices[1]), &(obj_->vertices[5]), &(obj_->vertices[6]), &(obj_->vertices[2]));
-	Quad3 top	(&(obj_->vertices[0]), &(obj_->vertices[4]), &(obj_->vertices[5]), &(obj_->vertices[1]));
-	Quad3 bottom(&(obj_->vertices[2]), &(obj_->vertices[6]), &(obj_->vertices[7]), &(obj_->vertices[3]));
-
-	obj_->primitives.push_back(front);
-	obj_->primitives.push_back(back);
-	obj_->primitives.push_back(left);
-	obj_->primitives.push_back(right);
-	obj_->primitives.push_back(top);
-	obj_->primitives.push_back(bottom);
-
-	generateIndicesFromGeometry();
-*/
 }

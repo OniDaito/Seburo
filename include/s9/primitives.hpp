@@ -23,7 +23,9 @@
 
 namespace s9 {
 
-// Make sure there is no padding here. Can add padding later
+
+/// \todo using padding globally but that may interfere with GLM and not always be great
+// eg vec3? we could pad to 4 and it might be better?
 
 #pragma pack(push)
 #pragma pack(1)    
@@ -77,7 +79,7 @@ namespace s9 {
 
 	template <class T = glm::vec3>
 	struct VertexPT {
-		VertexPT(const T pp = glm::vec3(1.0f)){
+		VertexPT(const T pp = T(1.0f)){
 			p = pp;	
 		} 
 
@@ -95,8 +97,8 @@ namespace s9 {
 
 	template <class T = glm::vec3, class U = glm::vec2>	
 	struct VertexPNUT {
-		VertexPNUT(const T pp = glm::vec3(1.0f), const T pn = glm::vec3(1.0f), 
-			const U pu = glm::vec2(1.0f)){
+		VertexPNUT(const T pp = T(1.0f), const T pn = T(1.0f), 
+			const U pu = U(1.0f)){
 			p = pp;
 			n = pn;
 			u = pu;
@@ -118,6 +120,11 @@ namespace s9 {
 
  	template <class T = glm::vec3 >
  	struct FaceT {
+ 		FaceT (const T pn = T(1.0f), const T pc = T(1.0f)) {
+ 			normal = pn;
+ 			colour = pc;
+ 		} 
+ 		
  		T normal;
  		T colour;
  	};

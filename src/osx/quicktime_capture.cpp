@@ -8,10 +8,7 @@
 
 #include "s9/osx/quicktime_camera.hpp"
 
-
-using namespace boost; 
 using namespace s9;
-
 
 bool QuicktimeCamera::startCapture(std::string devname, unsigned int width, unsigned int height, unsigned int fps) {
 

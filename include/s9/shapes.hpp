@@ -6,8 +6,6 @@
 *
 */
 
-
-
 #ifndef S9_SHAPES_HPP
 #define S9_SHAPES_HPP
 
@@ -17,17 +15,58 @@
 
 namespace s9 {
 	
+	/**
+	 * Basic interface to shapes
+	 */
 
 	class Shape {
-	protected:
+
+	public:
+		virtual void brew(gl::BrewFlags b=gl::BrewFlagsDefault) = 0;
 
 	};
 
 	/**
-	 * A basic Cuboid, made up of Quads with the underlying Vec3 type
-	 * It contains a reference to its own vertices however. This is how more complex
-	 * structures differ from their primitive counterparts
-	 * indices match the quads
+	 * A basic Quad with no indexing.
+	 */ 
+
+	class SEBUROAPI Quad : public Shape {
+	public:
+
+		Quad() {};
+		Quad(float w, float h);
+
+		void brew(gl::BrewFlags b=gl::BrewFlagsDefault) { obj_->brew(b);}
+
+	protected:
+
+		struct SharedObj {
+			SharedObj() {
+				geometry = GeometryT<Vertex4, Face4, AllocationPolicyNew> (4,0,QUADS);	
+			}
+
+			void brew (gl::BrewFlags b) {
+				drawable.brew(geometry, b);
+			}
+
+			GeometryT<Vertex4, Face4, AllocationPolicyNew> geometry;
+			gl::Drawable drawable;
+		
+		};
+
+		std::shared_ptr<SharedObj> obj_;
+
+	public:
+		//@{
+		//! Emulates shared_ptr-like behavior
+		typedef std::shared_ptr<SharedObj> Quad::*unspecified_bool_type;
+		operator unspecified_bool_type() const { return ( obj_.get() == 0 ) ? 0 : &Quad::obj_; }
+		void reset() { obj_.reset(); }
+		//@} 
+	};
+
+	/**
+	 * A basic Cuboid, made up of Quads with the underlying Vec4 type
 	 */ 
 
 	class SEBUROAPI Cuboid : public Shape {
@@ -36,23 +75,26 @@ namespace s9 {
 		Cuboid() {};
 		Cuboid(float w, float h, float d);
 
-
-		
+		void brew(gl::BrewFlags b=gl::BrewFlagsDefault) { obj_->brew(b);}
+		void test() { std::cout << obj_->geometry.vertices()[0].p.z << std::endl; }
 
 	protected:
 
 		struct SharedObj {
 			SharedObj() {
-				geometry = std::shared_ptr< GeometryT<Vertex4, Face4, AllocationPolicyNew> > ( new GeometryT<Vertex4, Face4, AllocationPolicyNew> (8,24,QUADS));
+				geometry = GeometryT<Vertex4, Face4, AllocationPolicyNew>(8,24,QUADS);
+			}
+			
+			void brew (gl::BrewFlags b) {
+				drawable.brew(geometry, b);
 			}
 
-
-			std::shared_ptr < GeometryT<Vertex4, Face4, AllocationPolicyNew> > geometry;
+			GeometryT<Vertex4, Face4, AllocationPolicyNew> geometry;
 			gl::Drawable drawable;
 
 		};
 
-		std::shared_ptr<SharedObj> obj_;
+		std::shared_ptr<SharedObj> obj_ = nullptr;
 
 	public:
 		//@{

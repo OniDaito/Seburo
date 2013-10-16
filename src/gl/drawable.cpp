@@ -1,4 +1,4 @@
-#/**
+/**
 * @brief Drawable Class
 * @file drawable.cpp
 * @author Benjamin Blundell <oni@section9.co.uk>
@@ -11,6 +11,11 @@
 using namespace std;
 using namespace s9;
 using namespace s9::gl;
+
+
+
+
+
 
 /**
  * DrawableT Constructor
