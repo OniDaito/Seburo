@@ -146,8 +146,7 @@ if (_SEBURO_LINUX)
     include(FindPkgConfig)
     pkg_check_modules(${pkgname}_pkg REQUIRED ${pkgname})
     if ( DEFINED ${pkgname}_pkg_FOUND )
-      set (SEBURO_LIBRARIES ${SEBURO_LIBRARIES} ${${pkgname}_pkg_LIBRARIES}
-                                    ${${pkgname}_pkg_LDFLAGS} ${${pkgname}_pkg_LDFLAGS_OTHER})
+      set (SEBURO_LIBRARIES ${SEBURO_LIBRARIES} ${${pkgname}_pkg_LIBRARIES} ${${pkgname}_pkg_LDFLAGS} ${${pkgname}_pkg_LDFLAGS_OTHER})
       set (SEBURO_INCLUDES ${SEBURO_INCLUDES} ${${pkgname}_pkg_INCLUDE_DIRS})
       set (SEBURO_CXX_FLAGS ${SEBURO_CXX_FLAGS} ${${pkgname}_pkg_CFLAGS})
     else()
@@ -158,11 +157,12 @@ if (_SEBURO_LINUX)
   SEBURO_find_pkgconfig_lib(gtkmm-3.0)
   SEBURO_find_pkgconfig_lib(gl)
   SEBURO_find_pkgconfig_lib(xxf86vm)
-  SEBURO_find_library(glfw)
-  SEBURO_find_library(AntTweakBar)
   SEBURO_find_pkgconfig_lib(xxf86vm)
   SEBURO_find_pkgconfig_lib(xrandr)
   SEBURO_find_pkgconfig_lib(xi)
+  
+  SEBURO_find_library(glfw)
+  SEBURO_find_library(AntTweakBar)
   SEBURO_find_library(assimp)
 
   #set (CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "-Wl")
@@ -182,8 +182,8 @@ elseif(_SEBURO_OSX)
 
   find_library(IOKIT_FRAMEWORK IOKit)
   find_library(CORE_FOUNDATION_FRAMEWORK CoreFoundation)
-  FIND_LIBRARY(OPENGL_LIBRARY OpenGL)
-  FIND_LIBRARY(COCOA_LIBRARY Cocoa )
+  find_library(OPENGL_LIBRARY OpenGL)
+  find_library(COCOA_LIBRARY Cocoa )
   MARK_AS_ADVANCED (COCOA_LIBRARY
                      OPENGL_LIBRARY)
 
@@ -254,20 +254,22 @@ endif()
 # TODO - threading is now taken care of with std::thread but maybe not under windows
 # possibly not with GCC either under Linux / Apple
 
-if(WIN32)
-  SET(Boost_USE_STATIC_LIBS   ON)
-  SET(Boost_USE_MULTITHREADED ON)
-  SET(Boost_USE_STATIC_RUNTIME ON)
-  SET(BOOST_ALL_DYN_LINK  OFF)
+
+
+#if(WIN32)
+#  SET(Boost_USE_STATIC_LIBS   ON)
+#  SET(Boost_USE_MULTITHREADED ON)
+#  SET(Boost_USE_STATIC_RUNTIME ON)
+#  SET(BOOST_ALL_DYN_LINK  OFF)
   #add_definitions(-DBOOST_ALL_NO_LIB)
   #SET(CMAKE_SHARED_LINKER_FLAGS /NODEFAULTLIB:LIBC;LIBCMT;MSVCRT)
-endif()
+#endif()
 
 #message("Looking for Installed BOOST Libraries")
-find_package(Boost COMPONENTS system filesystem signals iostreams program_options REQUIRED)
+#find_package(Boost COMPONENTS system filesystem signals iostreams program_options REQUIRED)
 
-include_directories(${Boost_INCLUDE_DIR})
-link_directories(${Boost_LIBRARY_DIRS})
+#include_directories(${Boost_INCLUDE_DIR})
+#link_directories(${Boost_LIBRARY_DIRS})
 
 #message(status "** Boost Include: ${Boost_INCLUDE_DIR}")
 #message(status "** Boost Libraries: ${Boost_LIBRARY_DIRS}")
@@ -370,13 +372,21 @@ if (USE_OCULUS)
   
   # There are two libs, one for debug and release but for now, we just use Debug
 
-  find_library(OCULUS_LIBRARIES
+  find_library(OCULUS_LIBRARY
                NAMES libovr
                HINTS /usr/lib
                PATHS "$ENV{PROGRAMFILES}/OpenNI/Lib${OPENNI_SUFFIX}" "$ENV{PROGRAMW6432}/OpenNI/Lib${OPENNI_SUFFIX}"
                PATH_SUFFIXES lib
   )
 
+  # We need some dependencies for Oculus it seems
+  if (_SEBURO_LINUX)
+    # this is untested on non-ubuntu linux :S
+    SEBURO_find_pkgconfig_lib(libudev)
+  endif()
+
+
+  set (OCULUS_LIBRARIES ${OCULUS_LIBRARY})
 
   add_definitions(-D_SEBURO_OCULUS)
   include_directories(${OCULUS_INCLUDE_DIR})
@@ -429,7 +439,7 @@ target_link_libraries(Seburo
   ${SEBURO_LIBRARIES}
   ${OPENGL_LIBRARY}
   ${OPENNI_LIBRARIES}
-  #${OCULUS_LIBRARIES} - causes errors with linux when turned off for some reason?
+  ${OCULUS_LIBRARIES} 
 )
 
 # seperate libs depending on OS

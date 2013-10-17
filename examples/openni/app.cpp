@@ -27,13 +27,11 @@ void OpenNIApp::init(){
 
     //mCamera.move(glm::vec3(0,0,10.0f));
 
-    link(mCamera);
     link(*this);
-    link(mScreenCamera);
 
     CXGLERROR
 
-    mOpenNI = OpenNISkeleton(openni::ANY_DEVICE);
+    openni_ = OpenNISkeleton(openni::ANY_DEVICE);
 }
 
 /*
@@ -41,7 +39,7 @@ void OpenNIApp::init(){
  */
 
 void OpenNIApp::update(double_t dt) {
-    mOpenNI.update();
+    openni_.update();
 }
 
 
@@ -59,8 +57,6 @@ void OpenNIApp::display(double_t dt){
     glClearBufferfv(GL_COLOR, 0, &glm::vec4(0.9f, 0.9f, 0.9f, 1.0f)[0]);
     glClearBufferfv(GL_DEPTH, 0, &depth );
     
-
-    mCamera.update(dt);
     
     CXGLERROR
 }

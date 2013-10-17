@@ -18,7 +18,7 @@ using namespace s9::gl;
  * Called when the mainloop starts, just once
  */
 
-void BasicApp::init(){
+ void OculusApp::init(){
     shader_.load( s9::File("./shaders/3/quad.vert").path(),  s9::File("./shaders/3/quad.frag").path());
 
    // camera_.set_pos(glm::vec3(0,0,20.0f));
@@ -33,24 +33,26 @@ void BasicApp::init(){
 
     rotation_ = 0;
 
-    glPointSize(5.0); 
 
-    glDisable(GL_CULL_FACE);
-    glDisable(GL_DEPTH_TEST);   
+
 }
 
 ///\todo seems not to want to update member variables :(
-void BasicApp::update(double_t dt) {
+void OculusApp::update(double_t dt) {
     
-    
+    oculus_.update(dt);
+
+    glm::quat q = oculus_.getOrientation();
+    //cout << q.w << "," << q.x << "," << q.y << "," << q.z << endl;
+
 }
 
 
 /*
  * Called as fast as possible. Not set FPS wise but dt is passed in
  */
-		
-void BasicApp::display(double_t dt){
+
+ void OculusApp::display(double_t dt){
 
     glClearBufferfv(GL_COLOR, 0, &glm::vec4(0.9f, 0.9f, 0.9f, 1.0f)[0]);
     GLfloat depth = 1.0f;
@@ -70,6 +72,7 @@ void BasicApp::display(double_t dt){
 
     cuboid_.draw();
     shader_.unbind();
+
    
 }
 
@@ -78,20 +81,20 @@ void BasicApp::display(double_t dt){
  * This is called by the wrapper function when an event is fired
  */
 
-void BasicApp::processEvent(MouseEvent e){
-}
+ void OculusApp::processEvent(MouseEvent e){
+ }
 
 /*
  * Called when the window is resized. You should set cameras here
  */
 
-void BasicApp::processEvent(ResizeEvent e){
+ void OculusApp::processEvent(ResizeEvent e){
     cout << "Window Resized:" << e.w << "," << e.h << endl;
     glViewport(0,0,e.w,e.h);
     camera_.resize(e.w,e.h);
 }
 
-void BasicApp::processEvent(KeyboardEvent e){
+void OculusApp::processEvent(KeyboardEvent e){
     cout << "Key Pressed: " << e.key << endl;
 }
 
@@ -99,27 +102,9 @@ void BasicApp::processEvent(KeyboardEvent e){
  * Main function - uses boost to parse program arguments
  */
 
-int main (int argc, const char * argv[]) {
-  
-/*#ifdef _SEBURO_LINUX
-    // Declare the supported options.
-    po::options_description desc("Allowed options");
-    desc.add_options()
-    ("help", "Seburo Basic Application - No Options")
-    ;
-    
-    po::variables_map vm;
-    po::store(po::parse_command_line(argc, argv, desc), vm);
-    po::notify(vm);
-    
+ int main (int argc, const char * argv[]) {
 
-    if (vm.count("help")) {
-        cout << desc << "\n";
-        return 1;
-    }
-#endif*/
-  
-    BasicApp b;
+    OculusApp b;
 
 #ifdef _SEBURO_OSX
     GLFWApp a(b, 800, 600, false, argc, argv, "Basic",3,2);

@@ -42,10 +42,10 @@ namespace s9 {
   protected:
   
 
-    s9::oni::OpenNISkeleton mOpenNI;
+    s9::oni::OpenNISkeleton openni_;
 
-    InertiaCam mCamera;
-    ScreenCamera mScreenCamera;
+    InertiaCam camera_;
+    OrthoCamera ortho_camera_;
     
   };
 }
