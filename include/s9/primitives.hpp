@@ -41,7 +41,7 @@ namespace s9 {
 
 
 	/// \todo this is tricky because this default is for the Vec3 type and we will need to override for Vertex2/4
-	template <class T = glm::vec3, class U = glm::vec2>
+	template <class T, class U >
 	struct VertexT {
 
 		VertexT(const T pp = T(1.0f), const T pn = T(1.0f), 
@@ -59,8 +59,6 @@ namespace s9 {
 		T c; // colour
 		U u; // texture uv
 		T t; // tangent
-
-		uint8_t f_ = 0x1F; // Default - LSB is position - MSB is tangent
 
 		// TODO - Flatten function -> spit out for OpenGL
 	};
@@ -124,7 +122,7 @@ namespace s9 {
  			normal = pn;
  			colour = pc;
  		} 
- 		
+
  		T normal;
  		T colour;
  	};

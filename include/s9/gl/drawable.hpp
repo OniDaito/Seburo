@@ -58,39 +58,35 @@ namespace s9{
       /// \todo unbrew method for cleaning data off the card
       /// Options for brewing that may need to be specified
       template< typename VertexType, typename FaceType, typename AllocationPolicy> 
-      void draw(GeometryT<VertexType, FaceType, AllocationPolicy> &g, GeometryPrimitive gp = NONE) {
+      void draw(GeometryT<VertexType, FaceType, AllocationPolicy> &g, GeometryPrimitive gp) {
         if (vao_ == 0){
           std::cerr << "SEBURO DRAWABLE ERROR - attempting to draw a shape that is not brewed." << std::endl;
           return; 
         }
 
         bind();
-        // Choose type based on the geometry  (no override)
+        // Choose type based on the geometry with option of an override
         GLint type;
-        if (gp == NONE){
-          switch (g.prim_type()){
-            case TRIANGLES:
-              type = GL_TRIANGLES;
-              break;
-            
-            case QUADS:
-              type = GL_QUADS;
-              break;
+        if (gp == NONE)
+          gp = g.prim_type();
 
-            case POINTS:
-              type = GL_POINTS;
-              break;
+        switch (gp){
+          case TRIANGLES:
+            type = GL_TRIANGLES;
+            break;
+          case POINTS:
+            type = GL_POINTS;
+            break;
 
-            default:
-              assert(false);
-          }
+          default:
+            assert(false);
         }
-
+                
         if ( g.indexed() ){
           /// \todo indices type matching GL_UNSIGNED_INT
           glDrawElements(type, g.size_indices(), GL_UNSIGNED_INT, 0);
         } else {
-          glDrawArrays(type,0, g.size_vertices());
+          glDrawArrays(type, 0, g.size_vertices());
         }
 
         unbind();
@@ -198,15 +194,15 @@ namespace s9{
 
           uint32_t idx = 0;
 
-          glVertexAttribPointer(idx++,4, GL_FLOAT, GL_FALSE, sizeof(Vertex4), (GLvoid*)offsetof(Vertex4,p) );
-          glVertexAttribPointer(idx++,4, GL_FLOAT, GL_FALSE, sizeof(Vertex4), (GLvoid*)offsetof(Vertex4,n) );
-          glVertexAttribPointer(idx++,4, GL_FLOAT, GL_FALSE, sizeof(Vertex4), (GLvoid*)offsetof(Vertex4,c) );
-          glVertexAttribPointer(idx++,2, GL_FLOAT, GL_FALSE, sizeof(Vertex4), (GLvoid*)offsetof(Vertex4,u) );
-          glVertexAttribPointer(idx++,4, GL_FLOAT, GL_FALSE, sizeof(Vertex4), (GLvoid*)offsetof(Vertex4,t) );
+          glVertexAttribPointer(idx++,4, GL_FLOAT, GL_FALSE, sizeof(Vertex4), (GLvoid*)offsetof( Vertex4, p) );
+          glVertexAttribPointer(idx++,4, GL_FLOAT, GL_FALSE, sizeof(Vertex4), (GLvoid*)offsetof( Vertex4, n) );
+          glVertexAttribPointer(idx++,4, GL_FLOAT, GL_FALSE, sizeof(Vertex4), (GLvoid*)offsetof( Vertex4, c) );
+          glVertexAttribPointer(idx++,2, GL_FLOAT, GL_FALSE, sizeof(Vertex4), (GLvoid*)offsetof( Vertex4, u) );
+          glVertexAttribPointer(idx++,4, GL_FLOAT, GL_FALSE, sizeof(Vertex4), (GLvoid*)offsetof( Vertex4, t) );
 
           // Indices
           if (g.indexed()){
-            glEnableVertexAttribArray(idx++); // Indices
+            glEnableVertexAttribArray(5); // Indices
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, handles_[1]);
 
             ///\todo GL_UNSIGNED_INT must match the IndiciesType
@@ -215,13 +211,10 @@ namespace s9{
           } 
         }
 
-
         unbind();
 
         glBindBuffer(GL_ARRAY_BUFFER, 0);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,0);
-
-
       }
 
   

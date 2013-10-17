@@ -32,6 +32,7 @@ namespace s9 {
 	public:
 		void init();
 		void display(double_t dt);
+		void update(double_t dt);
 
 		// Event handling - you can choose which to override
 		void processEvent(MouseEvent e);
@@ -42,6 +43,8 @@ namespace s9 {
 		Cuboid cuboid_;
 		gl::Shader shader_;
 		InertiaCam camera_;
+
+		float rotation_;
 		
 	};
 }

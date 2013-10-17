@@ -44,7 +44,7 @@ namespace s9 {
 
 		struct SharedObj {
 			SharedObj() {
-				geometry = GeometryT<Vertex4, Face4, AllocationPolicyNew> (4,0,QUADS);	
+				geometry = GeometryT<Vertex4, Face4, AllocationPolicyNew> (6,0,TRIANGLES);	
 			}
 
 			void brew (gl::BrewFlags b) {
@@ -80,11 +80,13 @@ namespace s9 {
 		void brew(gl::BrewFlags b=gl::BrewFlagsDefault) { obj_->brew(b);}
 		void draw(GeometryPrimitive g = TRIANGLES)  { obj_->drawable.draw(obj_->geometry, g); }
 
+		GeometryT<Vertex4, Face4, AllocationPolicyNew>& geometry() {return obj_->geometry; }
+
 	protected:
 
 		struct SharedObj {
 			SharedObj() {
-				geometry = GeometryT<Vertex4, Face4, AllocationPolicyNew>(8,24,QUADS);
+				geometry = GeometryT<Vertex4, Face4, AllocationPolicyNew>(8,36,TRIANGLES);
 			}
 			
 			void brew (gl::BrewFlags b) {

@@ -25,7 +25,7 @@
  
 namespace s9{
 	 
-	class SEBUROAPI Camera : public WindowResponder{
+	class SEBUROAPI Camera {
 
 	public:
 
@@ -33,34 +33,43 @@ namespace s9{
 		
 		virtual void reset();
 		
-
-		virtual void processEvent(ResizeEvent e) { 
-			setRatio( static_cast<float>(e.w) / e.h);
+		void resize(size_t w, size_t h){ 
+			set_ratio( static_cast<float>(w) / h);
+			w_ = w;
+			h_ = h;
 		}
 
-		void setNear(float n) {near_ = n; compute(); };
-		void setFar(float n) {far_ = n; compute(); };
+		void set_near(float n) {near_ = n; };
+		void set_far(float n) {far_ = n; };
 		
-		void setRatio(float r);
-		void setField(float a) {field_ = a; compute(); };
+		void set_ratio(float r);
+		void setField(float a) {field_ = a; };
 		
-		glm::vec3 getPos() {return pos_; };
-		glm::vec3 getLook() {return look_; };
-		glm::vec3 getUp() {return up_; };
+		glm::vec3 pos() {return pos_; };
+		glm::vec3 look() {return look_; };
+		glm::vec3 up() {return up_; };
+
+
+		void set_pos(glm::vec3 p) { pos_ = p; }
+		void set_look(glm::vec3 p) { look_ = p; }
+		void set_up(glm::vec3 p) { up_ = p; }
 		
-		glm::mat4 getViewMatrix() { return view_matrix_; };
-		glm::mat4 getProjMatrix() { return projection_matrix_; };
-		glm::mat4 getMatrix() {return projection_matrix_ * view_matrix_; };
+		glm::mat4 view_matrix() { return view_matrix_; };
+		glm::mat4 projection_matrix() { return projection_matrix_; };
+
+		virtual void update() {};
+		virtual void update(double_t dt) {};
 
 	protected:
-		virtual void compute();
 		
 		glm::mat4 view_matrix_;
 		glm::mat4 projection_matrix_;
 
-		float r_,far_,near_, field_;
+		float ratio_, far_, near_, field_;
 		
 		glm::vec3 pos_, look_, up_;
+
+		size_t w_, h_; // Screen / FBO size
 
 		
 	};
@@ -106,11 +115,13 @@ namespace s9{
 			mouse_pre_ = glm::vec2(e.x, e.y);
 		}
 
-
+		void update() {
+			view_matrix_ = glm::lookAt(pos_, look_, up_);
+			projection_matrix_ = glm::perspective(field_, ratio_, near_, far_);
+		}
 
 	protected:
-		void compute();
-
+		
 		float sense_;
 		glm::vec2 mouse_pre_;
 		
@@ -120,20 +131,21 @@ namespace s9{
 	 * Screen Camera
 	 */
 	 
-	class SEBUROAPI ScreenCamera : public Camera {
+	class SEBUROAPI OrthoCamera : public Camera {
 	public:
-		ScreenCamera() {w_ = 800; h_ = 600; compute(); };
-		void setDim(size_t w, size_t h) {w_ = w; h_ = h; compute(); };
-		virtual void processEvent(ResizeEvent e) { setDim(e.w, e.h); };		
+		OrthoCamera() {};
+
+		void update() {
+			view_matrix_ = glm::mat4(1.0f);
+			projection_matrix_ = glm::ortho(static_cast<float>(0.0), static_cast<float>(w_), 
+			static_cast<float>(h_), static_cast<float>(0.0));
+		}
 		
-	protected:
-		void compute();
-		size_t w_, h_;
 	};
 
 	/*
 	 * A template that adds inertia and mouse drag movements
-	 * \todo make implicit in the visual app somehow?
+	 * \todo this needs some proper signals
 	 */
 
 	class SEBUROAPI InertiaCam : public OrbitCamera {
@@ -159,11 +171,7 @@ namespace s9{
 			shift_ = 0.001;
 		}
 
-		void processEvent(ResizeEvent e) { 
-			setRatio( static_cast<float>(e.w) / e.h);
-		}
-
-		void processEvent(MouseEvent e){
+		void mouseEvent(MouseEvent e){
 
 			if (e.flag & MOUSE_LEFT_DOWN){
 
@@ -213,6 +221,10 @@ namespace s9{
 			if (!held_) {
 				now_ *= 1.0 - (dt * degrade_);
 			}
+
+			view_matrix_ = glm::lookAt(pos_, look_, up_);
+			projection_matrix_ = glm::perspective(field_, ratio_, near_, far_);
+		
 		}
 	};
 

@@ -25,7 +25,6 @@ namespace s9 {
 
 	typedef enum {
 		TRIANGLES,
-		QUADS,
 		TRIANGLE_STRIP,
 		TRIANGLE_FAN,
 		POINTS,
@@ -69,14 +68,7 @@ namespace s9 {
         }
         break;
   			
-        case QUADS: {
-  				assert(size_faces % 4 == 0);
-  				fp = std::unique_ptr<FaceType[]>(new FaceType[size_faces / 4]);
-  				return true;
-        }
-  			break;
-
-  			case TRIANGLE_STRIP: {
+   			case TRIANGLE_STRIP: {
   				assert(size_faces > 2);
   				fp = std::unique_ptr<FaceType[]>(new FaceType[1]);
   				return true;
@@ -140,13 +132,13 @@ namespace s9 {
 
     VertexType& operator[](IndicesType idx) {
       assert(idx >= 0 && idx < size_vertices_);
-      return vertices_[indices_[idx]];
+      return vertices_[idx];
   
     }
     
     const VertexType& operator[](IndicesType idx) const {
       assert(idx >= 0 && idx < size_vertices_);
-      return vertices_[indices_[idx]];
+      return vertices_[idx];
     }
 
     void setVertex(IndicesType idx, VertexType v) {
@@ -157,6 +149,12 @@ namespace s9 {
     void setIndex(IndicesType idx, IndicesType v) {
       assert(idx >= 0 && idx < size_indices_);
       indices_[idx] = v;
+    }
+
+    void setIndices( IndicesType *a) {
+      for (int i =0; i < size_indices_; ++i){
+        indices_[i] = a[i];
+      }
     }
 
     ///\todo one day, lets not use basic pointers? - How does using pointers affect allocation policy?
@@ -189,10 +187,10 @@ namespace s9 {
 
 			if (num_indices > 0) {
 				allocateIndices(indices_, num_indices);
-				size_faces_ = num_indices;
-			} else {
-				size_faces_ = num_verts;
-			}
+        indexed_ = true;
+			} 
+
+      size_faces_ = indexed_ ? size_indices_ : size_vertices_;
 
 			allocateFaces(faces_, size_faces_, prim_type);
 
