@@ -2,12 +2,12 @@
 * @brief GLFW Application
 * @file app.hpp
 * @author Benjamin Blundell <oni@section9.co.uk>
-* @date 03/07/2012
+* @date 21/10/2013
 *
 */
 
-#ifndef BASICAPP_HPP
-#define BASICAPP_HPP
+#ifndef TEXTUREAPP_HPP
+#define TEXTUREAPP_HPP
 
 #include "s9/common.hpp"
 #include "s9/file.hpp"
@@ -17,6 +17,8 @@
 #include "s9/gl/drawable.hpp"
 #include "s9/gl/shader.hpp"
 #include "s9/gl/glfw_app.hpp"
+#include "s9/image.hpp"
+#include "s9/gl/texture.hpp"
 
 #include "anttweakbar/AntTweakBar.h"
 
@@ -27,7 +29,7 @@ namespace s9 {
  	 * An Basic App that draws a quad and provides a basic camera
  	 */
 
-	class BasicApp : public WindowApp, WindowResponder{
+	class TextureApp : public WindowApp, WindowResponder{
 	public:
 		void init();
 		void display(double_t dt);
@@ -39,10 +41,12 @@ namespace s9 {
 		void processEvent(ResizeEvent e);
 		
 	protected:
-		Cuboid cuboid_;
-		Node node_;
+		Quad quad_;
+		Image image_;
+		gl::Texture texture_;
 		gl::Shader shader_;
 		InertiaCam camera_;
+		Node node_;
 
 		float rotation_;
 		

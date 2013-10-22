@@ -31,7 +31,7 @@ FBO::FBO (size_t w, size_t h) : _obj( shared_ptr<SharedObj> (new SharedObj())){
   
 	// Create the texture
 
-  _obj->_colour = Texture(glm::vec2(w,h));
+  _obj->_colour = Texture(w,h);
 	
 	// Attach texture to first color attachment and the depth to the depth attachment
 	glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_RECTANGLE,_obj->_colour.id(), 0);

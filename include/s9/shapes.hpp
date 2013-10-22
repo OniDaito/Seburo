@@ -16,20 +16,66 @@
 namespace s9 {
 	
 	/**
-	 * Basic interface to shapes
+	 * Shared Object container for basic shape geometries - OpenGL at present
 	 */
 
-	class Shape {
+	struct ShapeObj {
+
+		virtual void brew(gl::BrewFlags b) = 0;
+		virtual void draw(GeometryPrimitive g) = 0;
+
+		gl::Drawable gl_drawable;
+
+	};
+
+
+	/**
+	 * Basic interface to shapes
+	 * \todo brew and draw go through a lot of calls - worrying :S
+	 */
+
+	class SEBUROAPI Shape {
 
 	public:
-		virtual void draw(GeometryPrimitive g = TRIANGLES) = 0;
-		virtual void brew(gl::BrewFlags b=gl::BrewFlagsDefault) = 0;
+		Shape () {brewed_ = false; drawable_ = false; };
+		Shape (bool drawable) : drawable_(drawable) { brewed_ = false; }
+
+		virtual void draw(GeometryPrimitive g = TRIANGLES) { if (obj_ != nullptr) obj_->draw(g); };
+		virtual void brew(gl::BrewFlags b=gl::BrewFlagsDefault) { if (obj_ != nullptr)  { obj_->brew(b); brewed_ = true; } };
+		virtual bool brewed() { return brewed_; }
+		virtual bool drawable() { return drawable_; }
+
+		const Shape& operator= (const Shape &s ) { 
+			obj_ = s.obj_; 
+			brewed_ = s.brewed_; 
+			drawable_ = s.drawable_; 
+			return *this;
+		}
+
+	protected:
+		bool brewed_;
+		bool drawable_;
+
+		std::shared_ptr<ShapeObj> obj_ = nullptr;
 
 	};
 
 	/**
 	 * A basic Quad with no indexing.
+	 * Quad provides a basic contructor that does little more than build the ShapeObjectQuad
 	 */ 
+
+	struct ShapeObjQuad : public ShapeObj {
+		ShapeObjQuad() {
+			geometry = GeometryT<Vertex4, Face4, AllocationPolicyNew> (6,0,TRIANGLES);	
+		}
+
+		void brew (gl::BrewFlags b) { gl_drawable.brew(geometry, b);}
+		void draw (GeometryPrimitive g = TRIANGLES) { gl_drawable.draw(geometry, g); }
+
+		GeometryT<Vertex4, Face4, AllocationPolicyNew> geometry;
+			
+	};
 
 	class SEBUROAPI Quad : public Shape {
 	public:
@@ -37,76 +83,30 @@ namespace s9 {
 		Quad() {};
 		Quad(float w, float h);
 
-		void brew(gl::BrewFlags b=gl::BrewFlagsDefault) { obj_->brew(b);}
-		void draw(GeometryPrimitive g = TRIANGLES)  { obj_->drawable.draw(obj_->geometry, g); }
-
-	protected:
-
-		struct SharedObj {
-			SharedObj() {
-				geometry = GeometryT<Vertex4, Face4, AllocationPolicyNew> (6,0,TRIANGLES);	
-			}
-
-			void brew (gl::BrewFlags b) {
-				drawable.brew(geometry, b);
-			}
-
-			GeometryT<Vertex4, Face4, AllocationPolicyNew> geometry;
-			gl::Drawable drawable;
-		
-		};
-
-		std::shared_ptr<SharedObj> obj_;
-
-	public:
-		//@{
-		//! Emulates shared_ptr-like behavior
-		typedef std::shared_ptr<SharedObj> Quad::*unspecified_bool_type;
-		operator unspecified_bool_type() const { return ( obj_.get() == 0 ) ? 0 : &Quad::obj_; }
-		void reset() { obj_.reset(); }
-		//@} 
 	};
 
 	/**
 	 * A basic Cuboid, made up of Quads with the underlying Vec4 type
 	 */ 
 
+	struct ShapeObjCuboid : public ShapeObj {
+		ShapeObjCuboid() {
+			geometry = GeometryT<Vertex4, Face4, AllocationPolicyNew>(8,36,TRIANGLES);
+		}
+
+		void brew (gl::BrewFlags b) { gl_drawable.brew(geometry, b); }
+		void draw (GeometryPrimitive g = TRIANGLES) { gl_drawable.draw(geometry, g); }
+
+		GeometryT<Vertex4, Face4, AllocationPolicyNew> geometry;
+			
+	};
+
 	class SEBUROAPI Cuboid : public Shape {
 	public:
 
 		Cuboid() {};
 		Cuboid(float w, float h, float d);
-
-		void brew(gl::BrewFlags b=gl::BrewFlagsDefault) { obj_->brew(b);}
-		void draw(GeometryPrimitive g = TRIANGLES)  { obj_->drawable.draw(obj_->geometry, g); }
-
-		GeometryT<Vertex4, Face4, AllocationPolicyNew>& geometry() {return obj_->geometry; }
-
-	protected:
-
-		struct SharedObj {
-			SharedObj() {
-				geometry = GeometryT<Vertex4, Face4, AllocationPolicyNew>(8,36,TRIANGLES);
-			}
-			
-			void brew (gl::BrewFlags b) {
-				drawable.brew(geometry, b);
-			}
-
-			GeometryT<Vertex4, Face4, AllocationPolicyNew> geometry;
-			gl::Drawable drawable;
-
-		};
-
-		std::shared_ptr<SharedObj> obj_ = nullptr;
-
-	public:
-		//@{
-		//! Emulates shared_ptr-like behavior
-		typedef std::shared_ptr<SharedObj> Cuboid::*unspecified_bool_type;
-		operator unspecified_bool_type() const { return ( obj_.get() == 0 ) ? 0 : &Cuboid::obj_; }
-		void reset() { obj_.reset(); }
-		//@} 
+	
 	};
 
 

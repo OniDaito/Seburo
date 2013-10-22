@@ -12,7 +12,8 @@
 
 #include "common.hpp"
 #include "visualapp.hpp"
-#include "gl/drawable.hpp"
+#include "shapes.hpp"
+#include "camera.hpp"
 
 
 /*
@@ -36,44 +37,38 @@ namespace s9 {
 	protected:
 
 		virtual void drawToScreen() {};  
-	
-		struct SharedObj {
-			std::vector<NodePtr> 	children;	
-			glm::mat4 				matrix;
-      	};
 
-      	std::shared_ptr<SharedObj> obj_;
+		// No shared object as a node is either just copyable data OR shared_ptrs
+    glm::mat4 							matrix_;
+    std::vector<NodePtr> 		children_;	
+    Camera									camera_;
+    Shape 									geometry_;
 		
 	public:
-		Node() : obj_ ( std::shared_ptr<SharedObj>(new SharedObj())) {};
+		Node()  {};
 
 		// Defaulting to GL for now
 
-
 		virtual ~Node() {}; 
 
+		// Overridden add methods for attaching things to this node.
+		Node& add(Shape &shape);
+		Node& add(NodePtr p) {return addChild(p); }
 		
 		Node& translate(glm::vec3 p);
 		Node& rotate(glm::vec3 r);
 
-		Node& addChild(NodePtr p) { obj_->children.push_back(p); return *this; };
+		Node& addChild(NodePtr p) { children_.push_back(p); return *this; };
 		Node& removeChild(NodePtr p);
 		
 		Node& yaw(float a);
 		Node& pitch(float a);
 		Node& roll(float a);
 
-		glm::mat4 matrix() { return obj_->matrix; } ;
-		void set_matrix(const glm::mat4 &matrix) { obj_->matrix = matrix; } ;
+		glm::mat4 matrix() { return matrix_; } ;
+		void set_matrix(const glm::mat4 &matrix) { matrix_ = matrix; } ;
 
-		virtual void draw();
-
-		//@{
-		//! Emulates shared_ptr-like behavior
-		typedef std::shared_ptr<SharedObj> Node::*unspecified_bool_type;
-		operator unspecified_bool_type() const { return ( obj_.get() == 0 ) ? 0 : &Node::obj_; }
-		void reset() { obj_.reset(); }
-		//@} 
+		void draw();
 						
 	};
 

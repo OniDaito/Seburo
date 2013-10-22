@@ -20,38 +20,38 @@ using namespace s9::gl;
 using namespace s9::gl::compvis;
 #endif
 
-VidCam::VidCam(std::string dev, size_t w, size_t h, size_t fps) : _obj( shared_ptr<SharedObj> (new SharedObj())) {
+VidCam::VidCam(std::string dev, size_t w, size_t h, size_t fps) : obj_( shared_ptr<SharedObj> (new SharedObj())) {
 
-	_obj->_texture = TextureStream(glm::vec2(w,h),TEXTURE_RGB);
+	obj_->texture_ = TextureStream(w,h,RGB);
 
 #ifdef _SEBURO_LINUX
-	_obj->_cam.reset(new UVCVideo());
-	_obj->_cam->startCapture(dev,w,h,fps);
+	obj_->cam_.reset(new UVCVideo());
+	obj_->cam_->startCapture(dev,w,h,fps);
 #endif
 
-	_obj->_texture.setData(_obj->_cam->getBuffer());
-	_obj->_texture.start();
+	obj_->texture_.set_tex_data(obj_->cam_->getBuffer());
+	obj_->texture_.start();
 
-	_obj->_fps = fps; 
+	obj_->_fps = fps; 
 
 	CXGLERROR
 }
 
 void VidCam::update() {
-	_obj->_texture.update();
-	//_obj->_texture.update(_obj->_cam->getBuffer());
+	obj_->texture_.update();
+	//obj_->texture_.update(obj_->cam_->getBuffer());
 }
 
 void VidCam::stop(){
 #ifdef _SEBURO_LINUX
-	_obj->_cam->stop();
+	obj_->cam_->stop();
 #endif	
-	_obj->_texture.stop();
+	obj_->texture_.stop();
 }
 
 void VidCam::setControl(unsigned int id, int value) {
 #ifdef _SEBURO_LINUX
-	_obj->_cam->set_control(id,value);
+	obj_->cam_->set_control(id,value);
 #endif	
 }
 
@@ -65,20 +65,20 @@ void VidCam::setControl(unsigned int id, int value) {
 
 CVVidCam::CVVidCam(){}
 
-CVVidCam::CVVidCam(VidCam &cam) : _obj( shared_ptr<SharedObj> (new SharedObj(cam))){
+CVVidCam::CVVidCam(VidCam &cam) : obj_( shared_ptr<SharedObj> (new SharedObj(cam))){
 	
-	cv::Size size (_obj->mCam.getSize().x,  _obj->mCam.getSize().y);
-	_obj->mImage = Mat(size, CV_8UC3);
-	_obj->mImageRectified = Mat(size, CV_8UC3);
-	glGenTextures(1, &(_obj->mRectifiedTexID));
-	glBindTexture(GL_TEXTURE_RECTANGLE, _obj->mRectifiedTexID);               
-	glTexImage2D(GL_TEXTURE_RECTANGLE, 0, 3,  _obj->mCam.getSize().x,  _obj->mCam.getSize().y,
-	 0, GL_RGB, GL_UNSIGNED_BYTE, (unsigned char *) IplImage(_obj->mImageRectified).imageData);
+	cv::Size size (obj_->mCam.getSize().x,  obj_->mCam.getSize().y);
+	obj_->mImage = Mat(size, CV_8UC3);
+	obj_->mImageRectified = Mat(size, CV_8UC3);
+	glGenTextures(1, &(obj_->mRectifiedTexID));
+	glBindTexture(GL_TEXTURE_RECTANGLE, obj_->mRectifiedTexID);               
+	glTexImage2D(GL_TEXTURE_RECTANGLE, 0, 3,  obj_->mCam.getSize().x,  obj_->mCam.getSize().y,
+	 0, GL_RGB, GL_UNSIGNED_BYTE, (unsigned char *) IplImage(obj_->mImageRectified).imageData);
 
-	_obj->mPlaneNormal = Mat(Size(1,3), CV_64FC1);
-	_obj->mPlaneNormal.at<double_t>(0,0) = 0.0;
-	_obj->mPlaneNormal.at<double_t>(1,0) = 0.0;	
-	_obj->mPlaneNormal.at<double_t>(2,0) = 1.0;
+	obj_->mPlaneNormal = Mat(Size(1,3), CV_64FC1);
+	obj_->mPlaneNormal.at<double_t>(0,0) = 0.0;
+	obj_->mPlaneNormal.at<double_t>(1,0) = 0.0;	
+	obj_->mPlaneNormal.at<double_t>(2,0) = 1.0;
 	
 
 }
@@ -87,40 +87,40 @@ CVVidCam::CVVidCam(VidCam &cam) : _obj( shared_ptr<SharedObj> (new SharedObj(cam
 void CVVidCam::computeNormal() {
 	
 	Mat r (Size(3,3), CV_64FC1);
-	Rodrigues(_obj->mP.R,r);
+	Rodrigues(obj_->mP.R,r);
 
 	r = r.inv();
 	r *= -1;
-	_obj->mPlaneNormal = Mat(Size(1,3), CV_64FC1);
-	_obj->mPlaneNormal.at<double_t>(0,0) = 0.0;
-	_obj->mPlaneNormal.at<double_t>(1,0) = 0.0;	
-	_obj->mPlaneNormal.at<double_t>(2,0) = 1.0;
-	_obj->mPlaneNormal = r * _obj->mPlaneNormal;
+	obj_->mPlaneNormal = Mat(Size(1,3), CV_64FC1);
+	obj_->mPlaneNormal.at<double_t>(0,0) = 0.0;
+	obj_->mPlaneNormal.at<double_t>(1,0) = 0.0;	
+	obj_->mPlaneNormal.at<double_t>(2,0) = 1.0;
+	obj_->mPlaneNormal = r * obj_->mPlaneNormal;
 	
 }
 		
 	
-void CVVidCam::bindRectified(){ glBindTexture(GL_TEXTURE_RECTANGLE, _obj->mRectifiedTexID); }
+void CVVidCam::bindRectified(){ glBindTexture(GL_TEXTURE_RECTANGLE, obj_->mRectifiedTexID); }
 	
 	
 void CVVidCam::update(){
-	_obj->mCam.update();
+	obj_->mCam.update();
 	
-	_obj->mImage = cv::Mat (_obj->mImage.size(), CV_8UC3, _obj->mCam.getBuffer());
+	obj_->mImage = cv::Mat (obj_->mImage.size(), CV_8UC3, obj_->mCam.getBuffer());
 	
-	if (_obj->mP.mCalibrated){
-		undistort(_obj->mImage, _obj->mImageRectified, _obj->mP.M,_obj->mP.D);
+	if (obj_->mP.mCalibrated){
+		undistort(obj_->mImage, obj_->mImageRectified, obj_->mP.M,obj_->mP.D);
 		
 		bindRectified();
-		glTexSubImage2D(GL_TEXTURE_RECTANGLE,0,0,0, _obj->mImageRectified.size().width, 
-			_obj->mImageRectified.size().height, GL_RGB, GL_UNSIGNED_BYTE, (unsigned char *) IplImage(_obj->mImageRectified).imageData );
+		glTexSubImage2D(GL_TEXTURE_RECTANGLE,0,0,0, obj_->mImageRectified.size().width, 
+			obj_->mImageRectified.size().height, GL_RGB, GL_UNSIGNED_BYTE, (unsigned char *) IplImage(obj_->mImageRectified).imageData );
 		unbind();
 		
 	}	
 }
 
 void CVVidCam::bind(){
-	_obj->mCam.bind();
+	obj_->mCam.bind();
 }
 
 void CVVidCam::unbind(){
@@ -143,19 +143,19 @@ bool CVVidCam::loadParameters(string filename) {
 			return false;
 		}
 
-		fs["M"] >> _obj->mP.M;
-		fs["D"] >> _obj->mP.D;
+		fs["M"] >> obj_->mP.M;
+		fs["D"] >> obj_->mP.D;
 
 		try {
-			fs["R"] >> _obj->mP.R;
-			fs["T"] >> _obj->mP.T;
+			fs["R"] >> obj_->mP.R;
+			fs["T"] >> obj_->mP.T;
 		}
 		catch (...) {
 			cout << "SEBURO - failed to load world transforms in intrinsics." << endl;
 		}
 		
 		cout << "SEBURO - Loaded camera Parameters " << filename << endl;
-		_obj->mP.mCalibrated = true;
+		obj_->mP.mCalibrated = true;
 		fs.release();
 		computeNormal();
 		return true;
@@ -176,7 +176,7 @@ bool CVVidCam::saveParameters(string filename) {
 
     FileStorage fs(filename, CV_STORAGE_WRITE);
     if( fs.isOpened() ) {
-        fs << "M" << _obj->mP.M << "D" << _obj->mP.D << "R" << _obj->mP.R << "T" << _obj->mP.T;
+        fs << "M" << obj_->mP.M << "D" << obj_->mP.D << "R" << obj_->mP.R << "T" << obj_->mP.T;
         fs.release();
         return true;
     }

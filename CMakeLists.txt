@@ -184,13 +184,16 @@ elseif(_SEBURO_OSX)
   find_library(CORE_FOUNDATION_FRAMEWORK CoreFoundation)
   find_library(OPENGL_LIBRARY OpenGL)
   find_library(COCOA_LIBRARY Cocoa )
-  MARK_AS_ADVANCED (COCOA_LIBRARY
-                     OPENGL_LIBRARY)
+  find_library(CORE_GRAPHICS CoreGraphics)
+  find_library(QUARTZ_CORE_FRAMEWORK QuartzCore)
+  MARK_AS_ADVANCED (COCOA_LIBRARY OPENGL_LIBRARY CORE_GRAPHICS)
 
   SET(OSX_FRAMEWORKS ${COCOA_LIBRARY} 
     ${OPENGL_LIBRARY} 
     ${IOKIT_FRAMEWORK}
     ${CORE_FOUNDATION_FRAMEWORK}
+    ${CORE_GRAPHICS}
+    ${QUARTZ_CORE_FRAMEWORK}
   )
    
   set(LIBRARIES_SEARCH_PATHS
@@ -442,9 +445,9 @@ target_link_libraries(Seburo
   ${OCULUS_LIBRARIES} 
 )
 
-# seperate libs depending on OS
+# OSX Frameworks include
 
-if (_SEBURO_WIN32)
+if (_SEBURO_OSX)
   target_link_libraries(Seburo 
     ${OSX_FRAMEWORKS}
   )
@@ -472,7 +475,7 @@ if (_SEBURO_OSX)
     ) 
 
     set(MACOSX_BUNDLE_INFO_STRING "${PROJECT_NAME}")
-    set(MACOSX_BUNDLE_GUI_IDENTIFIER "uk.co.section9.SEBURO.${PROJECT_NAME}")
+    set(MACOSX_BUNDLE_GUI_IDENTIFIER "uk.co.section9.seburo.${PROJECT_NAME}")
 
     set(MACOSX_BUNDLE_LONG_VERSION_STRING "${PROJECT_NAME}")
     set(MACOSX_BUNDLE_BUNDLE_NAME ${PROJECT_NAME})

@@ -22,23 +22,26 @@ namespace s9 {
 
   namespace gl {
 
-    typedef enum {
-      TEXTURE_RGB,
-      TEXTURE_GREY,
-      TEXTURE_RGBA
-    }TextureType;
-
+   
     /*
      * Represents a texture in OpenGL. Use GL_TEXTURE_RECTANGLE
+     * was previously a shared object but since it keeps no pointers or data on the CPU it need not be
+     *   
+     * \todo binding unit
+     *
      */
 
     class SEBUROAPI Texture{
     public:
       Texture() {};
-      Texture(glm::vec2 size, TextureType format=TEXTURE_RGB, const char* data = NULL);
-      Texture(Image image);
+      Texture(size_t width, size_t height, ColourComponent format=RGB, ColourType type = UNSIGNED_BYTE, const char* data = NULL);
+      Texture(const Image &image);
 
-      GLuint id() { return _obj->_id; };
+      size_t width() const {return width_; }
+      size_t height() const {return height_; }
+      GLuint id() const {return id_; };
+
+      ColourType colour_type () const  { return colour_type_; }
 
       void bind();
       void unbind();
@@ -46,31 +49,19 @@ namespace s9 {
       void update(unsigned char * data);
 
     protected: 
-      struct SharedObj {
-        GLuint _id;
-        glm::vec2 _size;
-        TextureType _format;
-      };
+    
+      GLuint id_;
+      GLenum gl_type_;
+      size_t width_;
+      size_t height_;
+      ColourComponent format_;
+      ColourType colour_type_;
 
-      std::shared_ptr <SharedObj> _obj;
-
-    public:
-      glm::vec2 getSize() {return _obj->_size;};
-      glm::vec2 size() {return getSize(); };
-      GLuint getTexture() {return _obj->_id; };
     };
 
-    /*
-     * Represents a power of two texture with assert checks
+    /**
+     * Useful function for OpenCV Mat to Unsigned Char *
      */
-
-    class TextureTwo : public Texture{
-    public:
-      TextureTwo() {};
-      TextureTwo(glm::vec2 size,TextureType format=TEXTURE_RGB);
-      TextureTwo(uint32_t w, uint32_t h,TextureType format=TEXTURE_RGB) { TextureTwo(glm::vec2(w,h),format); };
-      TextureTwo(Image image);       
-    };
 
 #ifdef _SEBURO_OPENCV
     inline unsigned char * MatToGL(cv::Mat &mat) {
@@ -80,38 +71,41 @@ namespace s9 {
 
     /*
      * Streaming texture with a PBO. This need to be started,
-     * updated and then stopped.
+     * updated and then stopped. Potentially could be merged - inherit above
      */
 
     class TextureStream {
     public:
       TextureStream() {};
-      TextureStream(glm::vec2 size, TextureType format);
+      TextureStream(size_t width, size_t height, ColourComponent format);
       ~TextureStream();
 
-      GLuint id() { return _obj->_id; };
+      GLuint id() const { return id_; };
 
       void bind();
       void unbind();
 
-      glm::vec2 size() {return _obj->_size;};
+      size_t width() const { return width_; }
+      size_t height() const { return height_; }
+
 
       void update();
-
-      void setData(void *data);
+      void set_tex_data(void *data);
 
       void start();
       void stop();
 
     protected:
       struct SharedObj {
-        GLuint _id, _texBuffer;
-        glm::vec2 _size;
-        TextureType _format;
-        void *_pboMemory,*_texData;
+        void *pbo_memory, *tex_data;
       };
 
-      std::shared_ptr <SharedObj> _obj;
+      GLuint id_, tex_buffer_;
+      size_t width_, height_;
+      ColourType colour_type_;
+      ColourComponent format_;
+
+      std::shared_ptr <SharedObj> obj_;
 
     };
 

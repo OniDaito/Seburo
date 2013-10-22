@@ -19,7 +19,7 @@
 #endif
 
 #ifdef _SEBURO_LINUX
-#include "s9/linux/uvc_camera.hpp"
+#include "s9/linux/uvccam_era.hpp"
 #endif
 
 #ifdef _SEBURO_OSX
@@ -27,7 +27,7 @@
 #endif
 
 #ifdef _SEBURO_WIN32
-#include "s9/win32/windows_camera.hpp"
+#include "s9/win32/windowscam_era.hpp"
 #endif
 
 
@@ -46,17 +46,16 @@ namespace s9 {
 			void stop();		
 			void setControl(unsigned int id, int value);
 			void update();
-			unsigned char* getBuffer() {return _obj->_cam->getBuffer(); };
+			unsigned char* getBuffer() {return obj_->cam_->getBuffer(); };
 
-			void bind() {_obj->_texture.bind(); };
-			void unbind() {_obj->_texture.unbind(); };
+			void bind() {obj_->texture_.bind(); };
+			void unbind() {obj_->texture_.unbind(); };
 
-			TextureStream getTexture() {return _obj->_texture; };
+			TextureStream getTexture() {return obj_->texture_; };
 
-			glm::vec2 size() {return _obj->_texture.size(); }
-			glm::vec2 getSize() {return size(); }
 
-			virtual operator int() const { return _obj.use_count() > 0; };
+
+			virtual operator int() const { return obj_.use_count() > 0; };
 			
 		protected:
 
@@ -67,22 +66,22 @@ namespace s9 {
 			public:
 
 #ifdef _SEBURO_LINUX
-				std::shared_ptr<UVCVideo> _cam;
+				std::shared_ptr<UVCVideo> cam_;
 #endif
 
 #ifdef _SEBURO_OSX
-				std::shared_ptr<QuicktimeCamera> _cam;
+				std::shared_ptr<QuicktimeCamera> cam_;
 #endif
 
 #ifdef _SEBURO_WIN32
-				std::shared_ptr<WindowsCamera> _cam;
+				std::shared_ptr<WindowsCamera> cam_;
 #endif
 
 				size_t _fps;
-				TextureStream _texture;
+				TextureStream texture_;
 			};
 			
-			std::shared_ptr<SharedObj> _obj;
+			std::shared_ptr<SharedObj> obj_;
 			
 		};
 
@@ -114,21 +113,21 @@ namespace s9 {
 				CVVidCam();
 				CVVidCam(VidCam &cam);
 					
-				CameraParameters& getParams() {return _obj->mP;};
+				CameraParameters& getParams() {return obj_->mP;};
 				
 				bool loadParameters(std::string filename);
 				bool saveParameters(std::string filename);
 				
-				bool isSecondary() { return  _obj->mSecondary;};
-				bool isRectified() { return  _obj->mP.mCalibrated;};
+				bool isSecondary() { return  obj_->mSecondary;};
+				bool isRectified() { return  obj_->mP.mCalibrated;};
 					
-				cv::Mat& getImage() { return  _obj->mImage; };
-				cv::Mat& getImageRectified() {return  _obj->mImageRectified; };
-				glm::vec2 getSize() {return _obj->mCam.getSize(); };
+				cv::Mat& getImage() { return  obj_->mImage; };
+				cv::Mat& getImageRectified() {return  obj_->mImageRectified; };
+				glm::vec2 getSize() {return obj_->mCam.getSize(); };
 				void computeNormal();
 				
-				GLuint getRectifiedTexture() {return  _obj->mRectifiedTexID; };
-				cv::Mat& getNormal() {return  _obj->mPlaneNormal; };
+				GLuint getRectifiedTexture() {return  obj_->mRectifiedTexID; };
+				cv::Mat& getNormal() {return  obj_->mPlaneNormal; };
 				
 				void bind();
 				void bindRectified();
@@ -155,7 +154,7 @@ namespace s9 {
 
 				};
 
-				std::shared_ptr<SharedObj> _obj;
+				std::shared_ptr<SharedObj> obj_;
 
 			};
 		}

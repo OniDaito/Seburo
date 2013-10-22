@@ -19,7 +19,7 @@ namespace s9 {
 
     File(std::string path);
 
-    std::string path() { return _finalPath; };
+    std::string path() const { return _finalPath; };
 
   protected:
     std::string _finalPath;
