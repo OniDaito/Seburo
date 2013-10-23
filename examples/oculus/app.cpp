@@ -33,17 +33,13 @@ using namespace s9::gl;
 
     rotation_ = 0;
 
-
+    oculus_ = oculus::OculusBase(true);
 
 }
 
 ///\todo seems not to want to update member variables :(
-void OculusApp::update(double_t dt) {
-    
+void OculusApp::update(double_t dt) {    
     oculus_.update(dt);
-
-    glm::quat q = oculus_.getOrientation();
-    //cout << q.w << "," << q.x << "," << q.y << "," << q.z << endl;
 
 }
 
@@ -63,8 +59,13 @@ void OculusApp::update(double_t dt) {
     shader_.bind();
 
     glm::mat4 Projection = glm::perspective(45.0f, 4.0f / 3.0f, 0.1f, 100.f);
-    glm::mat4 View = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -10.0f));
+    glm::mat4 View = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -6.0f));
     glm::mat4 Model = glm::rotate(glm::mat4(1.0f), rotation_, glm::vec3(0.0f, 1.0f, 0.0f));
+
+    glm::quat q = oculus_.orientation();
+
+    glm::mat4 mq = glm::mat4_cast(q);
+    View = mq * View;
 
     glm::mat4 MVP = Projection * View * Model;
 
@@ -72,8 +73,7 @@ void OculusApp::update(double_t dt) {
 
     cuboid_.draw();
     shader_.unbind();
-
-   
+     
 }
 
 
@@ -107,9 +107,9 @@ void OculusApp::processEvent(KeyboardEvent e){
     OculusApp b;
 
 #ifdef _SEBURO_OSX
-    GLFWApp a(b, 800, 600, false, argc, argv, "Basic",3,2);
+    GLFWApp a(b, 800, 600, false, argc, argv, "Oculus",3,2);
 #else
-    GLFWApp a(b, 800, 600, false, argc, argv, "Basic");
+    GLFWApp a(b, 800, 600, false, argc, argv, "Oculus");
 #endif
 
     return EXIT_SUCCESS;

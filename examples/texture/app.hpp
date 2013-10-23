@@ -26,10 +26,10 @@
 namespace s9 {
 
 	/*
- 	 * An Basic App that draws a quad and provides a basic camera
+ 	 * Example of texturing a basic Quad
  	 */
 
-	class TextureApp : public WindowApp, WindowResponder{
+	class TextureApp : public WindowApp, public WindowResponder {
 	public:
 		void init();
 		void display(double_t dt);
@@ -39,6 +39,7 @@ namespace s9 {
 		void processEvent(MouseEvent e);
 		void processEvent(KeyboardEvent e);
 		void processEvent(ResizeEvent e);
+
 		
 	protected:
 		Quad quad_;

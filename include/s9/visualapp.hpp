@@ -48,18 +48,29 @@ namespace s9 {
 		virtual void update(double_t dt) {};
 		virtual void shutdown() {};
 
-		void fireEvent(Event e);
-		void fireEvent(MouseEvent e);
-		void fireEvent(ResizeEvent e);
-		void fireEvent(KeyboardEvent e);
+		template<class E>
+		void fireEvent(E e){
+  		for(WindowResponder* p : listeners_){
+    		p->processEvent(e);
+  		}
+  	}
 
-		void link(WindowResponder &responder) { 
-			std::shared_ptr<WindowResponder> p = std::make_shared<WindowResponder>(responder);
-			_listeners.push_back(p);
+		void addWindowListener(WindowResponder *responder) { 
+			listeners_.push_back(responder);
+		};
+
+		void removeWindowListener(WindowResponder *responder) { 
+			for (std::vector<WindowResponder*>::iterator it = listeners_.begin(); it != listeners_.end(); ) {
+				if  (*it == responder){
+					listeners_.erase(it);
+				} else {
+					++it;
+				}
+			}
 		};
 
 	protected:
-		std::vector< std::shared_ptr<WindowResponder> > _listeners;
+		std::vector< WindowResponder* > listeners_;
 
 	};
 

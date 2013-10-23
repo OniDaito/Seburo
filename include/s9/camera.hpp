@@ -12,15 +12,11 @@
 
 #include "common.hpp"
 #include "events.hpp"
-#include "visualapp.hpp"
 
 /** 
- * Camera Class for a camera that pitches and yaws whilst keeping up always parallel with y
- * \todo ORTHO Camera! 
- * \todo certain camera classes could listen for events but we need to set a precidence (as sometimes we want
- * \todo update and resize hooks on all cameras
- * \todo create GL Cameras that extend this so we get viewport and such for free
- * camera movement and othertimes we want selection for example) - bubbling
+ * Camera Class
+ * A perspective camera that provides the usual functions a camera model may want
+ * such as pitch, pan, zoom, resize etc.
  */
  
 namespace s9{
@@ -30,25 +26,28 @@ namespace s9{
 	public:
 
 		Camera();
-		
-		virtual void reset();
-		
+			
 		void resize(size_t w, size_t h){ 
 			set_ratio( static_cast<float>(w) / h);
-			w_ = w;
-			h_ = h;
 		}
 
 		void set_near(float n) {near_ = n; };
 		void set_far(float n) {far_ = n; };
 		
 		void set_ratio(float r);
-		void setField(float a) {field_ = a; };
+		void set_field(float a) {field_ = a; };
 		
-		glm::vec3 pos() {return pos_; };
-		glm::vec3 look() {return look_; };
-		glm::vec3 up() {return up_; };
+		inline glm::vec3 pos()	{return pos_; };
+		inline glm::vec3 look() {return look_; };
+		inline glm::vec3 up() {return up_; };
 
+		void zoom(float z);
+		void shift(glm::vec2 s);
+		void yaw(float a);
+		void pitch(float a);
+		void roll(float a);
+
+		void reset();
 
 		void set_pos(glm::vec3 p) { pos_ = p; }
 		void set_look(glm::vec3 p) { look_ = p; }
@@ -57,8 +56,8 @@ namespace s9{
 		glm::mat4 view_matrix() { return view_matrix_; };
 		glm::mat4 projection_matrix() { return projection_matrix_; };
 
-		virtual void update() {};
-		virtual void update(double_t dt) {};
+		virtual void update();
+		virtual void update(double_t dt) { update(); };
 
 	protected:
 		
@@ -69,29 +68,9 @@ namespace s9{
 		
 		glm::vec3 pos_, look_, up_;
 
-		size_t w_, h_; // Screen / FBO size
-
-		
 	};
 
-	/* 
-	 * Orbit camera revolves around one point as it were
-	 */
-	 
-	class SEBUROAPI OrbitCamera : public Camera{
-	public:
-		OrbitCamera();
-		void zoom(float z);
-		void shift(glm::vec2 s);
-		
-		void yaw(float a);
-		void pitch(float a);
-		void roll(float a);
-		void reset();
-
-		/*
-		 * Basic mouse movement for an orbiting camera
-		 */
+	/*
 
 		virtual void processEvent(MouseEvent e) { 
 			if(e.flag & MOUSE_LEFT_DOWN){
@@ -114,41 +93,15 @@ namespace s9{
 
 			mouse_pre_ = glm::vec2(e.x, e.y);
 		}
+		*/
 
-		void update() {
-			view_matrix_ = glm::lookAt(pos_, look_, up_);
-			projection_matrix_ = glm::perspective(field_, ratio_, near_, far_);
-		}
-
-	protected:
-		
-		float sense_;
-		glm::vec2 mouse_pre_;
-		
-	};
-	
-	/*
-	 * Screen Camera
-	 */
-	 
-	class SEBUROAPI OrthoCamera : public Camera {
-	public:
-		OrthoCamera() {};
-
-		void update() {
-			view_matrix_ = glm::mat4(1.0f);
-			projection_matrix_ = glm::ortho(static_cast<float>(0.0), static_cast<float>(w_), 
-			static_cast<float>(h_), static_cast<float>(0.0));
-		}
-		
-	};
 
 	/*
 	 * A template that adds inertia and mouse drag movements
 	 * \todo this needs some proper signals
 	 */
 
-	class SEBUROAPI InertiaCam : public OrbitCamera {
+	class SEBUROAPI InertiaCam : public Camera {
 
 	protected:
 		glm::vec3 now_;

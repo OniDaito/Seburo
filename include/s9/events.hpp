@@ -33,9 +33,16 @@ namespace s9{
 	}MouseAction;
 
 	struct Event {
+
+		friend std::ostream& operator<<(std::ostream& out, const Event& o);
+
 		EventType type;
 		double_t t;
 	};
+
+	inline std::ostream& operator<<(std::ostream& os, const Event& obj) {
+		 return os << "Event - Type: " << obj.type << ", Time: " << obj.t;
+	}
 
 	struct MouseEvent : public Event {
 		MouseEvent(int xp, int yp, uint16_t flagp, double_t tp=0 ) {
@@ -47,7 +54,6 @@ namespace s9{
 		}
 
 		uint16_t flag;
-	
 		int x, y;
 	}; 
 

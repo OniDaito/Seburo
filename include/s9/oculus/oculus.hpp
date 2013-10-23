@@ -6,8 +6,6 @@
 *
 */
 
-
-
 #ifndef S9_OCULUS_OCULUS_HPP
 #define S9_OCULUS_OCULUS_HPP
 
@@ -30,9 +28,52 @@ namespace s9 {
     
     protected:
 
-      void init();
+      void onMessage(const OVR::Message& msg);
+
+      struct DeviceStatusNotificationDesc {
+        OVR::DeviceHandle    Handle;
+        OVR::MessageType     Action;
+
+        DeviceStatusNotificationDesc():Action(OVR::Message_None) {}
+        DeviceStatusNotificationDesc(OVR::MessageType mt, const OVR::DeviceHandle& dev) 
+            : Handle(dev), Action(mt) {}
+      };
+    
 
       struct SharedObj {
+
+        SharedObj(OculusBase* pb) {
+          addHandler(pb);
+        }
+
+        void removeHandler(OculusBase* pb) {
+          for (std::vector<OculusBase*>::iterator it = handlers.begin(); it != handlers.end(); ){
+            if  (*it == pb){
+              handlers.erase(it);
+            } else {
+              ++it;
+            } 
+          }
+        }
+
+        void addHandler(OculusBase* pb) {
+          handlers.push_back(pb);
+        }
+        
+        ~SharedObj() {
+          for(OculusBase* pb : handlers){
+            pb->RemoveHandlerFromDevices();
+          }
+
+          latency_tester.Clear();
+          sensor.Clear();
+          HMD.Clear();
+
+          std::cout << "SEBURO OCCULUS - Shutting down oculus manager." << std::endl;
+        }
+
+        std::vector<OculusBase*> handlers;
+       
         OVR::Ptr<OVR::DeviceManager> manager;
         OVR::Ptr<OVR::HMDDevice> HMD;
         OVR::Ptr<OVR::SensorDevice> sensor; 
@@ -42,24 +83,30 @@ namespace s9 {
         OVR::Util::LatencyTest latency_util;
         OVR::Ptr<OVR::LatencyTestDevice> latency_tester;
 
+        OVR::Array<DeviceStatusNotificationDesc> device_status_notifications_queue; 
+
         OVR::SensorFusion fusion;
+        OVR::HMDInfo info;
       };
 
       std::shared_ptr<SharedObj> obj_ = nullptr;
+
+      glm::quat orientation_;
   
     public:
   
-      OculusBase();
+      OculusBase() {}
+      OculusBase(bool b);
+      ~OculusBase() { if (obj_) obj_->removeHandler(this);}
+
+      /*const OculusBase& operator= (const OculusBase & b) {
+
+      }*/
 
       void update(double_t dt);
 
-      glm::quat getOrientation() { 
-        if (obj_->sensor){
-          OVR::Quatf q = obj_->fusion.GetOrientation(); 
-          return glm::quat(q.w,q.x,q.y,q.z); 
-        }
-        return glm::quat();
-      }
+      glm::quat orientation() { return orientation_; } 
+     
 
     };
   }

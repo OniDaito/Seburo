@@ -19,7 +19,7 @@
 #endif
 
 #ifdef _SEBURO_LINUX
-#include "s9/linux/uvccam_era.hpp"
+#include "s9/linux/uvc_camera.hpp"
 #endif
 
 #ifdef _SEBURO_OSX
@@ -27,7 +27,7 @@
 #endif
 
 #ifdef _SEBURO_WIN32
-#include "s9/win32/windowscam_era.hpp"
+#include "s9/win32/windows_camera.hpp"
 #endif
 
 

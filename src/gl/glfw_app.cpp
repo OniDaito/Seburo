@@ -16,22 +16,12 @@ GLFWApp* GLFWApp::pp_;
 string GLFWApp::title_;
 
 
-#if defined(_SEBURO_BUILD_DLL)
-
-// SEBURO DLL entry point
-//
-BOOL WINAPI DllMain(HINSTANCE instance, DWORD reason, LPVOID reserved) {
-    return TRUE;
-}
-
-#endif // _SEBURO_BUILD_DLL
-
 GLFWApp::GLFWApp (WindowApp &app, const int w, const int h, 
 	bool fullscreen, int argc, const char * argv[], 
 	const char * title, const int major, const int minor, const int depthbits) : WindowSystem(app) {
 	
 	if( !glfwInit() ){
-		fprintf( stderr, "Failed to initialize GLFW\n" );
+		cerr << "SEBURO ERROR - Failed to initialize GLFW." << endl;
 		exit( EXIT_FAILURE );
 	}
 	pp_ = this;
@@ -76,12 +66,12 @@ void GLFWApp::mainLoop() {
   // Exiting state
 	glfwTerminate();
 	
-	// return to mainloop in the application for shutdown
+	// return to mainloop in the application for GLFW
 }
 
 
 /*
- * GLFW Callback for resizing a window
+ * shutdown Callback for resizing a window
  */
 
 void GLFWApp::_reshape(GLFWwindow* window, int w, int h) {
