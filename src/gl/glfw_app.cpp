@@ -16,7 +16,7 @@ GLFWApp* GLFWApp::pp_;
 string GLFWApp::title_;
 
 
-GLFWApp::GLFWApp (WindowApp &app, const int w, const int h, 
+GLFWApp::GLFWApp (WindowApp &app, const size_t w, const size_t h, 
 	bool fullscreen, int argc, const char * argv[], 
 	const char * title, const int major, const int minor, const int depthbits) : WindowSystem(app) {
 	
@@ -31,6 +31,10 @@ GLFWApp::GLFWApp (WindowApp &app, const int w, const int h,
 
 	pp_->_app.init();
 
+	// Initial startup here - fire a resize event
+	ResizeEvent e (w,h,glfwGetTime());
+	pp_->_app.fireEvent(e);
+
 	// Fire up the thread to keep update happy
 	// Use a thread for the updates
  	pp_->update_thread_ =  new std::thread(&GLFWApp::_update);
@@ -41,6 +45,7 @@ GLFWApp::GLFWApp (WindowApp &app, const int w, const int h,
 
 void GLFWApp::mainLoop() {
 	pp_->running_ = true;
+
 	
 	while (pp_->running_){
 
@@ -261,7 +266,7 @@ void GLFWApp::_error_callback(int error, const char* description) {
  * \todo pass params as a struct perhaps?
  */
 
- void GLFWApp::initGL( const int w = 800, const int h =600,
+ void GLFWApp::initGL( const size_t w = 800, const size_t h =600,
  		const int major = -1, const int minor = -1, const int depthbits = 16) {
 
  	if (major != -1 and minor != -1) {
@@ -328,9 +333,7 @@ void GLFWApp::_error_callback(int error, const char* description) {
 	pp_->dt_ = 0.0;
 	
 	CXGLERROR
-	// fire a cheeky resize event to make sure all is well
-	ResizeEvent e (w,h,glfwGetTime());
-	pp_->_app.fireEvent(e);
+
 
 
 

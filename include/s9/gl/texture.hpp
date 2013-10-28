@@ -34,7 +34,7 @@ namespace s9 {
     class SEBUROAPI Texture{
     public:
       Texture() {};
-      Texture(size_t width, size_t height, ColourComponent format=RGB, ColourType type = UNSIGNED_BYTE, const char* data = NULL);
+      Texture(size_t width, size_t height, ColourComponent format=RGB, ColourType type = UNSIGNED_BYTE, const byte_t* data = nullptr);
       Texture(const Image &image);
 
       size_t width() const {return width_; }
@@ -46,7 +46,7 @@ namespace s9 {
       void bind();
       void unbind();
 
-      void update(unsigned char * data);
+      void update(byte_t * data);
 
     protected: 
     
@@ -74,37 +74,27 @@ namespace s9 {
      * updated and then stopped. Potentially could be merged - inherit above
      */
 
-    class TextureStream {
+    class TextureStream : public Texture{
     public:
       TextureStream() {};
-      TextureStream(size_t width, size_t height, ColourComponent format);
+      TextureStream(size_t width, size_t height, ColourComponent format=RGB, ColourType type = UNSIGNED_BYTE, const byte_t* data = nullptr);
       ~TextureStream();
 
-      GLuint id() const { return id_; };
-
-      void bind();
-      void unbind();
-
-      size_t width() const { return width_; }
-      size_t height() const { return height_; }
-
-
-      void update();
-      void set_tex_data(void *data);
-
-      void start();
-      void stop();
-
+      void update(byte_t *data);
+    
     protected:
       struct SharedObj {
-        void *pbo_memory, *tex_data;
+        SharedObj() {
+          pbo_memory = nullptr;
+          tex_data = nullptr;
+        }
+
+        byte_t *tex_data;
+        GLvoid *pbo_memory;
       };
 
-      GLuint id_, tex_buffer_;
-      size_t width_, height_;
-      ColourType colour_type_;
-      ColourComponent format_;
-
+      GLuint tex_buffer_;
+   
       std::shared_ptr <SharedObj> obj_;
 
     };

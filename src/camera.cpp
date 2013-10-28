@@ -17,11 +17,27 @@ using namespace s9;
 
 Camera::Camera() {
 	reset();
+	orthographic_ = false;
+}
+
+	
+void Camera::resize(size_t w, size_t h){ 	
+	set_ratio( static_cast<float>(w) / h);
+
+	// For ortho, we are setting bottom left to 0,0 :)
+	right_ = w;
+	bottom_ = 0;
+	left_ = 0;
+	top_ = h;
 }
 
 void Camera::update() {	
  	view_matrix_ = glm::lookAt(pos_, look_, up_);
-	projection_matrix_ = glm::perspective(field_, ratio_, near_, far_);
+ 	if (orthographic_)
+ 		projection_matrix_ = glm::ortho(static_cast<float>(left_), static_cast<float>(right_),
+ 			static_cast<float>(bottom_), static_cast<float>(top_), near_, far_);
+ 	else
+		projection_matrix_ = glm::perspective(field_, ratio_, near_, far_);
 }
 
 void Camera::reset() {
@@ -29,9 +45,13 @@ void Camera::reset() {
 	pos_ = glm::vec3(0,0,1.0);
 	look_ = glm::vec3(0,0,0);
 	near_ = 0.1f;
-	field_ = 55.0f;
 	far_ = 100.0f;
 	ratio_ = 1.0;
+	left_ = 0;
+	top_ = 0;
+	right_ = 100;
+	bottom_ = 100;
+	field_ = 55.0f;
 }
 
 

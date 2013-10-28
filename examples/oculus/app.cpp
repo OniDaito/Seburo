@@ -23,7 +23,7 @@ using namespace s9::gl;
 
    // camera_.set_pos(glm::vec3(0,0,20.0f));
 
-    link(*this);
+    addWindowListener(this);
 
     cuboid_ = Cuboid(3.0,2.0,1.0);
     Cuboid v = cuboid_;
@@ -32,7 +32,6 @@ using namespace s9::gl;
     v.brew();
 
     rotation_ = 0;
-
     oculus_ = oculus::OculusBase(true);
 
 }

@@ -25,13 +25,26 @@ using namespace s9::oni;
 void OpenNIApp::init(){
    
 
-    //mCamera.move(glm::vec3(0,0,10.0f));
+    shader_.load( s9::File("./shaders/3/quad_texture.vert").path(), s9::File("./shaders/3/quad_texture.frag").path());
 
-    link(*this);
+    addWindowListener(this);
 
     CXGLERROR
 
-    openni_ = OpenNISkeleton(openni::ANY_DEVICE);
+    openni_ = OpenNIBase(openni::ANY_DEVICE);
+    skeleton_ = OpenNISkeleton(openni_);
+
+    ortho_camera_.set_orthographic(true);
+
+    quad_ = Quad(320,240);
+    node_depth_.add(quad_);
+    node_colour_.add(quad_);
+
+    bytes_ = new byte_t[320 * 240 * 4];
+    memset(bytes_, 255, 320 * 240 * 4);
+
+    texture_ = Texture(320, 240, RGBA, UNSIGNED_BYTE, bytes_);
+
 }
 
 /*
@@ -39,7 +52,12 @@ void OpenNIApp::init(){
  */
 
 void OpenNIApp::update(double_t dt) {
-    openni_.update();
+    
+    skeleton_.update();
+}
+
+OpenNIApp::~OpenNIApp(){
+    delete[] bytes_;
 }
 
 
@@ -50,14 +68,36 @@ void OpenNIApp::update(double_t dt) {
 void OpenNIApp::display(double_t dt){
 
     GLfloat depth = 1.0f;
-    // Our matrix = the object * camera
-
     // Now draw to the screen
 
     glClearBufferfv(GL_COLOR, 0, &glm::vec4(0.9f, 0.9f, 0.9f, 1.0f)[0]);
     glClearBufferfv(GL_DEPTH, 0, &depth );
-    
-    
+
+    openni_.update(); // While thread safe, its best to put this immediately before the update_textures
+    openni_.update_textures();
+   
+    ortho_camera_.update(dt);
+
+    shader_.bind();
+
+    //texture_.bind();
+    model_ = glm::translate(glm::mat4(1.0f), glm::vec3(160,120,0));
+    glm::mat4 MVP =  ortho_camera_.projection_matrix() * ortho_camera_.view_matrix() * model_;
+    shader_.s("uMVPMatrix",MVP);
+    openni_.texture_depth().bind();
+    node_depth_.draw();
+    openni_.texture_depth().unbind();
+
+    model_ = glm::translate(glm::mat4(1.0f), glm::vec3(480,120,0));
+    MVP =  ortho_camera_.projection_matrix() * ortho_camera_.view_matrix() * model_;
+    shader_.s("uMVPMatrix",MVP);
+    openni_.texture_colour().bind();
+    node_colour_.draw();
+    //texture_.unbind();
+    openni_.texture_colour().unbind();
+    shader_.unbind();
+
+
     CXGLERROR
 }
 
@@ -76,6 +116,9 @@ void OpenNIApp::processEvent(MouseEvent e){
 
 void OpenNIApp::processEvent(ResizeEvent e){
     glViewport(0, 0, e.w, e.h);
+    ortho_camera_.resize(e.w, e.h);
+   
+
 }
 
 void OpenNIApp::processEvent(KeyboardEvent e){

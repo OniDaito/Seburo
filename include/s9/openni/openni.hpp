@@ -18,17 +18,19 @@
 #include <vector>
 #include <set>
 
+#include "s9/gl/texture.hpp"
+
 #define S9_OPENNI_MAX_DEPTH 10000
 #define S9_NITE_MAX_USERS 10
 
 namespace s9 {
-
 
   namespace oni {
 
     /**
      * Basic OpenNI Entry class that deals with config and middleware
      * \TODO - needs more options! Many more options
+     * \todo replace the byte_t buffers with images when we advance the image class
      */
      
     class SEBUROAPI OpenNIBase {
@@ -37,40 +39,48 @@ namespace s9 {
       class SharedObj {
       public:
 
-        openni::VideoFrameRef   mDepthFrame;
-        openni::VideoFrameRef   mColourFrame;
+        openni::VideoFrameRef   depth_frame_;
+        openni::VideoFrameRef   colour_frame_;
 
-        openni::Device          mDevice;
-        openni::VideoStream     mDepthStream;
-        openni::VideoStream     mColourStream;
-        openni::VideoStream**   mStreams;
+        openni::Device          device_;
+        openni::VideoStream     depth_stream_;
+        openni::VideoStream     colour_stream_;
+        openni::VideoStream**   streams_;
 
-        // TODO - Depth could be a bit less?
-        openni::RGB888Pixel*    pTexMapBuffer;
+        ///\todo - Depth could be a bit less?
 
-        // TODO - Add s9 textures
+        // Seperate buffers as we update OpenGL seperately on a different thread
+        byte_t *    tex_buffer_colour_;
+        byte_t *    tex_buffer_depth_;
 
-        uint16_t     mWidth;
-        uint16_t     mHeight;
+        gl::TextureStream   texture_depth_;
+        gl::TextureStream   texture_colour_;
 
-        float       mDepthHist[S9_OPENNI_MAX_DEPTH];
+        uint16_t     width_;
+        uint16_t     height_;
 
-        bool        mReady = false;
+        float       depth_hist_[S9_OPENNI_MAX_DEPTH];
 
-        // NiTE functionality
-        NiteUserTrackerHandle mUserTrackerHandle = nullptr;
+        bool        ready_ = false;
 
         ~SharedObj();
 
       };
 
-      std::shared_ptr<SharedObj> _obj;
-
+      std::shared_ptr<SharedObj> obj_;
 
     public:
       OpenNIBase() {};
       OpenNIBase(const char * deviceURI); // openni::ANY_DEVICE normally
-      void update();
+      
+      void update(); // thread safe for update
+      void update_textures(); // Update the textures - main thread only
+      bool ready() const { return obj_->ready_; }
+
+      const openni::Device& device() const {return obj_->device_; }
+
+      gl::TextureStream texture_depth() {return obj_->texture_depth_; }
+      gl::TextureStream texture_colour() {return obj_->texture_colour_; }
 
       static void calculateHistogram(float* pHistogram, int histogramSize, const openni::VideoFrameRef& frame);
    
@@ -152,19 +162,20 @@ typedef struct  {
 
 
     /**
-     * NiTE 2 Tracker that builds on the base and tracks the skeleton
+     * NiTE 2 Tracker that works with the base in order to track skeletons
      * Would have extended the nite UserTracker class but decided to poll instead
      */
      
-    class SEBUROAPI OpenNISkeleton : public OpenNIBase {
+    class SEBUROAPI OpenNISkeleton {
       
     public:
       
       OpenNISkeleton() {};
-      OpenNISkeleton(const char * deviceURI);
-      ~OpenNISkeleton();
+      OpenNISkeleton(const OpenNIBase &base);
+      ~OpenNISkeleton() {};
       void update();
 
+    
       /**
        * A Decorator class around the NiteUserData providing convinience funtions
        */
@@ -223,14 +234,28 @@ typedef struct  {
       // This assumes just one stream / frame as you can imagine
       // I.e one timestamp etc
 
-      std::vector<User> vUsers; // Collection of current users
+      struct SharedObject {
 
-      NitePlane   mFloor;
-      float       mFloorConfidence;
-      NiteUserMap         mUserMap;
-      unsigned long long  mTimeStamp;
+        SharedObject(const OpenNIBase &ob) : base(ob) { ready = false; }
+        ~SharedObject();
 
-      NiteUserTrackerFrame *pNiteFrame = nullptr; // Current frame
+        std::vector<User> vUsers; // Collection of current users
+
+        NitePlane   mFloor;
+        float       mFloorConfidence;
+        NiteUserMap         mUserMap;
+        unsigned long long  mTimeStamp;
+        bool  ready;
+
+        NiteUserTrackerHandle user_tracker_handle_ = nullptr;
+        NiteUserTrackerFrame *pNiteFrame = nullptr; // Current frame
+
+        const OpenNIBase &base; // reference to the base class
+
+      };
+
+
+      std::shared_ptr<SharedObject> obj_ = nullptr;
 
 
     };

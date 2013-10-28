@@ -50,7 +50,7 @@ namespace s9{
 
     }
 
-    unsigned char * image_data() const { return obj_->image_data;}
+    byte_t * image_data() const { return obj_->image_data;}
 
     size_t width() const {return width_;}
     size_t height() const {return height_;}
@@ -63,7 +63,7 @@ namespace s9{
   protected:
 
 #ifdef _SEBURO_OSX
-    unsigned char * imageReference (const char *imageName);
+    byte_t * imageReference (const char *imageName);
 #endif
 
     struct SharedObj{
@@ -75,7 +75,7 @@ namespace s9{
         delete[] image_data;
       }
 
-      unsigned char * image_data;
+      byte_t * image_data;
     };
 
     std::shared_ptr<SharedObj> obj_;

@@ -23,7 +23,7 @@ void BasicApp::init(){
 
    // camera_.set_pos(glm::vec3(0,0,20.0f));
 
-    link(*this);
+    addWindowListener(this);
 
     cuboid_ = Cuboid(3.0,2.0,1.0);
     Cuboid v = cuboid_;

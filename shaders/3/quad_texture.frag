@@ -15,5 +15,5 @@ uniform sampler2DRect uBaseTex;
 void main() {
   vec2 texsize = textureSize(uBaseTex); 
 	vec4 texcolor = texture(uBaseTex,vTexCoord * texsize);
-	fragColor = texcolor;
+	fragColor = vec4(texcolor.rgb,1.0);
 }

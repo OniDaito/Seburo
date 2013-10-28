@@ -43,7 +43,7 @@ namespace s9 {
 			size_t mx_, my_;
 			uint16_t flag_;
 
-			static void initGL(const int w, const int h,
+			static void initGL(const size_t w, const size_t h,
 				const int major, const int minor, const int depthbits);
 
 			static void _error_callback(int error, const char* description);
@@ -74,7 +74,7 @@ namespace s9 {
 
 		public:
 
-			GLFWApp (WindowApp &app, const int w = 800, const int h = 600, 
+			GLFWApp (WindowApp &app, const size_t w = 800, const size_t h = 600, 
 				bool fullscreen = false, int argc = 0, const char * argv[] = NULL, 
 				const char * title = "SEBURO", const int major = -1, const int minor = -1, 
 				const int depthbits = 16 );

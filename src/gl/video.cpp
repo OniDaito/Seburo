@@ -29,16 +29,13 @@ VidCam::VidCam(std::string dev, size_t w, size_t h, size_t fps) : obj_( shared_p
 	obj_->cam_->startCapture(dev,w,h,fps);
 #endif
 
-	obj_->texture_.set_tex_data(obj_->cam_->getBuffer());
-	obj_->texture_.start();
-
 	obj_->_fps = fps; 
 
 	CXGLERROR
 }
 
 void VidCam::update() {
-	obj_->texture_.update();
+	obj_->texture_.update(obj_->cam_->getBuffer());
 	//obj_->texture_.update(obj_->cam_->getBuffer());
 }
 
@@ -46,7 +43,6 @@ void VidCam::stop(){
 #ifdef _SEBURO_LINUX
 	obj_->cam_->stop();
 #endif	
-	obj_->texture_.stop();
 }
 
 void VidCam::setControl(unsigned int id, int value) {

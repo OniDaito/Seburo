@@ -22,7 +22,7 @@ using namespace s9::gl;
  * \TODO - Need more options! A lot more options! :O
  */
 
-Texture::Texture(size_t width, size_t height, ColourComponent format, ColourType type, const char* data) {
+Texture::Texture(size_t width, size_t height, ColourComponent format, ColourType type, const byte_t* data) {
   
   assert (width > 0);
   assert (height > 0);
@@ -36,7 +36,8 @@ Texture::Texture(size_t width, size_t height, ColourComponent format, ColourType
   glGenTextures(1, &(id_));
 
   // Automatic detection of power of two.
-  if ( !(width & (width - 1)) == 0  && !(height & (height - 1)))
+
+  if (((width_ & (~width_ + 1)) == width_) && ((height_ & (~height_ + 1)) == height_))
     gl_type_ = GL_TEXTURE_2D;
   else 
     gl_type_ = GL_TEXTURE_RECTANGLE;
@@ -83,6 +84,7 @@ Texture::Texture(size_t width, size_t height, ColourComponent format, ColourType
       break;
     
     default:
+      cerr << "SEBURO ERROR - No Format specified for texture." << endl;
       assert(false);
       break;
 
@@ -106,7 +108,7 @@ Texture::Texture(const Image &image){
   CXGLERROR
 
   // Automatic detection of power of two.
-  if ( !(width_ & (width_ - 1)) == 0  && !(height_ & (height_ - 1)))
+  if (((width_ & (~width_ + 1)) == width_) && ((height_ & (~height_ + 1)) == height_))
     gl_type_ = GL_TEXTURE_2D;
   else 
     gl_type_ = GL_TEXTURE_RECTANGLE;
@@ -160,7 +162,7 @@ Texture::Texture(const Image &image){
 
 }
 
-void Texture::update(unsigned char * data) {
+void Texture::update(byte_t * data) {
  
   bind();
 
@@ -194,6 +196,7 @@ void Texture::update(unsigned char * data) {
       break;
     }
     default: {
+      cerr << "SEBURO ERROR - No Format specified for texture update." << endl;
       assert(false);
       break;
     }
@@ -218,84 +221,58 @@ void Texture::unbind(){ glBindTexture(gl_type_, 0); }
 
 
 /*
- * Texture Streamer with a PBO
+ * Texture Streamer with a pointer to some memory we stream in
+ * \todo eventually pass in an image that can change (when images replace byte_t arrays)
  */
 
-TextureStream::TextureStream(size_t width, size_t height, ColourComponent format = RGB) : obj_( shared_ptr<SharedObj> (new SharedObj())){
+TextureStream::TextureStream(size_t width, size_t height, ColourComponent format, 
+    ColourType type, const byte_t* data) : Texture(width,height,format,type,data),
+    obj_( shared_ptr<SharedObj> (new SharedObj())){
 
-
-  width_ = width;
-  height_ = height;
-  assert (width_ > 0);
-  assert (height > 0);
-
-  format_ = format;
- 
-  glGenTextures(1, &(id_));
-  
-  ///\todo assuming texture rect?
-
-  glBindTexture(GL_TEXTURE_RECTANGLE, id_);
+  bind();
 
   glGenBuffers(1, &(tex_buffer_));
   glBindBuffer(GL_PIXEL_UNPACK_BUFFER, tex_buffer_);
   int texsize = width_ * height_;
 
   ///\todo assuming unsigned byte?
-  switch (format_){
+  switch (format){
     case RGBA:
-      glTexImage2D(GL_TEXTURE_RECTANGLE, 0, 4, width_, height_, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+    case BGRA:
       glBufferData(GL_PIXEL_UNPACK_BUFFER, texsize * 4, NULL, GL_STREAM_DRAW);
       break;
     
     case RGB:
-      glTexImage2D(GL_TEXTURE_RECTANGLE, 0, 3, width_, height_, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+    case BGR:
       glBufferData(GL_PIXEL_UNPACK_BUFFER, texsize * 3, NULL, GL_STREAM_DRAW);
       break;
-    
+
     case GREY: 
     case RED:
-      glTexImage2D(GL_TEXTURE_RECTANGLE, 0, 1, width_, height_, 0, GL_RED, GL_UNSIGNED_BYTE, NULL);
       glBufferData(GL_PIXEL_UNPACK_BUFFER, texsize, NULL, GL_STREAM_DRAW);
-      break;
-    
-    case BGR:
-      glTexImage2D(GL_TEXTURE_RECTANGLE, 0, 1, width_, height_, 0, GL_BGR, GL_UNSIGNED_BYTE, NULL);
-      glBufferData(GL_PIXEL_UNPACK_BUFFER, texsize * 3, NULL, GL_STREAM_DRAW);
-      break;
-    
-    case BGRA:
-      glTexImage2D(GL_TEXTURE_RECTANGLE, 0, 1, width_, height_, 0, GL_BGRA, GL_UNSIGNED_BYTE, NULL);
-      glBufferData(GL_PIXEL_UNPACK_BUFFER, texsize * 4, NULL, GL_STREAM_DRAW);
       break;
   
     default:
+      cerr << "SEBURO ERROR - No Format specified for texturestream." << endl;
       assert(false);
       break;
 
   }
 
   glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0);
-  glBindTexture(GL_TEXTURE_RECTANGLE, 0);
+
+  unbind();
 
   CXGLERROR
 
 }
 
-///\todo dont like this function ><
-void TextureStream::set_tex_data(void *data){
-  obj_->tex_data = data;
-}
 
-void TextureStream::start() {
-  CXGLERROR
-}
+void TextureStream::update(byte_t *data){
 
-void TextureStream::stop() {
-   CXGLERROR
-}
+  if (data == nullptr)
+    return;
 
-void TextureStream::update(){
   int texsize = width_ * height_;
   bind();
 
@@ -303,29 +280,48 @@ void TextureStream::update(){
 
   obj_->pbo_memory = glMapBuffer(GL_PIXEL_UNPACK_BUFFER, GL_WRITE_ONLY);
   CXGLERROR
+
+  GLenum tc  = GL_UNSIGNED_BYTE;
+  switch (colour_type_) {
+    case UNSIGNED_BYTE:
+      tc = GL_UNSIGNED_BYTE;
+    break;
+
+    case FLOAT:
+      tc = GL_FLOAT;
+    break;
+
+    default:
+      tc = GL_UNSIGNED_BYTE;
+    break;
+  }
+
+
   switch (format_){
     
     case RGBA:
-      memcpy(obj_->pbo_memory, obj_->tex_data, texsize * 4);
+    case BGRA:
+      memcpy(obj_->pbo_memory, data, texsize * 4);
       CXGLERROR
       glUnmapBuffer(GL_PIXEL_UNPACK_BUFFER);
-      glTexSubImage2D(GL_TEXTURE_RECTANGLE, 0, 0, 0, width_, height_,GL_RGBA, GL_UNSIGNED_BYTE, 0);
+      glTexSubImage2D(gl_type_, 0, 0, 0, width_, height_,GL_RGBA, tc, 0);
       break;
     
     case RGB:
-      memcpy(obj_->pbo_memory, obj_->tex_data, texsize * 3);
+    case BGR:
+      memcpy(obj_->pbo_memory, data, texsize * 3);
       CXGLERROR
       glUnmapBuffer(GL_PIXEL_UNPACK_BUFFER);
-      glTexSubImage2D(GL_TEXTURE_RECTANGLE, 0, 0, 0, width_, height_, GL_RGB, GL_UNSIGNED_BYTE, 0);
+      glTexSubImage2D(gl_type_, 0, 0, 0, width_, height_, GL_RGB, tc, 0);
 
       CXGLERROR
       break;
     
     case GREY:
     case RED:
-      memcpy(obj_->pbo_memory, obj_->tex_data, texsize);
+      memcpy(obj_->pbo_memory, data, texsize);
       glUnmapBuffer(GL_PIXEL_UNPACK_BUFFER);
-      glTexSubImage2D(GL_TEXTURE_RECTANGLE, 0, 0, 0, width_, height_, GL_RED, GL_UNSIGNED_BYTE, 0);
+      glTexSubImage2D(gl_type_, 0, 0, 0, width_, height_, GL_RED, tc, 0);
 
       CXGLERROR
       break;
@@ -345,7 +341,3 @@ TextureStream::~TextureStream() {
 
 }
 
-
-void TextureStream::bind() { glBindTexture(GL_TEXTURE_RECTANGLE, id_); }
-
-void TextureStream::unbind(){ glBindTexture(GL_TEXTURE_RECTANGLE, 0); }

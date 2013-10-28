@@ -15,8 +15,10 @@
 #include "s9/geometry.hpp"
 #include "s9/gl/shader.hpp"
 #include "s9/gl/glfw_app.hpp"
-#include "s9/gl/fbo.hpp"
 #include "s9/openni/openni.hpp"
+#include "s9/node.hpp"
+#include "s9/gl/drawable.hpp"
+#include "s9/gl/texture.hpp"
 
 #include <anttweakbar/AntTweakBar.h>
 
@@ -29,6 +31,9 @@ namespace s9 {
 
   class OpenNIApp : public WindowApp, WindowResponder{
   public:
+
+    ~OpenNIApp();
+
     void init();
     void display(double_t dt);
     void update(double_t dt);
@@ -41,12 +46,22 @@ namespace s9 {
 
   protected:
   
+    s9::oni::OpenNIBase openni_;
+    s9::oni::OpenNISkeleton skeleton_;
 
-    s9::oni::OpenNISkeleton openni_;
+    Quad quad_;
+    Image image_;
+    gl::Shader shader_;
+    Node node_depth_;
+    Node node_colour_;
+    glm::mat4 model_;
+
+    byte_t *bytes_;
+
+    gl::Texture texture_;
 
     InertiaCam camera_;
-    OrthoCamera ortho_camera_;
-    
+    Camera ortho_camera_;    
   };
 }
 

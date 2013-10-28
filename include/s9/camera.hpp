@@ -27,9 +27,7 @@ namespace s9{
 
 		Camera();
 			
-		void resize(size_t w, size_t h){ 
-			set_ratio( static_cast<float>(w) / h);
-		}
+		void resize(size_t w, size_t h);
 
 		void set_near(float n) {near_ = n; };
 		void set_far(float n) {far_ = n; };
@@ -47,11 +45,18 @@ namespace s9{
 		void pitch(float a);
 		void roll(float a);
 
+		void set_orthographic(bool b) {orthographic_ = b;}
+		bool orthographic() {return orthographic_;}
+
 		void reset();
 
 		void set_pos(glm::vec3 p) { pos_ = p; }
 		void set_look(glm::vec3 p) { look_ = p; }
 		void set_up(glm::vec3 p) { up_ = p; }
+		void set_left(size_t p) { left_ = p; }
+		void set_top(size_t p) { top_ = p; }
+		void set_right(size_t p) { right_ = p; }
+		void set_bottom(size_t p) { bottom_ = p; }
 		
 		glm::mat4 view_matrix() { return view_matrix_; };
 		glm::mat4 projection_matrix() { return projection_matrix_; };
@@ -64,11 +69,15 @@ namespace s9{
 		glm::mat4 view_matrix_;
 		glm::mat4 projection_matrix_;
 
+		bool orthographic_;
 		float ratio_, far_, near_, field_;
+		size_t left_, top_, bottom_, right_; // Held for orthographic as well
 		
 		glm::vec3 pos_, look_, up_;
 
 	};
+
+
 
 	/*
 
