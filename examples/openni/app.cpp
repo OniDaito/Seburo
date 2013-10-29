@@ -54,6 +54,10 @@ void OpenNIApp::init(){
 void OpenNIApp::update(double_t dt) {
     
     skeleton_.update();
+
+    OpenNISkeleton::User user = skeleton_.user(1);
+    if (user.isTracked())
+        cout << user.skeleton() << endl;
 }
 
 OpenNIApp::~OpenNIApp(){

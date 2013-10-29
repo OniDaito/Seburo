@@ -18,7 +18,7 @@ nite::SkeletonState OpenNISkeleton::sSkeletonStates[S9_NITE_MAX_USERS] = {nite::
 
 
 inline void USER_MESSAGE (const OpenNISkeleton::User& user, std::string msg) {
-  cout << "SEBURO Nite - User: " << user.getId() << ", " << msg << endl;
+  cout << "SEBURO Nite - User: " << user.id() << ", " << msg << endl;
 }
 
 OpenNIBase::SharedObj::~SharedObj() {
@@ -306,25 +306,25 @@ nite::Status OpenNISkeleton::readFrame() {
     User ud (pv[i]);
 
     bool found = false;
-    for (User dd : obj_->vUsers){
-      if (ud.id == dd.id){
+    for (User &dd : obj_->vUsers){
+      if (ud.id() == dd.id()){
         found = true;
         dd = ud;
-        userAround.insert(ud.id);
+        userAround.insert(ud.id());
         break;
       }
     }
 
     if (!found){
       obj_->vUsers.push_back(ud);
-      userAround.insert(ud.id);
+      userAround.insert(ud.id());
     }
   }
 
   // Remove users not around any more - stale data
 
   for (vector<User>::iterator it = obj_->vUsers.begin(); it != obj_->vUsers.end();) {
-    if (userAround.find(it->id) == userAround.end()){
+    if (userAround.find(it->id()) == userAround.end()){
       it = obj_->vUsers.erase(it);
     } else {
       it++;
@@ -379,23 +379,107 @@ nite::Status OpenNISkeleton::setSkeletonSmoothingFactor(float factor) {
 }
 
 /**
+ * Copy the values from the NiTE Skeleton to the S9 Skeleton on this user
+ */
+
+void OpenNISkeleton::User::copySkeleton(){
+  
+  s9::Skeleton skel = skeleton();
+  nite::Skeleton nskel = getSkeletonNiTE();
+
+  nite::SkeletonJoint njoint;
+  NiteQuaternion orientation;
+
+  int idx = 0;
+
+  ///\todo confidence checking here? Do we want to add that or deal with it here?
+
+  njoint = nskel.getJoint(nite::JOINT_TORSO);
+  orientation = njoint.getOrientation();
+  skel.bone(idx++)->rotation = glm::quat(orientation.x, orientation.y, orientation.z, orientation.w );
+
+  njoint = nskel.getJoint(nite::JOINT_NECK);
+  orientation = njoint.getOrientation();
+  skel.bone(idx++)->rotation = glm::quat(orientation.x, orientation.y, orientation.z, orientation.w );
+
+  njoint = nskel.getJoint(nite::JOINT_HEAD);
+  orientation = njoint.getOrientation();
+  skel.bone(idx++)->rotation = glm::quat(orientation.x, orientation.y, orientation.z, orientation.w );
+
+  njoint = nskel.getJoint(nite::JOINT_LEFT_SHOULDER);
+  orientation = njoint.getOrientation();
+  skel.bone(idx++)->rotation = glm::quat(orientation.x, orientation.y, orientation.z, orientation.w );
+
+  njoint = nskel.getJoint(nite::JOINT_LEFT_ELBOW);
+  orientation = njoint.getOrientation();
+  skel.bone(idx++)->rotation = glm::quat(orientation.x, orientation.y, orientation.z, orientation.w );
+
+  njoint = nskel.getJoint(nite::JOINT_LEFT_HAND);
+  orientation = njoint.getOrientation();
+  skel.bone(idx++)->rotation = glm::quat(orientation.x, orientation.y, orientation.z, orientation.w );
+
+  njoint = nskel.getJoint(nite::JOINT_RIGHT_SHOULDER);
+  orientation = njoint.getOrientation();
+  skel.bone(idx++)->rotation = glm::quat(orientation.x, orientation.y, orientation.z, orientation.w );
+
+  njoint = nskel.getJoint(nite::JOINT_RIGHT_ELBOW);
+  orientation = njoint.getOrientation();
+  skel.bone(idx++)->rotation = glm::quat(orientation.x, orientation.y, orientation.z, orientation.w );
+
+  njoint = nskel.getJoint(nite::JOINT_RIGHT_HAND);
+  orientation = njoint.getOrientation();
+  skel.bone(idx++)->rotation = glm::quat(orientation.x, orientation.y, orientation.z, orientation.w );
+
+  njoint = nskel.getJoint(nite::JOINT_LEFT_HIP);
+  orientation = njoint.getOrientation();
+  skel.bone(idx++)->rotation = glm::quat(orientation.x, orientation.y, orientation.z, orientation.w );
+
+  njoint = nskel.getJoint(nite::JOINT_LEFT_KNEE);
+  orientation = njoint.getOrientation();
+  skel.bone(idx++)->rotation = glm::quat(orientation.x, orientation.y, orientation.z, orientation.w );
+
+  njoint = nskel.getJoint(nite::JOINT_LEFT_FOOT);
+  orientation = njoint.getOrientation();
+  skel.bone(idx++)->rotation = glm::quat(orientation.x, orientation.y, orientation.z, orientation.w );
+
+  njoint = nskel.getJoint(nite::JOINT_RIGHT_HIP);
+  orientation = njoint.getOrientation();
+  skel.bone(idx++)->rotation = glm::quat(orientation.x, orientation.y, orientation.z, orientation.w );
+
+  njoint = nskel.getJoint(nite::JOINT_RIGHT_KNEE);
+  orientation = njoint.getOrientation();
+  skel.bone(idx++)->rotation = glm::quat(orientation.x, orientation.y, orientation.z, orientation.w );
+
+  njoint = nskel.getJoint(nite::JOINT_RIGHT_FOOT);
+  orientation = njoint.getOrientation();
+  skel.bone(idx++)->rotation = glm::quat(orientation.x, orientation.y, orientation.z, orientation.w );
+
+  /*
+   const nite::SkeletonJoint& head = user.getSkeleton().getJoint(nite::JOINT_HEAD);
+      if (head.getPositionConfidence() > .5)
+        cout << user.id() << "," << head.getPosition().x << "," << head.getPosition().y << "," << head.getPosition().z << endl;
+  */
+}
+
+
+/**
  * Keep a static set of bools and states for the all users here
  */
 
 void OpenNISkeleton::updateUsersState(const User& user, unsigned long long ts) {
   if (user.isNew())
     USER_MESSAGE(user, "New");
-  else if (user.isVisible() && !sVisibleUsers[user.getId()])
+  else if (user.isVisible() && !sVisibleUsers[user.id()])
     USER_MESSAGE(user,"Visible");
-  else if (!user.isVisible() && sVisibleUsers[user.getId()])
+  else if (!user.isVisible() && sVisibleUsers[user.id()])
     USER_MESSAGE(user,"Out of Scene");
   else if (user.isLost())
     USER_MESSAGE(user,"Lost");
 
-  sVisibleUsers[user.getId()] = user.isVisible();
+  sVisibleUsers[user.id()] = user.isVisible();
 
-  if(sSkeletonStates[user.getId()] != user.getSkeleton().getState())  {
-    switch(sSkeletonStates[user.getId()] = user.getSkeleton().getState()) {
+  if(sSkeletonStates[user.id()] != user.getSkeletonNiTE().getState())  {
+    switch(sSkeletonStates[user.id()] = user.getSkeletonNiTE().getState()) {
     case nite::SKELETON_NONE:
       USER_MESSAGE(user,"Stopped tracking.");
       break;
@@ -417,6 +501,19 @@ void OpenNISkeleton::updateUsersState(const User& user, unsigned long long ts) {
 }
 
 /**
+ * Given a User ID, return a copy of that user, if they exist.
+ */
+
+OpenNISkeleton::User OpenNISkeleton::user(int id){
+  for (User user : obj_->vUsers) {
+    if (user.id() == id){
+      return user;
+    }
+  }
+  return User(); // A blank user
+}
+
+/**
  * Called as often as possible to grab a new frame and update the user data
  */
 
@@ -434,20 +531,16 @@ void OpenNISkeleton::update() {
   }
 
   // If we have users, check if they are new and start tracking or continue tracking
-  for (User user : obj_->vUsers) {
+  for (User &user : obj_->vUsers) {
 
     updateUsersState(user, obj_->mTimeStamp);
     if (user.isNew()) {
-      rc = (nite::Status)niteStartSkeletonTracking(obj_->user_tracker_handle_, user.getId());
+      rc = (nite::Status)niteStartSkeletonTracking(obj_->user_tracker_handle_, user.id());
       if (rc != nite::STATUS_OK) {
-        cerr << "SEBURO NITE Error - Cannot start skeleton tracking for userid: " << user.getId() << ", Error - " << rc << endl;
+        cerr << "SEBURO NITE Error - Cannot start skeleton tracking for userid: " << user.id() << ", Error - " << rc << endl;
       }
-
-    }
-    else if (user.getSkeleton().getState() == nite::SKELETON_TRACKED) {
-      const nite::SkeletonJoint& head = user.getSkeleton().getJoint(nite::JOINT_HEAD);
-      if (head.getPositionConfidence() > .5)
-        cout << user.getId() << "," << head.getPosition().x << "," << head.getPosition().y << "," << head.getPosition().z << endl;
+    } else if (user.getSkeletonNiTE().getState() == nite::SKELETON_TRACKED) {
+      user.copySkeleton();   
     }
   }
 }

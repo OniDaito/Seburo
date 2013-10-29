@@ -19,6 +19,7 @@
 #include <set>
 
 #include "s9/gl/texture.hpp"
+#include "s9/skeleton.hpp"
 
 #define S9_OPENNI_MAX_DEPTH 10000
 #define S9_NITE_MAX_USERS 10
@@ -164,6 +165,8 @@ typedef struct  {
     /**
      * NiTE 2 Tracker that works with the base in order to track skeletons
      * Would have extended the nite UserTracker class but decided to poll instead
+     * This class combines the NiTE skeleton with our more general s9::Skeleton 
+     * 
      */
      
     class SEBUROAPI OpenNISkeleton {
@@ -173,62 +176,103 @@ typedef struct  {
       OpenNISkeleton() {};
       OpenNISkeleton(const OpenNIBase &base);
       ~OpenNISkeleton() {};
-      void update();
+      
+      void  update();
 
+      /// A basic typedef that shows the state of the user
+      typedef enum {
+        BLANK = 0,
+        VISIBLE = 1,
+        NEW = 2,
+        LOST = 4,
+      } UserState;
+    
     
       /**
        * A Decorator class around the NiteUserData providing convinience funtions
+       * and an s9::Skeleton for ease of use.
        */
-      struct User : public NiteUserData {
+      class User {
 
-        User (NiteUserData niteuser){
-          id = niteuser.id;
-          boundingBox = niteuser.boundingBox;
-          centerOfMass = niteuser.centerOfMass;
-          state = niteuser.state;
-          skeleton = niteuser.skeleton;
-          poses[0] = niteuser.poses[0];
-          poses[1] = niteuser.poses[1];      
+      protected:
+        void copySkeleton();
+
+        s9::Skeleton skeleton_; /// The S9 Skeleton - a little nicer than the NiTE one!
+        NiteSkeleton skeleton_nite_;
+        UserState state_;
+        int id_;
+
+      public:
+
+        User() { 
+          id_ = -1;
+          state_ = BLANK;
         }
+        
+        User (NiteUserData niteuser){
+          id_ = (int)niteuser.id;
+          //boundingBox_ = niteuser.boundingBox; ///\todo replace this
+          //centerOfMass = niteuser.centerOfMass; ///\todo replace with GLM
+          state_ = (UserState)niteuser.state;
+          
+          skeleton_nite_ = niteuser.skeleton;
+          //poses[0] = niteuser.poses[0];
+          //poses[1] = niteuser.poses[1];
+
+          skeleton_ = s9::Skeleton(OPENNI_SKELETON);
+
+        }
+
+       /* const User operator= (const User& user) {
+          id_ = user.id_;
+          state_ = user.state_;
+          skeleton_ = user.skeleton_;
+          skeleton_nite_ = niteuser.skeleton;
+        }*/
+
 
         User operator=(NiteUserData niteuser) {
-          id = niteuser.id;
-          boundingBox = niteuser.boundingBox;
-          centerOfMass = niteuser.centerOfMass;
-          state = niteuser.state;
-          skeleton = niteuser.skeleton;
-          poses[0] = niteuser.poses[0];
-          poses[1] = niteuser.poses[1];    
+          id_ = (int)niteuser.id;
+          state_ = (UserState)niteuser.state;
+          skeleton_ = s9::Skeleton(OPENNI_SKELETON);
+          skeleton_nite_ = niteuser.skeleton;
         }
 
-        nite::UserId getId() const {return id;}
-
-       // const BoundingBox& getBoundingBox() const {return (const BoundingBox&)boundingBox;}
+        int id() const { return id_; }
 
         
+
+       // const BoundingBox& getBoundingBox() const {return (const BoundingBox&)boundingBox;}
        // const Point3f& getCenterOfMass() const {return (const Point3f&)centerOfMass;}
 
 
-        bool isNew() const {return (state & NITE_USER_STATE_NEW) != 0;}
-        bool isVisible() const {return (state & NITE_USER_STATE_VISIBLE) != 0;}
-        bool isLost() const {return (state & NITE_USER_STATE_LOST) != 0;}
+        bool isNew() const      {return (state_ & NEW) != 0;}
+        bool isVisible() const  {return (state_ & VISIBLE) != 0;}
+        bool isLost() const     {return (state_ & LOST) != 0;}
+        bool isTracked() const  {return (state_ & VISIBLE) != 0 && skeleton_nite_.state == NITE_SKELETON_TRACKED; }
         
-        const nite::Skeleton& getSkeleton() const {return (const nite::Skeleton&)skeleton;}
-        const nite::PoseData& getPose(nite::PoseType type) const {return (const nite::PoseData&)poses[type];}
-      
+        const nite::Skeleton&   getSkeletonNiTE() const {return (const nite::Skeleton&)skeleton_nite_;}
+        //const nite::PoseData&   getPose(nite::PoseType type) const {return (const nite::PoseData&)poses[type];}
+        const s9::Skeleton&     skeleton() const {return skeleton_;}
 
+        friend class OpenNISkeleton;
+    
       };
+
+      User user(int id); ///\todo a const faster version for direct access?
 
     protected:
       static bool sVisibleUsers[S9_NITE_MAX_USERS];
       static nite::SkeletonState sSkeletonStates[S9_NITE_MAX_USERS];
 
-      nite::Status readFrame();
-      nite::Status convertJointCoordinatesToDepth(float x, float y, float z, float* pOutX, float* pOutY) const;
-      nite::Status convertDepthCoordinatesToJoint(int x, int y, int z, float* pOutX, float* pOutY) const;
-      float getSkeletonSmoothingFactor() const;
-      nite::Status setSkeletonSmoothingFactor(float factor);
-      void updateUsersState(const User& user, unsigned long long ts);
+      nite::Status  readFrame();
+      nite::Status  convertJointCoordinatesToDepth(float x, float y, float z, float* pOutX, float* pOutY) const;
+      nite::Status  convertDepthCoordinatesToJoint(int x, int y, int z, float* pOutX, float* pOutY) const;
+      float         getSkeletonSmoothingFactor() const;
+      nite::Status  setSkeletonSmoothingFactor(float factor);
+      void          updateUsersState(const User& user, unsigned long long ts);
+      void          setS9Skeleton(const User& user);
+
 
 
       // This assumes just one stream / frame as you can imagine
@@ -249,6 +293,7 @@ typedef struct  {
 
         NiteUserTrackerHandle user_tracker_handle_ = nullptr;
         NiteUserTrackerFrame *pNiteFrame = nullptr; // Current frame
+
 
         const OpenNIBase &base; // reference to the base class
 
