@@ -1,0 +1,12 @@
+\hypertarget{group__native}{\section{\-Native access}
+\label{group__native}\index{\-Native access@{\-Native access}}
+}
+$\ast$$\ast$\-By using the native \-A\-P\-I, you assert that you know what you're doing and how to fix problems caused by using it. \-If you don't, you shouldn't be using it.$\ast$$\ast$
+
+\-Before the inclusion of \hyperlink{glfw3native_8h_source}{glfw3native.\-h}, you must define exactly one window \-A\-P\-I macro and exactly one context \-A\-P\-I macro. \-Failure to do this will cause a compile-\/time error.
+
+\-The available window \-A\-P\-I macros are\-: $\ast$ `\-G\-L\-F\-W\-\_\-\-E\-X\-P\-O\-S\-E\-\_\-\-N\-A\-T\-I\-V\-E\-\_\-\-W\-I\-N32` $\ast$ `\-G\-L\-F\-W\-\_\-\-E\-X\-P\-O\-S\-E\-\_\-\-N\-A\-T\-I\-V\-E\-\_\-\-C\-O\-C\-O\-A` $\ast$ `\-G\-L\-F\-W\-\_\-\-E\-X\-P\-O\-S\-E\-\_\-\-N\-A\-T\-I\-V\-E\-\_\-\-X11`
+
+\-The available context \-A\-P\-I macros are\-: $\ast$ `\-G\-L\-F\-W\-\_\-\-E\-X\-P\-O\-S\-E\-\_\-\-N\-A\-T\-I\-V\-E\-\_\-\-W\-G\-L` $\ast$ `\-G\-L\-F\-W\-\_\-\-E\-X\-P\-O\-S\-E\-\_\-\-N\-A\-T\-I\-V\-E\-\_\-\-N\-S\-G\-L` $\ast$ `\-G\-L\-F\-W\-\_\-\-E\-X\-P\-O\-S\-E\-\_\-\-N\-A\-T\-I\-V\-E\-\_\-\-G\-L\-X` $\ast$ `\-G\-L\-F\-W\-\_\-\-E\-X\-P\-O\-S\-E\-\_\-\-N\-A\-T\-I\-V\-E\-\_\-\-E\-G\-L`
+
+\-These macros select which of the native access functions that are declared and which platform-\/specific headers to include. \-It is then up your (by definition platform-\/specific) code to handle which of these should be defined. 

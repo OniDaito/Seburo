@@ -1,0 +1,35 @@
+\hypertarget{classs9_1_1AllocationPolicyNew}{\section{s9\-:\-:\-Allocation\-Policy\-New \-Class \-Reference}
+\label{classs9_1_1AllocationPolicyNew}\index{s9\-::\-Allocation\-Policy\-New@{s9\-::\-Allocation\-Policy\-New}}
+}
+
+
+{\ttfamily \#include $<$geometry.\-hpp$>$}
+
+
+
+\-Inherited by \hyperlink{classs9_1_1GeometryT}{s9\-::\-Geometry\-T$<$ Vertex4, Face4, Allocation\-Policy\-New $>$}{\ttfamily  \mbox{[}private\mbox{]}}.
+
+\subsection*{\-Protected \-Member \-Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classs9_1_1AllocationPolicyNew_aaaa439b82aff0401c8e8e9e5e59b4a53}{{\footnotesize template$<$typename Vertex\-Type $>$ }\\bool {\bfseries allocate\-Vertices} (std\-::unique\-\_\-ptr$<$ \-Vertex\-Type\mbox{[}$\,$\mbox{]}$>$ \&vp, \-Indices\-Type size) const }\label{classs9_1_1AllocationPolicyNew_aaaa439b82aff0401c8e8e9e5e59b4a53}
+
+\item 
+\hypertarget{classs9_1_1AllocationPolicyNew_ac4f40e98e06df1689cf24c3a7de288d0}{bool {\bfseries allocate\-Indices} (std\-::unique\-\_\-ptr$<$ \-Indices\-Type\mbox{[}$\,$\mbox{]}$>$ \&ip, \-Indices\-Type size) const }\label{classs9_1_1AllocationPolicyNew_ac4f40e98e06df1689cf24c3a7de288d0}
+
+\item 
+\hypertarget{classs9_1_1AllocationPolicyNew_a3bc2deceba78201f4c0a17567f28cb1f}{{\footnotesize template$<$typename Face\-Type $>$ }\\bool {\bfseries allocate\-Faces} (std\-::unique\-\_\-ptr$<$ \-Face\-Type\mbox{[}$\,$\mbox{]}$>$ \&fp, \-Indices\-Type size\-\_\-faces, \hyperlink{namespaces9_ad57d1332f8fd67d23f6a1d3520ab785c}{\-Geometry\-Primitive} type) const }\label{classs9_1_1AllocationPolicyNew_a3bc2deceba78201f4c0a17567f28cb1f}
+
+\end{DoxyCompactItemize}
+
+
+\subsection{\-Detailed \-Description}
+\hyperlink{classs9_1_1AllocationPolicyNew}{\-Allocation\-Policy\-New} -\/ default allocation policy using the heap and new \-A \-Policy for the allocation of vertices \& indices to vertices \-We can have other policies should we need to in order to streamline allocation later \-Modern \-C++ \-Design\-: \-Applied \-Generic and \-Design \-Patterns (\-C++ in \-Depth) \-For some reason, we can't return types -\/ is that a template function thing?
+
+\begin{DoxyRefDesc}{\-Todo}
+\item[\hyperlink{todo__todo000013}{\-Todo}]override \mbox{[}\mbox{]} operators \end{DoxyRefDesc}
+
+
+\-The documentation for this class was generated from the following file\-:\begin{DoxyCompactItemize}
+\item 
+include/s9/\hyperlink{geometry_8hpp}{geometry.\-hpp}\end{DoxyCompactItemize}

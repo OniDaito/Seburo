@@ -1,0 +1,94 @@
+\hypertarget{uvc__camera_8hpp}{\section{include/s9/linux/uvc\-\_\-camera.hpp \-File \-Reference}
+\label{uvc__camera_8hpp}\index{include/s9/linux/uvc\-\_\-camera.\-hpp@{include/s9/linux/uvc\-\_\-camera.\-hpp}}
+}
+
+
+\-U\-V\-C \-Camera controller for \-Linux.  
+
+
+{\ttfamily \#include $<$iostream$>$}\*
+{\ttfamily \#include $<$string$>$}\*
+{\ttfamily \#include $<$sstream$>$}\*
+{\ttfamily \#include $<$iomanip$>$}\*
+{\ttfamily \#include $<$stdexcept$>$}\*
+{\ttfamily \#include $<$thread$>$}\*
+{\ttfamily \#include $<$stdio.\-h$>$}\*
+{\ttfamily \#include $<$string.\-h$>$}\*
+{\ttfamily \#include $<$fcntl.\-h$>$}\*
+{\ttfamily \#include $<$unistd.\-h$>$}\*
+{\ttfamily \#include $<$stdint.\-h$>$}\*
+{\ttfamily \#include $<$stdlib.\-h$>$}\*
+{\ttfamily \#include $<$errno.\-h$>$}\*
+{\ttfamily \#include $<$getopt.\-h$>$}\*
+{\ttfamily \#include $<$sys/ioctl.\-h$>$}\*
+{\ttfamily \#include $<$sys/mman.\-h$>$}\*
+{\ttfamily \#include $<$sys/select.\-h$>$}\*
+{\ttfamily \#include $<$sys/time.\-h$>$}\*
+{\ttfamily \#include $<$linux/videodev2.\-h$>$}\*
+{\ttfamily \#include \char`\"{}s9/jpeg.\-h\char`\"{}}\*
+{\ttfamily \#include \char`\"{}s9/colorspaces.\-h\char`\"{}}\*
+\subsection*{\-Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \hyperlink{classUVCVideo}{\-U\-V\-C\-Video}
+\end{DoxyCompactItemize}
+\subsection*{\-Defines}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{uvc__camera_8hpp_a66876870f2d9e98012fa1fe73789f3ed}{\#define {\bfseries \-V4\-L\-\_\-\-B\-U\-F\-F\-E\-R\-S\-\_\-\-D\-E\-F\-A\-U\-L\-T}~8}\label{uvc__camera_8hpp_a66876870f2d9e98012fa1fe73789f3ed}
+
+\item 
+\hypertarget{uvc__camera_8hpp_a8942bb02b4a62e4d8c461c05d1624d6c}{\#define {\bfseries \-V4\-L\-\_\-\-B\-U\-F\-F\-E\-R\-S\-\_\-\-M\-A\-X}~32}\label{uvc__camera_8hpp_a8942bb02b4a62e4d8c461c05d1624d6c}
+
+\item 
+\hypertarget{uvc__camera_8hpp_a82efc5e3fff4311f4c8e77dc57aaf42a}{\#define {\bfseries \-O\-P\-T\-\_\-\-E\-N\-U\-M\-\_\-\-I\-N\-P\-U\-T\-S}~256}\label{uvc__camera_8hpp_a82efc5e3fff4311f4c8e77dc57aaf42a}
+
+\item 
+\hypertarget{uvc__camera_8hpp_abca4473a2948a22a8cfabbbdfb5044f1}{\#define {\bfseries \-O\-P\-T\-\_\-\-S\-K\-I\-P\-\_\-\-F\-R\-A\-M\-E\-S}~257}\label{uvc__camera_8hpp_abca4473a2948a22a8cfabbbdfb5044f1}
+
+\item 
+\hypertarget{uvc__camera_8hpp_a170b40da7fabda13b1a42e8bfa26664a}{\#define {\bfseries \-Y4\-M\-\_\-\-I\-L\-A\-C\-E\-\_\-\-N\-O\-N\-E}~0   /$\ast$ non-\/interlaced, progressive frame $\ast$/}\label{uvc__camera_8hpp_a170b40da7fabda13b1a42e8bfa26664a}
+
+\item 
+\hypertarget{uvc__camera_8hpp_a2701c99cd1806c15c20e5d7b3232c621}{\#define {\bfseries \-Y4\-M\-\_\-\-I\-L\-A\-C\-E\-\_\-\-T\-O\-P\-\_\-\-F\-I\-R\-S\-T}~1   /$\ast$ interlaced, top-\/field first       $\ast$/}\label{uvc__camera_8hpp_a2701c99cd1806c15c20e5d7b3232c621}
+
+\item 
+\hypertarget{uvc__camera_8hpp_a87cf1f14dc82a46decc2e9d76963cb18}{\#define {\bfseries \-Y4\-M\-\_\-\-I\-L\-A\-C\-E\-\_\-\-B\-O\-T\-T\-O\-M\-\_\-\-F\-I\-R\-S\-T}~2   /$\ast$ interlaced, bottom-\/field first    $\ast$/}\label{uvc__camera_8hpp_a87cf1f14dc82a46decc2e9d76963cb18}
+
+\item 
+\hypertarget{uvc__camera_8hpp_aed731e201c859923462cad8bf8a0245a}{\#define {\bfseries \-Y4\-M\-\_\-\-I\-L\-A\-C\-E\-\_\-\-M\-I\-X\-E\-D}~3   /$\ast$ mixed, \char`\"{}refer to frame header\char`\"{}    $\ast$/}\label{uvc__camera_8hpp_aed731e201c859923462cad8bf8a0245a}
+
+\item 
+\hypertarget{uvc__camera_8hpp_a4d6cad59bacccfea0f7f77a4f3892672}{\#define {\bfseries \-Y4\-M\-\_\-\-C\-H\-R\-O\-M\-A\-\_\-420\-J\-P\-E\-G}~0  /$\ast$ 4\-:2\-:0, \-H/\-V centered, for \-J\-P\-E\-G/\-M\-P\-E\-G-\/1 $\ast$/}\label{uvc__camera_8hpp_a4d6cad59bacccfea0f7f77a4f3892672}
+
+\item 
+\hypertarget{uvc__camera_8hpp_a281401942008e70db17538b41665a719}{\#define {\bfseries \-Y4\-M\-\_\-\-C\-H\-R\-O\-M\-A\-\_\-420\-M\-P\-E\-G2}~1  /$\ast$ 4\-:2\-:0, \-H cosited, for \-M\-P\-E\-G-\/2         $\ast$/}\label{uvc__camera_8hpp_a281401942008e70db17538b41665a719}
+
+\item 
+\hypertarget{uvc__camera_8hpp_acd114eef332c18ced7f8f3f8b2182765}{\#define {\bfseries \-Y4\-M\-\_\-\-C\-H\-R\-O\-M\-A\-\_\-420\-P\-A\-L\-D\-V}~2  /$\ast$ 4\-:2\-:0, alternating \-Cb/\-Cr, for \-P\-A\-L-\/\-D\-V $\ast$/}\label{uvc__camera_8hpp_acd114eef332c18ced7f8f3f8b2182765}
+
+\item 
+\hypertarget{uvc__camera_8hpp_a5600d8dde849662d0b290f59086e7862}{\#define {\bfseries \-Y4\-M\-\_\-\-C\-H\-R\-O\-M\-A\-\_\-444}~3  /$\ast$ 4\-:4\-:4, no subsampling, phew.         $\ast$/}\label{uvc__camera_8hpp_a5600d8dde849662d0b290f59086e7862}
+
+\item 
+\hypertarget{uvc__camera_8hpp_ae5ba873d98c4b7ef1b3d5e1262e5e787}{\#define {\bfseries \-Y4\-M\-\_\-\-C\-H\-R\-O\-M\-A\-\_\-422}~4  /$\ast$ 4\-:2\-:2, \-H cosited                     $\ast$/}\label{uvc__camera_8hpp_ae5ba873d98c4b7ef1b3d5e1262e5e787}
+
+\item 
+\hypertarget{uvc__camera_8hpp_a8e3502c3b4af2d9fd7c0f223402da835}{\#define {\bfseries \-Y4\-M\-\_\-\-C\-H\-R\-O\-M\-A\-\_\-411}~5  /$\ast$ 4\-:1\-:1, \-H cosited                     $\ast$/}\label{uvc__camera_8hpp_a8e3502c3b4af2d9fd7c0f223402da835}
+
+\item 
+\hypertarget{uvc__camera_8hpp_a1fc438bfbb334ca984349a67c631ddb9}{\#define {\bfseries \-Y4\-M\-\_\-\-C\-H\-R\-O\-M\-A\-\_\-\-M\-O\-N\-O}~6  /$\ast$ luma plane only                      $\ast$/}\label{uvc__camera_8hpp_a1fc438bfbb334ca984349a67c631ddb9}
+
+\item 
+\hypertarget{uvc__camera_8hpp_ab05dd66c56145ede0bf905b7c09904ea}{\#define {\bfseries \-Y4\-M\-\_\-\-C\-H\-R\-O\-M\-A\-\_\-444\-A\-L\-P\-H\-A}~7  /$\ast$ 4\-:4\-:4 with an alpha channel          $\ast$/}\label{uvc__camera_8hpp_ab05dd66c56145ede0bf905b7c09904ea}
+
+\end{DoxyCompactItemize}
+
+
+\subsection{\-Detailed \-Description}
+\-U\-V\-C \-Camera controller for \-Linux. \begin{DoxyAuthor}{\-Author}
+\-Benjamin \-Blundell $<$\href{mailto:oni@section9.co.uk}{\tt oni@section9.\-co.\-uk}$>$ 
+\end{DoxyAuthor}
+\begin{DoxyDate}{\-Date}
+03/05/2012 
+\end{DoxyDate}

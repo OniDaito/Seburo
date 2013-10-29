@@ -1,0 +1,192 @@
+\hypertarget{group__context}{\section{\-Context handling}
+\label{group__context}\index{\-Context handling@{\-Context handling}}
+}
+\subsection*{\-Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef void($\ast$ \hyperlink{group__context_gabf42b10edde1c4fc71e212e576b9f811}{\-G\-L\-F\-Wglproc} )(void)
+\begin{DoxyCompactList}\small\item\em \-Client \-A\-P\-I function pointer type. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{\-Functions}
+\begin{DoxyCompactItemize}
+\item 
+\-G\-L\-F\-W\-A\-P\-I void \hyperlink{group__context_gafd76c93e15ec8b0b90506a9936a46185}{glfw\-Make\-Context\-Current} (\hyperlink{group__window_ga3c96d80d363e67d13a41b5d1821f3242}{\-G\-L\-F\-Wwindow} $\ast$window)
+\begin{DoxyCompactList}\small\item\em \-Makes the context of the specified window current for the calling thread. \end{DoxyCompactList}\item 
+\-G\-L\-F\-W\-A\-P\-I \hyperlink{group__window_ga3c96d80d363e67d13a41b5d1821f3242}{\-G\-L\-F\-Wwindow} $\ast$ \hyperlink{group__context_gac28d98c655377d81a516bf5ef90780c8}{glfw\-Get\-Current\-Context} (void)
+\begin{DoxyCompactList}\small\item\em \-Returns the window whose context is current on the calling thread. \end{DoxyCompactList}\item 
+\-G\-L\-F\-W\-A\-P\-I void \hyperlink{group__context_gafb827800eedbfcbc97b1e5408df668d7}{glfw\-Swap\-Buffers} (\hyperlink{group__window_ga3c96d80d363e67d13a41b5d1821f3242}{\-G\-L\-F\-Wwindow} $\ast$window)
+\begin{DoxyCompactList}\small\item\em \-Swaps the front and back buffers of the specified window. \end{DoxyCompactList}\item 
+\-G\-L\-F\-W\-A\-P\-I void \hyperlink{group__context_ga12a595c06947cec4967c6e1f14210a8a}{glfw\-Swap\-Interval} (int interval)
+\begin{DoxyCompactList}\small\item\em \-Sets the swap interval for the current context. \end{DoxyCompactList}\item 
+\-G\-L\-F\-W\-A\-P\-I int \hyperlink{group__context_ga9a28c712d35f9e43534e1d03b051c04c}{glfw\-Extension\-Supported} (const char $\ast$extension)
+\begin{DoxyCompactList}\small\item\em \-Returns whether the specified extension is available. \end{DoxyCompactList}\item 
+\-G\-L\-F\-W\-A\-P\-I \hyperlink{group__context_gabf42b10edde1c4fc71e212e576b9f811}{\-G\-L\-F\-Wglproc} \hyperlink{group__context_ga0e8af175218929615c16e74938c10f2a}{glfw\-Get\-Proc\-Address} (const char $\ast$procname)
+\begin{DoxyCompactList}\small\item\em \-Returns the address of the specified function for the current context. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{\-Typedef \-Documentation}
+\hypertarget{group__context_gabf42b10edde1c4fc71e212e576b9f811}{\index{\-Context handling@{\-Context handling}!\-G\-L\-F\-Wglproc@{\-G\-L\-F\-Wglproc}}
+\index{\-G\-L\-F\-Wglproc@{\-G\-L\-F\-Wglproc}!Context handling@{\-Context handling}}
+\subsubsection[{\-G\-L\-F\-Wglproc}]{\setlength{\rightskip}{0pt plus 5cm}typedef void($\ast$ {\bf \-G\-L\-F\-Wglproc})(void)}}\label{group__context_gabf42b10edde1c4fc71e212e576b9f811}
+
+
+\-Client \-A\-P\-I function pointer type. 
+
+\-Generic function pointer used for returning client \-A\-P\-I function pointers without forcing a cast from a regular pointer. 
+
+\subsection{\-Function \-Documentation}
+\hypertarget{group__context_ga9a28c712d35f9e43534e1d03b051c04c}{\index{\-Context handling@{\-Context handling}!glfw\-Extension\-Supported@{glfw\-Extension\-Supported}}
+\index{glfw\-Extension\-Supported@{glfw\-Extension\-Supported}!Context handling@{\-Context handling}}
+\subsubsection[{glfw\-Extension\-Supported}]{\setlength{\rightskip}{0pt plus 5cm}\-G\-L\-F\-W\-A\-P\-I int {\bf glfw\-Extension\-Supported} (
+\begin{DoxyParamCaption}
+\item[{const char $\ast$}]{extension}
+\end{DoxyParamCaption}
+)}}\label{group__context_ga9a28c712d35f9e43534e1d03b051c04c}
+
+
+\-Returns whether the specified extension is available. 
+
+\-This function returns whether the specified \mbox{[}\-Open\-G\-L or context creation \-A\-P\-I extension\mbox{]}(context\-\_\-glext) is supported by the current context. \-For example, on \-Windows both the \-Open\-G\-L and \-W\-G\-L extension strings are checked.
+
+
+\begin{DoxyParams}[1]{\-Parameters}
+\mbox{\tt in}  & {\em extension} & \-The \-A\-S\-C\-I\-I encoded name of the extension. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{\-Returns}
+`\-G\-L\-\_\-\-T\-R\-U\-E` if the extension is available, or `\-G\-L\-\_\-\-F\-A\-L\-S\-E` otherwise.
+\end{DoxyReturn}
+\begin{DoxyRemark}{\-Remarks}
+\-This function may be called from secondary threads.
+\end{DoxyRemark}
+\begin{DoxyNote}{\-Note}
+\-As this functions searches one or more extension strings on each call, it is recommended that you cache its results if it's going to be used frequently. \-The extension strings will not change during the lifetime of a context, so there is no danger in doing this. 
+\end{DoxyNote}
+\hypertarget{group__context_gac28d98c655377d81a516bf5ef90780c8}{\index{\-Context handling@{\-Context handling}!glfw\-Get\-Current\-Context@{glfw\-Get\-Current\-Context}}
+\index{glfw\-Get\-Current\-Context@{glfw\-Get\-Current\-Context}!Context handling@{\-Context handling}}
+\subsubsection[{glfw\-Get\-Current\-Context}]{\setlength{\rightskip}{0pt plus 5cm}\-G\-L\-F\-W\-A\-P\-I {\bf \-G\-L\-F\-Wwindow}$\ast$ {\bf glfw\-Get\-Current\-Context} (
+\begin{DoxyParamCaption}
+\item[{void}]{}
+\end{DoxyParamCaption}
+)}}\label{group__context_gac28d98c655377d81a516bf5ef90780c8}
+
+
+\-Returns the window whose context is current on the calling thread. 
+
+\-This function returns the window whose context is current on the calling thread.
+
+\begin{DoxyReturn}{\-Returns}
+\-The window whose context is current, or `\-N\-U\-L\-L` if no window's context is current.
+\end{DoxyReturn}
+\begin{DoxyRemark}{\-Remarks}
+\-This function may be called from secondary threads.
+\end{DoxyRemark}
+\begin{DoxySeeAlso}{\-See also}
+\hyperlink{group__context_gafd76c93e15ec8b0b90506a9936a46185}{glfw\-Make\-Context\-Current} 
+\end{DoxySeeAlso}
+\hypertarget{group__context_ga0e8af175218929615c16e74938c10f2a}{\index{\-Context handling@{\-Context handling}!glfw\-Get\-Proc\-Address@{glfw\-Get\-Proc\-Address}}
+\index{glfw\-Get\-Proc\-Address@{glfw\-Get\-Proc\-Address}!Context handling@{\-Context handling}}
+\subsubsection[{glfw\-Get\-Proc\-Address}]{\setlength{\rightskip}{0pt plus 5cm}\-G\-L\-F\-W\-A\-P\-I {\bf \-G\-L\-F\-Wglproc} {\bf glfw\-Get\-Proc\-Address} (
+\begin{DoxyParamCaption}
+\item[{const char $\ast$}]{procname}
+\end{DoxyParamCaption}
+)}}\label{group__context_ga0e8af175218929615c16e74938c10f2a}
+
+
+\-Returns the address of the specified function for the current context. 
+
+\-This function returns the address of the specified \mbox{[}client \-A\-P\-I or extension function\mbox{]}(context\-\_\-glext), if it is supported by the current context.
+
+
+\begin{DoxyParams}[1]{\-Parameters}
+\mbox{\tt in}  & {\em procname} & \-The \-A\-S\-C\-I\-I encoded name of the function. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{\-Returns}
+\-The address of the function, or `\-N\-U\-L\-L` if the function is unavailable.
+\end{DoxyReturn}
+\begin{DoxyRemark}{\-Remarks}
+\-This function may be called from secondary threads.
+\end{DoxyRemark}
+\begin{DoxyNote}{\-Note}
+\-The addresses of these functions are not guaranteed to be the same for all contexts, especially if they use different client \-A\-P\-Is or even different context creation hints. 
+\end{DoxyNote}
+\hypertarget{group__context_gafd76c93e15ec8b0b90506a9936a46185}{\index{\-Context handling@{\-Context handling}!glfw\-Make\-Context\-Current@{glfw\-Make\-Context\-Current}}
+\index{glfw\-Make\-Context\-Current@{glfw\-Make\-Context\-Current}!Context handling@{\-Context handling}}
+\subsubsection[{glfw\-Make\-Context\-Current}]{\setlength{\rightskip}{0pt plus 5cm}\-G\-L\-F\-W\-A\-P\-I void {\bf glfw\-Make\-Context\-Current} (
+\begin{DoxyParamCaption}
+\item[{{\bf \-G\-L\-F\-Wwindow} $\ast$}]{window}
+\end{DoxyParamCaption}
+)}}\label{group__context_gafd76c93e15ec8b0b90506a9936a46185}
+
+
+\-Makes the context of the specified window current for the calling thread. 
+
+\-This function makes the context of the specified window current on the calling thread. \-A context can only be made current on a single thread at a time and each thread can have only a single current context at a time.
+
+
+\begin{DoxyParams}[1]{\-Parameters}
+\mbox{\tt in}  & {\em window} & \-The window whose context to make current, or `\-N\-U\-L\-L` to detach the current context.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyRemark}{\-Remarks}
+\-This function may be called from secondary threads.
+\end{DoxyRemark}
+\begin{DoxySeeAlso}{\-See also}
+\hyperlink{group__context_gac28d98c655377d81a516bf5ef90780c8}{glfw\-Get\-Current\-Context} 
+\end{DoxySeeAlso}
+\hypertarget{group__context_gafb827800eedbfcbc97b1e5408df668d7}{\index{\-Context handling@{\-Context handling}!glfw\-Swap\-Buffers@{glfw\-Swap\-Buffers}}
+\index{glfw\-Swap\-Buffers@{glfw\-Swap\-Buffers}!Context handling@{\-Context handling}}
+\subsubsection[{glfw\-Swap\-Buffers}]{\setlength{\rightskip}{0pt plus 5cm}\-G\-L\-F\-W\-A\-P\-I void {\bf glfw\-Swap\-Buffers} (
+\begin{DoxyParamCaption}
+\item[{{\bf \-G\-L\-F\-Wwindow} $\ast$}]{window}
+\end{DoxyParamCaption}
+)}}\label{group__context_gafb827800eedbfcbc97b1e5408df668d7}
+
+
+\-Swaps the front and back buffers of the specified window. 
+
+\-This function swaps the front and back buffers of the specified window. \-If the swap interval is greater than zero, the \-G\-P\-U driver waits the specified number of screen updates before swapping the buffers.
+
+
+\begin{DoxyParams}[1]{\-Parameters}
+\mbox{\tt in}  & {\em window} & \-The window whose buffers to swap.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyRemark}{\-Remarks}
+\-This function may be called from secondary threads.
+\end{DoxyRemark}
+\begin{DoxyParagraph}{\-New in \-G\-L\-F\-W 3}
+\-This function no longer calls \hyperlink{group__window_ga872d16e4c77f58c0436f356255920cfc}{glfw\-Poll\-Events}. \-You need to call it or \hyperlink{group__window_ga6e042d05823c11e11c7339b81a237738}{glfw\-Wait\-Events} yourself.
+\end{DoxyParagraph}
+\begin{DoxySeeAlso}{\-See also}
+\hyperlink{group__context_ga12a595c06947cec4967c6e1f14210a8a}{glfw\-Swap\-Interval} 
+\end{DoxySeeAlso}
+\hypertarget{group__context_ga12a595c06947cec4967c6e1f14210a8a}{\index{\-Context handling@{\-Context handling}!glfw\-Swap\-Interval@{glfw\-Swap\-Interval}}
+\index{glfw\-Swap\-Interval@{glfw\-Swap\-Interval}!Context handling@{\-Context handling}}
+\subsubsection[{glfw\-Swap\-Interval}]{\setlength{\rightskip}{0pt plus 5cm}\-G\-L\-F\-W\-A\-P\-I void {\bf glfw\-Swap\-Interval} (
+\begin{DoxyParamCaption}
+\item[{int}]{interval}
+\end{DoxyParamCaption}
+)}}\label{group__context_ga12a595c06947cec4967c6e1f14210a8a}
+
+
+\-Sets the swap interval for the current context. 
+
+\-This function sets the swap interval for the current context, i.\-e. the number of screen updates to wait before swapping the buffers of a window and returning from \hyperlink{group__context_gafb827800eedbfcbc97b1e5408df668d7}{glfw\-Swap\-Buffers}. \-This is sometimes called 'vertical synchronization', 'vertical retrace synchronization' or 'vsync'.
+
+\-Contexts that support either of the `\-W\-G\-L\-\_\-\-E\-X\-T\-\_\-swap\-\_\-control\-\_\-tear` and `\-G\-L\-X\-\_\-\-E\-X\-T\-\_\-swap\-\_\-control\-\_\-tear` extensions also accept negative swap intervals, which allow the driver to swap even if a frame arrives a little bit late. \-You can check for the presence of these extensions using \hyperlink{group__context_ga9a28c712d35f9e43534e1d03b051c04c}{glfw\-Extension\-Supported}. \-For more information about swap tearing, see the extension specifications.
+
+
+\begin{DoxyParams}[1]{\-Parameters}
+\mbox{\tt in}  & {\em interval} & \-The minimum number of screen updates to wait for until the buffers are swapped by \hyperlink{group__context_gafb827800eedbfcbc97b1e5408df668d7}{glfw\-Swap\-Buffers}.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyRemark}{\-Remarks}
+\-This function may be called from secondary threads.
+\end{DoxyRemark}
+\begin{DoxyNote}{\-Note}
+\-Some \-G\-P\-U drivers do not honor the requested swap interval, either because of user settings that override the request or due to bugs in the driver.
+\end{DoxyNote}
+\begin{DoxySeeAlso}{\-See also}
+\hyperlink{group__context_gafb827800eedbfcbc97b1e5408df668d7}{glfw\-Swap\-Buffers} 
+\end{DoxySeeAlso}

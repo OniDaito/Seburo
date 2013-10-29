@@ -1,0 +1,114 @@
+\hypertarget{classs9_1_1Node}{\section{s9\-:\-:\-Node \-Class \-Reference}
+\label{classs9_1_1Node}\index{s9\-::\-Node@{s9\-::\-Node}}
+}
+\subsection*{\-Public \-Member \-Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classs9_1_1Node}{\-Node} \& \hyperlink{classs9_1_1Node_ae75a24d598fed1d8cb265d7bd1f250a6}{add} (\hyperlink{classs9_1_1Shape}{\-Shape} \&shape)
+\item 
+\hypertarget{classs9_1_1Node_ac117bf8d7dbe445240a54a58b71d02fb}{\hyperlink{classs9_1_1Node}{\-Node} \& {\bfseries add} (\-Node\-Ptr p)}\label{classs9_1_1Node_ac117bf8d7dbe445240a54a58b71d02fb}
+
+\item 
+\hypertarget{classs9_1_1Node_a7ef334d59ddd6f2e0db167d955f00419}{\hyperlink{classs9_1_1Node}{\-Node} \& {\bfseries translate} (glm\-::vec3 p)}\label{classs9_1_1Node_a7ef334d59ddd6f2e0db167d955f00419}
+
+\item 
+\hypertarget{classs9_1_1Node_a0226fc806528f8a13d72589d97b35048}{\hyperlink{classs9_1_1Node}{\-Node} \& {\bfseries rotate} (glm\-::vec3 r)}\label{classs9_1_1Node_a0226fc806528f8a13d72589d97b35048}
+
+\item 
+\hypertarget{classs9_1_1Node_a9a558e14ea69bc090749140bc416ac63}{\hyperlink{classs9_1_1Node}{\-Node} \& {\bfseries add\-Child} (\-Node\-Ptr p)}\label{classs9_1_1Node_a9a558e14ea69bc090749140bc416ac63}
+
+\item 
+\hypertarget{classs9_1_1Node_a3f9b1b74aa4d81cabd30e54e3fbcc463}{\hyperlink{classs9_1_1Node}{\-Node} \& {\bfseries remove\-Child} (\-Node\-Ptr p)}\label{classs9_1_1Node_a3f9b1b74aa4d81cabd30e54e3fbcc463}
+
+\item 
+\hyperlink{classs9_1_1Node}{\-Node} \& \hyperlink{classs9_1_1Node_abf84276da34f295abef63302b530951c}{yaw} (float a)
+\item 
+\hyperlink{classs9_1_1Node}{\-Node} \& \hyperlink{classs9_1_1Node_a3227e4a745619e0f44a19df3576b8e65}{pitch} (float a)
+\item 
+\hyperlink{classs9_1_1Node}{\-Node} \& \hyperlink{classs9_1_1Node_a9ce12695e88691b8e8e0689347e0ced6}{roll} (float a)
+\item 
+\hypertarget{classs9_1_1Node_af568af42d07be9eee5bb77d637686125}{glm\-::mat4 {\bfseries matrix} ()}\label{classs9_1_1Node_af568af42d07be9eee5bb77d637686125}
+
+\item 
+\hypertarget{classs9_1_1Node_aca2590950f64f43f37b7999cd4e26bcf}{void {\bfseries set\-\_\-matrix} (const glm\-::mat4 \&matrix)}\label{classs9_1_1Node_aca2590950f64f43f37b7999cd4e26bcf}
+
+\item 
+void \hyperlink{classs9_1_1Node_ab88c83ced58700a56de568f5b1e3c473}{draw} ()
+\end{DoxyCompactItemize}
+\subsection*{\-Protected \-Member \-Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classs9_1_1Node_ad6633dd1b9e4603da3762be17255fba2}{virtual void {\bfseries draw\-To\-Screen} ()}\label{classs9_1_1Node_ad6633dd1b9e4603da3762be17255fba2}
+
+\end{DoxyCompactItemize}
+\subsection*{\-Protected \-Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classs9_1_1Node_a00b308a9c2fbd493a835bc4b3c7b9aaa}{glm\-::mat4 {\bfseries matrix\-\_\-}}\label{classs9_1_1Node_a00b308a9c2fbd493a835bc4b3c7b9aaa}
+
+\item 
+\hypertarget{classs9_1_1Node_a2f74e3b79b870b7eeec0c35bb7859fbe}{std\-::vector$<$ \-Node\-Ptr $>$ {\bfseries children\-\_\-}}\label{classs9_1_1Node_a2f74e3b79b870b7eeec0c35bb7859fbe}
+
+\item 
+\hypertarget{classs9_1_1Node_ae63d2d14dcb745d31000ef8136119295}{\hyperlink{classs9_1_1Camera}{\-Camera} {\bfseries camera\-\_\-}}\label{classs9_1_1Node_ae63d2d14dcb745d31000ef8136119295}
+
+\item 
+\hypertarget{classs9_1_1Node_a916d78aba871fce8b054b9d2a7e03121}{\hyperlink{classs9_1_1Shape}{\-Shape} {\bfseries geometry\-\_\-}}\label{classs9_1_1Node_a916d78aba871fce8b054b9d2a7e03121}
+
+\end{DoxyCompactItemize}
+
+
+\subsection{\-Member \-Function \-Documentation}
+\hypertarget{classs9_1_1Node_ae75a24d598fed1d8cb265d7bd1f250a6}{\index{s9\-::\-Node@{s9\-::\-Node}!add@{add}}
+\index{add@{add}!s9::Node@{s9\-::\-Node}}
+\subsubsection[{add}]{\setlength{\rightskip}{0pt plus 5cm}{\bf \-Node} \& {\bf \-Node\-::add} (
+\begin{DoxyParamCaption}
+\item[{{\bf \-Shape} \&}]{shape}
+\end{DoxyParamCaption}
+)}}\label{classs9_1_1Node_ae75a24d598fed1d8cb265d7bd1f250a6}
+\-Add the drawable for this node -\/ shape (shape being a shared object) \hypertarget{classs9_1_1Node_ab88c83ced58700a56de568f5b1e3c473}{\index{s9\-::\-Node@{s9\-::\-Node}!draw@{draw}}
+\index{draw@{draw}!s9::Node@{s9\-::\-Node}}
+\subsubsection[{draw}]{\setlength{\rightskip}{0pt plus 5cm}void {\bf \-Node\-::draw} (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{classs9_1_1Node_ab88c83ced58700a56de568f5b1e3c473}
+\-Draw -\/ recursive function that composes a final node that is actually drawn \begin{DoxyRefDesc}{\-Todo}
+\item[\hyperlink{todo__todo000006}{\-Todo}]
+\begin{DoxyItemize}
+\item allow the settings of flags here 
+\end{DoxyItemize}\end{DoxyRefDesc}
+
+
+\begin{DoxyRefDesc}{\-Todo}
+\item[\hyperlink{todo__todo000007}{\-Todo}]
+\begin{DoxyItemize}
+\item allow brew flags here 
+\end{DoxyItemize}\end{DoxyRefDesc}
+\hypertarget{classs9_1_1Node_a3227e4a745619e0f44a19df3576b8e65}{\index{s9\-::\-Node@{s9\-::\-Node}!pitch@{pitch}}
+\index{pitch@{pitch}!s9::Node@{s9\-::\-Node}}
+\subsubsection[{pitch}]{\setlength{\rightskip}{0pt plus 5cm}{\bf \-Node} \& {\bf \-Node\-::pitch} (
+\begin{DoxyParamCaption}
+\item[{float}]{a}
+\end{DoxyParamCaption}
+)}}\label{classs9_1_1Node_a3227e4a745619e0f44a19df3576b8e65}
+\-Pitch around global x axis \hypertarget{classs9_1_1Node_a9ce12695e88691b8e8e0689347e0ced6}{\index{s9\-::\-Node@{s9\-::\-Node}!roll@{roll}}
+\index{roll@{roll}!s9::Node@{s9\-::\-Node}}
+\subsubsection[{roll}]{\setlength{\rightskip}{0pt plus 5cm}{\bf \-Node} \& {\bf \-Node\-::roll} (
+\begin{DoxyParamCaption}
+\item[{float}]{a}
+\end{DoxyParamCaption}
+)}}\label{classs9_1_1Node_a9ce12695e88691b8e8e0689347e0ced6}
+\-Pitch around global z axis \hypertarget{classs9_1_1Node_abf84276da34f295abef63302b530951c}{\index{s9\-::\-Node@{s9\-::\-Node}!yaw@{yaw}}
+\index{yaw@{yaw}!s9::Node@{s9\-::\-Node}}
+\subsubsection[{yaw}]{\setlength{\rightskip}{0pt plus 5cm}{\bf \-Node} \& {\bf \-Node\-::yaw} (
+\begin{DoxyParamCaption}
+\item[{float}]{a}
+\end{DoxyParamCaption}
+)}}\label{classs9_1_1Node_abf84276da34f295abef63302b530951c}
+\-Pitch around global y axis 
+
+\-The documentation for this class was generated from the following files\-:\begin{DoxyCompactItemize}
+\item 
+include/s9/node.\-hpp\item 
+src/\hyperlink{node_8cpp}{node.\-cpp}\end{DoxyCompactItemize}

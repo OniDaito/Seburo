@@ -1,0 +1,220 @@
+\hypertarget{classAssimp_1_1IOSystem}{\section{\-Assimp\-:\-:\-I\-O\-System \-Class \-Reference}
+\label{classAssimp_1_1IOSystem}\index{\-Assimp\-::\-I\-O\-System@{\-Assimp\-::\-I\-O\-System}}
+}
+
+
+\-C\-P\-P-\/\-A\-P\-I\-: \-Interface to the file system.  
+
+
+
+
+{\ttfamily \#include $<$\-I\-O\-System.\-hpp$>$}
+
+\subsection*{\-Public \-Member \-Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classAssimp_1_1IOSystem_af8ba1ee2dc0686da8fc9e3dad49af801}{\-I\-O\-System} ()
+\begin{DoxyCompactList}\small\item\em \-Default constructor. \end{DoxyCompactList}\item 
+virtual \hyperlink{classAssimp_1_1IOSystem_a617417f1c5125770606fea3b41068b36}{$\sim$\-I\-O\-System} ()
+\begin{DoxyCompactList}\small\item\em \-Virtual destructor. \end{DoxyCompactList}\item 
+\-A\-I\-\_\-\-F\-O\-R\-C\-E\-\_\-\-I\-N\-L\-I\-N\-E bool \hyperlink{classAssimp_1_1IOSystem_a7ae6cfaea4957408967463bfc3b84b27}{\-Exists} (const std\-::string \&p\-File) const 
+\begin{DoxyCompactList}\small\item\em \-For backward compatibility. \end{DoxyCompactList}\item 
+virtual bool \hyperlink{classAssimp_1_1IOSystem_a79f5fe8d2dbe1056c9418f7de9a72445}{\-Exists} (const char $\ast$p\-File) const =0
+\begin{DoxyCompactList}\small\item\em \-Tests for the existence of a file at the given path. \end{DoxyCompactList}\item 
+virtual char \hyperlink{classAssimp_1_1IOSystem_a40e412875b985bdb638f00ef0f20fff6}{get\-Os\-Separator} () const =0
+\begin{DoxyCompactList}\small\item\em \-Returns the system specific directory separator. \end{DoxyCompactList}\item 
+virtual \hyperlink{classAssimp_1_1IOStream}{\-I\-O\-Stream} $\ast$ \hyperlink{classAssimp_1_1IOSystem_ac512ece3b0701de5682553007a4c0816}{\-Open} (const char $\ast$p\-File, const char $\ast$p\-Mode=\char`\"{}rb\char`\"{})=0
+\begin{DoxyCompactList}\small\item\em \-Open a new file with a given path. \end{DoxyCompactList}\item 
+\hyperlink{classAssimp_1_1IOStream}{\-I\-O\-Stream} $\ast$ \hyperlink{classAssimp_1_1IOSystem_aef35fabc9bd49fb83bfd4f12a94083c3}{\-Open} (const std\-::string \&p\-File, const std\-::string \&p\-Mode=std\-::string(\char`\"{}rb\char`\"{}))
+\begin{DoxyCompactList}\small\item\em \-For backward compatibility. \end{DoxyCompactList}\item 
+virtual void \hyperlink{classAssimp_1_1IOSystem_a8c334d60f04bceeb6bd0157d21723f3e}{\-Close} (\hyperlink{classAssimp_1_1IOStream}{\-I\-O\-Stream} $\ast$p\-File)=0
+\begin{DoxyCompactList}\small\item\em \-Closes the given file and releases all resources associated with it. \end{DoxyCompactList}\item 
+virtual bool \hyperlink{classAssimp_1_1IOSystem_a11349a65b353ed62f655c3dd802b9062}{\-Compare\-Paths} (const char $\ast$one, const char $\ast$second) const 
+\begin{DoxyCompactList}\small\item\em \-Compares two paths and check whether the point to identical files. \end{DoxyCompactList}\item 
+bool \hyperlink{classAssimp_1_1IOSystem_a279d1d4b0b2aa37800e222aad508dff1}{\-Compare\-Paths} (const std\-::string \&one, const std\-::string \&second) const 
+\begin{DoxyCompactList}\small\item\em \-For backward compatibility. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{\-Detailed \-Description}
+\-C\-P\-P-\/\-A\-P\-I\-: \-Interface to the file system. 
+
+\-Derive an own implementation from this interface to supply custom file handling to the importer library. \-If you implement this interface, you also want to supply a custom implementation for \hyperlink{classAssimp_1_1IOStream}{\-I\-O\-Stream}.
+
+\begin{DoxySeeAlso}{\-See also}
+\hyperlink{classAssimp_1_1Importer_a1161f46318af18bb86dfe0fc3edea4df}{\-Importer\-::\-Set\-I\-O\-Handler()} 
+\end{DoxySeeAlso}
+
+
+\subsection{\-Constructor \& \-Destructor \-Documentation}
+\hypertarget{classAssimp_1_1IOSystem_af8ba1ee2dc0686da8fc9e3dad49af801}{\index{\-Assimp\-::\-I\-O\-System@{\-Assimp\-::\-I\-O\-System}!\-I\-O\-System@{\-I\-O\-System}}
+\index{\-I\-O\-System@{\-I\-O\-System}!Assimp::IOSystem@{\-Assimp\-::\-I\-O\-System}}
+\subsubsection[{\-I\-O\-System}]{\setlength{\rightskip}{0pt plus 5cm}\-A\-I\-\_\-\-F\-O\-R\-C\-E\-\_\-\-I\-N\-L\-I\-N\-E {\bf \-Assimp\-::\-I\-O\-System\-::\-I\-O\-System} (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{classAssimp_1_1IOSystem_af8ba1ee2dc0686da8fc9e3dad49af801}
+
+
+\-Default constructor. 
+
+\-Create an instance of your derived class and assign it to an \hyperlink{classAssimp_1_1Importer}{\-Assimp\-::\-Importer} instance by calling \hyperlink{classAssimp_1_1Importer_a1161f46318af18bb86dfe0fc3edea4df}{\-Importer\-::\-Set\-I\-O\-Handler()}. \hypertarget{classAssimp_1_1IOSystem_a617417f1c5125770606fea3b41068b36}{\index{\-Assimp\-::\-I\-O\-System@{\-Assimp\-::\-I\-O\-System}!$\sim$\-I\-O\-System@{$\sim$\-I\-O\-System}}
+\index{$\sim$\-I\-O\-System@{$\sim$\-I\-O\-System}!Assimp::IOSystem@{\-Assimp\-::\-I\-O\-System}}
+\subsubsection[{$\sim$\-I\-O\-System}]{\setlength{\rightskip}{0pt plus 5cm}\-A\-I\-\_\-\-F\-O\-R\-C\-E\-\_\-\-I\-N\-L\-I\-N\-E {\bf \-Assimp\-::\-I\-O\-System\-::$\sim$\-I\-O\-System} (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily  \mbox{[}virtual\mbox{]}}}}\label{classAssimp_1_1IOSystem_a617417f1c5125770606fea3b41068b36}
+
+
+\-Virtual destructor. 
+
+\-It is safe to be called from within \-D\-L\-L \hyperlink{namespaceAssimp}{\-Assimp}, we're constructed on \hyperlink{namespaceAssimp}{\-Assimp}'s heap. 
+
+\subsection{\-Member \-Function \-Documentation}
+\hypertarget{classAssimp_1_1IOSystem_a8c334d60f04bceeb6bd0157d21723f3e}{\index{\-Assimp\-::\-I\-O\-System@{\-Assimp\-::\-I\-O\-System}!\-Close@{\-Close}}
+\index{\-Close@{\-Close}!Assimp::IOSystem@{\-Assimp\-::\-I\-O\-System}}
+\subsubsection[{\-Close}]{\setlength{\rightskip}{0pt plus 5cm}virtual void {\bf \-Assimp\-::\-I\-O\-System\-::\-Close} (
+\begin{DoxyParamCaption}
+\item[{{\bf \-I\-O\-Stream} $\ast$}]{p\-File}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily  \mbox{[}pure virtual\mbox{]}}}}\label{classAssimp_1_1IOSystem_a8c334d60f04bceeb6bd0157d21723f3e}
+
+
+\-Closes the given file and releases all resources associated with it. 
+
+
+\begin{DoxyParams}{\-Parameters}
+{\em p\-File} & \-The file instance previously created by \hyperlink{classAssimp_1_1IOSystem_ac512ece3b0701de5682553007a4c0816}{\-Open()}. \\
+\hline
+\end{DoxyParams}
+\hypertarget{classAssimp_1_1IOSystem_a11349a65b353ed62f655c3dd802b9062}{\index{\-Assimp\-::\-I\-O\-System@{\-Assimp\-::\-I\-O\-System}!\-Compare\-Paths@{\-Compare\-Paths}}
+\index{\-Compare\-Paths@{\-Compare\-Paths}!Assimp::IOSystem@{\-Assimp\-::\-I\-O\-System}}
+\subsubsection[{\-Compare\-Paths}]{\setlength{\rightskip}{0pt plus 5cm}virtual bool {\bf \-Assimp\-::\-I\-O\-System\-::\-Compare\-Paths} (
+\begin{DoxyParamCaption}
+\item[{const char $\ast$}]{one, }
+\item[{const char $\ast$}]{second}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily  \mbox{[}virtual\mbox{]}}}}\label{classAssimp_1_1IOSystem_a11349a65b353ed62f655c3dd802b9062}
+
+
+\-Compares two paths and check whether the point to identical files. 
+
+\-The dummy implementation of this virtual member performs a case-\/insensitive comparison of the given strings. \-The default \-I\-O system implementation uses \-O\-S mechanisms to convert relative into absolute paths, so the result can be trusted. 
+\begin{DoxyParams}{\-Parameters}
+{\em one} & \-First file \\
+\hline
+{\em second} & \-Second file \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{\-Returns}
+true if the paths point to the same file. \-The file needn't be existing, however. 
+\end{DoxyReturn}
+\hypertarget{classAssimp_1_1IOSystem_a279d1d4b0b2aa37800e222aad508dff1}{\index{\-Assimp\-::\-I\-O\-System@{\-Assimp\-::\-I\-O\-System}!\-Compare\-Paths@{\-Compare\-Paths}}
+\index{\-Compare\-Paths@{\-Compare\-Paths}!Assimp::IOSystem@{\-Assimp\-::\-I\-O\-System}}
+\subsubsection[{\-Compare\-Paths}]{\setlength{\rightskip}{0pt plus 5cm}bool {\bf \-Assimp\-::\-I\-O\-System\-::\-Compare\-Paths} (
+\begin{DoxyParamCaption}
+\item[{const std\-::string \&}]{one, }
+\item[{const std\-::string \&}]{second}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily  \mbox{[}inline\mbox{]}}}}\label{classAssimp_1_1IOSystem_a279d1d4b0b2aa37800e222aad508dff1}
+
+
+\-For backward compatibility. 
+
+\begin{DoxySeeAlso}{\-See also}
+\-Compare\-Paths(const char$\ast$, const char$\ast$) 
+\end{DoxySeeAlso}
+\hypertarget{classAssimp_1_1IOSystem_a7ae6cfaea4957408967463bfc3b84b27}{\index{\-Assimp\-::\-I\-O\-System@{\-Assimp\-::\-I\-O\-System}!\-Exists@{\-Exists}}
+\index{\-Exists@{\-Exists}!Assimp::IOSystem@{\-Assimp\-::\-I\-O\-System}}
+\subsubsection[{\-Exists}]{\setlength{\rightskip}{0pt plus 5cm}\-A\-I\-\_\-\-F\-O\-R\-C\-E\-\_\-\-I\-N\-L\-I\-N\-E bool {\bf \-Assimp\-::\-I\-O\-System\-::\-Exists} (
+\begin{DoxyParamCaption}
+\item[{const std\-::string \&}]{p\-File}
+\end{DoxyParamCaption}
+) const}}\label{classAssimp_1_1IOSystem_a7ae6cfaea4957408967463bfc3b84b27}
+
+
+\-For backward compatibility. 
+
+\begin{DoxySeeAlso}{\-See also}
+\-Exists(const char$\ast$) 
+\end{DoxySeeAlso}
+\hypertarget{classAssimp_1_1IOSystem_a79f5fe8d2dbe1056c9418f7de9a72445}{\index{\-Assimp\-::\-I\-O\-System@{\-Assimp\-::\-I\-O\-System}!\-Exists@{\-Exists}}
+\index{\-Exists@{\-Exists}!Assimp::IOSystem@{\-Assimp\-::\-I\-O\-System}}
+\subsubsection[{\-Exists}]{\setlength{\rightskip}{0pt plus 5cm}virtual bool {\bf \-Assimp\-::\-I\-O\-System\-::\-Exists} (
+\begin{DoxyParamCaption}
+\item[{const char $\ast$}]{p\-File}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily  \mbox{[}pure virtual\mbox{]}}}}\label{classAssimp_1_1IOSystem_a79f5fe8d2dbe1056c9418f7de9a72445}
+
+
+\-Tests for the existence of a file at the given path. 
+
+
+\begin{DoxyParams}{\-Parameters}
+{\em p\-File} & \-Path to the file \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{\-Returns}
+true if there is a file with this path, else false. 
+\end{DoxyReturn}
+\hypertarget{classAssimp_1_1IOSystem_a40e412875b985bdb638f00ef0f20fff6}{\index{\-Assimp\-::\-I\-O\-System@{\-Assimp\-::\-I\-O\-System}!get\-Os\-Separator@{get\-Os\-Separator}}
+\index{get\-Os\-Separator@{get\-Os\-Separator}!Assimp::IOSystem@{\-Assimp\-::\-I\-O\-System}}
+\subsubsection[{get\-Os\-Separator}]{\setlength{\rightskip}{0pt plus 5cm}virtual char {\bf \-Assimp\-::\-I\-O\-System\-::get\-Os\-Separator} (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily  \mbox{[}pure virtual\mbox{]}}}}\label{classAssimp_1_1IOSystem_a40e412875b985bdb638f00ef0f20fff6}
+
+
+\-Returns the system specific directory separator. 
+
+\begin{DoxyReturn}{\-Returns}
+\-System specific directory separator 
+\end{DoxyReturn}
+\hypertarget{classAssimp_1_1IOSystem_ac512ece3b0701de5682553007a4c0816}{\index{\-Assimp\-::\-I\-O\-System@{\-Assimp\-::\-I\-O\-System}!\-Open@{\-Open}}
+\index{\-Open@{\-Open}!Assimp::IOSystem@{\-Assimp\-::\-I\-O\-System}}
+\subsubsection[{\-Open}]{\setlength{\rightskip}{0pt plus 5cm}virtual {\bf \-I\-O\-Stream}$\ast$ {\bf \-Assimp\-::\-I\-O\-System\-::\-Open} (
+\begin{DoxyParamCaption}
+\item[{const char $\ast$}]{p\-File, }
+\item[{const char $\ast$}]{p\-Mode = {\ttfamily \char`\"{}rb\char`\"{}}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily  \mbox{[}pure virtual\mbox{]}}}}\label{classAssimp_1_1IOSystem_ac512ece3b0701de5682553007a4c0816}
+
+
+\-Open a new file with a given path. 
+
+\-When the access to the file is finished, call \hyperlink{classAssimp_1_1IOSystem_a8c334d60f04bceeb6bd0157d21723f3e}{\-Close()} to release all associated resources (or the virtual dtor of the \hyperlink{classAssimp_1_1IOStream}{\-I\-O\-Stream}).
+
+
+\begin{DoxyParams}{\-Parameters}
+{\em p\-File} & \-Path to the file \\
+\hline
+{\em p\-Mode} & \-Desired file \-I/\-O mode. \-Required are\-: \char`\"{}wb\char`\"{}, \char`\"{}w\char`\"{}, \char`\"{}wt\char`\"{}, \char`\"{}rb\char`\"{}, \char`\"{}r\char`\"{}, \char`\"{}rt\char`\"{}.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{\-Returns}
+\-New \hyperlink{classAssimp_1_1IOStream}{\-I\-O\-Stream} interface allowing the lib to access the underlying file. 
+\end{DoxyReturn}
+\begin{DoxyNote}{\-Note}
+\-When implementing this class to provide custom \-I\-O handling, you probably have to supply an own implementation of \hyperlink{classAssimp_1_1IOStream}{\-I\-O\-Stream} as well. 
+\end{DoxyNote}
+\hypertarget{classAssimp_1_1IOSystem_aef35fabc9bd49fb83bfd4f12a94083c3}{\index{\-Assimp\-::\-I\-O\-System@{\-Assimp\-::\-I\-O\-System}!\-Open@{\-Open}}
+\index{\-Open@{\-Open}!Assimp::IOSystem@{\-Assimp\-::\-I\-O\-System}}
+\subsubsection[{\-Open}]{\setlength{\rightskip}{0pt plus 5cm}\-A\-I\-\_\-\-F\-O\-R\-C\-E\-\_\-\-I\-N\-L\-I\-N\-E {\bf \-I\-O\-Stream} $\ast$ {\bf \-Assimp\-::\-I\-O\-System\-::\-Open} (
+\begin{DoxyParamCaption}
+\item[{const std\-::string \&}]{p\-File, }
+\item[{const std\-::string \&}]{p\-Mode = {\ttfamily std\-:\-:string(\char`\"{}rb\char`\"{})}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily  \mbox{[}inline\mbox{]}}}}\label{classAssimp_1_1IOSystem_aef35fabc9bd49fb83bfd4f12a94083c3}
+
+
+\-For backward compatibility. 
+
+\begin{DoxySeeAlso}{\-See also}
+\hyperlink{classAssimp_1_1IOSystem_ac512ece3b0701de5682553007a4c0816}{\-Open(const char$\ast$, const char$\ast$)} 
+\end{DoxySeeAlso}
+
+
+\-The documentation for this class was generated from the following file\-:\begin{DoxyCompactItemize}
+\item 
+include/assimp/\-I\-O\-System.\-hpp\end{DoxyCompactItemize}

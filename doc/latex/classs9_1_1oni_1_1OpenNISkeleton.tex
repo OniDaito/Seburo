@@ -1,0 +1,127 @@
+\hypertarget{classs9_1_1oni_1_1OpenNISkeleton}{\section{s9\-:\-:oni\-:\-:\-Open\-N\-I\-Skeleton \-Class \-Reference}
+\label{classs9_1_1oni_1_1OpenNISkeleton}\index{s9\-::oni\-::\-Open\-N\-I\-Skeleton@{s9\-::oni\-::\-Open\-N\-I\-Skeleton}}
+}
+
+
+{\ttfamily \#include $<$openni.\-hpp$>$}
+
+\subsection*{\-Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structs9_1_1oni_1_1OpenNISkeleton_1_1SharedObject}{\-Shared\-Object}
+\item 
+struct \hyperlink{structs9_1_1oni_1_1OpenNISkeleton_1_1User}{\-User}
+\end{DoxyCompactItemize}
+\subsection*{\-Public \-Member \-Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classs9_1_1oni_1_1OpenNISkeleton_a24c6f7cccbc8d0c319e977f17bd2109c}{\-Open\-N\-I\-Skeleton} (const \hyperlink{classs9_1_1oni_1_1OpenNIBase}{\-Open\-N\-I\-Base} \&base)
+\item 
+void \hyperlink{classs9_1_1oni_1_1OpenNISkeleton_a785d6e82ac21748116fccec0967b6533}{update} ()
+\end{DoxyCompactItemize}
+\subsection*{\-Protected \-Member \-Functions}
+\begin{DoxyCompactItemize}
+\item 
+nite\-::\-Status \hyperlink{classs9_1_1oni_1_1OpenNISkeleton_ab7d1842749a0e1b9c89cd91386c73fd0}{read\-Frame} ()
+\item 
+\hypertarget{classs9_1_1oni_1_1OpenNISkeleton_ab2b0cb54da4a043508423203b5669181}{nite\-::\-Status {\bfseries convert\-Joint\-Coordinates\-To\-Depth} (float x, float y, float z, float $\ast$p\-Out\-X, float $\ast$p\-Out\-Y) const }\label{classs9_1_1oni_1_1OpenNISkeleton_ab2b0cb54da4a043508423203b5669181}
+
+\item 
+\hypertarget{classs9_1_1oni_1_1OpenNISkeleton_a5375c4641f41211cb518777372101ca7}{nite\-::\-Status {\bfseries convert\-Depth\-Coordinates\-To\-Joint} (int x, int y, int z, float $\ast$p\-Out\-X, float $\ast$p\-Out\-Y) const }\label{classs9_1_1oni_1_1OpenNISkeleton_a5375c4641f41211cb518777372101ca7}
+
+\item 
+\hypertarget{classs9_1_1oni_1_1OpenNISkeleton_a5eeb8a84e335678e69c97d5a9ce9d34c}{float {\bfseries get\-Skeleton\-Smoothing\-Factor} () const }\label{classs9_1_1oni_1_1OpenNISkeleton_a5eeb8a84e335678e69c97d5a9ce9d34c}
+
+\item 
+\hypertarget{classs9_1_1oni_1_1OpenNISkeleton_a111290aca126cb6ba2562396a0a28c58}{nite\-::\-Status {\bfseries set\-Skeleton\-Smoothing\-Factor} (float factor)}\label{classs9_1_1oni_1_1OpenNISkeleton_a111290aca126cb6ba2562396a0a28c58}
+
+\item 
+void \hyperlink{classs9_1_1oni_1_1OpenNISkeleton_a741c8c2998d95615d658fc394c24f504}{update\-Users\-State} (const \hyperlink{structs9_1_1oni_1_1OpenNISkeleton_1_1User}{\-User} \&user, unsigned long long ts)
+\end{DoxyCompactItemize}
+\subsection*{\-Protected \-Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classs9_1_1oni_1_1OpenNISkeleton_a5e24753efe4c7c86bff349a30264b39d}{std\-::shared\-\_\-ptr$<$ \hyperlink{structs9_1_1oni_1_1OpenNISkeleton_1_1SharedObject}{\-Shared\-Object} $>$ {\bfseries obj\-\_\-} = nullptr}\label{classs9_1_1oni_1_1OpenNISkeleton_a5e24753efe4c7c86bff349a30264b39d}
+
+\end{DoxyCompactItemize}
+\subsection*{\-Static \-Protected \-Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classs9_1_1oni_1_1OpenNISkeleton_af498eae1a18c58a6e85670d319392ca2}{static bool {\bfseries s\-Visible\-Users} \mbox{[}\-S9\-\_\-\-N\-I\-T\-E\-\_\-\-M\-A\-X\-\_\-\-U\-S\-E\-R\-S\mbox{]} = \{false\}}\label{classs9_1_1oni_1_1OpenNISkeleton_af498eae1a18c58a6e85670d319392ca2}
+
+\item 
+\hypertarget{classs9_1_1oni_1_1OpenNISkeleton_a25dcf4c455ea86f97b50a10e0a421e38}{static nite\-::\-Skeleton\-State {\bfseries s\-Skeleton\-States} \mbox{[}\-S9\-\_\-\-N\-I\-T\-E\-\_\-\-M\-A\-X\-\_\-\-U\-S\-E\-R\-S\mbox{]} = \{nite\-::\-S\-K\-E\-L\-E\-T\-O\-N\-\_\-\-N\-O\-N\-E\}}\label{classs9_1_1oni_1_1OpenNISkeleton_a25dcf4c455ea86f97b50a10e0a421e38}
+
+\end{DoxyCompactItemize}
+
+
+\subsection{\-Detailed \-Description}
+\-Relevent data structures from \-Ni\-T\-E typedef struct \{ float x, y, z; \} \-Nite\-Point3f;
+
+typedef struct \{ float x, y, z, w; \} \-Nite\-Quaternion;
+
+typedef struct \{ \-Nite\-Joint\-Type joint\-Type; \-Nite\-Point3f position; float position\-Confidence; \-Nite\-Quaternion orientation; float orientation\-Confidence; \} \-Nite\-Skeleton\-Joint;
+
+typedef struct \{ \-Nite\-Point3f min; \-Nite\-Point3f max; \} \-Nite\-Bounding\-Box;
+
+typedef struct\{ \-Nite\-Pose\-Type type; int state; \} \-Nite\-Pose\-Data;
+
+typedef struct \{ \-Nite\-Skeleton\-Joint joints\mbox{[}\-N\-I\-T\-E\-\_\-\-J\-O\-I\-N\-T\-\_\-\-C\-O\-U\-N\-T\mbox{]}; \-Nite\-Skeleton\-State state; \} \-Nite\-Skeleton;
+
+typedef struct \{ \-Nite\-User\-Id id; \-Nite\-Bounding\-Box bounding\-Box; \-Nite\-Point3f center\-Of\-Mass;
+
+int state;
+
+\-Nite\-Skeleton skeleton;
+
+\-Nite\-Pose\-Data poses\mbox{[}\-N\-I\-T\-E\-\_\-\-P\-O\-S\-E\-\_\-\-C\-O\-U\-N\-T\mbox{]}; \} \-Nite\-User\-Data;
+
+typedef struct\{ \-Nite\-User\-Id$\ast$ pixels;
+
+int width; int height;
+
+int stride; \} \-Nite\-User\-Map;
+
+typedef struct \{ \-Nite\-Point3f point; \-Nite\-Point3f normal; \} \-Nite\-Plane;
+
+typedef struct \{ int user\-Count; \-Nite\-User\-Data$\ast$ p\-User; \-Nite\-User\-Map user\-Map; \-Oni\-Frame$\ast$ p\-Depth\-Frame; unsigned long long timestamp; int frame\-Index; float floor\-Confidence; \-Nite\-Plane floor; \} \-Nite\-User\-Tracker\-Frame; \-Ni\-T\-E 2 \-Tracker that works with the base in order to track skeletons \-Would have extended the nite \-User\-Tracker class but decided to poll instead 
+
+\subsection{\-Constructor \& \-Destructor \-Documentation}
+\hypertarget{classs9_1_1oni_1_1OpenNISkeleton_a24c6f7cccbc8d0c319e977f17bd2109c}{\index{s9\-::oni\-::\-Open\-N\-I\-Skeleton@{s9\-::oni\-::\-Open\-N\-I\-Skeleton}!\-Open\-N\-I\-Skeleton@{\-Open\-N\-I\-Skeleton}}
+\index{\-Open\-N\-I\-Skeleton@{\-Open\-N\-I\-Skeleton}!s9::oni::OpenNISkeleton@{s9\-::oni\-::\-Open\-N\-I\-Skeleton}}
+\subsubsection[{\-Open\-N\-I\-Skeleton}]{\setlength{\rightskip}{0pt plus 5cm}\-Open\-N\-I\-Skeleton\-::\-Open\-N\-I\-Skeleton (
+\begin{DoxyParamCaption}
+\item[{const {\bf \-Open\-N\-I\-Base} \&}]{base}
+\end{DoxyParamCaption}
+)}}\label{classs9_1_1oni_1_1OpenNISkeleton_a24c6f7cccbc8d0c319e977f17bd2109c}
+\-The \-Open\-N\-I \-Skeleton -\/ \-Given an \hyperlink{classs9_1_1oni_1_1OpenNIBase}{\-Open\-N\-I\-Base}, start tracking skeletons 
+
+\subsection{\-Member \-Function \-Documentation}
+\hypertarget{classs9_1_1oni_1_1OpenNISkeleton_ab7d1842749a0e1b9c89cd91386c73fd0}{\index{s9\-::oni\-::\-Open\-N\-I\-Skeleton@{s9\-::oni\-::\-Open\-N\-I\-Skeleton}!read\-Frame@{read\-Frame}}
+\index{read\-Frame@{read\-Frame}!s9::oni::OpenNISkeleton@{s9\-::oni\-::\-Open\-N\-I\-Skeleton}}
+\subsubsection[{read\-Frame}]{\setlength{\rightskip}{0pt plus 5cm}nite\-::\-Status {\bf \-Open\-N\-I\-Skeleton\-::read\-Frame} (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily  \mbox{[}protected\mbox{]}}}}\label{classs9_1_1oni_1_1OpenNISkeleton_ab7d1842749a0e1b9c89cd91386c73fd0}
+\-Read a frame from \-Ni\-T\-E and read the \-C data into our \-C++ \-Vector \hypertarget{classs9_1_1oni_1_1OpenNISkeleton_a785d6e82ac21748116fccec0967b6533}{\index{s9\-::oni\-::\-Open\-N\-I\-Skeleton@{s9\-::oni\-::\-Open\-N\-I\-Skeleton}!update@{update}}
+\index{update@{update}!s9::oni::OpenNISkeleton@{s9\-::oni\-::\-Open\-N\-I\-Skeleton}}
+\subsubsection[{update}]{\setlength{\rightskip}{0pt plus 5cm}void {\bf \-Open\-N\-I\-Skeleton\-::update} (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{classs9_1_1oni_1_1OpenNISkeleton_a785d6e82ac21748116fccec0967b6533}
+\-Called as often as possible to grab a new frame and update the user data \hypertarget{classs9_1_1oni_1_1OpenNISkeleton_a741c8c2998d95615d658fc394c24f504}{\index{s9\-::oni\-::\-Open\-N\-I\-Skeleton@{s9\-::oni\-::\-Open\-N\-I\-Skeleton}!update\-Users\-State@{update\-Users\-State}}
+\index{update\-Users\-State@{update\-Users\-State}!s9::oni::OpenNISkeleton@{s9\-::oni\-::\-Open\-N\-I\-Skeleton}}
+\subsubsection[{update\-Users\-State}]{\setlength{\rightskip}{0pt plus 5cm}void {\bf \-Open\-N\-I\-Skeleton\-::update\-Users\-State} (
+\begin{DoxyParamCaption}
+\item[{const {\bf \-User} \&}]{user, }
+\item[{unsigned long long}]{ts}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily  \mbox{[}protected\mbox{]}}}}\label{classs9_1_1oni_1_1OpenNISkeleton_a741c8c2998d95615d658fc394c24f504}
+\-Keep a static set of bools and states for the all users here 
+
+\-The documentation for this class was generated from the following files\-:\begin{DoxyCompactItemize}
+\item 
+include/s9/openni/\hyperlink{openni_8hpp}{openni.\-hpp}\item 
+src/openni/\hyperlink{openni_8cpp}{openni.\-cpp}\end{DoxyCompactItemize}

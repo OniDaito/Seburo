@@ -1,0 +1,47 @@
+\hypertarget{structs9_1_1VertexT}{\section{s9\-:\-:\-Vertex\-T$<$ \-T, \-U $>$ \-Struct \-Template \-Reference}
+\label{structs9_1_1VertexT}\index{s9\-::\-Vertex\-T$<$ T, U $>$@{s9\-::\-Vertex\-T$<$ T, U $>$}}
+}
+
+
+{\ttfamily \#include $<$primitives.\-hpp$>$}
+
+\subsection*{\-Public \-Member \-Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{structs9_1_1VertexT_ac360d39a7e7b3289ca6c1418fa2ed5b7}{{\bfseries \-Vertex\-T} (const \-T pp=\-T(1.\-0f), const T pn=\-T(1.\-0f), const T pc=\-T(1.\-0f), const U pu=\-U(1.\-0f), const T pt=\-T(1.\-0f))}\label{structs9_1_1VertexT_ac360d39a7e7b3289ca6c1418fa2ed5b7}
+
+\end{DoxyCompactItemize}
+\subsection*{\-Public \-Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{structs9_1_1VertexT_a85c5642c074508dd159fa4497c6b2a0c}{\-T {\bfseries p}}\label{structs9_1_1VertexT_a85c5642c074508dd159fa4497c6b2a0c}
+
+\item 
+\hypertarget{structs9_1_1VertexT_a0327b7e4fa535f6a16b12374d980c18b}{\-T {\bfseries n}}\label{structs9_1_1VertexT_a0327b7e4fa535f6a16b12374d980c18b}
+
+\item 
+\hypertarget{structs9_1_1VertexT_a0906bc2a04c5bf12d5483daaab81bc28}{\-T {\bfseries c}}\label{structs9_1_1VertexT_a0906bc2a04c5bf12d5483daaab81bc28}
+
+\item 
+\hypertarget{structs9_1_1VertexT_a85c4511e84ea1e51b1a5896dbe583af2}{\-U {\bfseries u}}\label{structs9_1_1VertexT_a85c4511e84ea1e51b1a5896dbe583af2}
+
+\item 
+\hypertarget{structs9_1_1VertexT_ac5ff8b99b43ed9d61069f65745757d66}{\-T {\bfseries t}}\label{structs9_1_1VertexT_ac5ff8b99b43ed9d61069f65745757d66}
+
+\end{DoxyCompactItemize}
+
+
+\subsection{\-Detailed \-Description}
+\subsubsection*{template$<$class T, class U$>$struct s9\-::\-Vertex\-T$<$ T, U $>$}
+
+\begin{DoxyRefDesc}{\-Todo}
+\item[\hyperlink{todo__todo000024}{\-Todo}]using padding globally but that may interfere with \-G\-L\-M and not always be great \end{DoxyRefDesc}
+\-Template for the vertex type we are defining \-Vertices must have at least a position but can have other things attached as per the \-Open\-G\-L rules for per vertex data.
+
+\-For speed, we dont allow adding or deleting to vertices, we have to copy \-There are flags for what is in use however, which are checked for buffering\begin{DoxyRefDesc}{\-Todo}
+\item[\hyperlink{todo__todo000025}{\-Todo}]this is tricky because this default is for the \-Vec3 type and we will need to override for \-Vertex2/4 \end{DoxyRefDesc}
+
+
+\-The documentation for this struct was generated from the following file\-:\begin{DoxyCompactItemize}
+\item 
+include/s9/primitives.\-hpp\end{DoxyCompactItemize}
