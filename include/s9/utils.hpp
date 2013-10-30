@@ -49,6 +49,22 @@ namespace s9 {
 	 	return tokens;
 	}
 
+	static inline bool string_contains (const std::string& input, const std::string& contains){
+		size_t found = input.find(contains);
+  	return found != std::string::npos;
+	}
+
+
+	/**
+	 * Remove a char from a string - returns a copy
+	 */
+
+	static inline std::string remove_char (const std::string s, const char c) {
+		std::string str (s);
+		str.erase (std::remove(str.begin(), str.end(), c), str.end());
+		return str;
+	}
+
 
 	/*
 	 * Basic text file reading
@@ -66,7 +82,7 @@ namespace s9 {
 			myfile.close();
 		}
 
-		else std::cerr << "SEBURO - Unable to open shader file " << filename << std::endl;
+		else std::cerr << "SEBURO - Unable to open text file " << filename << std::endl;
 
 		return rval;
 	}

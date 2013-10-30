@@ -126,6 +126,27 @@ namespace s9 {
 		};
 
 
+   /* GeometryT (const GeometryT& g ){
+      
+      size_indices_ = g.size_indices_;
+      size_vertices_ = g.size_vertices_;
+      size_faces_ = g.size_faces_;
+      vertices_ = g.vertices_;
+      faces_ = g.faces_;
+      indexed_ = g.indexed_;
+
+    }
+
+    GeometryT & operator= ( const GeometryT & g ){
+      size_indices_ = g.size_indices_;
+      size_vertices_ = g.size_vertices_;
+      size_faces_ = g.size_faces_;
+      vertices_ =  std::unique_ptr<VertexType[]> ( g.vertices() );
+      faces_ = std::move(g.faces_);
+      indexed_ = std::move(g.indexed_);
+      return *this;
+    }*/
+
     /**
      * operator[] will return the vertex at the position given, ignoring indices
      */
@@ -159,17 +180,17 @@ namespace s9 {
 
     ///\todo one day, lets not use basic pointers? - How does using pointers affect allocation policy?
 
-    const std::unique_ptr<IndicesType[]>&  indices() { return indices_; }
-    const std::unique_ptr<VertexType[]>&  vertices() { return vertices_; }
-    const std::unique_ptr<FaceType[]>&    faces() { return faces_; }
+    const std::unique_ptr<IndicesType[]>&  indices() const { return indices_; }
+    const std::unique_ptr<VertexType[]>&  vertices() const { return vertices_; }
+    const std::unique_ptr<FaceType[]>&    faces() const { return faces_; }
 
 
     bool indexed() {return indexed_; }
 
-    IndicesType size_vertices() { return size_vertices_; }
-    IndicesType size_indices() { return size_indices_; }
-    IndicesType size_faces() { return size_faces_; }
-    GeometryPrimitive prim_type() { return prim_type_; }
+    const IndicesType size_vertices() const { return size_vertices_; }
+    const IndicesType size_indices() const { return size_indices_; }
+    const IndicesType size_faces() const { return size_faces_; }
+    const GeometryPrimitive prim_type() const { return prim_type_; }
 	
 	protected:
 

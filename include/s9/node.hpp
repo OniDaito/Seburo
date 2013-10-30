@@ -42,7 +42,7 @@ namespace s9 {
     glm::mat4 							matrix_;
     std::vector<NodePtr> 		children_;	
     Camera									camera_;
-    Shape 									geometry_;
+    Shape 									shape_;
 		
 	public:
 		Node()  {};
@@ -52,8 +52,9 @@ namespace s9 {
 		virtual ~Node() {}; 
 
 		// Overridden add methods for attaching things to this node.
-		Node& add(Shape &shape);
-		Node& add(NodePtr p) {return addChild(p); }
+		Node& add(const Shape &shape);
+		Node& add(NodePtr p) { return addChild(p); }
+		Node& add(const Node &n) {NodePtr p = NodePtr(new Node()); *p = n; return *this; }
 		
 		Node& translate(glm::vec3 p);
 		Node& rotate(glm::vec3 r);
@@ -69,6 +70,9 @@ namespace s9 {
 		void set_matrix(const glm::mat4 &matrix) { matrix_ = matrix; } ;
 
 		void draw();
+
+		const Camera& camera() { return camera_; }
+		const Shape& shape() { return shape_; }
 						
 	};
 

@@ -83,6 +83,8 @@ namespace s9 {
 		Quad() {};
 		Quad(float w, float h);
 
+		const GeometryT<Vertex4, Face4, AllocationPolicyNew>* geometry();
+
 	};
 
 	/**
@@ -106,9 +108,38 @@ namespace s9 {
 
 		Cuboid() {};
 		Cuboid(float w, float h, float d);
+
+		const GeometryT<Vertex4, Face4, AllocationPolicyNew>* geometry();
+
 	
 	};
 
+	/**
+	 * A Triangle Mesh made up of Vec3 types
+	 */ 
+
+	struct ShapeObjTriMesh : public ShapeObj {
+		ShapeObjTriMesh(size_t num_verts, size_t num_indices) {
+			geometry = GeometryT<Vertex3, Face3, AllocationPolicyNew>(num_verts, num_indices, TRIANGLES);
+		}
+
+		void brew (gl::BrewFlags b) { gl_drawable.brew(geometry, b); }
+		void draw (GeometryPrimitive g = TRIANGLES) { gl_drawable.draw(geometry, g); }
+
+		GeometryT<Vertex3, Face3, AllocationPolicyNew> geometry;
+			
+	};
+
+	class SEBUROAPI TriMesh : public Shape {
+	public:
+
+		TriMesh() {};
+		TriMesh(size_t num_verts, size_t num_indices);
+
+		const GeometryT<Vertex3, Face3, AllocationPolicyNew>* geometry();
+
+	
+	};
 
 
 }

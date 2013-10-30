@@ -50,8 +50,8 @@ Node& Node::translate(glm::vec3 p) {
  * Add the drawable for this node - shape (shape being a shared object)
  */
 
-Node& Node::add(Shape &shape) {
-	geometry_ = shape;
+Node& Node::add(const Shape &shape) {
+	shape_ = shape;
 	return *this;
 }
 
@@ -92,11 +92,11 @@ Node& Node::yaw(float a){
 
 void Node::draw() {
 
-	if (geometry_.drawable()){
-		if (geometry_.brewed()){
-			geometry_.draw(); ///\todo - allow the settings of flags here
+	if (shape_.drawable()){
+		if (shape_.brewed()){
+			shape_.draw(); ///\todo - allow the settings of flags here
 		} else {
-			geometry_.brew(); ///\todo - allow brew flags here
+			shape_.brew(); ///\todo - allow brew flags here
 		}
 	}
 }

@@ -1,5 +1,6 @@
 ## Todo
 
+* Problem with nodes is they hold a shape and we often want the type (TriMesh, Quad etc) back out ><
 * Consider CPack with CMake for packaging examples and applications
 * FILE Sorting and packaging linux vs osx vs windows
 * Sponza Atrium Model

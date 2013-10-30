@@ -46,6 +46,17 @@ Quad::Quad (float w, float h) : Shape(true)  {
 
 }
 
+const GeometryT<Vertex4, Face4, AllocationPolicyNew>* Quad::geometry() {
+	std::shared_ptr<ShapeObjQuad> t = std::static_pointer_cast<ShapeObjQuad>(obj_) ;
+	return &(t->geometry);
+}
+
+/*
+shared_ptr< GeometryT<Vertex4, Face4, AllocationPolicyNew> > Quad::geometry() {
+	std::shared_ptr<ShapeObjQuad> t = std::static_pointer_cast<ShapeObjQuad>(obj_) ;
+	return std::make_shared<  GeometryT<Vertex4, Face4, AllocationPolicyNew> > (t);
+}*/
+
 
 /**
  * Build a Cuboid with w,h,d centred at the origin
@@ -84,6 +95,30 @@ Cuboid::Cuboid (float w, float h, float d)  : Shape(true) {
 
 	cuboid->geometry.setIndices(indices);
 
-	obj_ = std::static_pointer_cast<ShapeObjCuboid>(cuboid);
+	obj_ = std::static_pointer_cast<ShapeObj>(cuboid);
 
 }
+
+const GeometryT<Vertex4, Face4, AllocationPolicyNew>* Cuboid::geometry() {
+	std::shared_ptr<ShapeObjCuboid> t = std::static_pointer_cast<ShapeObjCuboid>(obj_) ;
+	return &(t->geometry);
+}
+
+
+/**
+ * Build a basic TriMesh with a set number of verts and indices
+ */
+
+TriMesh::TriMesh(size_t num_verts, size_t num_indices) {
+	std::shared_ptr<ShapeObjTriMesh> trimesh;
+	trimesh = std::make_shared<ShapeObjTriMesh>(num_verts, num_indices);
+
+
+	obj_ = std::static_pointer_cast<ShapeObj>(trimesh);
+}
+
+const GeometryT<Vertex3, Face3, AllocationPolicyNew>* TriMesh::geometry() {
+	std::shared_ptr<ShapeObjTriMesh> t = std::static_pointer_cast<ShapeObjTriMesh>(obj_) ;
+	return &(t->geometry);
+}
+
