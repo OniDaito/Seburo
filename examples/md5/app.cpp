@@ -30,7 +30,7 @@ void MD5App::init(){
 
     camera_.set_pos(glm::vec3(0,0,-6.0f));
 
-    md5_ = MD5Mesh( s9::File("./data/hellknight.md5mesh") ); 
+    md5_ = MD5Model( s9::File("./data/hellknight.md5mesh") ); 
 
     cout << md5_ << endl;
 }

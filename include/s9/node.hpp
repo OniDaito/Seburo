@@ -14,6 +14,7 @@
 #include "visualapp.hpp"
 #include "shapes.hpp"
 #include "camera.hpp"
+#include "skeleton.hpp"
 
 
 /*
@@ -106,12 +107,25 @@ namespace s9 {
 	 */
 
 	class NodeShape : public NodeBase {
-		NodeShape (Shape s,  NodeBasePtr p) : NodeBase(p), Shape_(s) { responsible_ = GEOMETRY; };
-		void  draw() { component_->draw(); }; 
+	public:
+		NodeShape (Shape s,  NodeBasePtr p) : NodeBase(p), shape_(s) { responsible_ = GEOMETRY; brewed_ = false; };
+		void draw();
 		std::string print() { return component_->print() + " - Shape"; }
-		Shape Shape_;
+		
+		Shape shape_;
+		bool brewed_;
 	};
 
+	/**
+	 * Add a skin to this node - essentially a shared object of weights
+	 */
+
+	class NodeSkin : public NodeBase {
+	public:
+		NodeSkin(Skin s, NodeBasePtr p) : NodeBase(p), skin_(s) { responsible_ = SKIN_WEIGHTS; };
+		std::string print() { return component_->print() + " - Skin Weights"; }
+		Skin skin_;
+	};
 
   
   typedef std::shared_ptr<Node> NodePtr;
@@ -125,18 +139,19 @@ namespace s9 {
 		Node() { base_ = std::shared_ptr<NodeMinimal>(new NodeMinimal()); node_ = base_; }
 
 		// Overridden add methods for attaching things to this node.
-		Node& add(Shape shape);
+		Node& add(Shape s);
 		Node& add(NodePtr p) { return addChild(p); }
 		Node& add(const Node &n) {NodePtr p = NodePtr(new Node()); *p = n; return *this; }
+		Node& add(Skin s) { node_ = NodeBasePtr(new NodeSkin(s, node_)); return *this; }
 
 		glm::mat4 matrix() {return base_->matrix(); }
 		void set_matrix(const glm::mat4 &m) { base_->set_matrix(m); }
 
 		Node& removeChild(NodePtr p);
 		Node& addChild(NodePtr p) { children_.push_back(p); return *this; }
+		Node& draw();
 
 		friend std::ostream& operator<<(std::ostream& out, const Node& o);
-
 		virtual ~Node() {}; 
 
 	protected:

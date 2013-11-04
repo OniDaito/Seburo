@@ -13,7 +13,6 @@ using namespace std;
 using namespace s9;
 
 
-
 MD5Model::MD5Model(const File &file) : Node(), obj_( shared_ptr<SharedObject>( new SharedObject())) {
   parse(file);
 }
@@ -30,7 +29,9 @@ float computeW (float x, float y, float z) {
 
 
 typedef struct {
-  float s, t;
+  float     s, t;
+  IndicesType index;
+  size_t    count;
 } md5_vertex;
 
 
@@ -50,7 +51,6 @@ void MD5Model::parse(const File &file) {
   obj_->skeleton = Skeleton(CUSTOM_SKELETON);
 
   // vector to hold indices for parent bones
-
   vector<int> bone_indices; // Could be a -1 here you see, for the top tree
 
   // Parse the ASCII format, extracting all the bits we need :)
@@ -104,6 +104,10 @@ void MD5Model::parse(const File &file) {
       }
 
       // Match up parents with actual pointers to bones
+      for (size_t i = 0; i < obj_->num_joints; ++i){
+        if (bone_indices[i] != -1)
+          obj_->skeleton.bone(i)->parent =  obj_->skeleton.bone(bone_indices[i]);
+      }
 
     }
 
@@ -117,8 +121,10 @@ void MD5Model::parse(const File &file) {
       add(mesh_node);
 
       md5_vertex* verts;
+      size_t num_verts;
 
       TriMesh trimesh;
+      Skin    skin;
       
       const GeometryT<Vertex3, Face3, AllocationPolicyNew> *geometry; // Really not happy about this :S
 
@@ -131,9 +137,7 @@ void MD5Model::parse(const File &file) {
         if (string_contains(tline, "numverts")){
           std::istringstream tiss(tline);
           string s;
-          size_t num_verts;
           if (!(tiss >> s >> num_verts)) { break; }
-          obj_->num_verts.push_back(num_verts);
 
           ///\todo this is not ideal for the memory usage I have to say :S
 
@@ -152,13 +156,10 @@ void MD5Model::parse(const File &file) {
 
           size_t idx;
           string s;
-          SkinWeightIndex w;
 
-          if (!(tiss >> s >> idx >> verts[vidx].s >> verts[vidx].t >> w.index >> w.count)) { break; }
+          if (!(tiss >> s >> idx >> verts[vidx].s >> verts[vidx].t >> verts[vidx].index >> verts[vidx].count)) { break; }
           ++vidx;
 
-          // Again, assuming weights and indices are in order
-          obj_->skeleton.addWeightIndex(w);
         }
 
         // Triangles read
@@ -168,11 +169,10 @@ void MD5Model::parse(const File &file) {
           string s;
           size_t num_tris;
           if (!(tiss >> s >> num_tris)) { break; }
-          obj_->num_tris.push_back(num_tris);
-
+        
           // Making the assumption (perhaps incorrectly) that numverts always comes before numtris so we have both here
           // We make our geometry and add it as a node
-          trimesh = TriMesh(obj_->num_verts.back(), num_tris * 3);
+          trimesh = TriMesh(num_verts, num_tris * 3);
           geometry = trimesh.geometry();
           mesh_node.add(trimesh);
 
@@ -197,7 +197,9 @@ void MD5Model::parse(const File &file) {
           string s;
           size_t num_weights;
           if (!(tiss >> s >> num_weights)) { break; }
-          obj_->num_weights.push_back(num_weights);
+          skin = Skin(num_weights);
+          mesh_node.add(skin);
+
         }
 
         else if (string_contains(tline, "weight")){
@@ -209,39 +211,37 @@ void MD5Model::parse(const File &file) {
           float bias, p0, p1, p2;
           string s;
 
-          SkinWeight w;
-
           if (!(tiss >> s >> idx >> bone_id >> bias >> p0 >> p1 >> p2 )) { break; }
 
+          Skin::SkinWeight w;
           w.position = glm::vec3(p0,p1,p2);
           w.bias = bias;
           // Assuming the skeleton / joints appear first
 
           w.bone = obj_->skeleton.bones()[bone_id];
 
-          // Again, assuming weights appear in order
-          obj_->skeleton.addWeight(w);
+          skin.addWeight(w);
 
         }
-
       }
 
-
-
       // Post process our vertices to get the basic initial pose and vertex position
-      vector<SkinWeightIndex> indices = obj_->skeleton.weight_indices();
-      vector<SkinWeight> weights = obj_->skeleton.weights();
+      vector<Skin::SkinIndex> indices = skin.indices();
+      vector<Skin::SkinWeight> weights = skin.weights();
 
-      for (size_t i =0; i < obj_->num_verts.back(); ++i){
+    /*  for (size_t i =0; i < num_verts; ++i){
         
-        SkinWeightIndex wi = indices[i];
+        // Setup the skin indices at this point
+        SkinIndex si;
+        si.index = verts[i].index;
+        si.count = verts[i].count;
+        indices.push_back(si);
 
         glm::vec3 pos (0.0f,0.0f,0.0f);
 
         for (size_t j = 0; j < wi.count; ++j){
           SkinWeight w = weights[wi.index + wi.count];
 
-  
           glm::vec3 bp = w.bone->rotation * w.position;
 
           pos += ( (w.bone->position + bp) * w.bias); // assuming all biases add up to 1
@@ -250,7 +250,7 @@ void MD5Model::parse(const File &file) {
 
         geometry->vertices()[i].p = pos;
 
-      }
+      }*/
 
 
       delete[] verts;

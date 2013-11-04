@@ -11,6 +11,19 @@
 using namespace std;
 using namespace s9;
 
+void NodeShape::draw(){
+	
+	if (brewed_)
+		shape_.draw(); ///\todo pass to shader / contract
+	else{
+		shape_.brew(); ///\todo allow passing of flags
+		brewed_ = true;
+	}
+
+	component_->draw(); 
+
+}
+
 
 Node& Node::removeChild(NodePtr p) {
 	for (std::vector<NodePtr>::iterator it = children_.begin(); it != children_.end(); ){
@@ -29,8 +42,8 @@ Node& Node::removeChild(NodePtr p) {
  * Add the drawable for this node - shape (shape being a shared object so we copy)
  */
 
-Node& Node::add(Shape shape) {
-	node_ = NodeBasePtr(new NodeShape(node_, shape));
+Node& Node::add(Shape s) {
+	node_ = NodeBasePtr(new NodeShape(s,node_));
 	return *this;
 }
 
@@ -41,13 +54,8 @@ Node& Node::add(Shape shape) {
  * Draw - recursive function that composes a final node that is actually drawn
  */
 
-void Node::draw() {
-
-	if (shape_.drawable()){
-		if (shape_.brewed()){
-			shape_.draw(); ///\todo - allow the settings of flags here
-		} else {
-			shape_.brew(); ///\todo - allow brew flags here
-		}
-	}
+Node& Node::draw() {
+	///\todo make recursive
+	node_->draw();
+	return *this;
 }

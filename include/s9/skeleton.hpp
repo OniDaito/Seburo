@@ -34,6 +34,61 @@ namespace s9{
       << obj.rotation.y << ", " << obj.rotation.z << ", " << obj.rotation.w;
   }
 
+  /** 
+   * A skin is a collection of weights and indices. It is a many to many relationship
+   * between vertices and joints with a weight between them.
+   * Skin follows the MD5 Approach by having an index and a range.
+   */
+
+  class Skin {
+  public:
+    Skin() {};
+    Skin(size_t num_weights);
+
+    /**
+     * A struct that indexes our weights in the Id MD5 Style
+     * This index MUST match the vertices it is attached to.
+     * \todo alignment on boundaries?
+     */
+
+    struct SkinIndex {
+      IndicesType   idx;
+      size_t      count;
+    };
+    
+    /**
+     * A weight for a skin. This must link to the skeleton in the current context
+     */
+
+    struct SkinWeight {
+      Bone*       bone;
+      glm::vec3   position; ///\todo Id has this but not sure why :S
+      float       bias;
+    };
+
+  
+  protected:
+ 
+    struct SharedObject {
+      SharedObject(size_t n) { num_weights = n; }
+      ~SharedObject() {};
+
+      std::vector<SkinIndex>  indices;
+      std::vector<SkinWeight> weights;
+      size_t                  num_weights;
+    };
+
+    std::shared_ptr<SharedObject> obj_ = nullptr;
+
+  public:
+    void addIndex (SkinIndex s) { obj_->indices.push_back(s); }
+    void addWeight (SkinWeight w) { obj_->weights.push_back(w); }
+
+    std::vector<SkinIndex>& indices() { return obj_->indices; }
+    std::vector<SkinWeight>& weights() { return obj_->weights; }
+
+  };
+
   /// Types for the skeleton. We can have one created if we like.
   typedef enum {
     OPENNI_SKELETON,

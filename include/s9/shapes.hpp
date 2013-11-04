@@ -83,6 +83,8 @@ namespace s9 {
 		Quad() {};
 		Quad(float w, float h);
 
+		const GeometryT<Vertex4, Face4, AllocationPolicyNew>* geometry();
+
 	};
 
 	/**
@@ -106,6 +108,8 @@ namespace s9 {
 
 		Cuboid() {};
 		Cuboid(float w, float h, float d);
+
+		const GeometryT<Vertex4, Face4, AllocationPolicyNew>* geometry();
 	
 	};
 
@@ -130,7 +134,9 @@ namespace s9 {
       
   };
 
-
+  /**
+   * A mesh made up of triangles
+   */
 
   class SEBUROAPI TriMesh : public Shape {
 

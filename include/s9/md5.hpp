@@ -49,7 +49,6 @@ namespace s9 {
     int version() const {return obj_->version; }
     size_t num_joints() const {return obj_->num_joints; }
     size_t num_meshes() const {return obj_->num_meshes; }
-    const std::vector<size_t> num_verts() const {return obj_->num_verts; }
 
   protected:
 
@@ -61,9 +60,7 @@ namespace s9 {
       int                   version;
       size_t                num_joints;
       size_t                num_meshes;
-      std::vector<size_t>   num_verts;
-      std::vector<size_t>   num_tris;
-      std::vector<size_t>   num_weights;
+ 
 
       s9::Skeleton  skeleton;
     };
@@ -78,8 +75,8 @@ namespace s9 {
       os << "SEBURO MD5Model - Version: " << obj.version() << std::endl;
       os << "   Num Joints: " << obj.num_joints() << std::endl;
       os << "   Num Meshes: " << obj.num_meshes() << std::endl;
-      for (int i =0; i < obj.num_meshes(); ++i)
-        os << "       Num Verts " << i << ": " << obj.num_verts()[i] << std::endl;
+      //for (int i =0; i < obj.num_meshes(); ++i)
+      //  os << "       Num Verts " << i << ": " << obj.num_verts()[i] << std::endl;
       return os;
     }
      
@@ -87,8 +84,6 @@ namespace s9 {
     return  os << "SEBURO MD5Model not Loaded." << std::endl;
   }
 
-  /**
-   * MD5Mesh represents a basic Node BUT with added Skin Support
 
 }
 

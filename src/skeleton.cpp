@@ -72,3 +72,7 @@ Bone* Skeleton::bone(string tag){
   return nullptr;
 }
 
+
+Skin::Skin(size_t num_weights) : obj_(std::shared_ptr<SharedObject> (new SharedObject(num_weights))) {
+  
+}
