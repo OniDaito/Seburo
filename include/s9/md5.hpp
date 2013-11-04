@@ -38,13 +38,13 @@ namespace s9 {
    * MD5 takes a file representing an MD5 and creates an array of s9::nodes we can draw
    */
 
-  class MD5Mesh : public s9::Node {
+  class MD5Model : public s9::Node {
   public:
 
-    MD5Mesh() {}
-    MD5Mesh(const s9::File &file);
+    MD5Model() {}
+    MD5Model(const s9::File &file);
     
-    friend std::ostream& operator<<(std::ostream& out, const MD5Mesh& o);
+    friend std::ostream& operator<<(std::ostream& out, const MD5Model& o);
 
     int version() const {return obj_->version; }
     size_t num_joints() const {return obj_->num_joints; }
@@ -73,9 +73,9 @@ namespace s9 {
   };
 
   /// friend function that actually prints an MD5 Mesh for debugging or other purposes
-  inline std::ostream& operator<<(std::ostream& os, const MD5Mesh& obj) {
+  inline std::ostream& operator<<(std::ostream& os, const MD5Model& obj) {
     if (obj.obj_ != nullptr){
-      os << "SEBURO MD5Mesh - Version: " << obj.version() << std::endl;
+      os << "SEBURO MD5Model - Version: " << obj.version() << std::endl;
       os << "   Num Joints: " << obj.num_joints() << std::endl;
       os << "   Num Meshes: " << obj.num_meshes() << std::endl;
       for (int i =0; i < obj.num_meshes(); ++i)
@@ -84,8 +84,11 @@ namespace s9 {
     }
      
   
-    return  os << "SEBURO MD5Mesh not Loaded." << std::endl;
+    return  os << "SEBURO MD5Model not Loaded." << std::endl;
   }
+
+  /**
+   * MD5Mesh represents a basic Node BUT with added Skin Support
 
 }
 
