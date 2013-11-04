@@ -25,64 +25,15 @@ Node& Node::removeChild(NodePtr p) {
 }
 
 
-Node& Node::rotate(glm::vec3 r){
-	glm::quat q_rotate;
-	
-	q_rotate = glm::rotate( q_rotate, r.x, glm::vec3( 1, 0, 0 ) );
-	q_rotate = glm::rotate( q_rotate, r.y, glm::vec3( 0, 1, 0 ) );
-	q_rotate = glm::rotate( q_rotate, r.z, glm::vec3( 0, 0, 1 ) );
-
-	matrix_ *= glm::toMat4(q_rotate);
-
-	return *this;
-}
-
-
-Node& Node::translate(glm::vec3 p) {
-	glm::mat4 trans = glm::mat4(1.0f);
-	glm::translate(trans,p);
-	matrix_ *= trans;
-	return *this;
-}
-
-
 /**
- * Add the drawable for this node - shape (shape being a shared object)
+ * Add the drawable for this node - shape (shape being a shared object so we copy)
  */
 
-Node& Node::add(const Shape &shape) {
-	shape_ = shape;
+Node& Node::add(Shape shape) {
+	node_ = NodeBasePtr(new NodeShape(node_, shape));
 	return *this;
 }
 
-
-/**
- * Pitch around global x axis
- */
-
-Node& Node::pitch(float a){
-	rotate(glm::vec3(1.0,0.0,0.0));
-	return *this;
-}
-
-/**
- * Pitch around global z axis
- */
-
-Node& Node::roll(float a){
-	rotate(glm::vec3(0.0,0.0,1.0));
-	return *this;
-}
-
-
-/**
- * Pitch around global y axis
- */
-
-Node& Node::yaw(float a){
-	rotate(glm::vec3(0.0,1.0,0.0));
-	return *this;
-}
 
 
 
