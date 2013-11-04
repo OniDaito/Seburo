@@ -140,7 +140,15 @@ namespace s9{
       
       template< typename AllocationPolicy> 
       void allocate(GeometryT<Vertex3, Face3, AllocationPolicy> &g, BrewFlags b) {
+        glBindBuffer(GL_ARRAY_BUFFER, handles_[0]);
+        glBufferData(GL_ARRAY_BUFFER, g.size_vertices() * sizeof(Vertex3), &(g.vertices()[0]), b.access);
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
 
+        if (g.indexed()){
+          glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, handles_[1]);
+          glBufferData(GL_ELEMENT_ARRAY_BUFFER, g.size_indices() * sizeof(IndicesType), &(g.indices()[0]), b.access);
+          glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+        }
       }
       
       template< typename AllocationPolicy> 
@@ -155,6 +163,16 @@ namespace s9{
 
       template< typename AllocationPolicy> 
       void allocate(GeometryT<Vertex3, Face4, AllocationPolicy> &g, BrewFlags b) {
+
+        glBindBuffer(GL_ARRAY_BUFFER, handles_[0]);
+        glBufferData(GL_ARRAY_BUFFER, g.size_vertices() * sizeof(Vertex3), &(g.vertices()[0]), b.access);
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+        if (g.indexed()){
+          glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, handles_[1]);
+          glBufferData(GL_ELEMENT_ARRAY_BUFFER, g.size_indices() * sizeof(IndicesType), &(g.indices()[0]), b.access);
+          glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+        }
 
       }
 
@@ -199,6 +217,45 @@ namespace s9{
           glVertexAttribPointer(idx++,4, GL_FLOAT, GL_FALSE, sizeof(Vertex4), (GLvoid*)offsetof( Vertex4, c) );
           glVertexAttribPointer(idx++,2, GL_FLOAT, GL_FALSE, sizeof(Vertex4), (GLvoid*)offsetof( Vertex4, u) );
           glVertexAttribPointer(idx++,4, GL_FLOAT, GL_FALSE, sizeof(Vertex4), (GLvoid*)offsetof( Vertex4, t) );
+
+          // Indices
+          if (g.indexed()){
+            glEnableVertexAttribArray(5); // Indices
+            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, handles_[1]);
+
+            ///\todo GL_UNSIGNED_INT must match the IndiciesType
+
+            glVertexAttribPointer(idx, 1, GL_UNSIGNED_INT, GL_FALSE,0, (GLubyte*) NULL);
+          } 
+        }
+
+        unbind();
+
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,0);
+      }
+
+      template<typename AllocationPolicy>
+      void setPointers(GeometryT<Vertex3, Face3, AllocationPolicy> &g, BrewFlags b) {
+      
+        bind();
+
+        if (b.interleaved) {
+
+          glBindBuffer(GL_ARRAY_BUFFER, handles_[0]);
+          glEnableVertexAttribArray(0); // Pos
+          glEnableVertexAttribArray(1); // Normal
+          glEnableVertexAttribArray(2); // colour
+          glEnableVertexAttribArray(3); // texture
+          glEnableVertexAttribArray(4); // tangent
+
+          uint32_t idx = 0;
+
+          glVertexAttribPointer(idx++,3, GL_FLOAT, GL_FALSE, sizeof(Vertex3), (GLvoid*)offsetof( Vertex3, p) );
+          glVertexAttribPointer(idx++,3, GL_FLOAT, GL_FALSE, sizeof(Vertex3), (GLvoid*)offsetof( Vertex3, n) );
+          glVertexAttribPointer(idx++,3, GL_FLOAT, GL_FALSE, sizeof(Vertex3), (GLvoid*)offsetof( Vertex3, c) );
+          glVertexAttribPointer(idx++,2, GL_FLOAT, GL_FALSE, sizeof(Vertex3), (GLvoid*)offsetof( Vertex3, u) );
+          glVertexAttribPointer(idx++,3, GL_FLOAT, GL_FALSE, sizeof(Vertex3), (GLvoid*)offsetof( Vertex3, t) );
 
           // Indices
           if (g.indexed()){

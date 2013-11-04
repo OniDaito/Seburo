@@ -52,7 +52,7 @@ namespace s9{
      */
 
     struct SkinIndex {
-      IndicesType   idx;
+      IndicesType index;
       size_t      count;
     };
     

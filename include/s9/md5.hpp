@@ -46,26 +46,23 @@ namespace s9 {
     
     friend std::ostream& operator<<(std::ostream& out, const MD5Model& o);
 
-    int version() const {return obj_->version; }
-    size_t num_joints() const {return obj_->num_joints; }
-    size_t num_meshes() const {return obj_->num_meshes; }
+    int version() const {return version_; }
+    size_t num_joints() const {return num_joints_; }
+    size_t num_meshes() const {return num_meshes_; }
 
   protected:
 
     void parse(const s9::File &file);
 
-    struct SharedObject {
-      
-      std::string           filename;
-      int                   version;
-      size_t                num_joints;
-      size_t                num_meshes;
- 
+    // All these are shared objects so can be copied 
+    // Note, this class extends a shared object so the obj_ pointer is set to that
 
-      s9::Skeleton  skeleton;
-    };
+    std::string   filename_;
+    int           version_;
+    size_t        num_joints_;
+    size_t        num_meshes_;
 
-    std::shared_ptr<SharedObject> obj_ = nullptr;
+    s9::Skeleton  skeleton_;
 
   };
 
@@ -75,6 +72,9 @@ namespace s9 {
       os << "SEBURO MD5Model - Version: " << obj.version() << std::endl;
       os << "   Num Joints: " << obj.num_joints() << std::endl;
       os << "   Num Meshes: " << obj.num_meshes() << std::endl;
+      for (Node p : obj.obj_->children ){
+        os << "       Mesh: " << p << std::endl;
+      }
       //for (int i =0; i < obj.num_meshes(); ++i)
       //  os << "       Num Verts " << i << ": " << obj.num_verts()[i] << std::endl;
       return os;

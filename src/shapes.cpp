@@ -109,11 +109,9 @@ const GeometryT<Vertex4, Face4, AllocationPolicyNew>* Cuboid::geometry() {
  * Build a basic TriMesh with a set number of verts and indices
  */
 
-TriMesh::TriMesh(size_t num_verts, size_t num_indices) {
+TriMesh::TriMesh(size_t num_verts, size_t num_indices) : Shape(true) {
 	std::shared_ptr<ShapeObjTriMesh> trimesh;
 	trimesh = std::make_shared<ShapeObjTriMesh>(num_verts, num_indices);
-
-
 	obj_ = std::static_pointer_cast<ShapeObj>(trimesh);
 }
 

@@ -66,6 +66,7 @@ namespace s9 {
 	 */ 
 
 	struct ShapeObjQuad : public ShapeObj {
+
 		ShapeObjQuad() {
 			geometry = GeometryT<Vertex4, Face4, AllocationPolicyNew> (6,0,TRIANGLES);	
 		}
@@ -121,14 +122,11 @@ namespace s9 {
   struct ShapeObjTriMesh : public ShapeObj {
 
     ShapeObjTriMesh(size_t num_verts, size_t num_indices) {
-
       geometry = GeometryT<Vertex3, Face3, AllocationPolicyNew>(num_verts, num_indices, TRIANGLES);
-
     }
 
-   void brew (gl::BrewFlags b) { gl_drawable.brew(geometry, b); }
-   void draw (GeometryPrimitive g = TRIANGLES) { gl_drawable.draw(geometry, g); }
-
+  	void brew (gl::BrewFlags b) { gl_drawable.brew(geometry, b); }
+  	void draw (GeometryPrimitive g = TRIANGLES) { gl_drawable.draw(geometry, g); }
 
     GeometryT<Vertex3, Face3, AllocationPolicyNew> geometry;
       

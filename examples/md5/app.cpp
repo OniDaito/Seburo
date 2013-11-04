@@ -13,7 +13,6 @@ using namespace std;
 using namespace s9;
 using namespace s9::gl;
 
-
 /*
  * Called when the mainloop starts, just once
  */
@@ -24,11 +23,11 @@ void MD5App::init(){
     addWindowListener(this);
 
     quad_ = Quad(1.0,1.0);
-    node_.add(quad_);
+    //node_.add(quad_);
     //texture_ = Texture( Image(s9::File("./data/astley.jpg")) );
     rotation_ = 0;
 
-    camera_.set_pos(glm::vec3(0,0,-6.0f));
+    camera_.set_pos(glm::vec3(0,0,18.0f));
 
     md5_ = MD5Model( s9::File("./data/hellknight.md5mesh") ); 
 
@@ -53,15 +52,22 @@ void MD5App::display(double_t dt){
     camera_.update(dt);
     shader_.bind();
 
-    glm::mat4 Model = glm::rotate(glm::mat4(1.0f), rotation_, glm::vec3(0.0f, 1.0f, 0.0f));
+    
+    
+    glm::mat4 Model = glm::rotate(glm::mat4(), rotation_, glm::vec3(0.0f, 1.0f, 0.0f));
+    Model = glm::translate(Model, glm::vec3(0.0,-6.0,0.0));
+    //Model = glm::rotate(Model, -90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+    Model = glm::scale(Model, glm::vec3(0.1,0.1,0.1));
     glm::mat4 MVP = camera_.projection_matrix() * camera_.view_matrix() * Model;
 
     shader_.s("uMVPMatrix",MVP);
-   // texture_.bind();
-    node_.draw();
-   // texture_.unbind();
+   
+    // texture_.bind();
+    // node_.draw();
+    // texture_.unbind();
+    
+    md5_.draw();
     shader_.unbind();
-
 }
 
 

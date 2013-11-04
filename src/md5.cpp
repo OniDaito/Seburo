@@ -13,7 +13,7 @@ using namespace std;
 using namespace s9;
 
 
-MD5Model::MD5Model(const File &file) : Node(), obj_( shared_ptr<SharedObject>( new SharedObject())) {
+MD5Model::MD5Model(const File &file) : Node() {
   parse(file);
 }
 
@@ -42,13 +42,13 @@ void MD5Model::parse(const File &file) {
     return;
   }
 
-  obj_->filename = file.filename();
+  filename_ = file.filename();
 
   std::ifstream ifs;
 
   ifs.open (file.path(), std::ifstream::in);
 
-  obj_->skeleton = Skeleton(CUSTOM_SKELETON);
+  skeleton_ = Skeleton(CUSTOM_SKELETON);
 
   // vector to hold indices for parent bones
   vector<int> bone_indices; // Could be a -1 here you see, for the top tree
@@ -62,17 +62,17 @@ void MD5Model::parse(const File &file) {
       int a;
       string s;
       if (!(iss >> s >> a)) { break; }
-      obj_->version = a;
+      version_ = a;
     } 
 
     else if (string_contains(line, "numJoints") ){
       string s;
-      if (!(iss >> s >> obj_->num_joints)) { break; }
+      if (!(iss >> s >> num_joints_)) { break; }
     } 
 
     else if (string_contains(line, "numMeshes") ){
       string s;
-      if (!(iss >> s >> obj_->num_meshes)) { break; }
+      if (!(iss >> s >> num_meshes_)) { break; }
     } 
 
     else if (string_contains(line, "joints {") ){
@@ -80,7 +80,7 @@ void MD5Model::parse(const File &file) {
       std::string tline;
       std::getline(ifs, tline);
 
-      for (size_t i = 0; i < obj_->num_joints; ++i){
+      for (size_t i = 0; i < num_joints_; ++i){
         float p0,p1,p2,r0,r1,r2;
         int parent;
         string name;
@@ -95,18 +95,17 @@ void MD5Model::parse(const File &file) {
         name = remove_char(name, '"');
 
         glm::quat q = glm::quat(r0,r1,r2, computeW(r0,r1,r2));
-        glm::vec3 p = glm::vec3(p0,p1,p2);
+        glm::vec3 p = glm::vec3(p0,p2,p1);
 
-        obj_->skeleton.addBone ( new Bone(name, nullptr, q, p) );
+        skeleton_.addBone ( new Bone(name, nullptr, q, p) );
 
-  
         std::getline(ifs, tline);
       }
 
       // Match up parents with actual pointers to bones
-      for (size_t i = 0; i < obj_->num_joints; ++i){
+      for (size_t i = 0; i < num_joints_; ++i){
         if (bone_indices[i] != -1)
-          obj_->skeleton.bone(i)->parent =  obj_->skeleton.bone(bone_indices[i]);
+          skeleton_.bone(i)->parent = skeleton_.bone(bone_indices[i]);
       }
 
     }
@@ -214,14 +213,12 @@ void MD5Model::parse(const File &file) {
           if (!(tiss >> s >> idx >> bone_id >> bias >> p0 >> p1 >> p2 )) { break; }
 
           Skin::SkinWeight w;
-          w.position = glm::vec3(p0,p1,p2);
+          w.position = glm::vec3(p0,p2,p1);
           w.bias = bias;
-          // Assuming the skeleton / joints appear first
 
-          w.bone = obj_->skeleton.bones()[bone_id];
-
+          // Assuming the skeleton_ / joints appear first
+          w.bone = skeleton_.bones()[bone_id];
           skin.addWeight(w);
-
         }
       }
 
@@ -229,28 +226,27 @@ void MD5Model::parse(const File &file) {
       vector<Skin::SkinIndex> indices = skin.indices();
       vector<Skin::SkinWeight> weights = skin.weights();
 
-    /*  for (size_t i =0; i < num_verts; ++i){
+      for (size_t i =0; i < num_verts; ++i){
         
         // Setup the skin indices at this point
-        SkinIndex si;
+        Skin::SkinIndex si;
         si.index = verts[i].index;
         si.count = verts[i].count;
         indices.push_back(si);
 
         glm::vec3 pos (0.0f,0.0f,0.0f);
 
-        for (size_t j = 0; j < wi.count; ++j){
-          SkinWeight w = weights[wi.index + wi.count];
+        for (size_t j = 0; j < si.count; ++j){
+          Skin::SkinWeight w = weights[si.index + j];
 
           glm::vec3 bp = w.bone->rotation * w.position;
-
           pos += ( (w.bone->position + bp) * w.bias); // assuming all biases add up to 1
       
         }
 
         geometry->vertices()[i].p = pos;
 
-      }*/
+      }
 
 
       delete[] verts;

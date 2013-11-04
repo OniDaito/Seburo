@@ -55,8 +55,8 @@ namespace s9 {
 	public:
 		NodeBase() {component_ = nullptr;}
 		NodeBase(NodeBasePtr c) : component_(c)  {}
-		virtual void 				draw() {};
-		virtual std::string print() { return ""; };
+		virtual void 				draw() { component_->draw(); }
+		virtual std::string print() { return ""; }
 
 	protected:
 
@@ -77,7 +77,7 @@ namespace s9 {
 		
 		glm::mat4 	matrix() { return matrix_; } ;
 		void 				set_matrix(const glm::mat4 &matrix) { matrix_ = matrix; } ;
-		void 				draw() { };
+		void 				draw() {};
 		std::string print() { return " - Matrix"; }
 		
 		glm::mat4 matrix_;
@@ -108,12 +108,11 @@ namespace s9 {
 
 	class NodeShape : public NodeBase {
 	public:
-		NodeShape (Shape s,  NodeBasePtr p) : NodeBase(p), shape_(s) { responsible_ = GEOMETRY; brewed_ = false; };
+		NodeShape (Shape s,  NodeBasePtr p) : NodeBase(p), shape_(s) { responsible_ = GEOMETRY; };
 		void draw();
 		std::string print() { return component_->print() + " - Shape"; }
 		
 		Shape shape_;
-		bool brewed_;
 	};
 
 	/**
@@ -128,41 +127,42 @@ namespace s9 {
 	};
 
   
-  typedef std::shared_ptr<Node> NodePtr;
-
   /**
    * The Actual Node we instantiate and use in our code
    */
 
   class SEBUROAPI Node {
 	public:
-		Node() { base_ = std::shared_ptr<NodeMinimal>(new NodeMinimal()); node_ = base_; }
+		Node(); 
 
 		// Overridden add methods for attaching things to this node.
 		Node& add(Shape s);
-		Node& add(NodePtr p) { return addChild(p); }
-		Node& add(const Node &n) {NodePtr p = NodePtr(new Node()); *p = n; return *this; }
-		Node& add(Skin s) { node_ = NodeBasePtr(new NodeSkin(s, node_)); return *this; }
+		Node& add(Node n);
+		Node& add(Skin s);
 
-		glm::mat4 matrix() {return base_->matrix(); }
-		void set_matrix(const glm::mat4 &m) { base_->set_matrix(m); }
+		glm::mat4 matrix();
+		void set_matrix(const glm::mat4 &m);
 
-		Node& removeChild(NodePtr p);
-		Node& addChild(NodePtr p) { children_.push_back(p); return *this; }
+		Node& removeChild(Node p);
 		Node& draw();
 
 		friend std::ostream& operator<<(std::ostream& out, const Node& o);
 		virtual ~Node() {}; 
 
 	protected:
-		std::vector<NodePtr> 					children_;
-  	std::shared_ptr<NodeMinimal>  base_; // We keep this so we can always get to the matrix
-  	NodeBasePtr 									node_;
+
+		struct SharedObject{
+			std::vector<Node> 						children;
+  		std::shared_ptr<NodeMinimal>  base; // We keep this so we can always get to the matrix
+  		NodeBasePtr 									node;
+		};
+
+		std::shared_ptr<SharedObject> obj_ = nullptr;
 
   };
 
   inline std::ostream& operator<<(std::ostream& os, const Node& obj) {
-    return os << "SEBURO Node with - " << obj.node_->print();
+    return os << "SEBURO Node with" << obj.obj_->node->print();
   }
 }
 
