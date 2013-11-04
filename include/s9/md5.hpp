@@ -87,6 +87,9 @@ namespace s9 {
     return  os << "SEBURO MD5Model not Loaded." << std::endl;
   }
 
+  /**
+   * MD5Mesh represents a basic Node BUT with added Skin Support
+
 }
 
 
