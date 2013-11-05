@@ -92,7 +92,9 @@ namespace s9{
         unbind();
       };
       
-      // Template functions for the brewing of Geometry
+      /// Template functions for the brewing of Geometry
+      ///\todo allow rebrewing with the same size 
+
       template< typename VertexType, typename FaceType, typename AllocationPolicy> 
       void brew( GeometryT<VertexType, FaceType, AllocationPolicy> &g, BrewFlags b=BrewFlagsDefault) {
         glGenVertexArrays(1, &(vao_));
@@ -116,7 +118,11 @@ namespace s9{
         setPointers(g,b);
 
       }
-
+      
+      /// Basic destruction of the buffers created
+      ~Drawable() {
+        glDeleteBuffers(handles_.size(), &(handles_[0]));
+      } 
 
 
       void bind() { glBindVertexArray(vao_);}

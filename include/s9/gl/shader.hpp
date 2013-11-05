@@ -22,12 +22,22 @@ namespace s9 {
 
 	namespace gl {
 
-		class SEBUROAPI Shader {
+		///\todo ShaderLibrary for our UberShader
+		/*class SEBUROAPI ShaderLibrary {
+
+		};*/
+
+		class SEBUROAPI Shader { ///\todo shared object? Possibly? If we add caching then fo shure!
+		
 		public:
+			Shader() { vs_ = fs_ = gs_ = program_ = 0; }
+
+			void load(std::string glsl);
 			void load(std::string vert, std::string frag);
-			GLuint getProgram() { return mProgram; };
-			
-			GLint location(const char * name) {return glGetUniformLocation(mProgram, name); }
+			void load(std::string vert, std::string frag, std::string geom);
+
+			GLuint getProgram() { return program_; };
+			GLint location(const char * name) {return glGetUniformLocation(program_, name); }
 			
 			// Fluent interface for quick setting
 
@@ -37,15 +47,19 @@ namespace s9 {
 			Shader& s(const char * name, float f);
 			Shader& s(const char * name, int i);
 
-			void bind() { glUseProgram(mProgram);};
-			void unbind() {glUseProgram(0);};
+			void bind() 	{ glUseProgram(program_); }
+			void unbind() {	glUseProgram(0); }
 			
-			~Shader() { glDetachShader(mProgram, mVS); glDetachShader(mProgram, mFS);  } 
+			~Shader();
 			
 		protected:
 		   
-			GLuint mVS, mFS;
-			GLuint mProgram;
+			bool parse(std::string &glsl, std::string &vs, std::string &fs, std::string &gs);
+			bool createShader(GLenum type, GLuint &handle, std::string &data);
+			bool createAndLink();
+
+			GLuint vs_, fs_, gs_;
+			GLuint program_;
 
 		};
 	}

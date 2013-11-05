@@ -36,7 +36,7 @@ namespace s9 {
 	 * \todo test split
 	 */
 
-	static inline std::vector<std::string> split_string(const std::string& input, const std::string& delimiters) {
+	static inline std::vector<std::string> split_string_chars(const std::string& input, const std::string& delimiters) {
 		size_t current;
 		size_t next = -1;
 		std::vector<std::string> tokens;
@@ -48,6 +48,20 @@ namespace s9 {
 		while (next != std::string::npos);
 	 	return tokens;
 	}
+
+	static inline std::vector<std::string> split_string_string(const std::string& input, const std::string& delimiter) {
+		size_t current;
+		size_t next = -1;
+		std::vector<std::string> tokens;
+		do {
+			current = next + 1;
+			next = input.find( delimiter, current );
+			tokens.push_back(input.substr( current, next - current ));
+		}
+		while (next != std::string::npos);
+	 	return tokens;
+	}
+
 
 	static inline bool string_contains (const std::string& input, const std::string& contains){
 		size_t found = input.find(contains);

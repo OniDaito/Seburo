@@ -74,7 +74,7 @@ std::string XMLIterator::operator[](const char *s) {
 	//split_string string via '/' into levels
 	string ss(s);
 	std::vector<std::string> strs;
-	strs = split_string(s, "/: ");
+	strs = split_string_chars(s, "/: ");
 	TiXmlElement *pRoot = pElement->FirstChildElement(strs[0].c_str());
 	return find(strs,pRoot);
 	
@@ -94,7 +94,7 @@ std::string XMLSettings::operator[](std::string s) {
 	if (it == mObj->mCache.end()){
 		//split_string string via '/' into levels
 		std::vector<std::string> strs;
-		strs = split_string(s, "/: ");
+		strs = split_string_chars(s, "/: ");
 		TiXmlElement *pRoot = mObj->mDoc->FirstChildElement(strs[0].c_str());
 		string result = find(strs,pRoot);
 		mObj->mCache[s] = result;
@@ -120,7 +120,7 @@ bool XMLSettings::loadFile(std::string filename){
 
 XMLIterator XMLSettings::iterator(std::string s){
 	std::vector<std::string> strs;
-	strs = split_string(s, "/: ");
+	strs = split_string_chars(s, "/: ");
 	
 	XMLIterator it;
 	

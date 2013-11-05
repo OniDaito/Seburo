@@ -15,7 +15,7 @@
 #include "shapes.hpp"
 #include "camera.hpp"
 #include "skeleton.hpp"
-
+#include "gl/shader.hpp"
 
 /*
  * Node represents a *thing* that has a position in space and time (though not a size)
@@ -41,27 +41,41 @@ namespace s9 {
 		POINT_LIGHTS,
 		MATRIX,
 		SKIN_WEIGHTS,
-		SKELETON
+		SKELETON,
+		SHADER,
 	}NodeResponsibility;
 
 	/**
 	 * Decorator pattern - NodeDecorator allows nodes to be decorated with
 	 * functionality and variables such as skin weights etc. We wrap each 
 	 * kind of data we want to add to nodes and present to our shader contract
-	 * present an enum and some data
+	 * present an enum and some data.
+	 * Bubble states if this decorator should go to the top of the stack
 	 */
 
 	class NodeBase {
 	public:
-		NodeBase() {component_ = nullptr;}
-		NodeBase(NodeBasePtr c) : component_(c)  {}
+		NodeBase() {component_ = nullptr; bubble_ = false; }
+		NodeBase(NodeBasePtr c, bool b = false )  {
+			bubble_ = b;
+			if (c->bubble() && !bubble_){
+				component_ = c->component_;
+				c->component_ = NodeBasePtr(this);
+			} else
+				component_ = c;
+		}
 		virtual void 				draw() { component_->draw(); }
+		virtual void 				postDraw() { component_->postDraw(); }
+
 		virtual std::string print() { return ""; }
+
+		bool bubble() {return bubble_; }
 
 	protected:
 
 		NodeBasePtr						component_;	
 		NodeResponsibility		responsible_;
+		bool									bubble_;
 	};
 
 
@@ -126,6 +140,18 @@ namespace s9 {
 		Skin skin_;
 	};
 
+	/**
+	 * Add a Shader to this node. This decorator bubbles to the top
+	 */
+
+	class NodeShader : public NodeBase {
+	public:
+		NodeShader(gl::Shader s, NodeBasePtr p) : NodeBase(p,true), shader_(s) { responsible_ = SHADER; };
+		std::string print() { return component_->print() + " - Shader"; }
+		void draw();
+		gl::Shader shader_;
+	};
+
   
   /**
    * The Actual Node we instantiate and use in our code
@@ -139,6 +165,7 @@ namespace s9 {
 		Node& add(Shape s);
 		Node& add(Node n);
 		Node& add(Skin s);
+		Node& add(gl::Shader s);
 
 		glm::mat4 matrix();
 		void set_matrix(const glm::mat4 &m);
@@ -153,8 +180,10 @@ namespace s9 {
 
 		struct SharedObject{
 			std::vector<Node> 						children;
-  		std::shared_ptr<NodeMinimal>  base; // We keep this so we can always get to the matrix
+  		std::shared_ptr<NodeMinimal>  base; 		// We keep this so we can always get to the matrix
+  		std::shared_ptr<NodeShader>		shader; 	// Like the above, this is handy for adding data values to the shader
   		NodeBasePtr 									node;
+
 		};
 
 		std::shared_ptr<SharedObject> obj_ = nullptr;
