@@ -15,16 +15,20 @@ using namespace s9;
 
 MD5Model::MD5Model(const File &file) : Node() {
   parse(file);
+
+  // Add the matrix rotation as this is in American co-ords
+  set_matrix(glm::rotate(glm::mat4(1.0f), -90.0f, glm::vec3(1.0f, 0.0f, 0.0f)));
 }
 
 
 /// small function to discern W for our Quaternions
-float computeW (float x, float y, float z) {
-  float t = 1.0f - (x * x) - (y * y) - (z * z);
+glm::quat computeW (glm::quat &q) {
+  float t = 1.0f - (q.x * q.x) - (q.y * q.y) - (q.z * q.z);
   if (t < 0.0f)
-    return 0.0f;
+    q.w = 0.0f;
   else
-    return -sqrt (t);
+    q.w = -sqrt (t);
+  return q;
 }
 
 
@@ -94,8 +98,9 @@ void MD5Model::parse(const File &file) {
         bone_indices.push_back(parent);
         name = remove_char(name, '"');
 
-        glm::quat q = glm::quat(r0,r1,r2, computeW(r0,r1,r2));
-        glm::vec3 p = glm::vec3(p0,p2,p1);
+        glm::quat q = glm::quat();
+        q.x = r0; q.y = r1; q.z = r2; computeW(q);
+        glm::vec3 p = glm::vec3(p0,p1,p2);
 
         skeleton_.addBone ( new Bone(name, nullptr, q, p) );
 
@@ -139,7 +144,6 @@ void MD5Model::parse(const File &file) {
           if (!(tiss >> s >> num_verts)) { break; }
 
           ///\todo this is not ideal for the memory usage I have to say :S
-
           verts = new md5_vertex[num_verts];
         
         } 
@@ -213,7 +217,7 @@ void MD5Model::parse(const File &file) {
           if (!(tiss >> s >> idx >> bone_id >> bias >> p0 >> p1 >> p2 )) { break; }
 
           Skin::SkinWeight w;
-          w.position = glm::vec3(p0,p2,p1);
+          w.position = glm::vec3(p0,p1,p2);
           w.bias = bias;
 
           // Assuming the skeleton_ / joints appear first
@@ -245,6 +249,7 @@ void MD5Model::parse(const File &file) {
         }
 
         geometry->vertices()[i].p = pos;
+        geometry->vertices()[i].u = glm::vec2(verts[i].s, verts[i].t);
 
       }
 
