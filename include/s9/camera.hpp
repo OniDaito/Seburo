@@ -12,6 +12,7 @@
 
 #include "common.hpp"
 #include "events.hpp"
+#include "utils.hpp"
 
 /** 
  * Camera Class
@@ -30,11 +31,11 @@ namespace s9{
 			
 		void resize(size_t w, size_t h);
 
-		void set_near(float n) {obj_->near = n; };
-		void set_far(float n) {obj_->far = n; };
+		void set_near(float n) {obj_->near = n; update();};
+		void set_far(float n) {obj_->far = n; update();};
 		
 		void set_ratio(float r);
-		void set_field(float a) {obj_->field = a; };
+		void set_field(float a) {obj_->field = a; update();};
 		
 		inline glm::vec3 pos()	{return obj_->pos; };
 		inline glm::vec3 look() {return obj_->look; };
@@ -46,18 +47,18 @@ namespace s9{
 		void pitch(float a);
 		void roll(float a);
 
-		void set_orthographic(bool b) {obj_->orthographic = b;}
+		void set_orthographic(bool b) {obj_->orthographic = b; update();}
 		bool orthographic() {return obj_->orthographic;}
 
 		void reset();
 
-		void set_pos(glm::vec3 p) { obj_->pos = p; }
-		void set_look(glm::vec3 p) { obj_->look = p; }
-		void set_up(glm::vec3 p) { obj_->up = p; }
-		void set_left(size_t p) { obj_->left = p; }
-		void set_top(size_t p) { obj_->top = p; }
-		void set_right(size_t p) { obj_->right = p; }
-		void set_bottom(size_t p) { obj_->bottom = p; }
+		void set_pos(const glm::vec3 &p) { obj_->pos = p; update();}
+		void set_look(const glm::vec3 &p) { obj_->look = p; update();}
+		void set_up(const glm::vec3 &p) { obj_->up = p; update();}
+		void set_left(size_t p) { obj_->left = p; update();}
+		void set_top(size_t p) { obj_->top = p; update();}
+		void set_right(size_t p) { obj_->right = p; update();}
+		void set_bottom(size_t p) { obj_->bottom = p; update();}
 		
 		///\todo Could this be misleading? Its mostly used in setting shaders through a contract
 		glm::mat4& view_matrix() { return obj_->view_matrix; };
@@ -69,6 +70,22 @@ namespace s9{
 	protected:
 
 		struct SharedObject {
+
+			SharedObject() {
+				up = glm::vec3(0,1.0f,0);
+				pos = glm::vec3(0,0,10.0f);
+				look = glm::vec3(0,0,0);
+				near = 0.1f;
+				far = 100.0f;
+				ratio = 1.0;
+				left = 0;
+				top = 0;
+				right = 100;
+				bottom = 100;
+				field = 55.0f;
+				orthographic = false;
+			}
+
 			glm::mat4 view_matrix;
 			glm::mat4 projection_matrix;
 
@@ -84,117 +101,7 @@ namespace s9{
 	};
 
 
-
-	/*
-
-		virtual void processEvent(MouseEvent e) { 
-			if(e.flag & MOUSE_LEFT_DOWN){
-				glm::vec2 mouse_d = glm::vec2(e.x,e.y) - mouse_pre_;
-				yaw(static_cast<float>(mouse_d.x) * sense_);
-				pitch(static_cast<float>(mouse_d.y) * sense_);
-			}
-
-			if (e.flag & MOUSE_WHEEL_DOWN){
-				zoom(-sense_ * 2);
-			}
-			else if (e.flag & MOUSE_WHEEL_UP){
-				zoom(sense_ * 2);
-			}
-
-			if (e.flag & MOUSE_MIDDLE_DOWN){
-				shift(glm::vec2(static_cast<float>(e.x - mouse_pre_.x) * sense_ * 0.8, 
-						static_cast<float>(e.y - mouse_pre_.y) * sense_ * 0.8));
-			}
-
-			mouse_pre_ = glm::vec2(e.x, e.y);
-		}
-		*/
-
-
-	/*
-	 * A template that adds inertia and mouse drag movements
-	 * \todo this needs some proper signals and inheriting properly
-	 */
-
-	class SEBUROAPI InertiaCam : public Camera {
-
-	protected:
-		glm::vec3 now_;
-		glm::vec3 prev_;
-		float angle_, degrade_;
-		glm::vec3 p_;
-		double_t dt_;
-		bool held_;
-		float zoom_, shift_;
-
-	public:
-
-		InertiaCam() { 
-			now_ = glm::vec3(0.0f,0.0f,0.0f); 
-		 	angle_ = 50.0;
-			degrade_ = 2.0;
-			dt_ = 0;
-			held_ = false;
-			zoom_ = 0.5;
-			shift_ = 0.001;
-		}
-
-		void mouseEvent(MouseEvent e){
-
-			if (e.flag & MOUSE_LEFT_DOWN){
-
-				if (glm::length(p_) > 0){
-
-					now_ = glm::vec3(static_cast<float>(e.x - p_.x), static_cast<float>(e.y - p_.y),0.0f);
-					held_ = true;
-				}
-
-			}
-			else if (e.flag & MOUSE_LEFT_UP ){
-				p_ = glm::vec3(0.0f,0.0f,0.0f);
-				held_ = false;
-			}
-			if (e.flag & MOUSE_WHEEL_DOWN){
-				this->zoom(-zoom_);
-			}
-			else if (e.flag & MOUSE_WHEEL_UP){
-				this->zoom(zoom_);
-			}
-
-			if (e.flag & MOUSE_MIDDLE_DOWN){
-				this->shift(glm::vec2(static_cast<float>(e.x - p_.x) * shift_, 
-						static_cast<float>(e.y - p_.y) * shift_));
-			}
-
-			p_ = glm::vec3(static_cast<float>(e.x), static_cast<float>(e.y),0.0f);
-		}
-
-		/*
-		 * Update is called as often as possible to complete inertia
-		 * \todo work out how best to do zooming and shifting
-		 */ 
-
-		void update(double_t dt){
-			
-			double_t ds = angle_ * dt;
-
-			if (glm::length(now_) < 0.01){
-				 now_ = glm::vec3(0.0f,0.0f,0.0f);
-			}	
-			else {
-				this->yaw(now_.x * ds);
-				this->pitch(now_.y * ds);
-			}
-
-			if (!held_) {
-				now_ *= 1.0 - (dt * degrade_);
-			}
-
-			obj_->view_matrix = glm::lookAt(obj_->pos, obj_->look, obj_->up);
-			obj_->projection_matrix = glm::perspective(obj_->field, obj_->ratio, obj_->near, obj_->far);
-		
-		}
-	};
+	
 
  }
 	 

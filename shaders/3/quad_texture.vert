@@ -18,7 +18,7 @@ uniform mat4 uProjectionMatrix;
 
 
 void main() {            
-  vVertexPosition = uViewMatrix * uProjectionMatrix * uModelMatrix * vec4(aVertPosition,1.0);
+  vVertexPosition = uProjectionMatrix * uViewMatrix  * uModelMatrix * vec4(aVertPosition,1.0);
   gl_Position = vVertexPosition;
 	vColour = aVertColour;
 	vTexCoord = aVertTexCoord;

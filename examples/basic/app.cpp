@@ -82,7 +82,7 @@ void BasicApp::processEvent(MouseEvent e){
 void BasicApp::processEvent(ResizeEvent e){
     cout << "Window Resized:" << e.w << "," << e.h << endl;
     glViewport(0,0,e.w,e.h);
-    camera_.resize(e.w,e.h);
+    //camera_.resize(e.w,e.h);
 }
 
 void BasicApp::processEvent(KeyboardEvent e){

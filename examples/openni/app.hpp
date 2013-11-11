@@ -60,7 +60,7 @@ namespace s9 {
 
     gl::Texture texture_;
 
-    InertiaCam camera_;
+    Camera camera_;
     Camera ortho_camera_;    
   };
 }

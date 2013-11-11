@@ -42,7 +42,7 @@ namespace s9 {
 		Cuboid cuboid_;
 		Node node_;
 		gl::Shader shader_;
-		InertiaCam camera_;
+		Camera camera_;
 
 		float rotation_;
 		

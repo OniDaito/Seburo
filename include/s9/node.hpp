@@ -107,7 +107,7 @@ namespace s9 {
 	public:
 		NodeCamera(Camera c) : NodeBase(CAMERA) { 
 			camera_ = c;  
-			contract_.add(new gl::ShaderClause<glm::mat4>("uPerspectiveMatrix", camera_.projection_matrix()));
+			contract_.add(new gl::ShaderClause<glm::mat4>("uProjectionMatrix", camera_.projection_matrix()));
 			contract_.add(new gl::ShaderClause<glm::mat4>("uViewMatrix", camera_.view_matrix()));  
 		};
 

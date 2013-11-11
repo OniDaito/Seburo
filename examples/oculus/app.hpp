@@ -43,7 +43,7 @@ namespace s9 {
 	protected:
 		Cuboid cuboid_;
 		gl::Shader shader_;
-		InertiaCam camera_;
+		Camera camera_;
 
 		oculus::OculusBase oculus_;
 

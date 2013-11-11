@@ -160,6 +160,12 @@ namespace s9 {
 	}
 
 
+	static inline std::string vecToString (const glm::vec3 &vec) {
+		std::stringstream s;
+		s << vec.x << ", " << vec.y << ", " << vec.z;
+		return s.str();
+	} 
+
 	/**
 	 * Checking at Compile Time
 	 * Modern C++ Design: Applied Generic and Design Patterns (C++ in Depth)

@@ -58,6 +58,7 @@ namespace s9 {
 			ShaderClause(const std::string n, const glm::mat4& d) : name_(n), data_(d) { }
 			void sign(){  
 				GLuint l = location(name_.c_str());
+				//std::cout << name_ << ":" << std::endl << matrixToString(data_) << std::endl;
 			 	glUniformMatrix4fv(	l, 1, GL_FALSE, glm::value_ptr(data_)); 
 			}
 			

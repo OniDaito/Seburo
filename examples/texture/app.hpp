@@ -46,7 +46,7 @@ namespace s9 {
 		Image image_;
 		gl::Texture texture_;
 		gl::Shader shader_;
-		InertiaCam camera_;
+		Camera camera_;
 		Node node_;
 
 		float rotation_;

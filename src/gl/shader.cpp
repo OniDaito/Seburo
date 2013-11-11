@@ -21,8 +21,6 @@ const static string geometry_delimiter = "##>GEOM";
 
 
 
-
-
 Shader::SharedObject::~SharedObject() {
 
 	glDetachShader(program, vs); 

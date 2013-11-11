@@ -16,8 +16,7 @@ using namespace s9;
  */
 
 Camera::Camera() : obj_ (shared_ptr<SharedObject>(new SharedObject())){
-	reset();
-	obj_->orthographic = false;
+
 }
 
 	
@@ -29,9 +28,12 @@ void Camera::resize(size_t w, size_t h){
 	obj_->bottom = 0;
 	obj_->left = 0;
 	obj_->top = h;
+
+	update();
 }
 
 void Camera::update() {	
+ 	
  	obj_->view_matrix = glm::lookAt(obj_->pos, obj_->look, obj_->up);
  	if (obj_->orthographic)
  		obj_->projection_matrix = glm::ortho(static_cast<float>(obj_->left), static_cast<float>(obj_->right),
@@ -52,11 +54,14 @@ void Camera::reset() {
 	obj_->right = 100;
 	obj_->bottom = 100;
 	obj_->field = 55.0f;
+
+	update();
 }
 
 
 void Camera::set_ratio(float r) {
 	obj_->ratio = r;
+	update();
 }
 
 
@@ -65,6 +70,7 @@ void Camera::zoom(float z) {
 	dir = glm::normalize(dir);
 	dir *= z;
 	obj_->pos += dir;
+	update();
 
 }
 
@@ -77,7 +83,7 @@ void Camera::shift(glm::vec2 s) {
 
 	obj_->pos += shiftx + shifty;
 	obj_->look += shiftx + shifty;
-	
+	update();
 }
 
 void Camera::yaw(float a){
@@ -85,7 +91,7 @@ void Camera::yaw(float a){
 	q_rotate = glm::rotate( q_rotate, a, obj_->up );
 	obj_->up = q_rotate * obj_->up;
 	obj_->pos = q_rotate * obj_->pos;
-
+	update();
 }
 
 void Camera::pitch(float a){
@@ -96,13 +102,14 @@ void Camera::pitch(float a){
 	q_rotate = glm::rotate( q_rotate, a, right );
 	obj_->up = q_rotate * obj_->up;
 	obj_->pos = q_rotate * obj_->pos;
-	
+	update();
 }
 
 void Camera::roll(float a){
 	glm::quat q_rotate;
 	q_rotate = glm::rotate( q_rotate, a,  glm::normalize(obj_->look - obj_->pos));
 	obj_->up = q_rotate * obj_->up;	
+	update();
 }
 
 
