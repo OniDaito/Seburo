@@ -19,7 +19,7 @@ using namespace s9::gl;
  */
 
 void BasicApp::init(){
-    shader_.load( s9::File("./shaders/3/quad.vert").path(),  s9::File("./shaders/3/quad.frag").path());
+    shader_ = Shader( s9::File("./shaders/3/quad.vert"),  s9::File("./shaders/3/quad.frag"));
 
    // camera_.set_pos(glm::vec3(0,0,20.0f));
 

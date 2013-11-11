@@ -1,0 +1,15 @@
+{
+	"folders":
+	[
+		{
+			"path": "/Users/oni/Projects/Seburo"
+		}
+	],
+  "settings":
+  {
+    "sublimeclang_options":
+    [
+      "-I/Users/oni/Projects/Seburo/include"
+    ]
+  }
+}

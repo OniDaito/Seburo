@@ -81,7 +81,7 @@ void GLFWApp::mainLoop() {
 
 void GLFWApp::_reshape(GLFWwindow* window, int w, int h) {
 	ResizeEvent e (w,h,glfwGetTime());
-	TwWindowSize(e.w, e.h);
+	//TwWindowSize(e.w, e.h);
 	pp_->_app.fireEvent(e);
 }
 
@@ -140,7 +140,7 @@ void GLFWApp::_keyCallback(GLFWwindow* window, int key, int scancode, int action
  */
 
 void GLFWApp::_mouseButtonCallback(GLFWwindow* window, int button, int action, int mods) {
-	if (!TwEventMouseButtonGLFW(button,action)){
+	//if (!TwEventMouseButtonGLFW(button,action)){
 		switch(button){
 			case 0: {
 				if (action){
@@ -193,17 +193,17 @@ void GLFWApp::_mouseButtonCallback(GLFWwindow* window, int button, int action, i
 				break;
 			}
 		}
-	}
+	//}
 }
 
 
 void GLFWApp::_mousePositionCallback(GLFWwindow* window, double x, double y){
-	if( !TwEventMousePosGLFW(x, y) ){  
+	//if( !TwEventMousePosGLFW(x, y) ){  
 		pp_->mx_ = x;
 		pp_->my_ = y;
 		MouseEvent e (pp_->mx_,pp_->my_,pp_->flag_,glfwGetTime());
 		pp_->_app.fireEvent(e);
-	}
+	//}
 
 }
 
@@ -327,8 +327,8 @@ void GLFWApp::_error_callback(int error, const char* description) {
 
 	pp_->windows_.push_back(window);
 
-	TwInit(TW_OPENGL, NULL);
-	TwWindowSize(w, h);
+	//TwInit(TW_OPENGL, NULL);
+	//TwWindowSize(w, h);
 
 	pp_->dt_ = 0.0;
 	

@@ -15,9 +15,9 @@ using namespace s9;
  * Basic Camera - Simply extends a primitive with viewports
  */
 
-Camera::Camera() {
+Camera::Camera() : obj_ (shared_ptr<SharedObject>(new SharedObject())){
 	reset();
-	orthographic_ = false;
+	obj_->orthographic = false;
 }
 
 	
@@ -25,84 +25,84 @@ void Camera::resize(size_t w, size_t h){
 	set_ratio( static_cast<float>(w) / h);
 
 	// For ortho, we are setting bottom left to 0,0 :)
-	right_ = w;
-	bottom_ = 0;
-	left_ = 0;
-	top_ = h;
+	obj_->right = w;
+	obj_->bottom = 0;
+	obj_->left = 0;
+	obj_->top = h;
 }
 
 void Camera::update() {	
- 	view_matrix_ = glm::lookAt(pos_, look_, up_);
- 	if (orthographic_)
- 		projection_matrix_ = glm::ortho(static_cast<float>(left_), static_cast<float>(right_),
- 			static_cast<float>(bottom_), static_cast<float>(top_), near_, far_);
+ 	obj_->view_matrix = glm::lookAt(obj_->pos, obj_->look, obj_->up);
+ 	if (obj_->orthographic)
+ 		obj_->projection_matrix = glm::ortho(static_cast<float>(obj_->left), static_cast<float>(obj_->right),
+ 			static_cast<float>(obj_->bottom), static_cast<float>(obj_->top), obj_->near, obj_->far);
  	else
-		projection_matrix_ = glm::perspective(field_, ratio_, near_, far_);
+		obj_->projection_matrix = glm::perspective(obj_->field, obj_->ratio, obj_->near, obj_->far);
 }
 
 void Camera::reset() {
-	up_ = glm::vec3(0,1,0);
-	pos_ = glm::vec3(0,0,1.0);
-	look_ = glm::vec3(0,0,0);
-	near_ = 0.1f;
-	far_ = 100.0f;
-	ratio_ = 1.0;
-	left_ = 0;
-	top_ = 0;
-	right_ = 100;
-	bottom_ = 100;
-	field_ = 55.0f;
+	obj_->up = glm::vec3(0,1,0);
+	obj_->pos = glm::vec3(0,0,1.0);
+	obj_->look = glm::vec3(0,0,0);
+	obj_->near = 0.1f;
+	obj_->far = 100.0f;
+	obj_->ratio = 1.0;
+	obj_->left = 0;
+	obj_->top = 0;
+	obj_->right = 100;
+	obj_->bottom = 100;
+	obj_->field = 55.0f;
 }
 
 
 void Camera::set_ratio(float r) {
-	ratio_ = r;
+	obj_->ratio = r;
 }
 
 
 void Camera::zoom(float z) {
-	glm::vec3 dir = pos_ - look_;
+	glm::vec3 dir = obj_->pos - obj_->look;
 	dir = glm::normalize(dir);
 	dir *= z;
-	pos_ += dir;
+	obj_->pos += dir;
 
 }
 
 void Camera::shift(glm::vec2 s) {
-	glm::vec3 dir = pos_ - look_;
+	glm::vec3 dir = obj_->pos - obj_->look;
 	dir = glm::normalize(dir);
-	glm::vec3 shiftx = glm::cross(dir,up_);
+	glm::vec3 shiftx = glm::cross(dir,obj_->up);
 	shiftx *= s.x;
-	glm::vec3 shifty = up_ * s.y;
+	glm::vec3 shifty = obj_->up * s.y;
 
-	pos_ += shiftx + shifty;
-	look_ += shiftx + shifty;
+	obj_->pos += shiftx + shifty;
+	obj_->look += shiftx + shifty;
 	
 }
 
 void Camera::yaw(float a){
 	glm::quat q_rotate;
-	q_rotate = glm::rotate( q_rotate, a, up_ );
-	up_ = q_rotate * up_;
-	pos_ = q_rotate *pos_;
+	q_rotate = glm::rotate( q_rotate, a, obj_->up );
+	obj_->up = q_rotate * obj_->up;
+	obj_->pos = q_rotate * obj_->pos;
 
 }
 
 void Camera::pitch(float a){
 	glm::quat q_rotate;
 	
-	glm::vec3 right = glm::normalize(glm::cross(up_, glm::normalize(look_ - pos_)));
+	glm::vec3 right = glm::normalize(glm::cross(obj_->up, glm::normalize(obj_->look - obj_->pos)));
 	
 	q_rotate = glm::rotate( q_rotate, a, right );
-	up_ = q_rotate * up_;
-	pos_ = q_rotate * pos_;
+	obj_->up = q_rotate * obj_->up;
+	obj_->pos = q_rotate * obj_->pos;
 	
 }
 
 void Camera::roll(float a){
 	glm::quat q_rotate;
-	q_rotate = glm::rotate( q_rotate, a,  glm::normalize(look_ - pos_));
-	up_ = q_rotate * up_;	
+	q_rotate = glm::rotate( q_rotate, a,  glm::normalize(obj_->look - obj_->pos));
+	obj_->up = q_rotate * obj_->up;	
 }
 
 

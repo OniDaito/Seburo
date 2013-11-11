@@ -5,16 +5,21 @@ out vec4 vVertexPosition;
 out vec2 vTexCoord;
 out vec4 vColour;
 
-layout (location = 0) in vec3 attribVertPosition;
-layout (location = 1) in vec3 attribVertNormal;
-layout (location = 2) in vec4 attribVertColour;
-layout (location = 3) in vec2 attribVertTexCoord;
+// Default layout from Seburo
+layout (location = 0) in vec3 aVertPosition;
+layout (location = 1) in vec3 aVertNormal;
+layout (location = 2) in vec4 aVertColour;
+layout (location = 3) in vec2 aVertTexCoord;
 
-uniform mat4 uMVPMatrix;
+// Defaults set by Seburo
+uniform mat4 uModelMatrix;
+uniform mat4 uViewMatrix;
+uniform mat4 uProjectionMatrix;
+
 
 void main() {            
-    vVertexPosition = uMVPMatrix * vec4(attribVertPosition,1.0);
-    gl_Position = vVertexPosition;
-	vColour = attribVertColour;
-	vTexCoord = attribVertTexCoord;
+  vVertexPosition = uViewMatrix * uProjectionMatrix * uModelMatrix * vec4(aVertPosition,1.0);
+  gl_Position = vVertexPosition;
+	vColour = aVertColour;
+	vTexCoord = aVertTexCoord;
 } 

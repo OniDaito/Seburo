@@ -19,7 +19,7 @@ using namespace s9::gl;
  */
 
 void TextureApp::init(){
-    shader_.load( s9::File("./shaders/3/quad_texture.vert").path(), s9::File("./shaders/3/quad_texture.frag").path());
+    shader_ = Shader( s9::File("./shaders/3/quad_texture.vert"), s9::File("./shaders/3/quad_texture.frag"));
 
     addWindowListener(this);
 

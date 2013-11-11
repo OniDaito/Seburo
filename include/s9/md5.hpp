@@ -46,6 +46,8 @@ namespace s9 {
     
     friend std::ostream& operator<<(std::ostream& out, const MD5Model& o);
 
+    std::string print() { return " - MD5Model"; }
+
     int version() const {return version_; }
     size_t num_joints() const {return num_joints_; }
     size_t num_meshes() const {return num_meshes_; }

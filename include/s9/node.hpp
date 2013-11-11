@@ -16,6 +16,9 @@
 #include "camera.hpp"
 #include "skeleton.hpp"
 #include "gl/shader.hpp"
+#include "gl/utils.hpp"
+
+#include <forward_list>
 
 /*
  * Node represents a *thing* that has a position in space and time (though not a size)
@@ -35,47 +38,42 @@ namespace s9 {
 	typedef std::shared_ptr<NodeBase> NodeBasePtr;
 
 	/// Responsibilities that a node has - allows some casting
+	/// Order here is important as objects are drawn in order - lowest first
 	typedef enum {
-		GEOMETRY,
-		CAMERA,
+		SHADER,
 		POINT_LIGHTS,
-		MATRIX,
 		SKIN_WEIGHTS,
 		SKELETON,
-		SHADER,
+		CAMERA,
+		MATRIX,
+		GEOMETRY
 	}NodeResponsibility;
 
 	/**
-	 * Decorator pattern - NodeDecorator allows nodes to be decorated with
-	 * functionality and variables such as skin weights etc. We wrap each 
-	 * kind of data we want to add to nodes and present to our shader contract
-	 * present an enum and some data.
-	 * Bubble states if this decorator should go to the top of the stack
+	 *  Basic interface for the subtypes.
 	 */
 
 	class NodeBase {
 	public:
-		NodeBase() {component_ = nullptr; bubble_ = false; }
-		NodeBase(NodeBasePtr c, bool b = false )  {
-			bubble_ = b;
-			if (c->bubble() && !bubble_){
-				component_ = c->component_;
-				c->component_ = NodeBasePtr(this);
-			} else
-				component_ = c;
+		NodeBase(NodeResponsibility r) { responsible_ = r; }
+	
+		virtual void 				draw() { contract_.sign(); }
+
+		virtual std::string tag() { return ""; }
+
+		bool operator < (const NodeBase& rhs) const {
+			if (responsible_ < rhs.responsible_)
+				return true;
+			return false;
 		}
-		virtual void 				draw() { component_->draw(); }
-		virtual void 				postDraw() { component_->postDraw(); }
 
-		virtual std::string print() { return ""; }
-
-		bool bubble() {return bubble_; }
+		friend class Node;
 
 	protected:
 
-		NodeBasePtr						component_;	
 		NodeResponsibility		responsible_;
-		bool									bubble_;
+		gl::ShaderContract		contract_;
+
 	};
 
 
@@ -87,12 +85,13 @@ namespace s9 {
 	class NodeMinimal : public NodeBase {
 		    	
 	public:
-		NodeMinimal() { responsible_ = MATRIX; };
+		NodeMinimal() : NodeBase(MATRIX) { 	
+			contract_.add(new gl::ShaderClause<glm::mat4>("uModelMatrix", matrix_) );
+		}
 		
 		glm::mat4 	matrix() { return matrix_; } ;
 		void 				set_matrix(const glm::mat4 &matrix) { matrix_ = matrix; } ;
-		void 				draw() {};
-		std::string print() { return " - Matrix"; }
+		std::string tag() { return "Matrix"; }
 		
 		glm::mat4 matrix_;
 						
@@ -106,11 +105,13 @@ namespace s9 {
 	class NodeCamera : public NodeBase {
 		    	
 	public:
-		NodeCamera(Camera c, NodeBasePtr p) : NodeBase(p) { camera_ = c; responsible_ = CAMERA; };
+		NodeCamera(Camera c) : NodeBase(CAMERA) { 
+			camera_ = c;  
+			contract_.add(new gl::ShaderClause<glm::mat4>("uPerspectiveMatrix", camera_.projection_matrix()));
+			contract_.add(new gl::ShaderClause<glm::mat4>("uViewMatrix", camera_.view_matrix()));  
+		};
 
-		///\todo override, presenting the camera data to the shader
-		void 				draw() { component_->draw(); };
-		std::string print() { return component_->print() + " - Camera"; }
+		std::string tag() { return "Camera"; }
 
 		Camera			camera_;	
 	
@@ -122,9 +123,9 @@ namespace s9 {
 
 	class NodeShape : public NodeBase {
 	public:
-		NodeShape (Shape s,  NodeBasePtr p) : NodeBase(p), shape_(s) { responsible_ = GEOMETRY; };
+		NodeShape (Shape s) : NodeBase(GEOMETRY), shape_(s) { };
 		void draw();
-		std::string print() { return component_->print() + " - Shape"; }
+		std::string tag() { return "Shape"; }
 		
 		Shape shape_;
 	};
@@ -135,8 +136,8 @@ namespace s9 {
 
 	class NodeSkin : public NodeBase {
 	public:
-		NodeSkin(Skin s, NodeBasePtr p) : NodeBase(p), skin_(s) { responsible_ = SKIN_WEIGHTS; };
-		std::string print() { return component_->print() + " - Skin Weights"; }
+		NodeSkin(Skin s) : NodeBase(SKIN_WEIGHTS), skin_(s) { };
+		std::string tag() { return "Skin Weights"; }
 		Skin skin_;
 	};
 
@@ -146,8 +147,8 @@ namespace s9 {
 
 	class NodeShader : public NodeBase {
 	public:
-		NodeShader(gl::Shader s, NodeBasePtr p) : NodeBase(p,true), shader_(s) { responsible_ = SHADER; };
-		std::string print() { return component_->print() + " - Shader"; }
+		NodeShader(gl::Shader s) : NodeBase(SHADER), shader_(s) {  };
+		std::string tag() { return "Shader"; }
 		void draw();
 		gl::Shader shader_;
 	};
@@ -162,10 +163,12 @@ namespace s9 {
 		Node(); 
 
 		// Overridden add methods for attaching things to this node.
+		///\todo template these? We could do! :)
 		Node& add(Shape s);
 		Node& add(Node n);
 		Node& add(Skin s);
 		Node& add(gl::Shader s);
+		Node& add(Camera c);
 
 		glm::mat4 matrix();
 		void set_matrix(const glm::mat4 &m);
@@ -178,11 +181,13 @@ namespace s9 {
 
 	protected:
 
+		void order(NodeBasePtr n);
+
 		struct SharedObject{
-			std::vector<Node> 						children;
-  		std::shared_ptr<NodeMinimal>  base; 		// We keep this so we can always get to the matrix
-  		std::shared_ptr<NodeShader>		shader; 	// Like the above, this is handy for adding data values to the shader
-  		NodeBasePtr 									node;
+			std::vector<Node> 							children;
+  		std::shared_ptr<NodeMinimal>  	matrix_node; 			// We keep this so we can always get to the matrix
+  		std::shared_ptr<NodeShader>			shader_node; 			// Like the above, this is handy for adding data values to the shader
+  		std::forward_list<NodeBasePtr> 	bases;
 
 		};
 
@@ -191,7 +196,10 @@ namespace s9 {
   };
 
   inline std::ostream& operator<<(std::ostream& os, const Node& obj) {
-    return os << "SEBURO Node with" << obj.obj_->node->print();
+    os << "SEBURO Node with";
+  	for (NodeBasePtr p : obj.obj_->bases)
+  		os << " - " << p->tag();
+  	return os << std::endl;
   }
 }
 

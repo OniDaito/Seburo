@@ -17,6 +17,7 @@
  * Camera Class
  * A perspective camera that provides the usual functions a camera model may want
  * such as pitch, pan, zoom, resize etc.
+ * SharedObject as it is passed around between nodes often
  */
  
 namespace s9{
@@ -29,15 +30,15 @@ namespace s9{
 			
 		void resize(size_t w, size_t h);
 
-		void set_near(float n) {near_ = n; };
-		void set_far(float n) {far_ = n; };
+		void set_near(float n) {obj_->near = n; };
+		void set_far(float n) {obj_->far = n; };
 		
 		void set_ratio(float r);
-		void set_field(float a) {field_ = a; };
+		void set_field(float a) {obj_->field = a; };
 		
-		inline glm::vec3 pos()	{return pos_; };
-		inline glm::vec3 look() {return look_; };
-		inline glm::vec3 up() {return up_; };
+		inline glm::vec3 pos()	{return obj_->pos; };
+		inline glm::vec3 look() {return obj_->look; };
+		inline glm::vec3 up() {return obj_->up; };
 
 		void zoom(float z);
 		void shift(glm::vec2 s);
@@ -45,35 +46,40 @@ namespace s9{
 		void pitch(float a);
 		void roll(float a);
 
-		void set_orthographic(bool b) {orthographic_ = b;}
-		bool orthographic() {return orthographic_;}
+		void set_orthographic(bool b) {obj_->orthographic = b;}
+		bool orthographic() {return obj_->orthographic;}
 
 		void reset();
 
-		void set_pos(glm::vec3 p) { pos_ = p; }
-		void set_look(glm::vec3 p) { look_ = p; }
-		void set_up(glm::vec3 p) { up_ = p; }
-		void set_left(size_t p) { left_ = p; }
-		void set_top(size_t p) { top_ = p; }
-		void set_right(size_t p) { right_ = p; }
-		void set_bottom(size_t p) { bottom_ = p; }
+		void set_pos(glm::vec3 p) { obj_->pos = p; }
+		void set_look(glm::vec3 p) { obj_->look = p; }
+		void set_up(glm::vec3 p) { obj_->up = p; }
+		void set_left(size_t p) { obj_->left = p; }
+		void set_top(size_t p) { obj_->top = p; }
+		void set_right(size_t p) { obj_->right = p; }
+		void set_bottom(size_t p) { obj_->bottom = p; }
 		
-		glm::mat4 view_matrix() { return view_matrix_; };
-		glm::mat4 projection_matrix() { return projection_matrix_; };
+		///\todo Could this be misleading? Its mostly used in setting shaders through a contract
+		glm::mat4& view_matrix() { return obj_->view_matrix; };
+		glm::mat4& projection_matrix() { return obj_->projection_matrix; };
 
 		virtual void update();
 		virtual void update(double_t dt) { update(); };
 
 	protected:
-		
-		glm::mat4 view_matrix_;
-		glm::mat4 projection_matrix_;
 
-		bool orthographic_;
-		float ratio_, far_, near_, field_;
-		size_t left_, top_, bottom_, right_; // Held for orthographic as well
+		struct SharedObject {
+			glm::mat4 view_matrix;
+			glm::mat4 projection_matrix;
+
+			bool orthographic;
+			float ratio, far, near, field;
+			size_t left, top, bottom, right; // Held for orthographic as well
 		
-		glm::vec3 pos_, look_, up_;
+			glm::vec3 pos, look, up;
+		};
+		
+		std::shared_ptr<SharedObject> obj_ = nullptr;
 
 	};
 
@@ -107,7 +113,7 @@ namespace s9{
 
 	/*
 	 * A template that adds inertia and mouse drag movements
-	 * \todo this needs some proper signals
+	 * \todo this needs some proper signals and inheriting properly
 	 */
 
 	class SEBUROAPI InertiaCam : public Camera {
@@ -184,8 +190,8 @@ namespace s9{
 				now_ *= 1.0 - (dt * degrade_);
 			}
 
-			view_matrix_ = glm::lookAt(pos_, look_, up_);
-			projection_matrix_ = glm::perspective(field_, ratio_, near_, far_);
+			obj_->view_matrix = glm::lookAt(obj_->pos, obj_->look, obj_->up);
+			obj_->projection_matrix = glm::perspective(obj_->field, obj_->ratio, obj_->near, obj_->far);
 		
 		}
 	};

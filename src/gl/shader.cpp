@@ -20,14 +20,90 @@ const static string vertex_delimiter = "##>VERTEX";
 const static string geometry_delimiter = "##>GEOM";
 
 
-Shader::~Shader() {
-	glDetachShader(program_, vs_); 
-	glDetachShader(program_, fs_);
+
+
+
+Shader::SharedObject::~SharedObject() {
+
+	glDetachShader(program, vs); 
+	glDetachShader(program, fs);
 	
-	if (gs_ != 0 ){
-		glDetachShader(program_, gs_);
+	if (gs != 0 ){
+		glDetachShader(program, gs);
 	}
+
 }
+
+Shader::Shader(s9::File glsl) : obj_(shared_ptr<SharedObject>(new SharedObject())) {
+	string vs,fs,gs;
+	string raw = textFileRead(glsl.path());
+	bool error = false;
+
+	if (!parse(raw,vs,fs,gs)) return;
+
+	if(!createShader(GL_VERTEX_SHADER, obj_->vs, vs)) return;
+	if(!createShader(GL_FRAGMENT_SHADER, obj_->fs, fs)) return;
+
+	if (gs.length() != 0){
+		if(!createShader(GL_GEOMETRY_SHADER, obj_->gs, gs)) return;
+	}
+
+	createAndLink();
+
+}
+Shader::Shader(s9::File vert, s9::File frag) : obj_(shared_ptr<SharedObject>(new SharedObject())){
+
+	string vs = textFileRead(vert.path());
+	string fs = textFileRead(frag.path());
+
+	if(!createShader(GL_VERTEX_SHADER, obj_->vs, vs)) return;
+	if(!createShader(GL_FRAGMENT_SHADER, obj_->fs, fs)) return;
+
+	createAndLink();
+}
+
+
+Shader::Shader(s9::File vert, s9::File frag, s9::File geom) : obj_(shared_ptr<SharedObject>(new SharedObject())) {
+	string vs = textFileRead(vert.path());
+	string fs = textFileRead(frag.path());
+	string gs = textFileRead(geom.path());
+
+	if(!createShader(GL_VERTEX_SHADER, obj_->vs, vs)) return;
+	if(!createShader(GL_FRAGMENT_SHADER, obj_->fs, fs)) return;
+	if(!createShader(GL_FRAGMENT_SHADER, obj_->gs, gs)) return;
+
+	createAndLink();
+}
+
+
+Shader::Shader(std::string glsl_string)  : obj_(shared_ptr<SharedObject>(new SharedObject()))  {
+	string vs,fs,gs;
+	bool error = false;
+
+	if (!parse(glsl_string,vs,fs,gs)) return;
+
+	if(!createShader(GL_VERTEX_SHADER, obj_->vs, vs)) return;
+	if(!createShader(GL_FRAGMENT_SHADER, obj_->fs, fs)) return;
+
+	if (gs.length() != 0){
+		if(!createShader(GL_GEOMETRY_SHADER, obj_->gs, gs)) return;
+	}
+
+	createAndLink();
+}
+
+Shader::Shader(std::string vert_string, std::string frag_string)  : obj_(shared_ptr<SharedObject>(new SharedObject())) {
+	if(!createShader(GL_VERTEX_SHADER, obj_->vs, vert_string)) return;
+	if(!createShader(GL_FRAGMENT_SHADER, obj_->fs, frag_string)) return;
+}
+
+
+Shader::Shader(std::string vert_string, std::string frag_string, std::string geom_string)  : obj_(shared_ptr<SharedObject>(new SharedObject())) {
+	if(!createShader(GL_VERTEX_SHADER, obj_->vs, vert_string)) return;
+	if(!createShader(GL_FRAGMENT_SHADER, obj_->fs, frag_string)) return;
+	if(!createShader(GL_GEOMETRY_SHADER, obj_->gs, geom_string)) return;
+}
+
 
 /**
  * Given a single GLSL file, read this in and split into its two
@@ -159,84 +235,31 @@ bool Shader::createShader(GLenum type, GLuint &handle, string &data){
 }
 
 bool Shader::createAndLink() {
-	program_ = glCreateProgram();
+	obj_->program = glCreateProgram();
 
-	glAttachShader(program_,vs_);
-	glAttachShader(program_,fs_);
+	glAttachShader(obj_->program,obj_->vs);
+	glAttachShader(obj_->program,obj_->fs);
 
-	if (gs_ != 0)
-		glAttachShader(program_, gs_);
+	if (obj_->gs != 0)
+		glAttachShader(obj_->program, obj_->gs);
 
-	glLinkProgram(program_);
+	glLinkProgram(obj_->program);
 
 	int isLinked;
 	int maxLength;
 	char* shaderProgramInfoLog;
 
-	glGetProgramiv(program_, GL_LINK_STATUS, (int *)&isLinked);
+	glGetProgramiv(obj_->program, GL_LINK_STATUS, (int *)&isLinked);
 	if(isLinked == false) {
-		glGetProgramiv(program_, GL_INFO_LOG_LENGTH, &maxLength);
+		glGetProgramiv(obj_->program, GL_INFO_LOG_LENGTH, &maxLength);
 		shaderProgramInfoLog = new char[maxLength];
-		glGetProgramInfoLog(program_, maxLength, &maxLength, shaderProgramInfoLog);
+		glGetProgramInfoLog(obj_->program, maxLength, &maxLength, shaderProgramInfoLog);
 		cerr << "SEBURO Shader Program Error - Could not Link. " << shaderProgramInfoLog << endl;
 		delete[] shaderProgramInfoLog;
 		return false;
 	}
 
 	return true;
-
-}
-
-void Shader::load(string glsl) {
-	string vs,fs,gs;
-	string raw = textFileRead(glsl);
-	bool error = false;
-
-	if (!parse(raw,vs,fs,gs)) return;
-
-	if(!createShader(GL_VERTEX_SHADER, vs_, vs)) return;
-	if(!createShader(GL_FRAGMENT_SHADER, fs_, fs)) return;
-
-	if (gs.length() != 0){
-		if(!createShader(GL_GEOMETRY_SHADER, gs_, gs)) return;
-	}
-
-	createAndLink();
-}
-
-
-/**
- * Load shader from vertex and fragment file
- */
-
-void Shader::load(string vert, string frag) {
-	
-	string vs = textFileRead(vert);
-	string fs = textFileRead(frag);
-
-	if(!createShader(GL_VERTEX_SHADER, vs_, vs)) return;
-	if(!createShader(GL_FRAGMENT_SHADER, fs_, fs)) return;
-
-	createAndLink();
-
-}
-
-/**
- * Load shader from vertex, fragment and geometry file
- */
-
-
-void Shader::load(string vert, string frag, string geom) {
-	
-	string vs = textFileRead(vert);
-	string fs = textFileRead(frag);
-	string gs = textFileRead(geom);
-
-	if(!createShader(GL_VERTEX_SHADER, vs_, vs)) return;
-	if(!createShader(GL_FRAGMENT_SHADER, fs_, fs)) return;
-	if(!createShader(GL_FRAGMENT_SHADER, gs_, gs)) return;
-
-	createAndLink();
 
 }
 

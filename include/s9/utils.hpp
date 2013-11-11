@@ -143,6 +143,22 @@ namespace s9 {
 	        return ltrim(rtrim(s));
 	}
 
+	/**
+	 * Print out a GLM Matrix
+	 */
+
+	static inline std::string matrixToString(const glm::mat4 &mat){
+	  std::stringstream s;
+	  int i,j;
+	  for (j=0; j<4; ++j){
+	    for (i=0; i<4; ++i){
+	    	s << mat[i][j] << " ";
+	  	}	
+	  	s << std::endl;
+	 	}
+		return s.str();
+	}
+
 
 	/**
 	 * Checking at Compile Time
