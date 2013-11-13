@@ -24,22 +24,20 @@ void MD5App::init(){
 
     quad_ = Quad(1.0,1.0);
 
-    //texture_ = Texture( Image(s9::File("./data/astley.jpg")) );
     rotation_ = 0;
-    
-    camera_.set_pos(glm::vec3(0,0,10.0f));
-
+    camera_ = Camera(glm::vec3(0,0,18.0f));
     md5_ = MD5Model( s9::File("./data/hellknight.md5mesh") ); 
 
-    CXGLERROR
-    node_.add(shader_).add(quad_).add(camera_);
+    node_.add(md5_).add(camera_).add(shader_);
+ 
 
     glm::mat4 Model = glm::rotate(glm::mat4(), rotation_, glm::vec3(0.0f, 1.0f, 0.0f));
-    //Model = glm::translate(Model, glm::vec3(0.0,-6.0,0.0));
-    //Model = glm::scale(Model, glm::vec3(0.1,0.1,0.1));
-    //node_.set_matrix(Model);
+    Model = glm::translate(Model, glm::vec3(0.0,-6.0,0.0));
+    Model = glm::scale(Model, glm::vec3(0.1,0.1,0.1));
+    node_.set_matrix(Model);
 
-    cout << node_ << endl;
+
+    CXGLERROR
 }
 
 ///\todo seems not to want to update member variables :(
@@ -55,11 +53,16 @@ void MD5App::display(double_t dt){
     glClearBufferfv(GL_COLOR, 0, &glm::vec4(0.9f, 0.9f, 0.9f, 1.0f)[0]);
     GLfloat depth = 1.0f;
     glClearBufferfv(GL_DEPTH, 0, &depth );
+    
     rotation_ += 1.0;
-
-
+    glm::mat4 Model = glm::rotate(glm::mat4(), rotation_, glm::vec3(0.0f, 1.0f, 0.0f));
+    Model = glm::translate(Model, glm::vec3(0.0,-6.0,0.0));
+    Model = glm::scale(Model, glm::vec3(0.1,0.1,0.1));
+    node_.set_matrix(Model);
+    
     node_.draw();
 
+    CXGLERROR
 }
 
 

@@ -30,63 +30,36 @@ namespace s9 {
 		};*/
 
 		/**
-		 * Template class that links Data to our shader. Methods are specialized for
-		 * each OpenGL type
-		 * \todo copy or ref? Also, does this not seem quite heavyweight?
+		 *
 		 */
 
-		struct SEBUROAPI ShaderClauseBase {
-			GLuint location(const char * name ){ 
-				GLint p;
-				glGetIntegerv(GL_CURRENT_PROGRAM, &p); 
-				return glGetUniformLocation(p, name);
-			}
-			
-			virtual void sign(){};
-		};
-
 		template <typename T>
-		struct SEBUROAPI ShaderClause : public ShaderClauseBase{
-			ShaderClause(const std::string n, const T& d) : name_(n), data_(d) { }
-			void sign(){ assert(false); }
-			const std::string name_;
-			const T& data_;
-		};
-
-		template <>
-		struct SEBUROAPI ShaderClause<glm::mat4> : public ShaderClauseBase {
-			ShaderClause(const std::string n, const glm::mat4& d) : name_(n), data_(d) { }
-			void sign(){  
-				GLuint l = location(name_.c_str());
-				//std::cout << name_ << ":" << std::endl << matrixToString(data_) << std::endl;
-			 	glUniformMatrix4fv(	l, 1, GL_FALSE, glm::value_ptr(data_)); 
-			}
-			
-			std::string name_;
-			const glm::mat4& data_;
+		struct SEBUROAPI ShaderClause {
+			ShaderClause(const std::string &s, T& d ) : name(s), data(d) {}
+			const std::string name;
+			T& data;
 		};
 
 		/**
-		 * This class creates a mapping between data and string uniforms in our shader
+		 * Called by nodes to present data to the currently bound shader
+		 * Follows the visitor pattern. 
 		 */
-		
-		class SEBUROAPI ShaderContract {
-			public:
-				~ShaderContract(){
-					for (ShaderClauseBase* p : clauses_)
-						delete p;
-				}
 
-				void add (ShaderClauseBase* p) { clauses_.push_back(p); }
+		class SEBUROAPI ShaderVisitor {
+		public:
 
-				void sign() {
-					for (ShaderClauseBase* p : clauses_){
-						p->sign();
-					}
-				}
-				std::vector<ShaderClauseBase*> clauses_; 
+			GLuint location(const char * name ){ 
+      	GLint p;
+        glGetIntegerv(GL_CURRENT_PROGRAM, &p); 
+        return glGetUniformLocation(p, name);
+      }
+
+			template<typename T>
+			void sign( ShaderClause<T> &c) { assert(false); }
+
 		};
 
+		
 		class SEBUROAPI Shader { ///\todo shared object? Possibly? If we add caching then fo shure!
 		
 		public:

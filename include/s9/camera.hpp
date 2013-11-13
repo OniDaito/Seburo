@@ -27,7 +27,12 @@ namespace s9{
 
 	public:
 
-		Camera();
+
+		Camera() {}
+
+		Camera(glm::vec3 pos);
+		Camera(glm::vec3 pos, glm::vec3 look);
+		Camera(glm::vec3 pos, glm::vec3 look, glm::vec3 up);
 			
 		void resize(size_t w, size_t h);
 

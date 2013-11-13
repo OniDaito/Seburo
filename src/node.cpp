@@ -12,6 +12,9 @@ using namespace std;
 using namespace s9;
 using namespace s9::gl;
 
+vector<glm::mat4> NodeMinimal::matrix_stack_;
+static ShaderVisitor global_visitor;
+
 /**
  * Draw function - recursively draws all the children of this node creating a contract
  * as it goes down with whatever shader is bound.
@@ -22,7 +25,6 @@ using namespace s9::gl;
  } 
 
 void NodeShape::draw(){
-	contract_.sign();
 
 	if (shape_.brewed())
 		shape_.draw(); ///\todo pass to shader / contract
@@ -32,16 +34,17 @@ void NodeShape::draw(){
 
 }
 
-void NodeShader::draw(){
-	shader_.bind();
-}
+/// Basic Node constructor.
+Node::Node() {}
 
-/// Basic Node constructor. Creates a shared object, adding a NodeMinimal for the matrix
-Node::Node() : obj_( shared_ptr<SharedObject>(new SharedObject())) {
+/// _init - This is internal.  Creates a shared object, adding a NodeMinimal for the matrix
+/// \todo by using init here we have to call it when we make any add call or similar. Is this verbose or even nice?
+void Node::_init() {
+	obj_ = shared_ptr<SharedObject>(new SharedObject());
 	obj_->matrix_node = std::shared_ptr<NodeMinimal>(new NodeMinimal());
 	obj_->bases.push_front(obj_->matrix_node);
-
 }
+
 
 /// Remove a childnode from this node \todo test this function
 Node& Node::removeChild(Node p) {
@@ -55,72 +58,121 @@ Node& Node::removeChild(Node p) {
 	return *this;
 }
 
-/// Add a child node to this node
-Node& Node::add(Node n) {
+/// Add a child node to this node. If the node being added is not initialised, make it so
+Node& Node::add(Node &n) {
+	if (obj_ == nullptr) _init();
+	if (n.obj_ == nullptr) n._init();
+
 	obj_->children.push_back(n);
 	return *this;
 }
 
 /// Add a skin to this node
-Node& Node::add(Skin s) { 
-	obj_->bases.push_front( NodeBasePtr(new NodeSkin(s)));
-	obj_->bases.sort(compareNodeBasePtr);
+Node& Node::add(Skin &s) {
+	if (obj_ == nullptr) _init();
+	if ( getBase(SKIN_WEIGHTS) == nullptr ){
+		obj_->bases.push_front( NodeBasePtr(new NodeSkin(s)));
+		obj_->bases.sort(compareNodeBasePtr);
+	} else {
+		cerr << "SEBURO Node - Trying to add a skin to a node when one already exists." << endl;
+	}
 	return *this;
 }
 
 /// Return the matrix for this node
 glm::mat4 Node::matrix() {
+	if (obj_ == nullptr)
+			return glm::mat4(1.0f);
 	return obj_->matrix_node->matrix(); 
 }
 
 /// set the matrix for this node
 void Node::set_matrix(const glm::mat4 &m) { 
-	obj_->matrix_node->set_matrix(m);
+	if (obj_ != nullptr)
+		obj_->matrix_node->set_matrix(m);
 }
 
 /// Add a shader to this node
-Node& Node::add(gl::Shader s) {
-
-	obj_->shader_node = std::shared_ptr<NodeShader>(new NodeShader(s));
-	obj_->bases.push_front(obj_->shader_node);
-	obj_->bases.sort(compareNodeBasePtr);
+Node& Node::add(gl::Shader &s) {
+	if (obj_ == nullptr) _init();
+	if ( getBase(SHADER) == nullptr ){
+		obj_->shader_node = std::shared_ptr<NodeShader>(new NodeShader(s));
+		obj_->bases.push_front(obj_->shader_node);
+		obj_->bases.sort(compareNodeBasePtr);
+	} else {
+		cerr << "SEBURO Node - Trying to add a shader to a node when one already exists." << endl;
+	}
 
 	return *this;
 }
 
 /// Add a shader to this node
-Node& Node::add(Camera c) {
-	obj_->bases.push_front( NodeBasePtr(new NodeCamera(c)));
-	obj_->bases.sort(compareNodeBasePtr);
+Node& Node::add(Camera &c) {
+	if (obj_ == nullptr) _init();
+	if ( getBase(CAMERA) == nullptr ){
+		obj_->bases.push_front( NodeBasePtr(new NodeCamera(c)));
+		obj_->bases.sort(compareNodeBasePtr);
+	} else {
+		cerr << "SEBURO Node - Trying to add a camera to a node when one already exists." << endl;
+	}
 	return *this;
 }
 
 /// Add the drawable for this node - shape (shape being a shared object so we copy) 
-Node& Node::add(Shape s) {
-	obj_->bases.push_front( NodeBasePtr(new NodeShape(s)));
-	obj_->bases.sort(compareNodeBasePtr);
+Node& Node::add(Shape &s) {
+	if (obj_ == nullptr) _init();
+	if ( getBase(GEOMETRY) == nullptr ){
+		obj_->bases.push_front( NodeBasePtr(new NodeShape(s)));
+		obj_->bases.sort(compareNodeBasePtr);
+	} else {
+		cerr << "SEBURO Node - Trying to add a Shape to a node when one already exists." << endl;
+	}
 	return *this;
 }
 
+/**
+ * Remove all nodebases from this node
+ */
+
+Node& Node::reset() {
+	obj_->bases.clear();
+	obj_->matrix_node.reset();
+	obj_->shader_node.reset();
+	return *this;
+}
 
 /**
- * Draw - recursive function that composes a final node that is actually drawn
+ * Internal function to grab a pointer to a base with a responsibility
+ */
+
+NodeBasePtr Node::getBase(NodeResponsibility r) {
+	for (NodeBasePtr p : obj_->bases){
+		if (p->responsible() == r)
+			return p;
+	}
+	return nullptr;
+}
+
+/**
+ * Draw call for this node. Recursive at present
  */
 
 Node& Node::draw() {
 
-	for (NodeBasePtr p : obj_->bases)
+	for (NodeBasePtr p : obj_->bases){
+		p->sign(global_visitor);
 		p->draw();
+	}
 
-	for (Node p : obj_->children)
+	for (Node p : obj_->children){
 		p.draw();
+	}
 
-	// At this point we can unbind shaders - Ths is because shaders remain in place 
-	// as we progress down the tree unless another replaces it.
-	//if (obj_->shader_node != nullptr)
-	//	obj_->shader_node->shader_.unbind();
 
-	
+	for (NodeBasePtr p : obj_->bases){
+		p->postDraw();
+	}
+
 
 	return *this;
 }

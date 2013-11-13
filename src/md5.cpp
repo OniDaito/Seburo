@@ -14,6 +14,7 @@ using namespace s9;
 
 
 MD5Model::MD5Model(const File &file) : Node() {
+  _init(); // Init this node - we want a nice matrix
   parse(file);
 
   // Add the matrix rotation as this is in American co-ords
@@ -122,10 +123,11 @@ void MD5Model::parse(const File &file) {
       std::string tline;
 
       Node mesh_node;
-      add(mesh_node);
-
+      
       md5_vertex* verts;
       size_t num_verts;
+
+      add(mesh_node);
 
       TriMesh trimesh;
       Skin    skin;
@@ -224,6 +226,8 @@ void MD5Model::parse(const File &file) {
           w.bone = skeleton_.bones()[bone_id];
           skin.addWeight(w);
         }
+
+        
       }
 
       // Post process our vertices to get the basic initial pose and vertex position

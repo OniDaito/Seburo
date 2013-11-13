@@ -49,6 +49,7 @@ namespace s9 {
 		gl::Shader shader_;
 		Camera camera_;
 		Node node_;
+		Node node2_;
 		MD5Model md5_;
 
 		float rotation_;

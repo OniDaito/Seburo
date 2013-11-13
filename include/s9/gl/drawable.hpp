@@ -53,7 +53,9 @@ namespace s9{
     class Drawable {
     public:
 
-      Drawable(){ vao_ = 0;}
+      Drawable(){ vao_ = 0; brewed_ = false; }
+
+      bool brewed() {return brewed_; }
       
       /// \todo unbrew method for cleaning data off the card
       /// Options for brewing that may need to be specified
@@ -116,6 +118,8 @@ namespace s9{
         glGenBuffers(handles_.size(), &(handles_[0]));
         allocate(g,b);
         setPointers(g,b);
+
+        brewed_ = true;
 
       }
       
@@ -282,6 +286,7 @@ namespace s9{
 
   
       GLuint vao_;
+      bool brewed_;
       std::vector<unsigned int> handles_;
 
     };

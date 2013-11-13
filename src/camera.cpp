@@ -15,9 +15,22 @@ using namespace s9;
  * Basic Camera - Simply extends a primitive with viewports
  */
 
-Camera::Camera() : obj_ (shared_ptr<SharedObject>(new SharedObject())){
-
+Camera::Camera(glm::vec3 pos) : obj_ (shared_ptr<SharedObject>(new SharedObject())){
+	obj_->pos = pos;
 }
+
+Camera::Camera(glm::vec3 pos, glm::vec3 look) : obj_ (shared_ptr<SharedObject>(new SharedObject())){
+	obj_->pos = pos;
+	obj_->look = look;
+}
+
+
+Camera::Camera(glm::vec3 pos, glm::vec3 look, glm::vec3 up) : obj_ (shared_ptr<SharedObject>(new SharedObject())){
+	obj_->pos = pos;
+	obj_->look = look;
+	obj_->up = up;
+}
+
 
 	
 void Camera::resize(size_t w, size_t h){ 	

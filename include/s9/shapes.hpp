@@ -24,6 +24,8 @@ namespace s9 {
 		virtual void brew(gl::BrewFlags b) = 0;
 		virtual void draw(GeometryPrimitive g) = 0;
 
+		bool brewed() { return gl_drawable.brewed(); }
+
 		gl::Drawable gl_drawable;
 
 	};
@@ -37,25 +39,19 @@ namespace s9 {
 	class SEBUROAPI Shape {
 
 	public:
-		Shape () {brewed_ = false; drawable_ = false; };
-		Shape (bool drawable) : drawable_(drawable) { brewed_ = false; }
-
+		Shape () {};
+		
 		virtual void draw(GeometryPrimitive g = TRIANGLES) { if (obj_ != nullptr) obj_->draw(g); };
-		virtual void brew(gl::BrewFlags b=gl::BrewFlagsDefault) { if (obj_ != nullptr)  { obj_->brew(b); brewed_ = true; } };
-		virtual bool brewed() { return brewed_; }
-		virtual bool drawable() { return drawable_; }
+		virtual void brew(gl::BrewFlags b=gl::BrewFlagsDefault) { if (obj_ != nullptr)  { obj_->brew(b); } };
+		virtual bool brewed() { if(obj_ != nullptr) return obj_->brewed(); return false;}
 
 		const Shape& operator= (const Shape &s ) { 
 			obj_ = s.obj_; 
-			brewed_ = s.brewed_; 
-			drawable_ = s.drawable_; 
 			return *this;
 		}
 
 	protected:
-		bool brewed_;
-		bool drawable_;
-
+	
 		std::shared_ptr<ShapeObj> obj_ = nullptr;
 
 	};

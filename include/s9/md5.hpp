@@ -20,7 +20,6 @@
 
 namespace s9 {
 
-
   /// Defines a skin weight for vertices
   typedef struct {
     glm::vec3   position;
@@ -41,7 +40,7 @@ namespace s9 {
   class MD5Model : public s9::Node {
   public:
 
-    MD5Model() {}
+    MD5Model() : Node() {}
     MD5Model(const s9::File &file);
     
     friend std::ostream& operator<<(std::ostream& out, const MD5Model& o);

@@ -18,7 +18,7 @@ using namespace s9::gl;
  */
 
 
-Quad::Quad (float w, float h) : Shape(true)  {
+Quad::Quad (float w, float h) : Shape()  {
 
   std::shared_ptr<ShapeObjQuad> quad;
 	quad = std::make_shared<ShapeObjQuad>();
@@ -62,7 +62,7 @@ shared_ptr< GeometryT<Vertex4, Face4, AllocationPolicyNew> > Quad::geometry() {
  * Build a Cuboid with w,h,d centred at the origin
  */
 
-Cuboid::Cuboid (float w, float h, float d)  : Shape(true) {
+Cuboid::Cuboid (float w, float h, float d)  : Shape() {
 
 	std::shared_ptr<ShapeObjCuboid> cuboid;
 	cuboid = std::make_shared<ShapeObjCuboid>();
@@ -109,7 +109,7 @@ const GeometryT<Vertex4, Face4, AllocationPolicyNew>* Cuboid::geometry() {
  * Build a basic TriMesh with a set number of verts and indices
  */
 
-TriMesh::TriMesh(size_t num_verts, size_t num_indices) : Shape(true) {
+TriMesh::TriMesh(size_t num_verts, size_t num_indices) : Shape() {
 	std::shared_ptr<ShapeObjTriMesh> trimesh;
 	trimesh = std::make_shared<ShapeObjTriMesh>(num_verts, num_indices);
 	obj_ = std::static_pointer_cast<ShapeObj>(trimesh);

@@ -50,16 +50,29 @@ namespace s9 {
 	}NodeResponsibility;
 
 	/**
-	 *  Basic interface for the subtypes.
+	 * NodeBase and its subclasses form the optional building blocks of a node.
+	 * They can be added
 	 */
 
 	class NodeBase {
 	public:
 		NodeBase(NodeResponsibility r) { responsible_ = r; }
 	
-		virtual void 				draw() { contract_.sign(); }
+		/// Called by the Node's draw method and sets up the shader / geometry
+		virtual void 					draw() { }
 
-		virtual std::string tag() { return ""; }
+		/// Operation called after this node has been drawn and we move up the tree
+		virtual void 					postDraw() { }
+
+		/// A std::string representation of this nodebase
+		virtual std::string 	tag() { return ""; }
+		
+		/// What is this node responsible for?
+		NodeResponsibility 		responsible() {return responsible_; }
+	
+
+		virtual void sign (gl::ShaderVisitor &v ) {};
+	
 
 		bool operator < (const NodeBase& rhs) const {
 			if (responsible_ < rhs.responsible_)
@@ -72,7 +85,6 @@ namespace s9 {
 	protected:
 
 		NodeResponsibility		responsible_;
-		gl::ShaderContract		contract_;
 
 	};
 
@@ -85,15 +97,32 @@ namespace s9 {
 	class NodeMinimal : public NodeBase {
 		    	
 	public:
-		NodeMinimal() : NodeBase(MATRIX) { 	
-			contract_.add(new gl::ShaderClause<glm::mat4>("uModelMatrix", matrix_) );
+		///\todo I have no idea how this constructor can even work! Find out!
+		NodeMinimal() : NodeBase(MATRIX), clause_matrix_("uModelMatrix", matrix_global_) { }
+		
+		glm::mat4 		matrix() { return matrix_; } ;
+		void 					set_matrix( const glm::mat4 &matrix) {matrix_ = matrix;  } ;
+		std::string 	tag() { return "Matrix"; }
+		// Careful not to call this without calling the pop as well
+		void					sign(gl::ShaderVisitor &v ) {
+			if (matrix_stack_.size() > 0){
+				matrix_global_ =  matrix_stack_.back() * matrix_;
+			}
+			else
+				matrix_global_ = matrix_;
+			
+			matrix_stack_.push_back(matrix_global_);
+			v.sign(clause_matrix_); 
 		}
-		
-		glm::mat4 	matrix() { return matrix_; } ;
-		void 				set_matrix(const glm::mat4 &matrix) { matrix_ = matrix; } ;
-		std::string tag() { return "Matrix"; }
-		
+
+		void					postDraw() {
+			matrix_stack_.pop_back();
+		}
+
 		glm::mat4 matrix_;
+		glm::mat4 matrix_global_;
+		static std::vector<glm::mat4> matrix_stack_;
+		gl::ShaderClause<glm::mat4> clause_matrix_; 
 						
 	};
 
@@ -105,15 +134,17 @@ namespace s9 {
 	class NodeCamera : public NodeBase {
 		    	
 	public:
-		NodeCamera(Camera c) : NodeBase(CAMERA) { 
-			camera_ = c;  
-			contract_.add(new gl::ShaderClause<glm::mat4>("uProjectionMatrix", camera_.projection_matrix()));
-			contract_.add(new gl::ShaderClause<glm::mat4>("uViewMatrix", camera_.view_matrix()));  
-		};
-
-		std::string tag() { return "Camera"; }
+		NodeCamera(Camera c) : NodeBase(CAMERA), camera_(c), 
+			clause_camera_view_("uViewMatrix", c.view_matrix()), 
+			clause_camera_projection_("uProjectionMatrix", c.projection_matrix()) {} 
+	
+		std::string 	tag() { return "Camera"; }
+		void					sign(gl::ShaderVisitor &v ) { v.sign(clause_camera_projection_); v.sign(clause_camera_view_); }
 
 		Camera			camera_;	
+
+		gl::ShaderClause<glm::mat4> clause_camera_projection_; 
+		gl::ShaderClause<glm::mat4> clause_camera_view_; 
 	
 	};
 
@@ -126,7 +157,6 @@ namespace s9 {
 		NodeShape (Shape s) : NodeBase(GEOMETRY), shape_(s) { };
 		void draw();
 		std::string tag() { return "Shape"; }
-		
 		Shape shape_;
 	};
 
@@ -137,7 +167,7 @@ namespace s9 {
 	class NodeSkin : public NodeBase {
 	public:
 		NodeSkin(Skin s) : NodeBase(SKIN_WEIGHTS), skin_(s) { };
-		std::string tag() { return "Skin Weights"; }
+		std::string 	tag() { return "Skin Weights"; }
 		Skin skin_;
 	};
 
@@ -149,11 +179,12 @@ namespace s9 {
 	public:
 		NodeShader(gl::Shader s) : NodeBase(SHADER), shader_(s) {  };
 		std::string tag() { return "Shader"; }
-		void draw();
+		void draw() {	shader_.bind(); }
+		void postDraw() {shader_.unbind(); }
 		gl::Shader shader_;
 	};
 
-  
+	
   /**
    * The Actual Node we instantiate and use in our code
    */
@@ -164,24 +195,25 @@ namespace s9 {
 
 		// Overridden add methods for attaching things to this node.
 		///\todo template these? We could do! :)
-		Node& add(Shape s);
-		Node& add(Node n);
-		Node& add(Skin s);
-		Node& add(gl::Shader s);
-		Node& add(Camera c);
+		Node& add(Shape &s);
+		Node& add(Node &n);
+		Node& add(Skin &s);
+		Node& add(gl::Shader &s);
+		Node& add(Camera &c);
 
 		glm::mat4 matrix();
 		void set_matrix(const glm::mat4 &m);
 
 		Node& removeChild(Node p);
 		Node& draw();
+		Node& reset();
 
 		friend std::ostream& operator<<(std::ostream& out, const Node& o);
 		virtual ~Node() {}; 
 
 	protected:
-
-		void order(NodeBasePtr n);
+		void _init();
+		NodeBasePtr getBase(NodeResponsibility r);
 
 		struct SharedObject{
 			std::vector<Node> 							children;

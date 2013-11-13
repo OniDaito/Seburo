@@ -19,6 +19,12 @@ const static string fragment_delimiter = "##>FRAGMENT";
 const static string vertex_delimiter = "##>VERTEX";
 const static string geometry_delimiter = "##>GEOM";
 
+template<>
+void ShaderVisitor::sign( ShaderClause<glm::mat4> &c) {
+	 GLuint l = location(c.name.c_str());
+
+   glUniformMatrix4fv( l, 1, GL_FALSE, glm::value_ptr(c.data));
+}
 
 
 Shader::SharedObject::~SharedObject() {
