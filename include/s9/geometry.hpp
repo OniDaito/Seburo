@@ -16,8 +16,6 @@
 namespace s9 {
 	
 
-	typedef uint32_t IndicesType; // Expand potentially on 64 bit systems?
-
 	/**
 	 * Typedef hint for Geometry
 	 * Ultimately, we have per face data but quads/triangle/fans are implict structures from indices

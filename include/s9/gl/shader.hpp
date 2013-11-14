@@ -12,7 +12,7 @@
 
 #include "../common.hpp"
 #include "common.hpp"
-#include "../utils.hpp"
+#include "../string_utils.hpp"
 #include "utils.hpp"
 #include "../file.hpp"
 
@@ -35,9 +35,12 @@ namespace s9 {
 
 		template <typename T>
 		struct SEBUROAPI ShaderClause {
-			ShaderClause(const std::string &s, T& d ) : name(s), data(d) {}
+			ShaderClause(const std::string &s, T& d, size_t l = 1 ) : name(s), data(d), size(l) {}
+			
 			const std::string name;
 			T& data;
+			size_t size;
+
 		};
 
 		/**

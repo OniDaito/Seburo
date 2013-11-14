@@ -1,0 +1,6 @@
+<map id="TiXmlNode::InsertAfterChild" name="TiXmlNode::InsertAfterChild">
+<area shape="rect" id="node2" href="$classTiXmlNode.html#a57b99d5c97d67a42b9752f5210a1ba5e" title="TiXmlNode::Type" alt="" coords="266,5,390,33"/>
+<area shape="rect" id="node3" href="$classTiXmlNode.html#aa66f4ebcd175204a168ed7c2d7b43071" title="TiXmlNode::GetDocument" alt="" coords="240,57,416,85"/>
+<area shape="rect" id="node5" href="$classTiXmlNode.html#a4508cc3a2d7a98e96a54cc09c37a78a4" title="TiXmlNode::Clone" alt="" coords="263,109,393,137"/>
+<area shape="rect" id="node4" href="$classTiXmlNode.html#a8a4cda4b15c29f64cff419309aebed08" title="Cast to a more defined type. Will return null if not of the requested type. " alt="" coords="465,57,634,85"/>
+</map>

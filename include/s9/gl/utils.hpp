@@ -15,6 +15,8 @@
 namespace s9 {
 	namespace gl {
 
+///\todo set this to go off only once otherwise we end up spamming the logs ( maybe even quit?)
+
 #define CXGLERROR checkError(__FUNCTION__,__LINE__,__FILE__);
 
 		inline bool checkError(const char * func, int line, const char* file) {

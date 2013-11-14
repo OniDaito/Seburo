@@ -1,0 +1,57 @@
+\hypertarget{classs9_1_1Skeleton}{\section{s9\-:\-:Skeleton Class Reference}
+\label{classs9_1_1Skeleton}\index{s9\-::\-Skeleton@{s9\-::\-Skeleton}}
+}
+
+
+{\ttfamily \#include $<$skeleton.\-hpp$>$}
+
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structs9_1_1Skeleton_1_1SharedObject}{Shared\-Object}
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classs9_1_1Skeleton_af74087f5bac7c441193c93a3532f253f}{\hyperlink{classs9_1_1Skeleton_af74087f5bac7c441193c93a3532f253f}{Skeleton} (\hyperlink{namespaces9_a4b242c485a2df431daccfd4a6876cc11}{Skeleton\-Type} type)}\label{classs9_1_1Skeleton_af74087f5bac7c441193c93a3532f253f}
+
+\begin{DoxyCompactList}\small\item\em Create a skeleton by providing a skeleton type to the constructor. \end{DoxyCompactList}\item 
+\hypertarget{classs9_1_1Skeleton_a85c1b7775ec831c7beec7cd0b62847fb}{\hyperlink{structs9_1_1Bone}{Bone} $\ast$ {\bfseries bone} (std\-::string tag)}\label{classs9_1_1Skeleton_a85c1b7775ec831c7beec7cd0b62847fb}
+
+\item 
+\hypertarget{classs9_1_1Skeleton_a6036694a2651250b94e3ea512ff1898b}{\hyperlink{structs9_1_1Bone}{Bone} $\ast$ \hyperlink{classs9_1_1Skeleton_a6036694a2651250b94e3ea512ff1898b}{bone} (uint id)}\label{classs9_1_1Skeleton_a6036694a2651250b94e3ea512ff1898b}
+
+\begin{DoxyCompactList}\small\item\em return a pointer to a bone given an id \end{DoxyCompactList}\item 
+\hypertarget{classs9_1_1Skeleton_a91d7470a0cae2f614a26077450178817}{\hyperlink{classs9_1_1Skeleton}{Skeleton} \& {\bfseries add\-Bone} (\hyperlink{structs9_1_1Bone}{Bone} $\ast$b)}\label{classs9_1_1Skeleton_a91d7470a0cae2f614a26077450178817}
+
+\item 
+\hypertarget{classs9_1_1Skeleton_a0144fa694f1dcb0a1e7cd2bc4bf699ed}{const std\-::vector$<$ \hyperlink{structs9_1_1Bone}{Bone} $\ast$ $>$ \& {\bfseries bones} () const }\label{classs9_1_1Skeleton_a0144fa694f1dcb0a1e7cd2bc4bf699ed}
+
+\end{DoxyCompactItemize}
+\subsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classs9_1_1Skeleton_aed798fad3e2c0baabb422cab259490a8}{void \hyperlink{classs9_1_1Skeleton_aed798fad3e2c0baabb422cab259490a8}{create\-Open\-N\-I\-Skeleton} ()}\label{classs9_1_1Skeleton_aed798fad3e2c0baabb422cab259490a8}
+
+\begin{DoxyCompactList}\small\item\em Create a skeleton hierarchy based on the Open\-N\-I data -\/ Could be hardcoded -\/ read from X\-M\-L? \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classs9_1_1Skeleton_a5c40715a00d134ba679ecc5409e41d8d}{std\-::shared\-\_\-ptr$<$ \hyperlink{structs9_1_1Skeleton_1_1SharedObject}{Shared\-Object} $>$ {\bfseries obj\-\_\-} = nullptr}\label{classs9_1_1Skeleton_a5c40715a00d134ba679ecc5409e41d8d}
+
+\end{DoxyCompactItemize}
+\subsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classs9_1_1Skeleton_a8cfbeb3a605ae9a98ab70cb571111b13}{std\-::ostream \& {\bfseries operator$<$$<$} (std\-::ostream \&out, const \hyperlink{classs9_1_1Skeleton}{Skeleton} \&o)}\label{classs9_1_1Skeleton_a8cfbeb3a605ae9a98ab70cb571111b13}
+
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+A \hyperlink{classs9_1_1Skeleton}{Skeleton} made up of bones. A hierarchy of rotations if you like. Influenced heavily by Open\-N\-I and Id Software's M\-D5 
+
+The documentation for this class was generated from the following files\-:\begin{DoxyCompactItemize}
+\item 
+include/s9/\hyperlink{skeleton_8hpp}{skeleton.\-hpp}\item 
+src/\hyperlink{skeleton_8cpp}{skeleton.\-cpp}\end{DoxyCompactItemize}

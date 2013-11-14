@@ -8,8 +8,6 @@
 
 #include "s9/file.hpp"
 
-#include "s9/utils.hpp"
-
 using namespace std;
 
 using namespace s9;

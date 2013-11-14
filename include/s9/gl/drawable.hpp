@@ -13,6 +13,7 @@
 #include "common.hpp"
 #include "utils.hpp"
 #include "../geometry.hpp"
+#include "../compiler_utils.hpp"
 
 
 namespace s9{
@@ -48,6 +49,8 @@ namespace s9{
      * Drawable Class - Provides functionality to the Shape class, allowing it 
      * to be drawn to the screen. Keeps track of buffers but only holds primitive types
      * This is loosely coupled with its geometry, only at brew time.
+     * \todo at present we are using a single interleaved array and only one brew variable
+     * We need to consider what to do if we want non-interleaved with different access types
      */
 
     class Drawable {
@@ -121,6 +124,8 @@ namespace s9{
 
         brewed_ = true;
 
+        CXGLERROR
+
       }
       
       /// Basic destruction of the buffers created
@@ -128,26 +133,24 @@ namespace s9{
         glDeleteBuffers(handles_.size(), &(handles_[0]));
       } 
 
-
-      void bind() { glBindVertexArray(vao_);}
-
+      void bind() { glBindVertexArray(vao_); }
       void unbind() { glBindVertexArray(0); }
       
     protected:
 
-      /// allocation of the data into the buffer - copy to the card
-      /// default template function should never be called.
+      /**
+       * Allocation of memory on the graphics card for our geometry
+       */
 
+      /// default template function should never be called.
       template< typename VertexType, typename FaceType, typename AllocationPolicy> 
       void allocate (GeometryT<VertexType,FaceType,AllocationPolicy> &g, BrewFlags b){
         STATIC_CHECK(false, Allocate_must_be_specialized_with_geometry);
       }
 
       template< typename AllocationPolicy> 
-      void allocate(GeometryT<Vertex2, Face3, AllocationPolicy> &g, BrewFlags b) {
+      void allocate(GeometryT<Vertex2, Face3, AllocationPolicy> &g, BrewFlags b) { }
 
-      }
-      
       template< typename AllocationPolicy> 
       void allocate(GeometryT<Vertex3, Face3, AllocationPolicy> &g, BrewFlags b) {
         glBindBuffer(GL_ARRAY_BUFFER, handles_[0]);
@@ -160,12 +163,12 @@ namespace s9{
           glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
         }
       }
-      
+
       template< typename AllocationPolicy> 
       void allocate(GeometryT<Vertex4, Face3, AllocationPolicy> &g, BrewFlags b) {
 
       }
-      
+
       template< typename AllocationPolicy> 
       void allocate(GeometryT<Vertex2, Face4, AllocationPolicy> &g, BrewFlags b) {
 
@@ -188,7 +191,7 @@ namespace s9{
 
       template< typename AllocationPolicy> 
       void allocate(GeometryT<Vertex4, Face4, AllocationPolicy> &g, BrewFlags b) {
-      
+
         glBindBuffer(GL_ARRAY_BUFFER, handles_[0]);
         glBufferData(GL_ARRAY_BUFFER, g.size_vertices() * sizeof(Vertex4), &(g.vertices()[0]), b.access);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -201,6 +204,25 @@ namespace s9{
       }
 
 
+      template< typename AllocationPolicy> 
+      void allocate(GeometryT<Vertex3Skin, Face3, AllocationPolicy> &g, BrewFlags b) {
+
+        glBindBuffer(GL_ARRAY_BUFFER, handles_[0]);
+        glBufferData(GL_ARRAY_BUFFER, g.size_vertices() * sizeof(Vertex3Skin), &(g.vertices()[0]), b.access);
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+        if (g.indexed()){
+          glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, handles_[1]);
+          glBufferData(GL_ELEMENT_ARRAY_BUFFER, g.size_indices() * sizeof(IndicesType), &(g.indices()[0]), b.access);
+          glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+        }
+      }
+
+
+      /**
+       * Pointer setting for the various types of geometry
+       */
+
       template< typename VertexType, typename FaceType, typename AllocationPolicy> 
       void setPointers(GeometryT<VertexType,FaceType,AllocationPolicy> &g, BrewFlags b) {
         assert(false);
@@ -208,7 +230,7 @@ namespace s9{
 
       template<typename AllocationPolicy> 
       void setPointers(GeometryT<Vertex4, Face4, AllocationPolicy> &g, BrewFlags b) {
-      
+
         bind();
 
         if (b.interleaved) {
@@ -220,7 +242,7 @@ namespace s9{
           glEnableVertexAttribArray(3); // texture
           glEnableVertexAttribArray(4); // tangent
 
-          uint32_t idx = 0;
+          IndicesType idx = 0;
 
           glVertexAttribPointer(idx++,4, GL_FLOAT, GL_FALSE, sizeof(Vertex4), (GLvoid*)offsetof( Vertex4, p) );
           glVertexAttribPointer(idx++,4, GL_FLOAT, GL_FALSE, sizeof(Vertex4), (GLvoid*)offsetof( Vertex4, n) );
@@ -247,7 +269,7 @@ namespace s9{
 
       template<typename AllocationPolicy>
       void setPointers(GeometryT<Vertex3, Face3, AllocationPolicy> &g, BrewFlags b) {
-      
+
         bind();
 
         if (b.interleaved) {
@@ -259,7 +281,7 @@ namespace s9{
           glEnableVertexAttribArray(3); // texture
           glEnableVertexAttribArray(4); // tangent
 
-          uint32_t idx = 0;
+          IndicesType idx = 0;
 
           glVertexAttribPointer(idx++,3, GL_FLOAT, GL_FALSE, sizeof(Vertex3), (GLvoid*)offsetof( Vertex3, p) );
           glVertexAttribPointer(idx++,3, GL_FLOAT, GL_FALSE, sizeof(Vertex3), (GLvoid*)offsetof( Vertex3, n) );
@@ -284,14 +306,56 @@ namespace s9{
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,0);
       }
 
-  
+      ///\todo we should, eventually, match these layout numbers up so we can just add bits to our uber shader easily
+      template<typename AllocationPolicy>
+      void setPointers(GeometryT<Vertex3Skin, Face3, AllocationPolicy> &g, BrewFlags b) {
+
+        bind();
+
+        if (b.interleaved) {
+
+          glBindBuffer(GL_ARRAY_BUFFER, handles_[0]);
+          glEnableVertexAttribArray(0); // Pos
+          glEnableVertexAttribArray(1); // Normal
+          glEnableVertexAttribArray(2); // texture
+          glEnableVertexAttribArray(3); // tangent
+          glEnableVertexAttribArray(4); // bone_index
+          glEnableVertexAttribArray(5); // bone_weight
+
+          IndicesType idx = 0;
+
+          glVertexAttribPointer(idx++, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex3Skin), (GLvoid*)offsetof( Vertex3Skin, p) );
+          glVertexAttribPointer(idx++, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex3Skin), (GLvoid*)offsetof( Vertex3Skin, n) );
+          glVertexAttribPointer(idx++, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex3Skin), (GLvoid*)offsetof( Vertex3Skin, u) );
+          glVertexAttribPointer(idx++, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex3Skin), (GLvoid*)offsetof( Vertex3Skin, t) );
+          glVertexAttribPointer(idx++, 1, GL_UNSIGNED_INT, GL_FALSE, sizeof(Vertex3Skin), (GLvoid*)offsetof( Vertex3Skin, b) );
+          glVertexAttribPointer(idx++, 1, GL_FLOAT, GL_FALSE, sizeof(Vertex3Skin), (GLvoid*)offsetof( Vertex3Skin, w) );
+
+          // Indices
+          if (g.indexed()){
+            glEnableVertexAttribArray(6); // Indices
+            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, handles_[1]);
+
+            ///\todo GL_UNSIGNED_INT must match the IndiciesType
+
+            glVertexAttribPointer(idx, 1, GL_UNSIGNED_INT, GL_FALSE,0, (GLubyte*) NULL);
+          } 
+        }
+
+        unbind();
+
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,0);
+
+        CXGLERROR
+      }
+
+        
       GLuint vao_;
       bool brewed_;
       std::vector<unsigned int> handles_;
 
     };
-
-
 
   }
 

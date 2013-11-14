@@ -1,0 +1,6 @@
+<map id="s9::Event" name="s9::Event">
+<area shape="rect" id="node2" href="$structs9_1_1KeyboardEvent.html" title="s9::KeyboardEvent" alt="" coords="5,83,139,111"/>
+<area shape="rect" id="node3" href="$structs9_1_1MouseEvent.html" title="s9::MouseEvent" alt="" coords="163,83,279,111"/>
+<area shape="rect" id="node4" href="$structs9_1_1ResizeEvent.html" title="s9::ResizeEvent" alt="" coords="304,83,421,111"/>
+<area shape="rect" id="node5" href="$structs9_1_1ScrollEvent.html" title="s9::ScrollEvent" alt="" coords="445,83,555,111"/>
+</map>

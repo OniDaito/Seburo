@@ -18,14 +18,14 @@ using namespace s9::gl;
  */
 
 void MD5App::init(){
-    shader_ = Shader( s9::File("./shaders/3/quad_texture.vert"), s9::File("./shaders/3/quad_texture.frag"));
+    shader_ = Shader(s9::File("./shaders/3/skinning.glsl"));
 
     addWindowListener(this);
 
     quad_ = Quad(1.0,1.0);
 
     rotation_ = 0;
-    camera_ = Camera(glm::vec3(0,0,18.0f));
+   
     md5_ = MD5Model( s9::File("./data/hellknight.md5mesh") ); 
 
     node_.add(md5_).add(camera_).add(shader_);
@@ -36,6 +36,11 @@ void MD5App::init(){
     Model = glm::scale(Model, glm::vec3(0.1,0.1,0.1));
     node_.set_matrix(Model);
 
+    Bone * neck = md5_.skeleton().bone("neck");
+
+    glm::rotate( neck->rotation , 1.0, glm::vec3(0.0,1.0,0.0));
+
+    camera_.set_pos( glm::vec3(0,0,18.0f));
 
     CXGLERROR
 }

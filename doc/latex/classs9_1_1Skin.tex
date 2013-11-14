@@ -1,0 +1,49 @@
+\hypertarget{classs9_1_1Skin}{\section{s9\-:\-:Skin Class Reference}
+\label{classs9_1_1Skin}\index{s9\-::\-Skin@{s9\-::\-Skin}}
+}
+
+
+{\ttfamily \#include $<$skeleton.\-hpp$>$}
+
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structs9_1_1Skin_1_1SharedObject}{Shared\-Object}
+\item 
+struct \hyperlink{structs9_1_1Skin_1_1SkinIndex}{Skin\-Index}
+\item 
+struct \hyperlink{structs9_1_1Skin_1_1SkinWeight}{Skin\-Weight}
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classs9_1_1Skin_a4b451b5f0a0d54fcfddc70d683867ff1}{{\bfseries Skin} (size\-\_\-t num\-\_\-weights)}\label{classs9_1_1Skin_a4b451b5f0a0d54fcfddc70d683867ff1}
+
+\item 
+\hypertarget{classs9_1_1Skin_a4a864dec5884e946d41996e3bb5045b2}{void {\bfseries add\-Index} (\hyperlink{structs9_1_1Skin_1_1SkinIndex}{Skin\-Index} s)}\label{classs9_1_1Skin_a4a864dec5884e946d41996e3bb5045b2}
+
+\item 
+\hypertarget{classs9_1_1Skin_a23a77091c1c9d06a494278aefa1108ef}{void {\bfseries add\-Weight} (\hyperlink{structs9_1_1Skin_1_1SkinWeight}{Skin\-Weight} w)}\label{classs9_1_1Skin_a23a77091c1c9d06a494278aefa1108ef}
+
+\item 
+\hypertarget{classs9_1_1Skin_aa8698ea541a9018417f272dfe37b41bf}{std\-::vector$<$ \hyperlink{structs9_1_1Skin_1_1SkinIndex}{Skin\-Index} $>$ \& {\bfseries indices} ()}\label{classs9_1_1Skin_aa8698ea541a9018417f272dfe37b41bf}
+
+\item 
+\hypertarget{classs9_1_1Skin_a16087c6f41ffd10897e4b616d5522d29}{std\-::vector$<$ \hyperlink{structs9_1_1Skin_1_1SkinWeight}{Skin\-Weight} $>$ \& {\bfseries weights} ()}\label{classs9_1_1Skin_a16087c6f41ffd10897e4b616d5522d29}
+
+\end{DoxyCompactItemize}
+\subsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classs9_1_1Skin_a18777933793b0ab5563a38880ac9f955}{std\-::shared\-\_\-ptr$<$ \hyperlink{structs9_1_1Skin_1_1SharedObject}{Shared\-Object} $>$ {\bfseries obj\-\_\-} = nullptr}\label{classs9_1_1Skin_a18777933793b0ab5563a38880ac9f955}
+
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+A skin is a collection of weights and indices. It is a many to many relationship between vertices and joints with a weight between them. \hyperlink{classs9_1_1Skin}{Skin} follows the M\-D5 Approach by having an index and a range. 
+
+The documentation for this class was generated from the following files\-:\begin{DoxyCompactItemize}
+\item 
+include/s9/\hyperlink{skeleton_8hpp}{skeleton.\-hpp}\item 
+src/\hyperlink{skeleton_8cpp}{skeleton.\-cpp}\end{DoxyCompactItemize}

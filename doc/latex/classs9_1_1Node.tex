@@ -1,114 +1,137 @@
-\hypertarget{classs9_1_1Node}{\section{s9\-:\-:\-Node \-Class \-Reference}
+\hypertarget{classs9_1_1Node}{\section{s9\-:\-:Node Class Reference}
 \label{classs9_1_1Node}\index{s9\-::\-Node@{s9\-::\-Node}}
 }
-\subsection*{\-Public \-Member \-Functions}
+
+
+{\ttfamily \#include $<$node.\-hpp$>$}
+
+Inheritance diagram for s9\-:\-:Node\-:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classs9_1_1Node}
+\end{center}
+\end{figure}
+\subsection*{Classes}
 \begin{DoxyCompactItemize}
 \item 
-\hyperlink{classs9_1_1Node}{\-Node} \& \hyperlink{classs9_1_1Node_ae75a24d598fed1d8cb265d7bd1f250a6}{add} (\hyperlink{classs9_1_1Shape}{\-Shape} \&shape)
-\item 
-\hypertarget{classs9_1_1Node_ac117bf8d7dbe445240a54a58b71d02fb}{\hyperlink{classs9_1_1Node}{\-Node} \& {\bfseries add} (\-Node\-Ptr p)}\label{classs9_1_1Node_ac117bf8d7dbe445240a54a58b71d02fb}
-
-\item 
-\hypertarget{classs9_1_1Node_a7ef334d59ddd6f2e0db167d955f00419}{\hyperlink{classs9_1_1Node}{\-Node} \& {\bfseries translate} (glm\-::vec3 p)}\label{classs9_1_1Node_a7ef334d59ddd6f2e0db167d955f00419}
-
-\item 
-\hypertarget{classs9_1_1Node_a0226fc806528f8a13d72589d97b35048}{\hyperlink{classs9_1_1Node}{\-Node} \& {\bfseries rotate} (glm\-::vec3 r)}\label{classs9_1_1Node_a0226fc806528f8a13d72589d97b35048}
-
-\item 
-\hypertarget{classs9_1_1Node_a9a558e14ea69bc090749140bc416ac63}{\hyperlink{classs9_1_1Node}{\-Node} \& {\bfseries add\-Child} (\-Node\-Ptr p)}\label{classs9_1_1Node_a9a558e14ea69bc090749140bc416ac63}
-
-\item 
-\hypertarget{classs9_1_1Node_a3f9b1b74aa4d81cabd30e54e3fbcc463}{\hyperlink{classs9_1_1Node}{\-Node} \& {\bfseries remove\-Child} (\-Node\-Ptr p)}\label{classs9_1_1Node_a3f9b1b74aa4d81cabd30e54e3fbcc463}
-
-\item 
-\hyperlink{classs9_1_1Node}{\-Node} \& \hyperlink{classs9_1_1Node_abf84276da34f295abef63302b530951c}{yaw} (float a)
-\item 
-\hyperlink{classs9_1_1Node}{\-Node} \& \hyperlink{classs9_1_1Node_a3227e4a745619e0f44a19df3576b8e65}{pitch} (float a)
-\item 
-\hyperlink{classs9_1_1Node}{\-Node} \& \hyperlink{classs9_1_1Node_a9ce12695e88691b8e8e0689347e0ced6}{roll} (float a)
-\item 
-\hypertarget{classs9_1_1Node_af568af42d07be9eee5bb77d637686125}{glm\-::mat4 {\bfseries matrix} ()}\label{classs9_1_1Node_af568af42d07be9eee5bb77d637686125}
-
-\item 
-\hypertarget{classs9_1_1Node_aca2590950f64f43f37b7999cd4e26bcf}{void {\bfseries set\-\_\-matrix} (const glm\-::mat4 \&matrix)}\label{classs9_1_1Node_aca2590950f64f43f37b7999cd4e26bcf}
-
-\item 
-void \hyperlink{classs9_1_1Node_ab88c83ced58700a56de568f5b1e3c473}{draw} ()
+struct \hyperlink{structs9_1_1Node_1_1SharedObject}{Shared\-Object}
 \end{DoxyCompactItemize}
-\subsection*{\-Protected \-Member \-Functions}
+\subsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\hypertarget{classs9_1_1Node_ad6633dd1b9e4603da3762be17255fba2}{virtual void {\bfseries draw\-To\-Screen} ()}\label{classs9_1_1Node_ad6633dd1b9e4603da3762be17255fba2}
+\hypertarget{classs9_1_1Node_ad7a34779cad45d997bfd6d3d8043c75f}{\hyperlink{classs9_1_1Node_ad7a34779cad45d997bfd6d3d8043c75f}{Node} ()}\label{classs9_1_1Node_ad7a34779cad45d997bfd6d3d8043c75f}
 
+\begin{DoxyCompactList}\small\item\em Basic \hyperlink{classs9_1_1Node}{Node} constructor. \end{DoxyCompactList}\item 
+\hyperlink{classs9_1_1Node}{Node} \& \hyperlink{classs9_1_1Node_ac44580d62b43ded65eca763eb380eb9c}{add} (\hyperlink{classs9_1_1Shape}{Shape} \&s)
+\begin{DoxyCompactList}\small\item\em Add the drawable for this node -\/ shape (shape being a shared object so we copy) \end{DoxyCompactList}\item 
+\hypertarget{classs9_1_1Node_afcba0c1ba679104bc51398ca8c8cf524}{\hyperlink{classs9_1_1Node}{Node} \& \hyperlink{classs9_1_1Node_afcba0c1ba679104bc51398ca8c8cf524}{add} (\hyperlink{classs9_1_1Node}{Node} \&n)}\label{classs9_1_1Node_afcba0c1ba679104bc51398ca8c8cf524}
+
+\begin{DoxyCompactList}\small\item\em Add a child node to this node. If the node being added is not initialised, make it so. \end{DoxyCompactList}\item 
+\hypertarget{classs9_1_1Node_a7cb3d603d9fb0db8be71c637b0d11b33}{\hyperlink{classs9_1_1Node}{Node} \& \hyperlink{classs9_1_1Node_a7cb3d603d9fb0db8be71c637b0d11b33}{add} (\hyperlink{classs9_1_1Skin}{Skin} \&s)}\label{classs9_1_1Node_a7cb3d603d9fb0db8be71c637b0d11b33}
+
+\begin{DoxyCompactList}\small\item\em Add a skin to this node. \end{DoxyCompactList}\item 
+\hypertarget{classs9_1_1Node_aa71a2da0e324bc6890a06f122c8767aa}{\hyperlink{classs9_1_1Node}{Node} \& \hyperlink{classs9_1_1Node_aa71a2da0e324bc6890a06f122c8767aa}{add} (\hyperlink{classs9_1_1gl_1_1Shader}{gl\-::\-Shader} \&s)}\label{classs9_1_1Node_aa71a2da0e324bc6890a06f122c8767aa}
+
+\begin{DoxyCompactList}\small\item\em Add a shader to this node. \end{DoxyCompactList}\item 
+\hypertarget{classs9_1_1Node_a0fc873bdf9c07aa1f63aafdcd3511ccc}{\hyperlink{classs9_1_1Node}{Node} \& \hyperlink{classs9_1_1Node_a0fc873bdf9c07aa1f63aafdcd3511ccc}{add} (\hyperlink{classs9_1_1Camera}{Camera} \&c)}\label{classs9_1_1Node_a0fc873bdf9c07aa1f63aafdcd3511ccc}
+
+\begin{DoxyCompactList}\small\item\em Add a shader to this node. \end{DoxyCompactList}\item 
+\hypertarget{classs9_1_1Node_abeebdb9fd6d487491cf390648b76047a}{glm\-::mat4 \hyperlink{classs9_1_1Node_abeebdb9fd6d487491cf390648b76047a}{matrix} ()}\label{classs9_1_1Node_abeebdb9fd6d487491cf390648b76047a}
+
+\begin{DoxyCompactList}\small\item\em Return the matrix for this node. \end{DoxyCompactList}\item 
+\hypertarget{classs9_1_1Node_a005bfd0a28a89193e61f5db16004257f}{void \hyperlink{classs9_1_1Node_a005bfd0a28a89193e61f5db16004257f}{set\-\_\-matrix} (const glm\-::mat4 \&m)}\label{classs9_1_1Node_a005bfd0a28a89193e61f5db16004257f}
+
+\begin{DoxyCompactList}\small\item\em set the matrix for this node \end{DoxyCompactList}\item 
+\hyperlink{classs9_1_1Node}{Node} \& \hyperlink{classs9_1_1Node_af7943a5ef0029e3fcfdd63ef5c573ffc}{remove\-Child} (\hyperlink{classs9_1_1Node}{Node} p)
+\begin{DoxyCompactList}\small\item\em Remove a childnode from this node. \end{DoxyCompactList}\item 
+\hyperlink{classs9_1_1Node}{Node} \& \hyperlink{classs9_1_1Node_a5110feb0ab6c078c4520cf12e91b99db}{draw} ()
+\item 
+\hyperlink{classs9_1_1Node}{Node} \& \hyperlink{classs9_1_1Node_afb371480f18c5d994ba9bfedcadebaa8}{reset} ()
 \end{DoxyCompactItemize}
-\subsection*{\-Protected \-Attributes}
+\subsection*{Protected Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\hypertarget{classs9_1_1Node_a00b308a9c2fbd493a835bc4b3c7b9aaa}{glm\-::mat4 {\bfseries matrix\-\_\-}}\label{classs9_1_1Node_a00b308a9c2fbd493a835bc4b3c7b9aaa}
-
+void \hyperlink{classs9_1_1Node_ab5541e36644656e95fcd214dd47147f9}{\-\_\-init} ()
 \item 
-\hypertarget{classs9_1_1Node_a2f74e3b79b870b7eeec0c35bb7859fbe}{std\-::vector$<$ \-Node\-Ptr $>$ {\bfseries children\-\_\-}}\label{classs9_1_1Node_a2f74e3b79b870b7eeec0c35bb7859fbe}
-
+Node\-Base\-Ptr \hyperlink{classs9_1_1Node_adc7ba2a843fcc8c24317c09e0fbce6a9}{get\-Base} (\hyperlink{namespaces9_a5c291cd938e865ef990a7f53eec62f36}{Node\-Responsibility} r)
+\end{DoxyCompactItemize}
+\subsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
 \item 
-\hypertarget{classs9_1_1Node_ae63d2d14dcb745d31000ef8136119295}{\hyperlink{classs9_1_1Camera}{\-Camera} {\bfseries camera\-\_\-}}\label{classs9_1_1Node_ae63d2d14dcb745d31000ef8136119295}
+\hypertarget{classs9_1_1Node_a155dd98568768de1ffa56b640f9f1c25}{std\-::shared\-\_\-ptr$<$ \hyperlink{structs9_1_1Node_1_1SharedObject}{Shared\-Object} $>$ {\bfseries obj\-\_\-} = nullptr}\label{classs9_1_1Node_a155dd98568768de1ffa56b640f9f1c25}
 
+\end{DoxyCompactItemize}
+\subsection*{Friends}
+\begin{DoxyCompactItemize}
 \item 
-\hypertarget{classs9_1_1Node_a916d78aba871fce8b054b9d2a7e03121}{\hyperlink{classs9_1_1Shape}{\-Shape} {\bfseries geometry\-\_\-}}\label{classs9_1_1Node_a916d78aba871fce8b054b9d2a7e03121}
+\hypertarget{classs9_1_1Node_a665cafb946fe352747ef888b5d1004c2}{std\-::ostream \& {\bfseries operator$<$$<$} (std\-::ostream \&out, const \hyperlink{classs9_1_1Node}{Node} \&o)}\label{classs9_1_1Node_a665cafb946fe352747ef888b5d1004c2}
 
 \end{DoxyCompactItemize}
 
 
-\subsection{\-Member \-Function \-Documentation}
-\hypertarget{classs9_1_1Node_ae75a24d598fed1d8cb265d7bd1f250a6}{\index{s9\-::\-Node@{s9\-::\-Node}!add@{add}}
-\index{add@{add}!s9::Node@{s9\-::\-Node}}
-\subsubsection[{add}]{\setlength{\rightskip}{0pt plus 5cm}{\bf \-Node} \& {\bf \-Node\-::add} (
-\begin{DoxyParamCaption}
-\item[{{\bf \-Shape} \&}]{shape}
-\end{DoxyParamCaption}
-)}}\label{classs9_1_1Node_ae75a24d598fed1d8cb265d7bd1f250a6}
-\-Add the drawable for this node -\/ shape (shape being a shared object) \hypertarget{classs9_1_1Node_ab88c83ced58700a56de568f5b1e3c473}{\index{s9\-::\-Node@{s9\-::\-Node}!draw@{draw}}
-\index{draw@{draw}!s9::Node@{s9\-::\-Node}}
-\subsubsection[{draw}]{\setlength{\rightskip}{0pt plus 5cm}void {\bf \-Node\-::draw} (
+\subsection{Detailed Description}
+The Actual \hyperlink{classs9_1_1Node}{Node} we instantiate and use in our code 
+
+\subsection{Member Function Documentation}
+\hypertarget{classs9_1_1Node_ab5541e36644656e95fcd214dd47147f9}{\index{s9\-::\-Node@{s9\-::\-Node}!\-\_\-init@{\-\_\-init}}
+\index{\-\_\-init@{\-\_\-init}!s9::Node@{s9\-::\-Node}}
+\subsubsection[{\-\_\-init}]{\setlength{\rightskip}{0pt plus 5cm}void Node\-::\-\_\-init (
 \begin{DoxyParamCaption}
 {}
 \end{DoxyParamCaption}
-)}}\label{classs9_1_1Node_ab88c83ced58700a56de568f5b1e3c473}
-\-Draw -\/ recursive function that composes a final node that is actually drawn \begin{DoxyRefDesc}{\-Todo}
-\item[\hyperlink{todo__todo000006}{\-Todo}]
-\begin{DoxyItemize}
-\item allow the settings of flags here 
-\end{DoxyItemize}\end{DoxyRefDesc}
+)\hspace{0.3cm}{\ttfamily [protected]}}}\label{classs9_1_1Node_ab5541e36644656e95fcd214dd47147f9}
+\-\_\-init -\/ This is internal. Creates a shared object, adding a \hyperlink{classs9_1_1NodeMinimal}{Node\-Minimal} for the matrix \begin{DoxyRefDesc}{Todo}
+\item[\hyperlink{todo__todo000009}{Todo}]by using init here we have to call it when we make any add call or similar. Is this verbose or even nice? \end{DoxyRefDesc}
+\hypertarget{classs9_1_1Node_ac44580d62b43ded65eca763eb380eb9c}{\index{s9\-::\-Node@{s9\-::\-Node}!add@{add}}
+\index{add@{add}!s9::Node@{s9\-::\-Node}}
+\subsubsection[{add}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Node} \& Node\-::add (
+\begin{DoxyParamCaption}
+\item[{{\bf Shape} \&}]{s}
+\end{DoxyParamCaption}
+)}}\label{classs9_1_1Node_ac44580d62b43ded65eca763eb380eb9c}
 
 
-\begin{DoxyRefDesc}{\-Todo}
-\item[\hyperlink{todo__todo000007}{\-Todo}]
-\begin{DoxyItemize}
-\item allow brew flags here 
-\end{DoxyItemize}\end{DoxyRefDesc}
-\hypertarget{classs9_1_1Node_a3227e4a745619e0f44a19df3576b8e65}{\index{s9\-::\-Node@{s9\-::\-Node}!pitch@{pitch}}
-\index{pitch@{pitch}!s9::Node@{s9\-::\-Node}}
-\subsubsection[{pitch}]{\setlength{\rightskip}{0pt plus 5cm}{\bf \-Node} \& {\bf \-Node\-::pitch} (
-\begin{DoxyParamCaption}
-\item[{float}]{a}
-\end{DoxyParamCaption}
-)}}\label{classs9_1_1Node_a3227e4a745619e0f44a19df3576b8e65}
-\-Pitch around global x axis \hypertarget{classs9_1_1Node_a9ce12695e88691b8e8e0689347e0ced6}{\index{s9\-::\-Node@{s9\-::\-Node}!roll@{roll}}
-\index{roll@{roll}!s9::Node@{s9\-::\-Node}}
-\subsubsection[{roll}]{\setlength{\rightskip}{0pt plus 5cm}{\bf \-Node} \& {\bf \-Node\-::roll} (
-\begin{DoxyParamCaption}
-\item[{float}]{a}
-\end{DoxyParamCaption}
-)}}\label{classs9_1_1Node_a9ce12695e88691b8e8e0689347e0ced6}
-\-Pitch around global z axis \hypertarget{classs9_1_1Node_abf84276da34f295abef63302b530951c}{\index{s9\-::\-Node@{s9\-::\-Node}!yaw@{yaw}}
-\index{yaw@{yaw}!s9::Node@{s9\-::\-Node}}
-\subsubsection[{yaw}]{\setlength{\rightskip}{0pt plus 5cm}{\bf \-Node} \& {\bf \-Node\-::yaw} (
-\begin{DoxyParamCaption}
-\item[{float}]{a}
-\end{DoxyParamCaption}
-)}}\label{classs9_1_1Node_abf84276da34f295abef63302b530951c}
-\-Pitch around global y axis 
+Add the drawable for this node -\/ shape (shape being a shared object so we copy) 
 
-\-The documentation for this class was generated from the following files\-:\begin{DoxyCompactItemize}
+\begin{DoxyRefDesc}{Todo}
+\item[\hyperlink{todo__todo000032}{Todo}]template these? We could do! \-:) \end{DoxyRefDesc}
+\hypertarget{classs9_1_1Node_a5110feb0ab6c078c4520cf12e91b99db}{\index{s9\-::\-Node@{s9\-::\-Node}!draw@{draw}}
+\index{draw@{draw}!s9::Node@{s9\-::\-Node}}
+\subsubsection[{draw}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Node} \& Node\-::draw (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{classs9_1_1Node_a5110feb0ab6c078c4520cf12e91b99db}
+Draw call for this node. Recursive at present \hypertarget{classs9_1_1Node_adc7ba2a843fcc8c24317c09e0fbce6a9}{\index{s9\-::\-Node@{s9\-::\-Node}!get\-Base@{get\-Base}}
+\index{get\-Base@{get\-Base}!s9::Node@{s9\-::\-Node}}
+\subsubsection[{get\-Base}]{\setlength{\rightskip}{0pt plus 5cm}Node\-Base\-Ptr Node\-::get\-Base (
+\begin{DoxyParamCaption}
+\item[{{\bf Node\-Responsibility}}]{r}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [protected]}}}\label{classs9_1_1Node_adc7ba2a843fcc8c24317c09e0fbce6a9}
+Internal function to grab a pointer to a base with a responsibility \hypertarget{classs9_1_1Node_af7943a5ef0029e3fcfdd63ef5c573ffc}{\index{s9\-::\-Node@{s9\-::\-Node}!remove\-Child@{remove\-Child}}
+\index{remove\-Child@{remove\-Child}!s9::Node@{s9\-::\-Node}}
+\subsubsection[{remove\-Child}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Node} \& Node\-::remove\-Child (
+\begin{DoxyParamCaption}
+\item[{{\bf Node}}]{p}
+\end{DoxyParamCaption}
+)}}\label{classs9_1_1Node_af7943a5ef0029e3fcfdd63ef5c573ffc}
+
+
+Remove a childnode from this node. 
+
+\begin{DoxyRefDesc}{Todo}
+\item[\hyperlink{todo__todo000010}{Todo}]test this function \end{DoxyRefDesc}
+\hypertarget{classs9_1_1Node_afb371480f18c5d994ba9bfedcadebaa8}{\index{s9\-::\-Node@{s9\-::\-Node}!reset@{reset}}
+\index{reset@{reset}!s9::Node@{s9\-::\-Node}}
+\subsubsection[{reset}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Node} \& Node\-::reset (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{classs9_1_1Node_afb371480f18c5d994ba9bfedcadebaa8}
+Remove all nodebases from this node 
+
+The documentation for this class was generated from the following files\-:\begin{DoxyCompactItemize}
 \item 
 include/s9/node.\-hpp\item 
 src/\hyperlink{node_8cpp}{node.\-cpp}\end{DoxyCompactItemize}

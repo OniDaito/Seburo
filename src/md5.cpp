@@ -7,7 +7,6 @@
 */
 
 #include "s9/md5.hpp"
-#include "s9/utils.hpp"
 
 using namespace std;
 using namespace s9;
@@ -54,6 +53,8 @@ void MD5Model::parse(const File &file) {
   ifs.open (file.path(), std::ifstream::in);
 
   skeleton_ = Skeleton(CUSTOM_SKELETON);
+
+  add(skeleton_);
 
   // vector to hold indices for parent bones
   vector<int> bone_indices; // Could be a -1 here you see, for the top tree
@@ -129,10 +130,11 @@ void MD5Model::parse(const File &file) {
 
       add(mesh_node);
 
-      TriMesh trimesh;
+      ///\todo we are using trimeshskinned here and using per vertex attributes but eventually use textures
+      TriMeshSkinned trimesh;
       Skin    skin;
       
-      const GeometryT<Vertex3, Face3, AllocationPolicyNew> *geometry; // Really not happy about this :S
+      const GeometryT<Vertex3Skin, Face3, AllocationPolicyNew> *geometry; // Really not happy about this :S
 
       size_t vidx = 0;
 
@@ -177,7 +179,7 @@ void MD5Model::parse(const File &file) {
         
           // Making the assumption (perhaps incorrectly) that numverts always comes before numtris so we have both here
           // We make our geometry and add it as a node
-          trimesh = TriMesh(num_verts, num_tris * 3);
+          trimesh = TriMeshSkinned(num_verts, num_tris * 3);
           geometry = trimesh.geometry();
           mesh_node.add(trimesh);
 
@@ -256,7 +258,6 @@ void MD5Model::parse(const File &file) {
         geometry->vertices()[i].u = glm::vec2(verts[i].s, verts[i].t);
 
       }
-
 
       delete[] verts;
     }

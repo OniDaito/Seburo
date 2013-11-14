@@ -120,3 +120,19 @@ const GeometryT<Vertex3, Face3, AllocationPolicyNew>* TriMesh::geometry() {
 	return &(t->geometry);
 }
 
+/**
+ * Build a basic TriMeshSkinned with a set number of verts and indices
+ */
+
+TriMeshSkinned::TriMeshSkinned(size_t num_verts, size_t num_indices) : Shape() {
+	std::shared_ptr<ShapeObjTriMeshSkinned> trimesh;
+	trimesh = std::make_shared<ShapeObjTriMeshSkinned>(num_verts, num_indices);
+	obj_ = std::static_pointer_cast<ShapeObj>(trimesh);
+}
+
+const GeometryT<Vertex3Skin, Face3, AllocationPolicyNew>* TriMeshSkinned::geometry() {
+	std::shared_ptr<ShapeObjTriMeshSkinned> t = std::static_pointer_cast<ShapeObjTriMeshSkinned>(obj_) ;
+	return &(t->geometry);
+}
+
+

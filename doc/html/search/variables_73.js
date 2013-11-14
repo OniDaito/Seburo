@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['seekproc',['SeekProc',['../structaiFile.html#a7a07b499be4ad433669246479a4d4ad2',1,'aiFile']]],
-  ['size',['size',['../structaiExportDataBlob.html#a339bfaacc70396b2f99f94c1bc3b808f',1,'aiExportDataBlob::size()'],['../structGLFWgammaramp.html#ad620e1cffbff9a32c51bca46301b59a5',1,'GLFWgammaramp::size()']]]
+  ['skeleton_5fnite_5f',['skeleton_nite_',['../classs9_1_1oni_1_1OpenNISkeleton_1_1User.html#a7aadf06fda9a9c7b945b90f9a942c95f',1,'s9::oni::OpenNISkeleton::User']]],
+  ['svisibleusers',['sVisibleUsers',['../classs9_1_1oni_1_1OpenNISkeleton.html#af498eae1a18c58a6e85670d319392ca2',1,'s9::oni::OpenNISkeleton']]]
 ];

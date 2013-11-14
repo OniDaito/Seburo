@@ -1,0 +1,9 @@
+<map id="TiXmlNode::GetDocument" name="TiXmlNode::GetDocument">
+<area shape="rect" id="node2" href="$classTiXmlNode.html#a1a881212554b759865f6cac79a851d38" title="TiXmlNode::LinkEndChild" alt="" coords="242,57,414,85"/>
+<area shape="rect" id="node3" href="$classTiXmlNode.html#af287a913ce46d8dbf7ef24fec69bbaf0" title="TiXmlNode::InsertEndChild" alt="" coords="475,5,656,33"/>
+<area shape="rect" id="node6" href="$classTiXmlNode.html#a71e54e393336382bc9875f64aab5cb15" title="TiXmlNode::InsertBeforeChild" alt="" coords="229,109,427,137"/>
+<area shape="rect" id="node7" href="$classTiXmlNode.html#a274db3292218202805c093f66a964cb5" title="TiXmlNode::InsertAfterChild" alt="" coords="235,161,421,189"/>
+<area shape="rect" id="node8" href="$classTiXmlNode.html#a543208c2c801c84a213529541e904b9f" title="TiXmlNode::ReplaceChild" alt="" coords="241,213,415,241"/>
+<area shape="rect" id="node4" href="$classTiXmlDocument.html#a789ad2f06f93d52bdb5570b2f3670289" title="TiXmlDocument::Parse" alt="" coords="486,57,644,85"/>
+<area shape="rect" id="node5" href="$classTiXmlDocument.html#a41f6fe7200864d1dca663d230caf8db6" title="TiXmlDocument::LoadFile" alt="" coords="705,57,879,85"/>
+</map>

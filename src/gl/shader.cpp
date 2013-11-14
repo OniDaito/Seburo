@@ -17,13 +17,13 @@ using namespace s9::gl;
 
 const static string fragment_delimiter = "##>FRAGMENT";
 const static string vertex_delimiter = "##>VERTEX";
-const static string geometry_delimiter = "##>GEOM";
+const static string geometry_delimiter = "##>GEOMETRY";
 
 template<>
 void ShaderVisitor::sign( ShaderClause<glm::mat4> &c) {
 	 GLuint l = location(c.name.c_str());
 
-   glUniformMatrix4fv( l, 1, GL_FALSE, glm::value_ptr(c.data));
+   glUniformMatrix4fv( l, c.size, GL_FALSE, glm::value_ptr(c.data));
 }
 
 
@@ -115,11 +115,10 @@ Shader::Shader(std::string vert_string, std::string frag_string, std::string geo
  */
 
 bool Shader::parse(string &glsl, string &vs, string &fs, string &gs){
-	string raw = textFileRead(glsl);
 
-	size_t fpos = raw.find(fragment_delimiter);
-	size_t vpos = raw.find(vertex_delimiter);
-	size_t gpos = raw.find(geometry_delimiter);
+	size_t fpos = glsl.find(fragment_delimiter);
+	size_t vpos = glsl.find(vertex_delimiter);
+	size_t gpos = glsl.find(geometry_delimiter);
 
 	std::vector<size_t> positions;
 
@@ -139,39 +138,39 @@ bool Shader::parse(string &glsl, string &vs, string &fs, string &gs){
 
 	if (gpos != string::npos) positions.push_back(gpos);
 
-	positions.push_back(raw.length()-1);
+	positions.push_back(glsl.length()-1);
 
 	std::sort (positions.begin(), positions.end());
 
 	// Read the first chunk
 	if (positions[0] == vpos) {
 		size_t s = vpos + vertex_delimiter.length();
-		vs = raw.substr(s, positions[1] - s);
+		vs = glsl.substr(s, positions[1] - s);
 	}
 	if (positions[0] == fpos) {
 		size_t s = fpos + fragment_delimiter.length();
-		fs = raw.substr(s, positions[1] - s);
+		fs = glsl.substr(s, positions[1] - s);
 	}
 	if (positions.size() == 4){
 		if (positions[0] == gpos) {
 			size_t s = gpos + geometry_delimiter.length();
-			gs = raw.substr(s, positions[1] - s);
+			gs = glsl.substr(s, positions[1] - s);
 		}
 	}
 
 	// Read the second chunk
 	if (positions[1] == vpos) {
 		size_t s = vpos + vertex_delimiter.length();
-		vs = raw.substr(s, positions[2] - s);
+		vs = glsl.substr(s, positions[2] - s);
 	}
 	if (positions[1] == fpos) {
 		size_t s = fpos + fragment_delimiter.length();
-		fs = raw.substr(s, positions[2] - s);
+		fs = glsl.substr(s, positions[2] - s);
 	}
 	if (positions.size() == 4){
 		if (positions[1] == gpos) {
 			size_t s = gpos + geometry_delimiter.length();
-			gs = raw.substr(s, positions[2] - s);
+			gs = glsl.substr(s, positions[2] - s);
 		}
 	}
 
@@ -179,15 +178,15 @@ bool Shader::parse(string &glsl, string &vs, string &fs, string &gs){
 	if (positions.size() == 4){
 		if (positions[2] == vpos) {
 			size_t s = vpos + vertex_delimiter.length();
-			vs = raw.substr(s, positions[3] - s);
+			vs = glsl.substr(s, positions[3] - s);
 		}
 		if (positions[2] == fpos) {
 			size_t s = fpos + fragment_delimiter.length();
-			fs = raw.substr(s, positions[3] - s);
+			fs = glsl.substr(s, positions[3] - s);
 		}
 		if (positions[2] == gpos) {
 			size_t s = gpos + geometry_delimiter.length();
-			gs = raw.substr(s, positions[3] - s);
+			gs = glsl.substr(s, positions[3] - s);
 		}
 	}
 	return true;

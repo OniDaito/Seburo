@@ -1,63 +1,110 @@
 
 \begin{DoxyRefList}
-\item[\label{todo__todo000023}%
-\hypertarget{todo__todo000023}{}%
-\-Namespace \hyperlink{namespaces9}{s9} ]is \-G\-L\-M dependent on \-Open\-G\-L or not?  
-\item[\label{todo__todo000013}%
-\hypertarget{todo__todo000013}{}%
-\-Class \hyperlink{classs9_1_1AllocationPolicyNew}{s9\-:\-:\-Allocation\-Policy\-New} ]override \mbox{[}\mbox{]} operators  
-\item[\label{todo__todo000012}%
-\hypertarget{todo__todo000012}{}%
-\-Member \hyperlink{classs9_1_1compvis_1_1ProcessBlock_a2189359475f02db5e99e699a4a9a5fa0}{s9\-:\-:compvis\-:\-:\-Process\-Block\-:\-:get\-Value} (std\-::string tag)]wrong key should not fall over but warn  
-\item[\label{todo__todo000014}%
-\hypertarget{todo__todo000014}{}%
-\-Member \hyperlink{classs9_1_1GeometryT_a74be427b554991e3a771b07c101185f2}{s9\-:\-:\-Geometry\-T$<$ \-Vertex\-Type, \-Face\-Type, \-Allocation\-Policy $>$\-:\-:indices} ()]one day, lets not use basic pointers? -\/ \-How does using pointers affect allocation policy?  
+\item[\label{todo__todo000037}%
+\hypertarget{todo__todo000037}{}%
+Namespace \hyperlink{namespaces9}{s9} ]is G\-L\-M dependent on Open\-G\-L or not?  
 \item[\label{todo__todo000018}%
 \hypertarget{todo__todo000018}{}%
-\-Member \hyperlink{classs9_1_1gl_1_1Drawable_ac45a196466c96705860cff9f8898673f}{s9\-:\-:gl\-:\-:\-Drawable\-:\-:brew} (\-Geometry\-T$<$ Vertex\-Type, Face\-Type, Allocation\-Policy $>$ \&g, \-Brew\-Flags b=\-Brew\-Flags\-Default)]non interleaved buffers  
-\item[\label{todo__todo000016}%
-\hypertarget{todo__todo000016}{}%
-\-Member \hyperlink{classs9_1_1gl_1_1Drawable_a17009f367a17d45ac7f9245b15229c95}{s9\-:\-:gl\-:\-:\-Drawable\-:\-:draw} (\-Geometry\-T$<$ Vertex\-Type, Face\-Type, Allocation\-Policy $>$ \&g, \-Geometry\-Primitive gp)]unbrew method for cleaning data off the card \-Options for brewing that may need to be specified 
-
-indices type matching \-G\-L\-\_\-\-U\-N\-S\-I\-G\-N\-E\-D\-\_\-\-I\-N\-T  
+Class \hyperlink{classs9_1_1AllocationPolicyNew}{s9\-:\-:Allocation\-Policy\-New} ]override \mbox{[}\mbox{]} operators  
+\item[\label{todo__todo000014}%
+\hypertarget{todo__todo000014}{}%
+Member \hyperlink{classs9_1_1Camera_aad4cde7320e0a12e13453bd5f4cef494}{s9\-:\-:Camera\-:\-:view\-\_\-matrix} ()]Could this be misleading? Its mostly used in setting shaders through a contract  
+\item[\label{todo__todo000017}%
+\hypertarget{todo__todo000017}{}%
+Member \hyperlink{classs9_1_1compvis_1_1ProcessBlock_a2189359475f02db5e99e699a4a9a5fa0}{s9\-:\-:compvis\-:\-:Process\-Block\-:\-:get\-Value} (std\-::string tag)]wrong key should not fall over but warn  
 \item[\label{todo__todo000019}%
 \hypertarget{todo__todo000019}{}%
-\-Member \hyperlink{classs9_1_1gl_1_1Drawable_a82268b69a4127ccea73e20d14e9a4835}{s9\-:\-:gl\-:\-:\-Drawable\-:\-:set\-Pointers} (\-Geometry\-T$<$ Vertex4, Face4, Allocation\-Policy $>$ \&g, \-Brew\-Flags b)]\-G\-L\-\_\-\-U\-N\-S\-I\-G\-N\-E\-D\-\_\-\-I\-N\-T must match the \-Indicies\-Type  
+Member \hyperlink{classs9_1_1GeometryT_acde81a6b14f995e64ec5480dc1c3ad83}{s9\-:\-:Geometry\-T$<$ Vertex\-Type, Face\-Type, Allocation\-Policy $>$\-:\-:indices} () const ]one day, lets not use basic pointers? -\/ How does using pointers affect allocation policy?  
+\item[\label{todo__todo000023}%
+\hypertarget{todo__todo000023}{}%
+Member \hyperlink{classs9_1_1gl_1_1Drawable_ac45a196466c96705860cff9f8898673f}{s9\-:\-:gl\-:\-:Drawable\-:\-:brew} (Geometry\-T$<$ Vertex\-Type, Face\-Type, Allocation\-Policy $>$ \&g, Brew\-Flags b=Brew\-Flags\-Default)]allow rebrewing with the same size 
+
+non interleaved buffers  
+\item[\label{todo__todo000021}%
+\hypertarget{todo__todo000021}{}%
+Member \hyperlink{classs9_1_1gl_1_1Drawable_a17009f367a17d45ac7f9245b15229c95}{s9\-:\-:gl\-:\-:Drawable\-:\-:draw} (Geometry\-T$<$ Vertex\-Type, Face\-Type, Allocation\-Policy $>$ \&g, Geometry\-Primitive gp)]unbrew method for cleaning data off the card Options for brewing that may need to be specified 
+
+indices type matching G\-L\-\_\-\-U\-N\-S\-I\-G\-N\-E\-D\-\_\-\-I\-N\-T  
+\item[\label{todo__todo000025}%
+\hypertarget{todo__todo000025}{}%
+Member \hyperlink{classs9_1_1gl_1_1Drawable_a82268b69a4127ccea73e20d14e9a4835}{s9\-:\-:gl\-:\-:Drawable\-:\-:set\-Pointers} (Geometry\-T$<$ Vertex4, Face4, Allocation\-Policy $>$ \&g, Brew\-Flags b)]G\-L\-\_\-\-U\-N\-S\-I\-G\-N\-E\-D\-\_\-\-I\-N\-T must match the Indicies\-Type  
+\item[\label{todo__todo000026}%
+\hypertarget{todo__todo000026}{}%
+Member \hyperlink{classs9_1_1gl_1_1Drawable_ad1e1197c103a410e4a606dfda9e6810d}{s9\-:\-:gl\-:\-:Drawable\-:\-:set\-Pointers} (Geometry\-T$<$ Vertex3, Face3, Allocation\-Policy $>$ \&g, Brew\-Flags b)]G\-L\-\_\-\-U\-N\-S\-I\-G\-N\-E\-D\-\_\-\-I\-N\-T must match the Indicies\-Type  
+\item[\label{todo__todo000028}%
+\hypertarget{todo__todo000028}{}%
+Member \hyperlink{classs9_1_1gl_1_1Shader_ae78a7518cbf2dace65cdef8d9ed07721}{s9\-:\-:gl\-:\-:Shader\-:\-:Shader} ()]shared object? Possibly? If we add caching then fo shure!  
+\item[\label{todo__todo000029}%
+\hypertarget{todo__todo000029}{}%
+Member \hyperlink{classs9_1_1gl_1_1Shader_a5639704a27519dd9bba2faf9e3e6af34}{s9\-:\-:gl\-:\-:Shader\-:\-:Shader} (\hyperlink{classs9_1_1File}{s9\-::\-File} glsl)]not sure if we need all these constructors but hey  
+\item[\label{todo__todo000027}%
+\hypertarget{todo__todo000027}{}%
+Class \hyperlink{structs9_1_1gl_1_1ShaderClause}{s9\-:\-:gl\-:\-:Shader\-Clause$<$ T $>$} ]Shader\-Library for our Uber\-Shader  
 \item[\label{todo__todo000001}%
 \hypertarget{todo__todo000001}{}%
-\-Member \hyperlink{classs9_1_1gl_1_1Texture_a169bf6c0f7958eee33cf1d60ba0c7806}{s9\-:\-:gl\-:\-:\-Texture\-:\-:\-Texture} (const \-Image \&image)]assuming \-R\-G\-B here \-:\-S 
+Member \hyperlink{classs9_1_1gl_1_1Texture_a169bf6c0f7958eee33cf1d60ba0c7806}{s9\-:\-:gl\-:\-:Texture\-:\-:Texture} (const Image \&image)]assuming R\-G\-B here \-:S 
 
-\-This affects global texture state \-:\-S 
+This affects global texture state \-:S 
 
-\-B\-G\-R\-A or \-R\-G\-B\-A or what? 
+B\-G\-R\-A or R\-G\-B\-A or what? 
 
 also could do with the datatype as well  
 \item[\label{todo__todo000005}%
 \hypertarget{todo__todo000005}{}%
-\-Member \hyperlink{classs9_1_1gl_1_1TextureStream_af480e3b1df190227d46215955824dcc0}{s9\-:\-:gl\-:\-:\-Texture\-Stream\-:\-:\-Texture\-Stream} (size\-\_\-t width, size\-\_\-t height, \-Colour\-Component format=\-R\-G\-B, \-Colour\-Type type=\-U\-N\-S\-I\-G\-N\-E\-D\-\_\-\-B\-Y\-T\-E, const byte\-\_\-t $\ast$data=nullptr)]assuming unsigned byte?  
+Member \hyperlink{classs9_1_1gl_1_1TextureStream_af480e3b1df190227d46215955824dcc0}{s9\-:\-:gl\-:\-:Texture\-Stream\-:\-:Texture\-Stream} (size\-\_\-t width, size\-\_\-t height, Colour\-Component format=R\-G\-B, Colour\-Type type=U\-N\-S\-I\-G\-N\-E\-D\-\_\-\-B\-Y\-T\-E, const byte\-\_\-t $\ast$data=nullptr)]assuming unsigned byte?  
 \item[\label{todo__todo000006}%
 \hypertarget{todo__todo000006}{}%
-\-Member \hyperlink{classs9_1_1Node_ab88c83ced58700a56de568f5b1e3c473}{s9\-:\-:\-Node\-:\-:draw} ()]-\/ allow the settings of flags here 
-
--\/ allow brew flags here  
-\item[\label{todo__todo000008}%
-\hypertarget{todo__todo000008}{}%
-\-Member \hyperlink{classs9_1_1oculus_1_1OculusBase_a574e05f1890877cd2eb77f8fbbd9c553}{s9\-:\-:oculus\-:\-:\-Oculus\-Base\-:\-:\-Oculus\-Base} (bool b)]-\/ pass in a window listener as window events will affect this  
-\item[\label{todo__todo000020}%
-\hypertarget{todo__todo000020}{}%
-\-Class \hyperlink{classs9_1_1oni_1_1OpenNIBase}{s9\-:\-:oni\-:\-:\-Open\-N\-I\-Base} ]replace the byte\-\_\-t buffers with images when we advance the image class  
+Member \hyperlink{classs9_1_1MD5Model_ae66dbcad9ce47515274dd0d31c58685f}{s9\-:\-:M\-D5\-Model\-:\-:parse} (const \hyperlink{classs9_1_1File}{s9\-::\-File} \&file)]this is not ideal for the memory usage I have to say \-:S  
 \item[\label{todo__todo000009}%
 \hypertarget{todo__todo000009}{}%
-\-Member \hyperlink{classs9_1_1oni_1_1OpenNIBase_a466d4d6f769490e0703490004d7e9dcc}{s9\-:\-:oni\-:\-:\-Open\-N\-I\-Base\-:\-:\-Open\-N\-I\-Base} (const char $\ast$device\-U\-R\-I)]dont always assume both streams  
-\item[\label{todo__todo000021}%
-\hypertarget{todo__todo000021}{}%
-\-Member \hyperlink{classs9_1_1oni_1_1OpenNIBase_1_1SharedObj_a95bcc43c79c432a446a88784ff5d1cc4}{s9\-:\-:oni\-:\-:\-Open\-N\-I\-Base\-:\-:\-Shared\-Obj\-:\-:tex\-\_\-buffer\-\_\-colour\-\_\-} ]-\/ \-Depth could be a bit less?  
-\item[\label{todo__todo000026}%
-\hypertarget{todo__todo000026}{}%
-\-Class \hyperlink{classs9_1_1Shape}{s9\-:\-:\-Shape} ]brew and draw go through a lot of calls -\/ worrying \-:\-S  
-\item[\label{todo__todo000024}%
-\hypertarget{todo__todo000024}{}%
-\-Class \hyperlink{structs9_1_1VertexT}{s9\-:\-:\-Vertex\-T$<$ \-T, \-U $>$} ]using padding globally but that may interfere with \-G\-L\-M and not always be great 
+Member \hyperlink{classs9_1_1Node_ab5541e36644656e95fcd214dd47147f9}{s9\-:\-:Node\-:\-:\-\_\-init} ()]by using init here we have to call it when we make any add call or similar. Is this verbose or even nice?  
+\item[\label{todo__todo000032}%
+\hypertarget{todo__todo000032}{}%
+Member \hyperlink{classs9_1_1Node_ac44580d62b43ded65eca763eb380eb9c}{s9\-:\-:Node\-:\-:add} (Shape \&s)]template these? We could do! \-:)  
+\item[\label{todo__todo000010}%
+\hypertarget{todo__todo000010}{}%
+Member \hyperlink{classs9_1_1Node_af7943a5ef0029e3fcfdd63ef5c573ffc}{s9\-:\-:Node\-:\-:remove\-Child} (Node p)]test this function  
+\item[\label{todo__todo000030}%
+\hypertarget{todo__todo000030}{}%
+Class \hyperlink{classs9_1_1NodeCamera}{s9\-:\-:Node\-Camera} ]camera is not a shared object so this {\itshape should} be a ref or camera should be changed  
+\item[\label{todo__todo000031}%
+\hypertarget{todo__todo000031}{}%
+Member \hyperlink{classs9_1_1NodeMinimal_a80572ab845ddfd90f879333f4020d67e}{s9\-:\-:Node\-Minimal\-:\-:Node\-Minimal} ()]I have no idea how this constructor can even work! Find out!  
+\item[\label{todo__todo000007}%
+\hypertarget{todo__todo000007}{}%
+Member \hyperlink{classs9_1_1NodeShape_a73adf5ca86fc1aee2d4f1d4ce8c5f411}{s9\-:\-:Node\-Shape\-:\-:draw} ()]pass to shader / contract 
 
-this is tricky because this default is for the \-Vec3 type and we will need to override for \-Vertex2/4 
+allow passing of flags  
+\item[\label{todo__todo000011}%
+\hypertarget{todo__todo000011}{}%
+Member \hyperlink{classs9_1_1oculus_1_1OculusBase_a574e05f1890877cd2eb77f8fbbd9c553}{s9\-:\-:oculus\-:\-:Oculus\-Base\-:\-:Oculus\-Base} (bool b)]-\/ pass in a window listener as window events will affect this  
+\item[\label{todo__todo000033}%
+\hypertarget{todo__todo000033}{}%
+Class \hyperlink{classs9_1_1oni_1_1OpenNIBase}{s9\-:\-:oni\-:\-:Open\-N\-I\-Base} ]replace the byte\-\_\-t buffers with images when we advance the image class  
+\item[\label{todo__todo000012}%
+\hypertarget{todo__todo000012}{}%
+Member \hyperlink{classs9_1_1oni_1_1OpenNIBase_a466d4d6f769490e0703490004d7e9dcc}{s9\-:\-:oni\-:\-:Open\-N\-I\-Base\-:\-:Open\-N\-I\-Base} (const char $\ast$device\-U\-R\-I)]dont always assume both streams  
+\item[\label{todo__todo000034}%
+\hypertarget{todo__todo000034}{}%
+Member \hyperlink{classs9_1_1oni_1_1OpenNIBase_1_1SharedObj_a95bcc43c79c432a446a88784ff5d1cc4}{s9\-:\-:oni\-:\-:Open\-N\-I\-Base\-:\-:Shared\-Obj\-:\-:tex\-\_\-buffer\-\_\-colour\-\_\-} ]-\/ Depth could be a bit less?  
+\item[\label{todo__todo000035}%
+\hypertarget{todo__todo000035}{}%
+Member \hyperlink{classs9_1_1oni_1_1OpenNISkeleton_af498eae1a18c58a6e85670d319392ca2}{s9\-:\-:oni\-:\-:Open\-N\-I\-Skeleton\-:\-:s\-Visible\-Users} \mbox{[}S9\-\_\-\-N\-I\-T\-E\-\_\-\-M\-A\-X\-\_\-\-U\-S\-E\-R\-S\mbox{]}]a const faster version for direct access?  
+\item[\label{todo__todo000013}%
+\hypertarget{todo__todo000013}{}%
+Member \hyperlink{classs9_1_1oni_1_1OpenNISkeleton_1_1User_a9475f7e337cb55fdd051b6b8a577d523}{s9\-:\-:oni\-:\-:Open\-N\-I\-Skeleton\-:\-:User\-:\-:copy\-Skeleton} ()]confidence checking here? Do we want to add that or deal with it here?  
+\item[\label{todo__todo000040}%
+\hypertarget{todo__todo000040}{}%
+Class \hyperlink{classs9_1_1Shape}{s9\-:\-:Shape} ]brew and draw go through a lot of calls -\/ worrying \-:S  
+\item[\label{todo__todo000041}%
+\hypertarget{todo__todo000041}{}%
+Class \hyperlink{structs9_1_1Skin_1_1SkinIndex}{s9\-:\-:Skin\-:\-:Skin\-Index} ]alignment on boundaries?  
+\item[\label{todo__todo000042}%
+\hypertarget{todo__todo000042}{}%
+Member \hyperlink{structs9_1_1Skin_1_1SkinWeight_a8f9650be7ec3144f2fef974d18ef2555}{s9\-:\-:Skin\-:\-:Skin\-Weight\-:\-:bias} ]Id has this but not sure why \-:S  
+\item[\label{todo__todo000038}%
+\hypertarget{todo__todo000038}{}%
+Class \hyperlink{structs9_1_1VertexT}{s9\-:\-:Vertex\-T$<$ T, U $>$} ]using padding globally but that may interfere with G\-L\-M and not always be great 
+
+this is tricky because this default is for the Vec3 type and we will need to override for Vertex2/4 
 \end{DoxyRefList}

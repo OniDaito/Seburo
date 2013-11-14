@@ -1,0 +1,5 @@
+<map id="s9::ShapeObj" name="s9::ShapeObj">
+<area shape="rect" id="node2" href="$structs9_1_1ShapeObjCuboid.html" title="s9::ShapeObjCuboid" alt="" coords="5,83,149,111"/>
+<area shape="rect" id="node3" href="$structs9_1_1ShapeObjQuad.html" title="s9::ShapeObjQuad" alt="" coords="174,83,308,111"/>
+<area shape="rect" id="node4" href="$structs9_1_1ShapeObjTriMesh.html" title="s9::ShapeObjTriMesh" alt="" coords="333,83,483,111"/>
+</map>

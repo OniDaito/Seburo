@@ -11,11 +11,13 @@
 #ifndef S9_MD5_HPP
 #define S9_MD5_HPP
 
-#include "s9/primitives.hpp"
-#include "s9/node.hpp"
-#include "s9/file.hpp"
-#include "s9/skeleton.hpp"
+#include "primitives.hpp"
+#include "node.hpp"
+#include "file.hpp"
+#include "skeleton.hpp"
 #include "common.hpp"
+#include "string_utils.hpp"
+
 
 
 namespace s9 {
@@ -50,6 +52,8 @@ namespace s9 {
     int version() const {return version_; }
     size_t num_joints() const {return num_joints_; }
     size_t num_meshes() const {return num_meshes_; }
+
+    Skeleton& skeleton() {return skeleton_; }
 
   protected:
 

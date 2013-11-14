@@ -12,7 +12,7 @@
 
 #include "common.hpp"
 #include "events.hpp"
-#include "utils.hpp"
+#include "string_utils.hpp"
 
 /** 
  * Camera Class
@@ -33,6 +33,8 @@ namespace s9{
 		Camera(glm::vec3 pos);
 		Camera(glm::vec3 pos, glm::vec3 look);
 		Camera(glm::vec3 pos, glm::vec3 look, glm::vec3 up);
+
+		void init(); // Called to init this class with default params
 			
 		void resize(size_t w, size_t h);
 

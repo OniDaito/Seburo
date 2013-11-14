@@ -30,9 +30,25 @@ void NodeShape::draw(){
 		shape_.draw(); ///\todo pass to shader / contract
 	else
 		shape_.brew(); ///\todo allow passing of flags
+
 	CXGLERROR
+}
+
+
+
+
+/**
+ * NodeSkeleton Sign method. We create the clauses on the fly instead
+ */
+
+void NodeSkeleton::sign(gl::ShaderVisitor &v) {
+
+//	gl::ShaderClause<glm::mat4> clause_bone_rotation_;
+//	gl::ShaderClause<glm::mat4> clause_bone_position_; 
 
 }
+
+
 
 /// Basic Node constructor.
 Node::Node() {}
@@ -68,7 +84,7 @@ Node& Node::add(Node &n) {
 }
 
 /// Add a skin to this node
-Node& Node::add(Skin &s) {
+Node& Node::add(Skin s) {
 	if (obj_ == nullptr) _init();
 	if ( getBase(SKIN_WEIGHTS) == nullptr ){
 		obj_->bases.push_front( NodeBasePtr(new NodeSkin(s)));
@@ -93,7 +109,7 @@ void Node::set_matrix(const glm::mat4 &m) {
 }
 
 /// Add a shader to this node
-Node& Node::add(gl::Shader &s) {
+Node& Node::add(gl::Shader s) {
 	if (obj_ == nullptr) _init();
 	if ( getBase(SHADER) == nullptr ){
 		obj_->shader_node = std::shared_ptr<NodeShader>(new NodeShader(s));
@@ -108,6 +124,7 @@ Node& Node::add(gl::Shader &s) {
 
 /// Add a shader to this node
 Node& Node::add(Camera &c) {
+	c.init(); // make sure we have a full object
 	if (obj_ == nullptr) _init();
 	if ( getBase(CAMERA) == nullptr ){
 		obj_->bases.push_front( NodeBasePtr(new NodeCamera(c)));
@@ -118,8 +135,8 @@ Node& Node::add(Camera &c) {
 	return *this;
 }
 
-/// Add the drawable for this node - shape (shape being a shared object so we copy) 
-Node& Node::add(Shape &s) {
+/// Add the drawable for this node 
+Node& Node::add(Shape s) {
 	if (obj_ == nullptr) _init();
 	if ( getBase(GEOMETRY) == nullptr ){
 		obj_->bases.push_front( NodeBasePtr(new NodeShape(s)));
@@ -129,6 +146,20 @@ Node& Node::add(Shape &s) {
 	}
 	return *this;
 }
+
+
+/// Add a skeleton to this node 
+Node& Node::add(Skeleton s) {
+	if (obj_ == nullptr) _init();
+	if ( getBase(SKELETON) == nullptr ){
+		obj_->bases.push_front( NodeBasePtr(new NodeSkeleton(s)));
+		obj_->bases.sort(compareNodeBasePtr);
+	} else {
+		cerr << "SEBURO Node - Trying to add a Skeleton to a node when one already exists." << endl;
+	}
+	return *this;
+}
+
 
 /**
  * Remove all nodebases from this node

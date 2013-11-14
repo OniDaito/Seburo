@@ -1,6 +1,7 @@
 var searchData=
 [
   ['savefile',['SaveFile',['../classTiXmlDocument.html#a21c0aeb0d0a720169ad4ac89523ebe93',1,'TiXmlDocument::SaveFile() const '],['../classTiXmlDocument.html#ae869f5ebf7fc54c4a1d737fb4689fd44',1,'TiXmlDocument::SaveFile(const char *filename) const '],['../classTiXmlDocument.html#acf1672b4538c6d1d441f9f108aea2bf4',1,'TiXmlDocument::SaveFile(FILE *) const ']]],
+  ['set_5fmatrix',['set_matrix',['../classs9_1_1Node.html#a005bfd0a28a89193e61f5db16004257f',1,'s9::Node']]],
   ['setattribute',['SetAttribute',['../classTiXmlElement.html#abf0b3bd7f0e4c746a89ec6e7f101fc32',1,'TiXmlElement::SetAttribute(const char *name, const char *_value)'],['../classTiXmlElement.html#ace6f4be75e373726d4774073d666d1a7',1,'TiXmlElement::SetAttribute(const char *name, int value)']]],
   ['setcdata',['SetCDATA',['../classTiXmlText.html#acb17ff7c5d09b2c839393445a3de5ea9',1,'TiXmlText']]],
   ['setcondensewhitespace',['SetCondenseWhiteSpace',['../classTiXmlBase.html#a0f799ec645bfb8d8a969e83478f379c1',1,'TiXmlBase']]],
@@ -10,11 +11,13 @@ var searchData=
   ['setintvalue',['SetIntValue',['../classTiXmlAttribute.html#a7e065df640116a62ea4f4b7da5449cc8',1,'TiXmlAttribute']]],
   ['setlinebreak',['SetLineBreak',['../classTiXmlPrinter.html#a4be1e37e69e3858c59635aa947174fe6',1,'TiXmlPrinter']]],
   ['setname',['SetName',['../classTiXmlAttribute.html#ab7fa3d21ff8d7c5764cf9af15b667a99',1,'TiXmlAttribute']]],
-  ['setpointers',['setPointers',['../classs9_1_1gl_1_1Drawable.html#a82268b69a4127ccea73e20d14e9a4835',1,'s9::gl::Drawable']]],
+  ['setpointers',['setPointers',['../classs9_1_1gl_1_1Drawable.html#a82268b69a4127ccea73e20d14e9a4835',1,'s9::gl::Drawable::setPointers(GeometryT&lt; Vertex4, Face4, AllocationPolicy &gt; &amp;g, BrewFlags b)'],['../classs9_1_1gl_1_1Drawable.html#ad1e1197c103a410e4a606dfda9e6810d',1,'s9::gl::Drawable::setPointers(GeometryT&lt; Vertex3, Face3, AllocationPolicy &gt; &amp;g, BrewFlags b)']]],
   ['setstreamprinting',['SetStreamPrinting',['../classTiXmlPrinter.html#ab23a90629e374cb1cadca090468bbd19',1,'TiXmlPrinter']]],
   ['settabsize',['SetTabSize',['../classTiXmlDocument.html#a51dac56316f89b35bdb7d0d433ba988e',1,'TiXmlDocument']]],
   ['setuserdata',['SetUserData',['../classTiXmlBase.html#ac6b3e0f790930d4970ec30764e937b5d',1,'TiXmlBase']]],
   ['setvalue',['SetValue',['../classTiXmlNode.html#a2a38329ca5d3f28f98ce932b8299ae90',1,'TiXmlNode::SetValue()'],['../classTiXmlAttribute.html#a2dae44178f668b3cb48101be4f2236a0',1,'TiXmlAttribute::SetValue()']]],
+  ['shader',['Shader',['../classs9_1_1gl_1_1Shader.html#ae78a7518cbf2dace65cdef8d9ed07721',1,'s9::gl::Shader::Shader()'],['../classs9_1_1gl_1_1Shader.html#a5639704a27519dd9bba2faf9e3e6af34',1,'s9::gl::Shader::Shader(s9::File glsl)']]],
   ['size',['Size',['../classTiXmlPrinter.html#ad01375ae9199bd2f48252eaddce3039d',1,'TiXmlPrinter']]],
+  ['skeleton',['Skeleton',['../classs9_1_1Skeleton.html#af74087f5bac7c441193c93a3532f253f',1,'s9::Skeleton']]],
   ['standalone',['Standalone',['../classTiXmlDeclaration.html#a9ff06afc033d7ef730ec7c6825b97ad9',1,'TiXmlDeclaration']]]
 ];

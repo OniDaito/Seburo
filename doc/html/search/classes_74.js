@@ -18,5 +18,6 @@ var searchData=
   ['tixmlstring',['TiXmlString',['../classTiXmlString.html',1,'']]],
   ['tixmltext',['TiXmlText',['../classTiXmlText.html',1,'']]],
   ['tixmlunknown',['TiXmlUnknown',['../classTiXmlUnknown.html',1,'']]],
-  ['tixmlvisitor',['TiXmlVisitor',['../classTiXmlVisitor.html',1,'']]]
+  ['tixmlvisitor',['TiXmlVisitor',['../classTiXmlVisitor.html',1,'']]],
+  ['trimesh',['TriMesh',['../classs9_1_1TriMesh.html',1,'s9']]]
 ];

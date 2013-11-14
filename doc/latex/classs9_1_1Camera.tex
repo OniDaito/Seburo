@@ -1,14 +1,22 @@
-\hypertarget{classs9_1_1Camera}{\section{s9\-:\-:\-Camera \-Class \-Reference}
+\hypertarget{classs9_1_1Camera}{\section{s9\-:\-:Camera Class Reference}
 \label{classs9_1_1Camera}\index{s9\-::\-Camera@{s9\-::\-Camera}}
 }
-\-Inheritance diagram for s9\-:\-:\-Camera\-:\begin{figure}[H]
-\begin{center}
-\leavevmode
-\includegraphics[height=2.000000cm]{classs9_1_1Camera}
-\end{center}
-\end{figure}
-\subsection*{\-Public \-Member \-Functions}
+\subsection*{Classes}
 \begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structs9_1_1Camera_1_1SharedObject}{Shared\-Object}
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classs9_1_1Camera_a2d8c44f33f085961ebf67f858494a02a}{{\bfseries Camera} (glm\-::vec3 pos)}\label{classs9_1_1Camera_a2d8c44f33f085961ebf67f858494a02a}
+
+\item 
+\hypertarget{classs9_1_1Camera_ad49c6456cb88f31154c0ae4f38e95c52}{{\bfseries Camera} (glm\-::vec3 pos, glm\-::vec3 look)}\label{classs9_1_1Camera_ad49c6456cb88f31154c0ae4f38e95c52}
+
+\item 
+\hypertarget{classs9_1_1Camera_a74a959e81d720e7e0840088eab808915}{{\bfseries Camera} (glm\-::vec3 pos, glm\-::vec3 look, glm\-::vec3 up)}\label{classs9_1_1Camera_a74a959e81d720e7e0840088eab808915}
+
 \item 
 \hypertarget{classs9_1_1Camera_a6eff9242a0e38236d26c0b5b8934c23e}{void {\bfseries resize} (size\-\_\-t w, size\-\_\-t h)}\label{classs9_1_1Camera_a6eff9242a0e38236d26c0b5b8934c23e}
 
@@ -58,13 +66,13 @@
 \hypertarget{classs9_1_1Camera_a02be8aa0dbef77e02dddc715a726fb67}{void {\bfseries reset} ()}\label{classs9_1_1Camera_a02be8aa0dbef77e02dddc715a726fb67}
 
 \item 
-\hypertarget{classs9_1_1Camera_a06254a1642d663e024e1b34c8e5f59ca}{void {\bfseries set\-\_\-pos} (glm\-::vec3 p)}\label{classs9_1_1Camera_a06254a1642d663e024e1b34c8e5f59ca}
+\hypertarget{classs9_1_1Camera_a55e11abf2595d7727236b9217cd9a0dc}{void {\bfseries set\-\_\-pos} (const glm\-::vec3 \&p)}\label{classs9_1_1Camera_a55e11abf2595d7727236b9217cd9a0dc}
 
 \item 
-\hypertarget{classs9_1_1Camera_afc53e7e53b952e36dc55a355dfb81958}{void {\bfseries set\-\_\-look} (glm\-::vec3 p)}\label{classs9_1_1Camera_afc53e7e53b952e36dc55a355dfb81958}
+\hypertarget{classs9_1_1Camera_af9dba4f1abe3ea6941b5b49eeafde008}{void {\bfseries set\-\_\-look} (const glm\-::vec3 \&p)}\label{classs9_1_1Camera_af9dba4f1abe3ea6941b5b49eeafde008}
 
 \item 
-\hypertarget{classs9_1_1Camera_a02b59733a720549bdc955d48a1b3ff97}{void {\bfseries set\-\_\-up} (glm\-::vec3 p)}\label{classs9_1_1Camera_a02b59733a720549bdc955d48a1b3ff97}
+\hypertarget{classs9_1_1Camera_a269cd19842303a20df7b707fd9fffe82}{void {\bfseries set\-\_\-up} (const glm\-::vec3 \&p)}\label{classs9_1_1Camera_a269cd19842303a20df7b707fd9fffe82}
 
 \item 
 \hypertarget{classs9_1_1Camera_a059cec22aa650e270b95b322bc5aa9a7}{void {\bfseries set\-\_\-left} (size\-\_\-t p)}\label{classs9_1_1Camera_a059cec22aa650e270b95b322bc5aa9a7}
@@ -79,10 +87,9 @@
 \hypertarget{classs9_1_1Camera_ad1e6a888b424e32632ff4a795e0f2c8d}{void {\bfseries set\-\_\-bottom} (size\-\_\-t p)}\label{classs9_1_1Camera_ad1e6a888b424e32632ff4a795e0f2c8d}
 
 \item 
-\hypertarget{classs9_1_1Camera_a7e9cc98105e567636c4eebca453b5d9d}{glm\-::mat4 {\bfseries view\-\_\-matrix} ()}\label{classs9_1_1Camera_a7e9cc98105e567636c4eebca453b5d9d}
-
+glm\-::mat4 \& \hyperlink{classs9_1_1Camera_aad4cde7320e0a12e13453bd5f4cef494}{view\-\_\-matrix} ()
 \item 
-\hypertarget{classs9_1_1Camera_a9ee97b1396546c43115190de8405cf27}{glm\-::mat4 {\bfseries projection\-\_\-matrix} ()}\label{classs9_1_1Camera_a9ee97b1396546c43115190de8405cf27}
+\hypertarget{classs9_1_1Camera_a63a42ee76bb621c387662ca2bc1be690}{glm\-::mat4 \& {\bfseries projection\-\_\-matrix} ()}\label{classs9_1_1Camera_a63a42ee76bb621c387662ca2bc1be690}
 
 \item 
 \hypertarget{classs9_1_1Camera_a42cda7239981a5618660d04bd5893556}{virtual void {\bfseries update} ()}\label{classs9_1_1Camera_a42cda7239981a5618660d04bd5893556}
@@ -91,54 +98,27 @@
 \hypertarget{classs9_1_1Camera_a4367ec82119e3fe249d744d420875f3d}{virtual void {\bfseries update} (double\-\_\-t dt)}\label{classs9_1_1Camera_a4367ec82119e3fe249d744d420875f3d}
 
 \end{DoxyCompactItemize}
-\subsection*{\-Protected \-Attributes}
+\subsection*{Protected Attributes}
 \begin{DoxyCompactItemize}
 \item 
-\hypertarget{classs9_1_1Camera_aa14bf0dbfe9f292b4841c647f328dd76}{glm\-::mat4 {\bfseries view\-\_\-matrix\-\_\-}}\label{classs9_1_1Camera_aa14bf0dbfe9f292b4841c647f328dd76}
-
-\item 
-\hypertarget{classs9_1_1Camera_aab7a588b390fa05250f25b5538e46b86}{glm\-::mat4 {\bfseries projection\-\_\-matrix\-\_\-}}\label{classs9_1_1Camera_aab7a588b390fa05250f25b5538e46b86}
-
-\item 
-\hypertarget{classs9_1_1Camera_a71665686599a0151fad513544fa21230}{bool {\bfseries orthographic\-\_\-}}\label{classs9_1_1Camera_a71665686599a0151fad513544fa21230}
-
-\item 
-\hypertarget{classs9_1_1Camera_a0344aaaadb55b0d81800b51f2c7b2815}{float {\bfseries ratio\-\_\-}}\label{classs9_1_1Camera_a0344aaaadb55b0d81800b51f2c7b2815}
-
-\item 
-\hypertarget{classs9_1_1Camera_a3756d83d24d11222efa0130e95ff903e}{float {\bfseries far\-\_\-}}\label{classs9_1_1Camera_a3756d83d24d11222efa0130e95ff903e}
-
-\item 
-\hypertarget{classs9_1_1Camera_a214dd980fd5f99f272e1aef1646e45e4}{float {\bfseries near\-\_\-}}\label{classs9_1_1Camera_a214dd980fd5f99f272e1aef1646e45e4}
-
-\item 
-\hypertarget{classs9_1_1Camera_a88cb54b968bf47fea6a536fba0ab52e8}{float {\bfseries field\-\_\-}}\label{classs9_1_1Camera_a88cb54b968bf47fea6a536fba0ab52e8}
-
-\item 
-\hypertarget{classs9_1_1Camera_aae3f13ab7467694c6b38175e1df84a76}{size\-\_\-t {\bfseries left\-\_\-}}\label{classs9_1_1Camera_aae3f13ab7467694c6b38175e1df84a76}
-
-\item 
-\hypertarget{classs9_1_1Camera_aff5887222b004435324ef1d37a2b20d6}{size\-\_\-t {\bfseries top\-\_\-}}\label{classs9_1_1Camera_aff5887222b004435324ef1d37a2b20d6}
-
-\item 
-\hypertarget{classs9_1_1Camera_a39f17ec5ca1d58c0e91c544f6aa4e38b}{size\-\_\-t {\bfseries bottom\-\_\-}}\label{classs9_1_1Camera_a39f17ec5ca1d58c0e91c544f6aa4e38b}
-
-\item 
-\hypertarget{classs9_1_1Camera_ad56ce0d5e3a1bc7ccd0e993ef93ae171}{size\-\_\-t {\bfseries right\-\_\-}}\label{classs9_1_1Camera_ad56ce0d5e3a1bc7ccd0e993ef93ae171}
-
-\item 
-\hypertarget{classs9_1_1Camera_ad0e9f3951aea84ed9dcf22391d123f35}{glm\-::vec3 {\bfseries pos\-\_\-}}\label{classs9_1_1Camera_ad0e9f3951aea84ed9dcf22391d123f35}
-
-\item 
-\hypertarget{classs9_1_1Camera_ab7be66338e1ed45f7e7721089c7644ef}{glm\-::vec3 {\bfseries look\-\_\-}}\label{classs9_1_1Camera_ab7be66338e1ed45f7e7721089c7644ef}
-
-\item 
-\hypertarget{classs9_1_1Camera_a193b633a02c7c6dd1055d97d8f09baa4}{glm\-::vec3 {\bfseries up\-\_\-}}\label{classs9_1_1Camera_a193b633a02c7c6dd1055d97d8f09baa4}
+\hypertarget{classs9_1_1Camera_a3b90bea9a4aca0c9974b4bc8604abff0}{std\-::shared\-\_\-ptr$<$ \hyperlink{structs9_1_1Camera_1_1SharedObject}{Shared\-Object} $>$ {\bfseries obj\-\_\-} = nullptr}\label{classs9_1_1Camera_a3b90bea9a4aca0c9974b4bc8604abff0}
 
 \end{DoxyCompactItemize}
 
 
-\-The documentation for this class was generated from the following files\-:\begin{DoxyCompactItemize}
+\subsection{Member Function Documentation}
+\hypertarget{classs9_1_1Camera_aad4cde7320e0a12e13453bd5f4cef494}{\index{s9\-::\-Camera@{s9\-::\-Camera}!view\-\_\-matrix@{view\-\_\-matrix}}
+\index{view\-\_\-matrix@{view\-\_\-matrix}!s9::Camera@{s9\-::\-Camera}}
+\subsubsection[{view\-\_\-matrix}]{\setlength{\rightskip}{0pt plus 5cm}glm\-::mat4\& s9\-::\-Camera\-::view\-\_\-matrix (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{classs9_1_1Camera_aad4cde7320e0a12e13453bd5f4cef494}
+\begin{DoxyRefDesc}{Todo}
+\item[\hyperlink{todo__todo000014}{Todo}]Could this be misleading? Its mostly used in setting shaders through a contract \end{DoxyRefDesc}
+
+
+The documentation for this class was generated from the following files\-:\begin{DoxyCompactItemize}
 \item 
 include/s9/\hyperlink{camera_8hpp}{camera.\-hpp}\item 
 src/\hyperlink{camera_8cpp}{camera.\-cpp}\end{DoxyCompactItemize}

@@ -143,6 +143,38 @@ namespace s9 {
 
   };
 
+  /**
+   * A Triangle Mesh for skinning - using per vertex data for its weights
+   */ 
+
+  struct ShapeObjTriMeshSkinned : public ShapeObj {
+
+    ShapeObjTriMeshSkinned(size_t num_verts, size_t num_indices) {
+      geometry = GeometryT<Vertex3Skin, Face3, AllocationPolicyNew>(num_verts, num_indices, TRIANGLES);
+    }
+
+  	void brew (gl::BrewFlags b) { gl_drawable.brew(geometry, b); }
+  	void draw (GeometryPrimitive g = TRIANGLES) { gl_drawable.draw(geometry, g); }
+
+    GeometryT<Vertex3Skin, Face3, AllocationPolicyNew> geometry;
+      
+  };
+
+  /**
+   * A mesh made up of triangles and skinned
+   */
+
+  class SEBUROAPI TriMeshSkinned : public Shape {
+
+  public:
+
+    TriMeshSkinned() {};
+    TriMeshSkinned(size_t num_verts, size_t num_indices);
+
+    const GeometryT<Vertex3Skin, Face3, AllocationPolicyNew>* geometry();
+
+  };
+
 }
 
 

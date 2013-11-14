@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['blue',['blue',['../structGLFWgammaramp.html#acf0c836d0efe29c392fe8d1a1042744b',1,'GLFWgammaramp']]],
-  ['bluebits',['blueBits',['../structGLFWvidmode.html#af310977f58d2e3b188175b6e3d314047',1,'GLFWvidmode']]]
+  ['bias',['bias',['../structs9_1_1Skin_1_1SkinWeight.html#a8f9650be7ec3144f2fef974d18ef2555',1,'s9::Skin::SkinWeight']]]
 ];

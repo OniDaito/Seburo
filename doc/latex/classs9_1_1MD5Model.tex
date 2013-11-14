@@ -1,0 +1,85 @@
+\hypertarget{classs9_1_1MD5Model}{\section{s9\-:\-:M\-D5\-Model Class Reference}
+\label{classs9_1_1MD5Model}\index{s9\-::\-M\-D5\-Model@{s9\-::\-M\-D5\-Model}}
+}
+
+
+{\ttfamily \#include $<$md5.\-hpp$>$}
+
+Inheritance diagram for s9\-:\-:M\-D5\-Model\-:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classs9_1_1MD5Model}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classs9_1_1MD5Model_a8fda33653cc483dd85d3d8b79e4904a2}{{\bfseries M\-D5\-Model} (const \hyperlink{classs9_1_1File}{s9\-::\-File} \&file)}\label{classs9_1_1MD5Model_a8fda33653cc483dd85d3d8b79e4904a2}
+
+\item 
+\hypertarget{classs9_1_1MD5Model_af1d8ef363c03ee80ef9339987f3ed29b}{std\-::string {\bfseries print} ()}\label{classs9_1_1MD5Model_af1d8ef363c03ee80ef9339987f3ed29b}
+
+\item 
+\hypertarget{classs9_1_1MD5Model_a82fedccd13a968c94c06b5edad9e22b0}{int {\bfseries version} () const }\label{classs9_1_1MD5Model_a82fedccd13a968c94c06b5edad9e22b0}
+
+\item 
+\hypertarget{classs9_1_1MD5Model_a6cbe036a44ed920c171b91be43944d79}{size\-\_\-t {\bfseries num\-\_\-joints} () const }\label{classs9_1_1MD5Model_a6cbe036a44ed920c171b91be43944d79}
+
+\item 
+\hypertarget{classs9_1_1MD5Model_a40e37ca6659141783d7d7f6d30e5fe20}{size\-\_\-t {\bfseries num\-\_\-meshes} () const }\label{classs9_1_1MD5Model_a40e37ca6659141783d7d7f6d30e5fe20}
+
+\end{DoxyCompactItemize}
+\subsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{classs9_1_1MD5Model_ae66dbcad9ce47515274dd0d31c58685f}{parse} (const \hyperlink{classs9_1_1File}{s9\-::\-File} \&file)
+\end{DoxyCompactItemize}
+\subsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classs9_1_1MD5Model_ad72ac4b6ec19e49517024183a7fa0ff0}{std\-::string {\bfseries filename\-\_\-}}\label{classs9_1_1MD5Model_ad72ac4b6ec19e49517024183a7fa0ff0}
+
+\item 
+\hypertarget{classs9_1_1MD5Model_a02ac69864c0e7f3befeb7d5ce0038c64}{int {\bfseries version\-\_\-}}\label{classs9_1_1MD5Model_a02ac69864c0e7f3befeb7d5ce0038c64}
+
+\item 
+\hypertarget{classs9_1_1MD5Model_aa696aa88472708f91283d8bfd60da400}{size\-\_\-t {\bfseries num\-\_\-joints\-\_\-}}\label{classs9_1_1MD5Model_aa696aa88472708f91283d8bfd60da400}
+
+\item 
+\hypertarget{classs9_1_1MD5Model_aae8c585db4ea2b517ccbdca53559c9ae}{size\-\_\-t {\bfseries num\-\_\-meshes\-\_\-}}\label{classs9_1_1MD5Model_aae8c585db4ea2b517ccbdca53559c9ae}
+
+\item 
+\hypertarget{classs9_1_1MD5Model_a1d1692ca27c68ad62159fd5f2a65431b}{\hyperlink{classs9_1_1Skeleton}{s9\-::\-Skeleton} {\bfseries skeleton\-\_\-}}\label{classs9_1_1MD5Model_a1d1692ca27c68ad62159fd5f2a65431b}
+
+\end{DoxyCompactItemize}
+\subsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classs9_1_1MD5Model_a25ff6ad38a06fbc3cacc3ffa3b8d1035}{std\-::ostream \& \hyperlink{classs9_1_1MD5Model_a25ff6ad38a06fbc3cacc3ffa3b8d1035}{operator$<$$<$} (std\-::ostream \&out, const \hyperlink{classs9_1_1MD5Model}{M\-D5\-Model} \&o)}\label{classs9_1_1MD5Model_a25ff6ad38a06fbc3cacc3ffa3b8d1035}
+
+\begin{DoxyCompactList}\small\item\em friend function that actually prints an M\-D5 Mesh for debugging or other purposes \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+M\-D5 takes a file representing an M\-D5 and creates an array of s9\-::nodes we can draw 
+
+\subsection{Member Function Documentation}
+\hypertarget{classs9_1_1MD5Model_ae66dbcad9ce47515274dd0d31c58685f}{\index{s9\-::\-M\-D5\-Model@{s9\-::\-M\-D5\-Model}!parse@{parse}}
+\index{parse@{parse}!s9::MD5Model@{s9\-::\-M\-D5\-Model}}
+\subsubsection[{parse}]{\setlength{\rightskip}{0pt plus 5cm}void M\-D5\-Model\-::parse (
+\begin{DoxyParamCaption}
+\item[{const {\bf s9\-::\-File} \&}]{file}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [protected]}}}\label{classs9_1_1MD5Model_ae66dbcad9ce47515274dd0d31c58685f}
+\begin{DoxyVerb}We use a full trimesh here because we will precompute tangent and normal before
+\end{DoxyVerb}
+ sending it off to the shader
+
+\begin{DoxyRefDesc}{Todo}
+\item[\hyperlink{todo__todo000006}{Todo}]this is not ideal for the memory usage I have to say \-:S \end{DoxyRefDesc}
+
+
+The documentation for this class was generated from the following files\-:\begin{DoxyCompactItemize}
+\item 
+include/s9/\hyperlink{md5_8hpp}{md5.\-hpp}\item 
+src/\hyperlink{md5_8cpp}{md5.\-cpp}\end{DoxyCompactItemize}

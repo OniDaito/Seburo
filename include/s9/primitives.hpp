@@ -13,7 +13,7 @@
 #define S9_PRIMITIVES_HPP
 
 #include "common.hpp"
-#include "utils.hpp"
+#include "string_utils.hpp"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -22,6 +22,13 @@
 ///\todo is GLM dependent on OpenGL or not?
 
 namespace s9 {
+
+
+	/// Global constants
+	const static uint8_t geometry_max_bones = 16;
+
+	/// Global typedefs
+	typedef uint32_t IndicesType; // Expand potentially on 64 bit systems?
 
 
 /// \todo using padding globally but that may interfere with GLM and not always be great
@@ -111,6 +118,34 @@ namespace s9 {
 	typedef VertexPNUT<glm::vec2, glm::vec2> Vertex2PNU;
 	typedef VertexPNUT<glm::vec3, glm::vec2> Vertex3PNU;
 	typedef VertexPNUT<glm::vec4, glm::vec2> Vertex4PNU;
+
+	/**
+	 * Template for basic position, normal, tangent, texture and skinning
+	 * We have an upper limit for the number of bones allowed - 16 normally
+	 */
+
+	template <typename T = glm::vec3, typename U = glm::vec2, typename V = IndicesType, typename W = float>	
+	struct VertexPSkin {
+		VertexPSkin(const T pp = T(1.0f), const T pn = T(1.0f), 
+			const U pu = U(1.0f), const T pt = T(1.0f)){
+			p = pp;
+			n = pn;
+			u = pu;
+			t = pt;
+		}
+
+		T p; 	// position
+		T n; 	// normal
+		U u; 	// texture uv
+		T t; 	// tangent
+		V b[geometry_max_bones]; // bone index
+		W w[geometry_max_bones]; // bone weight
+
+	};
+
+	typedef VertexPSkin<glm::vec3, glm::vec2, IndicesType, float> Vertex3Skin;
+	typedef VertexPSkin<glm::vec4, glm::vec2, IndicesType, float> Vertex4Skin;
+
  	
  	/**
  	 * Template for basic face data

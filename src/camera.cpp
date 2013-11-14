@@ -31,6 +31,13 @@ Camera::Camera(glm::vec3 pos, glm::vec3 look, glm::vec3 up) : obj_ (shared_ptr<S
 	obj_->up = up;
 }
 
+void Camera::init() {
+	if (obj_ == nullptr){
+		obj_ = shared_ptr<SharedObject>(new SharedObject());
+		reset();
+	}
+}
+
 
 	
 void Camera::resize(size_t w, size_t h){ 	

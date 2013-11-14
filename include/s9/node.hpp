@@ -128,7 +128,6 @@ namespace s9 {
 
 	/**
 	 * A Camera Decorator
-	 * \todo camera is not a shared object so this *should* be a ref or camera should be changed
 	 */
 
 	class NodeCamera : public NodeBase {
@@ -172,6 +171,21 @@ namespace s9 {
 	};
 
 	/**
+	 * Add a skeleton to this node - essentially a set of quaternions and positions
+	 * represented as 4x2 matrices
+	 */
+
+	class NodeSkeleton : public NodeBase {
+	public:
+		NodeSkeleton (Skeleton s) : NodeBase(SKELETON), skeleton_(s){}
+		std::string 	tag() { return "Skeleton"; }
+		void					sign(gl::ShaderVisitor &v );
+
+		Skeleton skeleton_;
+
+	};
+
+	/**
 	 * Add a Shader to this node. This decorator bubbles to the top
 	 */
 
@@ -195,11 +209,12 @@ namespace s9 {
 
 		// Overridden add methods for attaching things to this node.
 		///\todo template these? We could do! :)
-		Node& add(Shape &s);
+		Node& add(Shape s);
 		Node& add(Node &n);
-		Node& add(Skin &s);
-		Node& add(gl::Shader &s);
+		Node& add(Skin s);
+		Node& add(gl::Shader s);
 		Node& add(Camera &c);
+		Node& add(Skeleton s);
 
 		glm::mat4 matrix();
 		void set_matrix(const glm::mat4 &m);

@@ -1,0 +1,5 @@
+<map id="TiXmlNode::LinkEndChild" name="TiXmlNode::LinkEndChild">
+<area shape="rect" id="node2" href="$classTiXmlNode.html#aa66f4ebcd175204a168ed7c2d7b43071" title="TiXmlNode::GetDocument" alt="" coords="226,5,403,33"/>
+<area shape="rect" id="node4" href="$classTiXmlNode.html#a57b99d5c97d67a42b9752f5210a1ba5e" title="TiXmlNode::Type" alt="" coords="253,57,376,85"/>
+<area shape="rect" id="node3" href="$classTiXmlNode.html#a8a4cda4b15c29f64cff419309aebed08" title="Cast to a more defined type. Will return null if not of the requested type. " alt="" coords="451,5,621,33"/>
+</map>

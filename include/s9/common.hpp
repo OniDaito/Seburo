@@ -70,6 +70,9 @@
   #define SEBUROAPI
 #endif
 
+
+/// Type definitions
 typedef uint8_t byte_t;
+
 
 #endif

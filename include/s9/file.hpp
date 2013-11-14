@@ -10,6 +10,7 @@
 #define S9_FILE_HPP
 
 #include "common.hpp"
+#include "string_utils.hpp"
 
 #include <sys/stat.h>
 
