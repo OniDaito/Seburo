@@ -165,6 +165,12 @@ void MD5Model::parse(const File &file) {
           string s;
 
           if (!(tiss >> s >> idx >> verts[vidx].s >> verts[vidx].t >> verts[vidx].index >> verts[vidx].count)) { break; }
+         
+
+          if (verts[vidx].count > geometry_max_bones) {
+            cerr << "SEBURO MD5 Error - Bone attached to vertex exceed max bones count - " << verts[vidx].count  << endl;
+          }
+
           ++vidx;
 
         }
@@ -233,6 +239,8 @@ void MD5Model::parse(const File &file) {
       }
 
       // Post process our vertices to get the basic initial pose and vertex position
+      // This calculation is repeated inside the shader more or less.
+      
       vector<Skin::SkinIndex> indices = skin.indices();
       vector<Skin::SkinWeight> weights = skin.weights();
 
@@ -246,16 +254,38 @@ void MD5Model::parse(const File &file) {
 
         glm::vec3 pos (0.0f,0.0f,0.0f);
 
-        for (size_t j = 0; j < si.count; ++j){
-          Skin::SkinWeight w = weights[si.index + j];
+        for (size_t j = 0; j < geometry_max_bones; ++j){
+         
+          if ( si.count > geometry_max_bones)
+            cerr << "SEBURO MD5 Error - Number of bones attached exceeds geometry_max_bones." << endl;
 
-          glm::vec3 bp = w.bone->rotation * w.position;
-          pos += ( (w.bone->position + bp) * w.bias); // assuming all biases add up to 1
+          if (j < si.count ) {
+            Skin::SkinWeight w = weights[si.index + j];
+            geometry->vertices()[i].b[j] = skeleton_.getBoneIndex(w.bone);
+            geometry->vertices()[i].w[j * 4] = w.position.x; 
+            geometry->vertices()[i].w[j * 4 + 1] = w.position.y; 
+            geometry->vertices()[i].w[j * 4 + 2] = w.position.z; 
+            geometry->vertices()[i].w[j * 4 + 3] = w.bias; 
+
+            glm::vec3 bp = w.bone->rotation * w.position;
+            pos += ( (w.bone->position + bp) * w.bias); // assuming all biases add up to 1
+           
+          
+          } else {
+            geometry->vertices()[i].b[j] = 0;
+            geometry->vertices()[i].w[j * 4] = 0; 
+            geometry->vertices()[i].w[j * 4 + 1] = 0; 
+            geometry->vertices()[i].w[j * 4 + 2] = 0; 
+            geometry->vertices()[i].w[j * 4 + 3] = 0; 
+          }
+
       
         }
 
         geometry->vertices()[i].p = pos;
         geometry->vertices()[i].u = glm::vec2(verts[i].s, verts[i].t);
+
+        ///\todo precompute normals and tangents
 
       }
 

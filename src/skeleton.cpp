@@ -63,6 +63,19 @@ Bone* Skeleton::bone(uint id){
   return nullptr;
 }
 
+/// Get the index of the bone in the array - useful for passing to the shader
+int Skeleton::getBoneIndex(Bone* p) {
+  int idx = 0;
+
+  for (Bone* b : obj_->bones){
+    if (b == p ){
+      return idx;
+    }
+    idx++;
+  }
+  return -1;
+}
+
 /// Return a pointer to a bone given a string name tag
 Bone* Skeleton::bone(string tag){
   for (Bone* b : obj_->bones){

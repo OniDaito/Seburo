@@ -122,7 +122,7 @@ namespace s9 {
 		glm::mat4 matrix_;
 		glm::mat4 matrix_global_;
 		static std::vector<glm::mat4> matrix_stack_;
-		gl::ShaderClause<glm::mat4> clause_matrix_; 
+		gl::ShaderClause<glm::mat4,1> clause_matrix_; 
 						
 	};
 
@@ -142,8 +142,8 @@ namespace s9 {
 
 		Camera			camera_;	
 
-		gl::ShaderClause<glm::mat4> clause_camera_projection_; 
-		gl::ShaderClause<glm::mat4> clause_camera_view_; 
+		gl::ShaderClause<glm::mat4,1> clause_camera_projection_; 
+		gl::ShaderClause<glm::mat4,1> clause_camera_view_; 
 	
 	};
 
@@ -213,7 +213,7 @@ namespace s9 {
 		Node& add(Node &n);
 		Node& add(Skin s);
 		Node& add(gl::Shader s);
-		Node& add(Camera &c);
+		Node& add(Camera c);
 		Node& add(Skeleton s);
 
 		glm::mat4 matrix();

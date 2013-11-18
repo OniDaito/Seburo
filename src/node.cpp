@@ -31,7 +31,7 @@ void NodeShape::draw(){
 	else
 		shape_.brew(); ///\todo allow passing of flags
 
-	CXGLERROR
+	//CXGLERROR
 }
 
 
@@ -39,13 +39,34 @@ void NodeShape::draw(){
 
 /**
  * NodeSkeleton Sign method. We create the clauses on the fly instead
+ * This creates a matrix palette, packing the quaternion and position
+ * into a matrix4x2
  */
 
 void NodeSkeleton::sign(gl::ShaderVisitor &v) {
 
-//	gl::ShaderClause<glm::mat4> clause_bone_rotation_;
-//	gl::ShaderClause<glm::mat4> clause_bone_position_; 
+	size_t bsize = skeleton_.bones().size();
+	glm::mat4 bone_data[shader_bone_limit];
 
+	
+	int idx = 0;
+	for (Bone * b : skeleton_.bones()) {
+		glm::mat4 boneTranslation = glm::translate( glm::mat4(1.0f), b->position);
+		glm::mat4 boneRotation = glm::toMat4(b->rotation);  
+		bone_data[idx] =  boneTranslation * boneRotation;
+
+		idx++;
+		if (idx >= shader_bone_limit){
+			cerr << "SEBURO Shader Clause Error - Number of bones in model exceeds shader limit." << endl;
+			break;
+		}
+	}
+
+	gl::ShaderClause<glm::mat4, shader_bone_limit> clause_bones("uBonePalette", bone_data ); 
+	v.sign(clause_bones);
+
+	gl::ShaderClause<float,1> clause_num_bones("uNumBones", bsize ); 
+	v.sign(clause_num_bones);
 }
 
 
@@ -123,8 +144,7 @@ Node& Node::add(gl::Shader s) {
 }
 
 /// Add a shader to this node
-Node& Node::add(Camera &c) {
-	c.init(); // make sure we have a full object
+Node& Node::add(Camera c) {
 	if (obj_ == nullptr) _init();
 	if ( getBase(CAMERA) == nullptr ){
 		obj_->bases.push_front( NodeBasePtr(new NodeCamera(c)));

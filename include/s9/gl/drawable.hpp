@@ -244,27 +244,23 @@ namespace s9{
 
           IndicesType idx = 0;
 
-          glVertexAttribPointer(idx++,4, GL_FLOAT, GL_FALSE, sizeof(Vertex4), (GLvoid*)offsetof( Vertex4, p) );
-          glVertexAttribPointer(idx++,4, GL_FLOAT, GL_FALSE, sizeof(Vertex4), (GLvoid*)offsetof( Vertex4, n) );
-          glVertexAttribPointer(idx++,4, GL_FLOAT, GL_FALSE, sizeof(Vertex4), (GLvoid*)offsetof( Vertex4, c) );
-          glVertexAttribPointer(idx++,2, GL_FLOAT, GL_FALSE, sizeof(Vertex4), (GLvoid*)offsetof( Vertex4, u) );
-          glVertexAttribPointer(idx++,4, GL_FLOAT, GL_FALSE, sizeof(Vertex4), (GLvoid*)offsetof( Vertex4, t) );
+          glVertexAttribPointer(idx++,4, GL_FLOAT, GL_FALSE, sizeof(Vertex4), reinterpret_cast<void*>(offsetof( Vertex4, p)) );
+          glVertexAttribPointer(idx++,4, GL_FLOAT, GL_FALSE, sizeof(Vertex4), reinterpret_cast<void*>(offsetof( Vertex4, n)) );
+          glVertexAttribPointer(idx++,4, GL_FLOAT, GL_FALSE, sizeof(Vertex4), reinterpret_cast<void*>(offsetof( Vertex4, c)) );
+          glVertexAttribPointer(idx++,2, GL_FLOAT, GL_FALSE, sizeof(Vertex4), reinterpret_cast<void*>(offsetof( Vertex4, u)) );
+          glVertexAttribPointer(idx++,4, GL_FLOAT, GL_FALSE, sizeof(Vertex4), reinterpret_cast<void*>(offsetof( Vertex4, t)) );
 
           // Indices
           if (g.indexed()){
-            glEnableVertexAttribArray(5); // Indices
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, handles_[1]);
 
             ///\todo GL_UNSIGNED_INT must match the IndiciesType
 
-            glVertexAttribPointer(idx, 1, GL_UNSIGNED_INT, GL_FALSE,0, (GLubyte*) NULL);
           } 
         }
 
         unbind();
 
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,0);
       }
 
       template<typename AllocationPolicy>
@@ -283,27 +279,24 @@ namespace s9{
 
           IndicesType idx = 0;
 
-          glVertexAttribPointer(idx++,3, GL_FLOAT, GL_FALSE, sizeof(Vertex3), (GLvoid*)offsetof( Vertex3, p) );
-          glVertexAttribPointer(idx++,3, GL_FLOAT, GL_FALSE, sizeof(Vertex3), (GLvoid*)offsetof( Vertex3, n) );
-          glVertexAttribPointer(idx++,3, GL_FLOAT, GL_FALSE, sizeof(Vertex3), (GLvoid*)offsetof( Vertex3, c) );
-          glVertexAttribPointer(idx++,2, GL_FLOAT, GL_FALSE, sizeof(Vertex3), (GLvoid*)offsetof( Vertex3, u) );
-          glVertexAttribPointer(idx++,3, GL_FLOAT, GL_FALSE, sizeof(Vertex3), (GLvoid*)offsetof( Vertex3, t) );
+          glVertexAttribPointer(idx++,3, GL_FLOAT, GL_FALSE, sizeof(Vertex3), reinterpret_cast<void*>(offsetof( Vertex3, p)) );
+          glVertexAttribPointer(idx++,3, GL_FLOAT, GL_FALSE, sizeof(Vertex3), reinterpret_cast<void*>(offsetof( Vertex3, n)) );
+          glVertexAttribPointer(idx++,3, GL_FLOAT, GL_FALSE, sizeof(Vertex3), reinterpret_cast<void*>(offsetof( Vertex3, c)) );
+          glVertexAttribPointer(idx++,2, GL_FLOAT, GL_FALSE, sizeof(Vertex3), reinterpret_cast<void*>(offsetof( Vertex3, u)) );
+          glVertexAttribPointer(idx++,3, GL_FLOAT, GL_FALSE, sizeof(Vertex3), reinterpret_cast<void*>(offsetof( Vertex3, t)) );
 
           // Indices
           if (g.indexed()){
-            glEnableVertexAttribArray(5); // Indices
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, handles_[1]);
 
             ///\todo GL_UNSIGNED_INT must match the IndiciesType
 
-            glVertexAttribPointer(idx, 1, GL_UNSIGNED_INT, GL_FALSE,0, (GLubyte*) NULL);
           } 
         }
 
         unbind();
 
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,0);
+    
       }
 
       ///\todo we should, eventually, match these layout numbers up so we can just add bits to our uber shader easily
@@ -313,39 +306,54 @@ namespace s9{
         bind();
 
         if (b.interleaved) {
-
+          
           glBindBuffer(GL_ARRAY_BUFFER, handles_[0]);
-          glEnableVertexAttribArray(0); // Pos
+          
+          // These numbers must match these in the shader and the rules for OpenGL Layout binding.
+          // E.g a matrix takes up 4 slots!
+
+          ///\todo OpenGL4.1+ has a better way to assign these: http://www.opengl.org/wiki/Vertex_Specification#Vertex_Buffer_Object
+
+          glEnableVertexAttribArray(0); // Pos (bind pose)
           glEnableVertexAttribArray(1); // Normal
           glEnableVertexAttribArray(2); // texture
           glEnableVertexAttribArray(3); // tangent
-          glEnableVertexAttribArray(4); // bone_index
-          glEnableVertexAttribArray(5); // bone_weight
+          glEnableVertexAttribArray(4); // bone_index (2 x uvec4 )
+          glEnableVertexAttribArray(5); 
+          glEnableVertexAttribArray(6); // skin position and weight (6 x vec4)
+          glEnableVertexAttribArray(7);
+          glEnableVertexAttribArray(8);
+          glEnableVertexAttribArray(9);
+          glEnableVertexAttribArray(10);
+          glEnableVertexAttribArray(11);
+  
 
           IndicesType idx = 0;
+          
+          glVertexAttribPointer(idx++, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex3Skin),  reinterpret_cast<void*>(offsetof( Vertex3Skin, p)) );
+          glVertexAttribPointer(idx++, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex3Skin),  reinterpret_cast<void*>(offsetof( Vertex3Skin, n)) );
+          glVertexAttribPointer(idx++, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex3Skin),  reinterpret_cast<void*>(offsetof( Vertex3Skin, u)) );
+          glVertexAttribPointer(idx++, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex3Skin),  reinterpret_cast<void*>(offsetof( Vertex3Skin, t)) );
+          
+          glVertexAttribIPointer(idx++, 4, GL_UNSIGNED_INT, sizeof(Vertex3Skin),  reinterpret_cast<void*>(offsetof( Vertex3Skin, b)) );
+          glVertexAttribIPointer(idx++, 4, GL_UNSIGNED_INT, sizeof(Vertex3Skin),  reinterpret_cast<void*>(offsetof( Vertex3Skin, b) + 16) );
 
-          glVertexAttribPointer(idx++, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex3Skin), (GLvoid*)offsetof( Vertex3Skin, p) );
-          glVertexAttribPointer(idx++, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex3Skin), (GLvoid*)offsetof( Vertex3Skin, n) );
-          glVertexAttribPointer(idx++, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex3Skin), (GLvoid*)offsetof( Vertex3Skin, u) );
-          glVertexAttribPointer(idx++, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex3Skin), (GLvoid*)offsetof( Vertex3Skin, t) );
-          glVertexAttribPointer(idx++, 1, GL_UNSIGNED_INT, GL_FALSE, sizeof(Vertex3Skin), (GLvoid*)offsetof( Vertex3Skin, b) );
-          glVertexAttribPointer(idx++, 1, GL_FLOAT, GL_FALSE, sizeof(Vertex3Skin), (GLvoid*)offsetof( Vertex3Skin, w) );
+          glVertexAttribPointer(idx++, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex3Skin),  reinterpret_cast<void*>(offsetof( Vertex3Skin, w)) );
+          glVertexAttribPointer(idx++, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex3Skin),  reinterpret_cast<void*>(offsetof( Vertex3Skin, w) + 16) );
+          glVertexAttribPointer(idx++, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex3Skin),  reinterpret_cast<void*>(offsetof( Vertex3Skin, w) + (16 * 2)));
+          glVertexAttribPointer(idx++, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex3Skin),  reinterpret_cast<void*>(offsetof( Vertex3Skin, w) + (16 * 3)));
+          glVertexAttribPointer(idx++, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex3Skin),  reinterpret_cast<void*>(offsetof( Vertex3Skin, w) + (16 * 4)));
+          glVertexAttribPointer(idx++, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex3Skin),  reinterpret_cast<void*>(offsetof( Vertex3Skin, w) + (16 * 5)));
+
+
 
           // Indices
           if (g.indexed()){
-            glEnableVertexAttribArray(6); // Indices
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, handles_[1]);
-
-            ///\todo GL_UNSIGNED_INT must match the IndiciesType
-
-            glVertexAttribPointer(idx, 1, GL_UNSIGNED_INT, GL_FALSE,0, (GLubyte*) NULL);
           } 
         }
 
         unbind();
-
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,0);
 
         CXGLERROR
       }

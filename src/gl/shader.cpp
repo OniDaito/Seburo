@@ -19,11 +19,26 @@ const static string fragment_delimiter = "##>FRAGMENT";
 const static string vertex_delimiter = "##>VERTEX";
 const static string geometry_delimiter = "##>GEOMETRY";
 
-template<>
-void ShaderVisitor::sign( ShaderClause<glm::mat4> &c) {
-	 GLuint l = location(c.name.c_str());
+template<typename T, size_t N>
+void ShaderVisitor::sign( ShaderClause<T, N> &c) {
+	assert(false);
+}
 
-   glUniformMatrix4fv( l, c.size, GL_FALSE, glm::value_ptr(c.data));
+void ShaderVisitor::sign( ShaderClause<glm::mat4, 1> &c) {
+	GLuint l = location(c.name.c_str());
+  glUniformMatrix4fv( l, 1, GL_FALSE, glm::value_ptr(c.data));
+}
+
+
+template<size_t N>
+void ShaderVisitor::sign( ShaderClause<float, N> &c) {
+	GLuint l = location(c.name.c_str());
+  glUniform1fv( l, c.size, &c.data); ///\todo test this!
+}
+
+void ShaderVisitor::sign( ShaderClause<float, 1> &c) {
+	GLuint l = location(c.name.c_str());
+  glUniform1f( l, c.data); ///\todo test this!
 }
 
 

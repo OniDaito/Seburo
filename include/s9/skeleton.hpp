@@ -110,6 +110,8 @@ namespace s9{
 
     Skeleton& addBone(Bone* b) { obj_->bones.push_back(b); return *this; }
 
+    int getBoneIndex(Bone* b);
+
     const std::vector<Bone*>& bones() const { return obj_->bones; }
    
     friend std::ostream& operator<<(std::ostream& out, const Skeleton& o);

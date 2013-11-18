@@ -25,7 +25,7 @@ namespace s9 {
 
 
 	/// Global constants
-	const static uint8_t geometry_max_bones = 16;
+	const static uint8_t geometry_max_bones = 8; // Needs to be pretty low to stay under MAX_VERTEX_ATTRIBS - we use 2 x uvec4 for 8 bones per vertex
 
 	/// Global typedefs
 	typedef uint32_t IndicesType; // Expand potentially on 64 bit systems?
@@ -124,7 +124,7 @@ namespace s9 {
 	 * We have an upper limit for the number of bones allowed - 16 normally
 	 */
 
-	template <typename T = glm::vec3, typename U = glm::vec2, typename V = IndicesType, typename W = float>	
+	template <typename T = glm::vec3, typename U = glm::vec2, typename V = uint32_t, typename W = float>	
 	struct VertexPSkin {
 		VertexPSkin(const T pp = T(1.0f), const T pn = T(1.0f), 
 			const U pu = U(1.0f), const T pt = T(1.0f)){
@@ -132,14 +132,20 @@ namespace s9 {
 			n = pn;
 			u = pu;
 			t = pt;
+
+			///\todo this might be a bit inefficient :S
+		/*	for (int i=0; i <geometry_max_bones; ++i ){
+				b[i] = 0;
+				w[i] = 0;
+			}*/
 		}
 
 		T p; 	// position
 		T n; 	// normal
 		U u; 	// texture uv
 		T t; 	// tangent
-		V b[geometry_max_bones]; // bone index
-		W w[geometry_max_bones]; // bone weight
+		V b[geometry_max_bones]; 			// bone index ( 2 x uvec4 shorts)
+		W w[geometry_max_bones * 4]; 	// skin position + bias as 4 floats
 
 	};
 

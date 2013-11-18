@@ -44,6 +44,7 @@ namespace s9 {
 		virtual void draw(GeometryPrimitive g = TRIANGLES) { if (obj_ != nullptr) obj_->draw(g); };
 		virtual void brew(gl::BrewFlags b=gl::BrewFlagsDefault) { if (obj_ != nullptr)  { obj_->brew(b); } };
 		virtual bool brewed() { if(obj_ != nullptr) return obj_->brewed(); return false;}
+		virtual void init() {};
 
 		const Shape& operator= (const Shape &s ) { 
 			obj_ = s.obj_; 

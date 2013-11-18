@@ -26,6 +26,7 @@ void MD5App::init(){
 
     rotation_ = 0;
    
+    camera_= Camera( glm::vec3(0,0,18.0f));
     md5_ = MD5Model( s9::File("./data/hellknight.md5mesh") ); 
 
     node_.add(md5_).add(camera_).add(shader_);
@@ -40,7 +41,7 @@ void MD5App::init(){
 
     glm::rotate( neck->rotation , 1.0, glm::vec3(0.0,1.0,0.0));
 
-    camera_.set_pos( glm::vec3(0,0,18.0f));
+   
 
     CXGLERROR
 }
@@ -67,7 +68,7 @@ void MD5App::display(double_t dt){
     
     node_.draw();
 
-    CXGLERROR
+    //CXGLERROR
 }
 
 
