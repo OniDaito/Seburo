@@ -104,7 +104,7 @@ Bone* Skeleton::bone(string tag){
 /// \todo enforce ordering somehow (on the add no doubt)
 
 void Skeleton::update() {
-  for (Bone* b : obj_->bones){
+  /*for (Bone* b : obj_->bones){
     
     glm::mat4 local_matrix =  glm::toMat4(b->rotation()) * glm::translate( glm::mat4(1.0f), b->position());
 
@@ -117,7 +117,7 @@ void Skeleton::update() {
     } else {
       b->set_global_matrix( local_matrix * glm::inverse(b->bind_pose()) );
     }
-  }
+  }*/
 }
 
 /// Set all the bones' global matrices

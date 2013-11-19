@@ -46,6 +46,13 @@ typedef struct {
   size_t bone;
 } md5_weight;
 
+/// Temporary structure for joints
+typedef struct {
+  glm::vec3 position;
+  glm::quat rotation;
+} md5_joint;
+
+
 
 void MD5Model::parse(const File &file) {
   if (!file.exists()){
@@ -66,6 +73,8 @@ void MD5Model::parse(const File &file) {
   // vector to hold indices for parent bones
   vector<int> bone_indices; // Could be a -1 here you see, for the top tree
 
+  md5_joint *joints;
+
   // Parse the ASCII format, extracting all the bits we need :)
   std::string line;
   while (std::getline(ifs, line)){
@@ -81,6 +90,7 @@ void MD5Model::parse(const File &file) {
     else if (string_contains(line, "numJoints") ){
       string s;
       if (!(iss >> s >> num_joints_)) { break; }
+      joints = new md5_joint[num_joints_];
     } 
 
     else if (string_contains(line, "numMeshes") ){
@@ -97,6 +107,7 @@ void MD5Model::parse(const File &file) {
         float p0,p1,p2,r0,r1,r2;
         int parent;
         string name;
+
         
         tline = remove_char(tline, '(');
         tline = remove_char(tline, ')');
@@ -110,6 +121,10 @@ void MD5Model::parse(const File &file) {
         glm::quat q = glm::quat();
         q.x = r0; q.y = r1; q.z = r2; computeW(q);
         glm::vec3 p = glm::vec3(p0,p1,p2);
+
+        // Double up on joints as well so we can compute positions later on
+        joints[i].position = p;
+        joints[i].rotation = q;
 
         skeleton_.addBone ( new Bone(name, i, nullptr, q, p) );
 
@@ -279,8 +294,8 @@ void MD5Model::parse(const File &file) {
             geometry->vertices()[i].b[j] = w.bone;
             geometry->vertices()[i].w[j] = w.bias; 
           
-            glm::vec3 bp = skeleton_.bone(w.bone)->rotation() * w.position;
-            pos += ( (skeleton_.bone(w.bone)->position() + bp) * w.bias); // assuming all biases add up to 1
+            glm::vec3 bp = joints[w.bone].rotation * w.position;
+            pos += ( (joints[w.bone].position + bp) * w.bias); // assuming all biases add up to 1
                      
           } else {
             geometry->vertices()[i].b[j] = 0;
@@ -298,10 +313,9 @@ void MD5Model::parse(const File &file) {
       delete[] verts;
       delete[] weights;
     }
-
   }
 
-
+  delete[] joints;
   ifs.close();
 
   

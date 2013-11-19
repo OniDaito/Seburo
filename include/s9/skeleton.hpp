@@ -30,11 +30,9 @@ namespace s9{
   public:
 
     Bone(std::string n, int idx,  Bone* h = nullptr, glm::quat r = glm::quat(), 
-      glm::vec3 p = glm::vec3(1.0f)) : name_(n), id_(idx), parent_(h), rotation_(r), position_(p) {
+      glm::vec3 p = glm::vec3(1.0f)) : name_(n), id_(idx), parent_(h) {
 
-      
       bind_pose_ = glm::translate( glm::mat4(1.0f), p) * glm::toMat4(r);
-
       global_matrix_ = glm::mat4(1.0f);
 
 
