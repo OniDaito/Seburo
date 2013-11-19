@@ -144,15 +144,14 @@ namespace s9 {
 		T n; 	// normal
 		U u; 	// texture uv
 		T t; 	// tangent
-		V b[geometry_max_bones]; 			// bone index ( 2 x uvec4 shorts)
-		W w[geometry_max_bones * 4]; 	// skin position + bias as 4 floats
+		V b[geometry_max_bones]; 	// bone index ( 2 x uvec4 shorts)
+		W w[geometry_max_bones]; 	// weights (2 x vec4 floats)
 
 	};
 
 	typedef VertexPSkin<glm::vec3, glm::vec2, IndicesType, float> Vertex3Skin;
 	typedef VertexPSkin<glm::vec4, glm::vec2, IndicesType, float> Vertex4Skin;
 
- 	
  	/**
  	 * Template for basic face data
  	 */

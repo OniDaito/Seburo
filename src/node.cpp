@@ -45,16 +45,13 @@ void NodeShape::draw(){
 
 void NodeSkeleton::sign(gl::ShaderVisitor &v) {
 
-	size_t bsize = skeleton_.bones().size();
+	size_t bsize = skeleton_.size();
 	glm::mat4 bone_data[shader_bone_limit];
 
-	
 	int idx = 0;
 	for (Bone * b : skeleton_.bones()) {
-		glm::mat4 boneTranslation = glm::translate( glm::mat4(1.0f), b->position);
-		glm::mat4 boneRotation = glm::toMat4(b->rotation);  
-		bone_data[idx] =  boneTranslation * boneRotation;
-
+		
+		bone_data[idx] =  b->global_matrix();
 		idx++;
 		if (idx >= shader_bone_limit){
 			cerr << "SEBURO Shader Clause Error - Number of bones in model exceeds shader limit." << endl;

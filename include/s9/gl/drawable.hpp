@@ -320,33 +320,22 @@ namespace s9{
           glEnableVertexAttribArray(3); // tangent
           glEnableVertexAttribArray(4); // bone_index (2 x uvec4 )
           glEnableVertexAttribArray(5); 
-          glEnableVertexAttribArray(6); // skin position and weight (6 x vec4)
+          glEnableVertexAttribArray(6); // skin weight (2 x vec4)
           glEnableVertexAttribArray(7);
-          glEnableVertexAttribArray(8);
-          glEnableVertexAttribArray(9);
-          glEnableVertexAttribArray(10);
-          glEnableVertexAttribArray(11);
-  
-
+        
           IndicesType idx = 0;
           
-          glVertexAttribPointer(idx++, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex3Skin),  reinterpret_cast<void*>(offsetof( Vertex3Skin, p)) );
-          glVertexAttribPointer(idx++, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex3Skin),  reinterpret_cast<void*>(offsetof( Vertex3Skin, n)) );
-          glVertexAttribPointer(idx++, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex3Skin),  reinterpret_cast<void*>(offsetof( Vertex3Skin, u)) );
-          glVertexAttribPointer(idx++, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex3Skin),  reinterpret_cast<void*>(offsetof( Vertex3Skin, t)) );
+          glVertexAttribPointer(idx++, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex3Skin), reinterpret_cast<void*>(offsetof( Vertex3Skin, p)) );
+          glVertexAttribPointer(idx++, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex3Skin), reinterpret_cast<void*>(offsetof( Vertex3Skin, n)) );
+          glVertexAttribPointer(idx++, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex3Skin), reinterpret_cast<void*>(offsetof( Vertex3Skin, u)) );
+          glVertexAttribPointer(idx++, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex3Skin), reinterpret_cast<void*>(offsetof( Vertex3Skin, t)) );
           
-          glVertexAttribIPointer(idx++, 4, GL_UNSIGNED_INT, sizeof(Vertex3Skin),  reinterpret_cast<void*>(offsetof( Vertex3Skin, b)) );
-          glVertexAttribIPointer(idx++, 4, GL_UNSIGNED_INT, sizeof(Vertex3Skin),  reinterpret_cast<void*>(offsetof( Vertex3Skin, b) + 16) );
+          glVertexAttribIPointer(idx++, 4, GL_UNSIGNED_INT, sizeof(Vertex3Skin), reinterpret_cast<void*>(offsetof( Vertex3Skin, b)) );
+          glVertexAttribIPointer(idx++, 4, GL_UNSIGNED_INT, sizeof(Vertex3Skin), reinterpret_cast<void*>(offsetof( Vertex3Skin, b) + 16) );
 
-          glVertexAttribPointer(idx++, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex3Skin),  reinterpret_cast<void*>(offsetof( Vertex3Skin, w)) );
-          glVertexAttribPointer(idx++, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex3Skin),  reinterpret_cast<void*>(offsetof( Vertex3Skin, w) + 16) );
-          glVertexAttribPointer(idx++, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex3Skin),  reinterpret_cast<void*>(offsetof( Vertex3Skin, w) + (16 * 2)));
-          glVertexAttribPointer(idx++, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex3Skin),  reinterpret_cast<void*>(offsetof( Vertex3Skin, w) + (16 * 3)));
-          glVertexAttribPointer(idx++, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex3Skin),  reinterpret_cast<void*>(offsetof( Vertex3Skin, w) + (16 * 4)));
-          glVertexAttribPointer(idx++, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex3Skin),  reinterpret_cast<void*>(offsetof( Vertex3Skin, w) + (16 * 5)));
-
-
-
+          glVertexAttribPointer(idx++, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex3Skin), reinterpret_cast<void*>(offsetof( Vertex3Skin, w)) );
+          glVertexAttribPointer(idx++, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex3Skin), reinterpret_cast<void*>(offsetof( Vertex3Skin, w) + 16) );
+       
           // Indices
           if (g.indexed()){
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, handles_[1]);

@@ -31,23 +31,33 @@ void MD5App::init(){
 
     node_.add(md5_).add(camera_).add(shader_);
  
-
     glm::mat4 Model = glm::rotate(glm::mat4(), rotation_, glm::vec3(0.0f, 1.0f, 0.0f));
     Model = glm::translate(Model, glm::vec3(0.0,-6.0,0.0));
     Model = glm::scale(Model, glm::vec3(0.1,0.1,0.1));
     node_.set_matrix(Model);
 
     Bone * neck = md5_.skeleton().bone("neck");
+    neck->set_rotation (glm::rotate( neck->rotation() , 21.0, glm::vec3(0.0,1.0,0.0)));
 
-    glm::rotate( neck->rotation , 1.0, glm::vec3(0.0,1.0,0.0));
+    //Bone * waist = md5_.skeleton().bone("waist");
+    //waist->set_rotation( glm::rotate( waist->rotation() , 20.0, glm::vec3(0.0,1.0,0.0)) );
+
+
+    //Bone * luparm = md5_.skeleton().bone("luparm");
+    //luparm->set_rotation (glm::rotate( luparm->rotation() , 20.0, glm::vec3(0.0,1.0,0.0)));
 
    
+    Bone * lloarm = md5_.skeleton().bone("lloarm");
+    lloarm->set_rotation (glm::rotate( lloarm->rotation() , 50.0, glm::vec3(0.0,1.0,0.0)));
 
     CXGLERROR
 }
 
 ///\todo seems not to want to update member variables :(
-void MD5App::update(double_t dt) {}
+void MD5App::update(double_t dt) {
+    md5_.skeleton().update();
+
+}
 
 
 /*

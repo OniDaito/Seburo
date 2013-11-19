@@ -15,7 +15,7 @@ layout (location = 1) in vec3 aVertNormal;
 layout (location = 2) in vec2 aVertTexCoord;
 layout (location = 3) in vec3 aVertTangent;
 layout (location = 4) in uvec4 aVertBoneIndex[2];
-layout (location = 6) in vec4 aVertWeightPosBias[6];
+layout (location = 6) in vec4 aVertWeight[2];
 
 
 // Defaults set by Seburo
@@ -28,7 +28,7 @@ uniform mat4 uBonePalette[128]; // Quite a lot! :O
 uniform uint uNumBones;
 
 vec3 qtransform( vec4 q, vec3 v ){ 
-  return v + 2.0*cross(cross(v, q.xyz ) + q.w*v, q.xyz);
+  return v + 2.0 * cross(cross(v, q.xyz ) + q.w*v, q.xyz);
 }
 
 
@@ -37,41 +37,31 @@ void main() {
 
   // Flatten out the loop
   // Unpack the values
-  float bias = aVertWeightPosBias[0].w;
-  vec4 weight_position =  vec4(aVertWeightPosBias[0].xyz, 1.0);
-  vec4 bp = uBonePalette[aVertBoneIndex[0].x] * weight_position;
-  skinnedPosition += (vec3(bp.xyz) * bias);
+  float bias = aVertWeight[0].x;
+  vec4 bp = vec4(aVertPosition,1.0) * uBonePalette[aVertBoneIndex[0].x] * bias;
+  skinnedPosition += bp.xyz;
 
+  bias = aVertWeight[0].y;
+  bp = vec4(aVertPosition,1.0) * uBonePalette[aVertBoneIndex[0].y] * bias;
+  skinnedPosition += bp.xyz;
 
-  bias = aVertWeightPosBias[1].w;
-  weight_position =  vec4(aVertWeightPosBias[1].xyz, 1.0);
-  bp = uBonePalette[aVertBoneIndex[0].y] * weight_position;
-  skinnedPosition += (vec3(bp.xyz) * bias);
+  bias = aVertWeight[0].z;
+  bp = vec4(aVertPosition,1.0) * uBonePalette[aVertBoneIndex[0].z] * bias;
+  skinnedPosition += bp.xyz;
 
+  bias = aVertWeight[0].w;
+  bp = vec4(aVertPosition,1.0) * uBonePalette[aVertBoneIndex[0].w] * bias;
+  skinnedPosition += bp.xyz;
 
-  bias = aVertWeightPosBias[2].w;
-  weight_position =  vec4(aVertWeightPosBias[2].xyz, 1.0);
-  bp = uBonePalette[aVertBoneIndex[0].z] * weight_position;
-  skinnedPosition += (vec3(bp.xyz) * bias);
+  bias = aVertWeight[1].x;
+  bp = vec4(aVertPosition,1.0) * uBonePalette[aVertBoneIndex[1].x] * bias;
+  skinnedPosition += bp.xyz;
 
+  bias = aVertWeight[1].y;
+  bp = vec4(aVertPosition,1.0) * uBonePalette[aVertBoneIndex[1].y] * bias;
+  skinnedPosition += bp.xyz;
 
-  bias = aVertWeightPosBias[3].w;
-  weight_position =  vec4(aVertWeightPosBias[3].xyz, 1.0);
-  bp = uBonePalette[aVertBoneIndex[0].w] * weight_position;
-  skinnedPosition += (vec3(bp.xyz) * bias);
-
-  bias = aVertWeightPosBias[4].w;
-  weight_position =  vec4(aVertWeightPosBias[4].xyz, 1.0);
-  bp = uBonePalette[aVertBoneIndex[1].x] * weight_position;
-  skinnedPosition += (vec3(bp.xyz) * bias);
-
-
-  bias = aVertWeightPosBias[5].w;
-  weight_position =  vec4(aVertWeightPosBias[5].xyz, 1.0);
-  bp = uBonePalette[aVertBoneIndex[1].y] * weight_position;
-  skinnedPosition += (vec3(bp.xyz) * bias);
-
-  vVertexPosition = uProjectionMatrix * uViewMatrix  * uModelMatrix * vec4(skinnedPosition,1.0);
+  vVertexPosition = uProjectionMatrix * uViewMatrix * uModelMatrix * vec4(skinnedPosition,1.0);
   gl_Position = vVertexPosition;
   vTexCoord = aVertTexCoord;
 } 

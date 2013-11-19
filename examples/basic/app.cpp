@@ -46,6 +46,7 @@ void BasicApp::update(double_t dt) {
 		
 void BasicApp::display(double_t dt){
 
+
     glClearBufferfv(GL_COLOR, 0, &glm::vec4(0.9f, 0.9f, 0.9f, 1.0f)[0]);
     GLfloat depth = 1.0f;
     glClearBufferfv(GL_DEPTH, 0, &depth );

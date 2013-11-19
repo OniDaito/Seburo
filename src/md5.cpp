@@ -32,12 +32,19 @@ glm::quat computeW (glm::quat &q) {
 }
 
 
+/// Temporary structure for parsing MD5Mesh style vertices
 typedef struct {
   float     s, t;
   IndicesType index;
   size_t    count;
 } md5_vertex;
 
+/// Temporary structure for MD5 Weights
+typedef struct {
+  glm::vec3 position;
+  float bias;
+  size_t bone;
+} md5_weight;
 
 
 void MD5Model::parse(const File &file) {
@@ -104,7 +111,7 @@ void MD5Model::parse(const File &file) {
         q.x = r0; q.y = r1; q.z = r2; computeW(q);
         glm::vec3 p = glm::vec3(p0,p1,p2);
 
-        skeleton_.addBone ( new Bone(name, nullptr, q, p) );
+        skeleton_.addBone ( new Bone(name, i, nullptr, q, p) );
 
         std::getline(ifs, tline);
       }
@@ -112,7 +119,7 @@ void MD5Model::parse(const File &file) {
       // Match up parents with actual pointers to bones
       for (size_t i = 0; i < num_joints_; ++i){
         if (bone_indices[i] != -1)
-          skeleton_.bone(i)->parent = skeleton_.bone(bone_indices[i]);
+          skeleton_.bone(i)->set_parent(skeleton_.bone(bone_indices[i]));
       }
 
     }
@@ -126,6 +133,8 @@ void MD5Model::parse(const File &file) {
       Node mesh_node;
       
       md5_vertex* verts;
+      md5_weight* weights;
+
       size_t num_verts;
 
       add(mesh_node);
@@ -213,6 +222,9 @@ void MD5Model::parse(const File &file) {
           skin = Skin(num_weights);
           mesh_node.add(skin);
 
+          // MD5Mesh 
+          weights = new md5_weight[num_weights];
+
         }
 
         else if (string_contains(tline, "weight")){
@@ -227,22 +239,25 @@ void MD5Model::parse(const File &file) {
           if (!(tiss >> s >> idx >> bone_id >> bias >> p0 >> p1 >> p2 )) { break; }
 
           Skin::SkinWeight w;
-          w.position = glm::vec3(p0,p1,p2);
           w.bias = bias;
 
           // Assuming the skeleton_ / joints appear first
-          w.bone = skeleton_.bones()[bone_id];
+          w.bone = skeleton_.bone(bone_id);
           skin.addWeight(w);
+
+          // Annoyingly we need to double up so we can provide a GPU friendly skinning
+          weights[idx].position = glm::vec3(p0,p1,p2);
+          weights[idx].bias = bias;
+          weights[idx].bone = bone_id;
+
+
         }
 
-        
       }
 
       // Post process our vertices to get the basic initial pose and vertex position
-      // This calculation is repeated inside the shader more or less.
-      
+      // This is our friendly bind pose      
       vector<Skin::SkinIndex> indices = skin.indices();
-      vector<Skin::SkinWeight> weights = skin.weights();
 
       for (size_t i =0; i < num_verts; ++i){
         
@@ -260,26 +275,17 @@ void MD5Model::parse(const File &file) {
             cerr << "SEBURO MD5 Error - Number of bones attached exceeds geometry_max_bones." << endl;
 
           if (j < si.count ) {
-            Skin::SkinWeight w = weights[si.index + j];
-            geometry->vertices()[i].b[j] = skeleton_.getBoneIndex(w.bone);
-            geometry->vertices()[i].w[j * 4] = w.position.x; 
-            geometry->vertices()[i].w[j * 4 + 1] = w.position.y; 
-            geometry->vertices()[i].w[j * 4 + 2] = w.position.z; 
-            geometry->vertices()[i].w[j * 4 + 3] = w.bias; 
-
-            glm::vec3 bp = w.bone->rotation * w.position;
-            pos += ( (w.bone->position + bp) * w.bias); // assuming all biases add up to 1
-           
+            md5_weight w = weights[si.index + j];
+            geometry->vertices()[i].b[j] = w.bone;
+            geometry->vertices()[i].w[j] = w.bias; 
           
+            glm::vec3 bp = skeleton_.bone(w.bone)->rotation() * w.position;
+            pos += ( (skeleton_.bone(w.bone)->position() + bp) * w.bias); // assuming all biases add up to 1
+                     
           } else {
             geometry->vertices()[i].b[j] = 0;
-            geometry->vertices()[i].w[j * 4] = 0; 
-            geometry->vertices()[i].w[j * 4 + 1] = 0; 
-            geometry->vertices()[i].w[j * 4 + 2] = 0; 
-            geometry->vertices()[i].w[j * 4 + 3] = 0; 
+            geometry->vertices()[i].w[j] = 0; 
           }
-
-      
         }
 
         geometry->vertices()[i].p = pos;
@@ -288,8 +294,9 @@ void MD5Model::parse(const File &file) {
         ///\todo precompute normals and tangents
 
       }
-
+      skeleton_.resetGlobals();
       delete[] verts;
+      delete[] weights;
     }
 
   }

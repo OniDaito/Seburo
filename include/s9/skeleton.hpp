@@ -9,29 +9,75 @@
 #ifndef S9_SKELETON_HPP
 #define S9_SKELETON_HPP
 
+#include <forward_list>
 #include "common.hpp"
 #include "geometry.hpp"
 
 
 namespace s9{
 
-  /// A bone represents a rotation, held as a quaternion in this case
-  struct Bone {
-    Bone(std::string n, Bone* h = nullptr, glm::quat r = glm::quat(), 
-      glm::vec3 p = glm::vec3(1.0f)) : name(n), parent(h), rotation(r), position(p) {} 
+  class Skeleton;
+
+  /**
+   *  A bone represents a rotation, held as a quaternion in this case. 
+   *  The initial rotation and translation values form the bind pose matrix.
+   *  We invert these matrices so we can get the inverse_bind_pose_ matrix and 
+   *  perform skinning normally.
+   */ 
+
+  class Bone {
+
+  public:
+
+    Bone(std::string n, int idx,  Bone* h = nullptr, glm::quat r = glm::quat(), 
+      glm::vec3 p = glm::vec3(1.0f)) : name_(n), id_(idx), parent_(h), rotation_(r), position_(p) {
+
+      
+      bind_pose_ = glm::translate( glm::mat4(1.0f), p) * glm::toMat4(r);
+
+      global_matrix_ = glm::mat4(1.0f);
+
+
+    } 
 
     friend std::ostream& operator<<(std::ostream& out, const Bone& o);
 
-    Bone* parent;
-    std::string name; /// A useful tag for the bone
-    glm::quat rotation;
-    glm::vec3 position; // Sort of like a length really.
+    const std::string name () const {return name_;}
+    const glm::quat rotation() const{ return rotation_; }
+    const glm::vec3 position() const { return position_; }
+
+    const int id() const {return id_; }
+
+    const Bone* parent() {return parent_; }
+
+    const glm::mat4 global_matrix() const { return global_matrix_; }
+
+
+    void set_rotation(const glm::quat &q) {rotation_ = q; } 
+    void set_position(const glm::vec3 &p) {position_ = p; }
+    void set_parent(Bone *p) {parent_ = p; }
+    const glm::mat4 bind_pose() const { return bind_pose_; }
+
+  protected:
+
+    void set_global_matrix(const glm::mat4 &m) {global_matrix_ = m; } 
+
+    Bone* parent_;
+    std::string name_;   /// A useful tag for the bone
+    int id_;             /// An ID for the bone - parents have lower numbers than children
+    glm::quat rotation_;
+    glm::vec3 position_; // Sort of like a length really.
+
+    glm::mat4 global_matrix_;
+    glm::mat4 bind_pose_; 
+
+    friend class Skeleton;
 
   };
 
   inline std::ostream& operator<<(std::ostream& os, const Bone& obj) {
-    return os << "Bone - " << obj.name << " : " << obj.rotation.x << ", " 
-      << obj.rotation.y << ", " << obj.rotation.z << ", " << obj.rotation.w;
+    return os << "Bone - " << obj.name() << " : " << obj.rotation().x << ", " 
+      << obj.rotation().y << ", " << obj.rotation().z << ", " << obj.rotation().w;
   }
 
   /** 
@@ -58,11 +104,11 @@ namespace s9{
     
     /**
      * A weight for a skin. This must link to the skeleton in the current context
+     * ID's MD5 uses an offset which we will not use
      */
 
     struct SkinWeight {
       Bone*       bone;
-      glm::vec3   position; ///\todo Id has this but not sure why :S
       float       bias;
     };
 
@@ -98,6 +144,7 @@ namespace s9{
   /**
    * A Skeleton made up of bones. A hierarchy of rotations if you like.
    * Influenced heavily by OpenNI and Id Software's MD5
+   * 
    */
 
   class Skeleton {
@@ -108,11 +155,21 @@ namespace s9{
     Bone* bone(std::string tag);
     Bone* bone(uint id);
 
-    Skeleton& addBone(Bone* b) { obj_->bones.push_back(b); return *this; }
+    Skeleton& addBone(Bone* b);
 
     int getBoneIndex(Bone* b);
 
-    const std::vector<Bone*>& bones() const { return obj_->bones; }
+    void update();
+
+    size_t size() {
+      std::forward_list<Bone*>::iterator first = obj_->bones.begin();
+      std::forward_list<Bone*>::iterator last = obj_->bones.end();
+      return std::distance(first,last);
+    }
+
+    void resetGlobals();
+
+    const std::forward_list<Bone*>& bones() const { return obj_->bones; }
    
     friend std::ostream& operator<<(std::ostream& out, const Skeleton& o);
 
@@ -123,7 +180,7 @@ namespace s9{
     struct SharedObject {
       ~SharedObject();
       Bone* top;
-      std::vector<Bone*> bones;
+      std::forward_list<Bone*> bones;
 
     };
 
