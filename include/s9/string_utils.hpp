@@ -152,7 +152,7 @@ namespace s9 {
 	  int i,j;
 	  for (j=0; j<4; ++j){
 	    for (i=0; i<4; ++i){
-	    	s << mat[i][j] << " ";
+	    	s << std::setprecision(2) <<  mat[i][j] << " ";
 	  	}	
 	  	s << std::endl;
 	 	}

@@ -104,27 +104,43 @@ Bone* Skeleton::bone(string tag){
 /// \todo enforce ordering somehow (on the add no doubt)
 
 void Skeleton::update() {
-  /*for (Bone* b : obj_->bones){
-    
-    glm::mat4 local_matrix =  glm::toMat4(b->rotation()) * glm::translate( glm::mat4(1.0f), b->position());
+  for (Bone* b : obj_->bones){
 
-    if (b->parent() != nullptr){
-      
-      glm::mat4 tm = glm::inverse(b->parent()->global_matrix()) * (local_matrix * glm::inverse(b->bind_pose()))* b->parent()->global_matrix();
-
-      b->set_global_matrix(tm);
+    if (b->parent() == nullptr){
+      b->set_global_matrix( b->relative_matrix() );
 
     } else {
-      b->set_global_matrix( local_matrix * glm::inverse(b->bind_pose()) );
-    }
-  }*/
+
+        b->set_global_matrix( b->parent()->global_matrix() * b->relative_matrix() );
+    } 
+  }
+
+  for (Bone* b : obj_->bones){
+    b->set_skinned_matrix( b->global_matrix() * b->inverse_bind_pose() );
+  }
+
 }
 
 /// Set all the bones' global matrices
 void Skeleton::resetGlobals() {
   for (Bone* b : obj_->bones){
-    b->set_global_matrix(glm::mat4(1.0f));
+    b->set_global_matrix(  glm::toMat4(b->rotation_absolute()) * 
+          glm::translate( glm::mat4(1.0f), b->position_absolute() ));
   }
+
+}
+
+/// Creates a string for printing
+
+std::string Skeleton::toString() {
+  std::stringstream s;
+  s << "Skeleton" << endl;
+  size_t idx = 0;
+  for (Bone* b : obj_->bones){
+    s << "  " << idx << " : " <<  b->id() << " - " << b->name() << endl;
+    idx++;
+  }
+  return s.str();
 }
 
 

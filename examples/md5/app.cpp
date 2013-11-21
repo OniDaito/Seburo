@@ -19,44 +19,63 @@ using namespace s9::gl;
 
 void MD5App::init(){
     shader_ = Shader(s9::File("./shaders/3/skinning.glsl"));
+    shader_colour_ = Shader(s9::File("./shaders/3/solid_colour.glsl"));
 
     addWindowListener(this);
 
     quad_ = Quad(1.0,1.0);
-
     rotation_ = 0;
+
+    bone_colour_ = glm::vec4(1.0,0.0,0.0,1.0);
    
     camera_= Camera( glm::vec3(0,0,18.0f));
-    md5_ = MD5Model( s9::File("./data/hellknight.md5mesh") ); 
+    md5_ = MD5Model( s9::File("./data/boblampclean.md5mesh") ); 
+    md5_.set_geometry_cast(WIREFRAME);
 
     node_.add(md5_).add(camera_).add(shader_);
  
     glm::mat4 Model = glm::rotate(glm::mat4(), rotation_, glm::vec3(0.0f, 1.0f, 0.0f));
     Model = glm::translate(Model, glm::vec3(0.0,-6.0,0.0));
     Model = glm::scale(Model, glm::vec3(0.1,0.1,0.1));
-    node_.set_matrix(Model);
+    Model = glm::rotate(Model, -90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+    node_.setMatrix(Model);
 
-    Bone * neck = md5_.skeleton().bone("neck");
-    neck->set_rotation (glm::rotate( neck->rotation() , 21.0, glm::vec3(0.0,1.0,0.0)));
+    skeleton_shape_ = SkeletonShape(md5_.skeleton());
+    skeleton_shape_.add(shader_colour_).add(camera_).add( ShaderClause<glm::vec4,1>("uColour", bone_colour_) );
+
+    node_.add(skeleton_shape_);
+
+    //Bone * neck = md5_.skeleton().bone("neck");
+    //neck->set_rotation (glm::rotate( neck->rotation() , 21.0, glm::vec3(0.0,1.0,0.0)));
 
     //Bone * waist = md5_.skeleton().bone("waist");
     //waist->set_rotation( glm::rotate( waist->rotation() , 20.0, glm::vec3(0.0,1.0,0.0)) );
 
 
-    //Bone * luparm = md5_.skeleton().bone("luparm");
-    //luparm->set_rotation (glm::rotate( luparm->rotation() , 20.0, glm::vec3(0.0,1.0,0.0)));
+    //Bone * luparm = md5_.skeleton().bone("origin");
+    //luparm->set_rotation (glm::rotate( luparm->rotation() , 50.0, glm::vec3(0.0,1.0,0.0)));
 
-   
-    Bone * lloarm = md5_.skeleton().bone("lloarm");
-    lloarm->set_rotation (glm::rotate( lloarm->rotation() , 50.0, glm::vec3(0.0,1.0,0.0)));
+    Bone * lloarm = md5_.skeleton().bone("upperarm.R");
+    //lloarm->set_rotation_relative (glm::rotate( lloarm->rotation() , -45.0, glm::vec3(0.0,1.0,0.0)));
+    glm::quat q =  glm::angleAxis(-45.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+
+    lloarm->set_relative_matrix(glm::toMat4(q));
+
+    //Bone * lloarm2 = md5_.skeleton().bone("upperarm.L");
+    //lloarm2->set_rotation (glm::rotate( lloarm2->rotation() , 45.0, glm::vec3(1.0,0.0,0.0)));
+
+    cout << node_ << endl;
 
     CXGLERROR
+
+    glEnable(GL_CULL_FACE);
+    glCullFace(GL_BACK);
 }
 
 ///\todo seems not to want to update member variables :(
 void MD5App::update(double_t dt) {
-    md5_.skeleton().update();
 
+    md5_.skeleton().update();
 }
 
 
@@ -66,6 +85,8 @@ void MD5App::update(double_t dt) {
 		
 void MD5App::display(double_t dt){
 
+    
+
     glClearBufferfv(GL_COLOR, 0, &glm::vec4(0.9f, 0.9f, 0.9f, 1.0f)[0]);
     GLfloat depth = 1.0f;
     glClearBufferfv(GL_DEPTH, 0, &depth );
@@ -74,9 +95,13 @@ void MD5App::display(double_t dt){
     glm::mat4 Model = glm::rotate(glm::mat4(), rotation_, glm::vec3(0.0f, 1.0f, 0.0f));
     Model = glm::translate(Model, glm::vec3(0.0,-6.0,0.0));
     Model = glm::scale(Model, glm::vec3(0.1,0.1,0.1));
-    node_.set_matrix(Model);
+    Model = glm::rotate(Model, -90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+
+    node_.setMatrix(Model);
     
     node_.draw();
+
+    //cylinder_node_.draw();
 
     //CXGLERROR
 }

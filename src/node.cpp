@@ -20,18 +20,14 @@ static ShaderVisitor global_visitor;
  * as it goes down with whatever shader is bound.
  */
 
- bool compareNodeBasePtr( NodeBasePtr l, NodeBasePtr r){
- 	return (*l) < (*r);
- } 
 
-void NodeShape::draw(){
+void NodeShape::draw(GeometryPrimitive overide){
 
-	if (shape_.brewed())
-		shape_.draw(); ///\todo pass to shader / contract
+	if (shape_.brewed()) {
+		shape_.draw(overide);
+	}
 	else
 		shape_.brew(); ///\todo allow passing of flags
-
-	//CXGLERROR
 }
 
 
@@ -50,8 +46,8 @@ void NodeSkeleton::sign(gl::ShaderVisitor &v) {
 
 	int idx = 0;
 	for (Bone * b : skeleton_.bones()) {
-		
-		bone_data[idx] =  b->global_matrix();
+
+		bone_data[idx] =  b->skinned_matrix();
 		idx++;
 		if (idx >= shader_bone_limit){
 			cerr << "SEBURO Shader Clause Error - Number of bones in model exceeds shader limit." << endl;
@@ -71,12 +67,20 @@ void NodeSkeleton::sign(gl::ShaderVisitor &v) {
 /// Basic Node constructor.
 Node::Node() {}
 
+/// Node Constructor with a shape (for convinience)
+
+Node::Node(Shape s) {
+	_init();
+	add(s);
+}
+
 /// _init - This is internal.  Creates a shared object, adding a NodeMinimal for the matrix
 /// \todo by using init here we have to call it when we make any add call or similar. Is this verbose or even nice?
 void Node::_init() {
 	obj_ = shared_ptr<SharedObject>(new SharedObject());
 	obj_->matrix_node = std::shared_ptr<NodeMinimal>(new NodeMinimal());
 	obj_->bases.push_front(obj_->matrix_node);
+	obj_->geometry_cast = NONE;
 }
 
 
@@ -121,7 +125,7 @@ glm::mat4 Node::matrix() {
 }
 
 /// set the matrix for this node
-void Node::set_matrix(const glm::mat4 &m) { 
+void Node::setMatrix(const glm::mat4 &m) { 
 	if (obj_ != nullptr)
 		obj_->matrix_node->set_matrix(m);
 }
@@ -139,6 +143,7 @@ Node& Node::add(gl::Shader s) {
 
 	return *this;
 }
+
 
 /// Add a shader to this node
 Node& Node::add(Camera c) {
@@ -203,19 +208,28 @@ NodeBasePtr Node::getBase(NodeResponsibility r) {
 
 /**
  * Draw call for this node. Recursive at present
+ * \todo where we are passing GP, we should have user overrides or similar?
  */
 
-Node& Node::draw() {
+Node& Node::draw(GeometryPrimitive gp) {
+
+	// Call the shared object update - allows Node subclasses polymorphism
+	obj_->update();
+
+	// Allow parental overriding if there is something to overide
+	GeometryPrimitive fp = gp;
+	if (gp == NONE)
+		fp = obj_->geometry_cast;
 
 	for (NodeBasePtr p : obj_->bases){
 		p->sign(global_visitor);
-		p->draw();
+		p->draw(fp);
+
 	}
 
 	for (Node p : obj_->children){
-		p.draw();
+		p.draw(fp);
 	}
-
 
 	for (NodeBasePtr p : obj_->bases){
 		p->postDraw();

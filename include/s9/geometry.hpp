@@ -26,6 +26,10 @@ namespace s9 {
 		TRIANGLE_STRIP,
 		TRIANGLE_FAN,
 		POINTS,
+    LINES,
+    LINE_LOOP,
+    INVISIBLE,
+    WIREFRAME,
     NONE
 	}GeometryPrimitive;
 
@@ -59,11 +63,12 @@ namespace s9 {
   	bool allocateFaces(std::unique_ptr<FaceType[]> &fp, IndicesType size_faces, GeometryPrimitive type ) const {
   		
   		switch(type){
-  			case TRIANGLES: {
+        case LINE_LOOP:
+  			case TRIANGLES: 
   				assert(size_faces % 3 == 0);
   				fp = std::unique_ptr<FaceType[]>(new FaceType[size_faces / 3]);
   				return true;
-        }
+        
         break;
   			
    			case TRIANGLE_STRIP: {
@@ -87,7 +92,7 @@ namespace s9 {
   			break;
 
   			default: {
-  				assert(false && "SEBURO ASSERT - Must provide a type for geometry.");
+  				assert(false && "SEBURO ASSERT - Must provide a type for geometry indexing.");
           return false;
         }
         break;

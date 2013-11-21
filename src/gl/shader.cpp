@@ -41,6 +41,12 @@ void ShaderVisitor::sign( ShaderClause<float, 1> &c) {
   glUniform1f( l, c.data); ///\todo test this!
 }
 
+void ShaderVisitor::sign( ShaderClause<glm::vec4, 1> &c) {
+	GLuint l = location(c.name.c_str());
+  glUniform4f( l, c.data.x, c.data.y, c.data.z, c.data.w );
+}
+
+
 
 Shader::SharedObject::~SharedObject() {
 

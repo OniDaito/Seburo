@@ -27,6 +27,8 @@
  *
  * \todo addition of extra things on this node to match with the shader
  * \todo node and its derivatives do not followed shared object model. Check this! 
+ * \todo presenting with things like cameras only works for the currently bound shader.
+ * if we override that shader with one in the child node, we dont get the one from the parent ><
  *
  */
  
@@ -40,12 +42,14 @@ namespace s9 {
 	/// Responsibilities that a node has - allows some casting
 	/// Order here is important as objects are drawn in order - lowest first
 	typedef enum {
+		PREDRAW,
 		SHADER,
 		POINT_LIGHTS,
 		SKIN_WEIGHTS,
 		SKELETON,
 		CAMERA,
 		MATRIX,
+		CLAUSE,
 		GEOMETRY
 	}NodeResponsibility;
 
@@ -59,7 +63,7 @@ namespace s9 {
 		NodeBase(NodeResponsibility r) { responsible_ = r; }
 	
 		/// Called by the Node's draw method and sets up the shader / geometry
-		virtual void 					draw() { }
+		virtual void 					draw(GeometryPrimitive overide) { }
 
 		/// Operation called after this node has been drawn and we move up the tree
 		virtual void 					postDraw() { }
@@ -88,6 +92,9 @@ namespace s9 {
 
 	};
 
+	static bool compareNodeBasePtr( NodeBasePtr l, NodeBasePtr r){
+ 		return (*l) < (*r);
+ 	} 
 
 	/**
 	 * NodeMinimal. All nodes have at least this level of decoration. This does not call
@@ -101,7 +108,7 @@ namespace s9 {
 		NodeMinimal() : NodeBase(MATRIX), clause_matrix_("uModelMatrix", matrix_global_) { }
 		
 		glm::mat4 		matrix() { return matrix_; } ;
-		void 					set_matrix( const glm::mat4 &matrix) {matrix_ = matrix;  } ;
+		void 					set_matrix( const glm::mat4 &matrix) { matrix_ = matrix;  } ;
 		std::string 	tag() { return "Matrix"; }
 		// Careful not to call this without calling the pop as well
 		void					sign(gl::ShaderVisitor &v ) {
@@ -125,6 +132,26 @@ namespace s9 {
 		gl::ShaderClause<glm::mat4,1> clause_matrix_; 
 						
 	};
+
+	/**
+	 * This class is a container for a clause - some uniform data to pass to the bound shader
+	 */
+
+	template<typename T, size_t U>
+	class NodeClause : public NodeBase {
+	public:
+		NodeClause( gl::ShaderClause<T,U> c ) : NodeBase(CLAUSE), clause_(c) {}		
+
+		void sign(gl::ShaderVisitor &v ) {
+			v.sign(clause_);
+		}
+
+		std::string 	tag() { return "Clause"; }
+
+		gl::ShaderClause<T,U> clause_; 
+
+	};
+
 
 	/**
 	 * A Camera Decorator
@@ -154,7 +181,7 @@ namespace s9 {
 	class NodeShape : public NodeBase {
 	public:
 		NodeShape (Shape s) : NodeBase(GEOMETRY), shape_(s) { };
-		void draw();
+		void draw(GeometryPrimitive overide);
 		std::string tag() { return "Shape"; }
 		Shape shape_;
 	};
@@ -193,7 +220,7 @@ namespace s9 {
 	public:
 		NodeShader(gl::Shader s) : NodeBase(SHADER), shader_(s) {  };
 		std::string tag() { return "Shader"; }
-		void draw() {	shader_.bind(); }
+		void draw(GeometryPrimitive overide) {	shader_.bind(); }
 		void postDraw() {shader_.unbind(); }
 		gl::Shader shader_;
 	};
@@ -201,11 +228,14 @@ namespace s9 {
 	
   /**
    * The Actual Node we instantiate and use in our code
+   * This is a shared object as we want to have node control 
+   * just the bits it needs control over.
    */
 
   class SEBUROAPI Node {
 	public:
 		Node(); 
+		Node(Shape s);
 
 		// Overridden add methods for attaching things to this node.
 		///\todo template these? We could do! :)
@@ -216,26 +246,40 @@ namespace s9 {
 		Node& add(Camera c);
 		Node& add(Skeleton s);
 
+		template<typename T, size_t U>
+		Node& add(gl::ShaderClause<T,U> c) {
+			if (obj_ == nullptr) _init();
+			obj_->bases.push_front( std::shared_ptr<NodeClause<T,U> >(new NodeClause<T,U>(c)) );
+			obj_->bases.sort(compareNodeBasePtr);
+			return *this;
+		}
+
 		glm::mat4 matrix();
-		void set_matrix(const glm::mat4 &m);
+		void setMatrix(const glm::mat4 &m);
 
 		Node& removeChild(Node p);
-		Node& draw();
+		Node& draw(GeometryPrimitive gp = NONE);
 		Node& reset();
+
+		void set_geometry_cast(GeometryPrimitive gc) {obj_->geometry_cast = gc; }
 
 		friend std::ostream& operator<<(std::ostream& out, const Node& o);
 		virtual ~Node() {}; 
 
 	protected:
+
+
 		void _init();
 		NodeBasePtr getBase(NodeResponsibility r);
 
-		struct SharedObject{
-			std::vector<Node> 							children;
+		struct SharedObject {
+			virtual void update() {} // A Cheeky function that allows overriding in subclasses 
+			
+			std::vector< Node > 						children;
   		std::shared_ptr<NodeMinimal>  	matrix_node; 			// We keep this so we can always get to the matrix
   		std::shared_ptr<NodeShader>			shader_node; 			// Like the above, this is handy for adding data values to the shader
   		std::forward_list<NodeBasePtr> 	bases;
-
+  		GeometryPrimitive 							geometry_cast;		///\todo potentially replace this with something else we can pass to draw? User stuff
 		};
 
 		std::shared_ptr<SharedObject> obj_ = nullptr;
@@ -243,9 +287,14 @@ namespace s9 {
   };
 
   inline std::ostream& operator<<(std::ostream& os, const Node& obj) {
-    os << "SEBURO Node with";
-  	for (NodeBasePtr p : obj.obj_->bases)
-  		os << " - " << p->tag();
+   
+    if (obj.obj_ != nullptr){
+    	os << "SEBURO Node with";
+  		for (NodeBasePtr p : obj.obj_->bases)
+  			os << " - " << p->tag();
+  	} else {
+  		os << "SEBURO Node UN-INITIALISED!";
+  	}
   	return os << std::endl;
   }
 }

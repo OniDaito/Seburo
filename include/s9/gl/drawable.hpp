@@ -70,6 +70,11 @@ namespace s9{
         }
 
         bind();
+
+        ///\todo do we really want to mess with state here? Probably
+
+        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+        
         // Choose type based on the geometry with option of an override
         GLint type;
         if (gp == NONE)
@@ -79,8 +84,19 @@ namespace s9{
           case TRIANGLES:
             type = GL_TRIANGLES;
             break;
+        
+          case LINE_LOOP:
+            type = GL_LINE_LOOP;
+            break;
+
           case POINTS:
             type = GL_POINTS;
+            glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
+            break;
+
+          case WIREFRAME:
+            type = GL_TRIANGLES;
+            glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
             break;
 
           default:
@@ -344,7 +360,6 @@ namespace s9{
 
         unbind();
 
-        CXGLERROR
       }
 
         

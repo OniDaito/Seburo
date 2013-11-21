@@ -12,11 +12,15 @@
 #include "common.hpp"
 #include "geometry.hpp"
 #include "gl/drawable.hpp" // Default to OpenGL for now
+#include "math_utils.hpp"
 
 namespace s9 {
 	
+  ///\todo still not happy with this structure! ><
+
 	/**
 	 * Shared Object container for basic shape geometries - OpenGL at present
+   * \todo can we template this class and ergo, have a base pointer we can always get to?
 	 */
 
 	struct ShapeObj {
@@ -174,6 +178,59 @@ namespace s9 {
 
     const GeometryT<Vertex3Skin, Face3, AllocationPolicyNew>* geometry();
 
+  };
+
+
+  /**
+   * A basic Cylinder
+   */ 
+
+  struct ShapeObjCylinder : public ShapeObj {
+    ShapeObjCylinder(size_t s, size_t f) {
+      geometry = GeometryT<Vertex3, Face3, AllocationPolicyNew>(s,f,TRIANGLES);
+    }
+
+    void brew (gl::BrewFlags b) { gl_drawable.brew(geometry, b); }
+    void draw (GeometryPrimitive g = TRIANGLES) { gl_drawable.draw(geometry, g); }
+
+    GeometryT<Vertex3, Face3, AllocationPolicyNew> geometry;
+      
+  };
+
+  class SEBUROAPI Cylinder : public Shape {
+  public:
+
+    Cylinder() {};
+    Cylinder(size_t segments, size_t stacks, float diameter, float height);
+
+    const GeometryT<Vertex3, Face3, AllocationPolicyNew>* geometry();
+  
+  };
+
+  /**
+   * A pointed Cyclinder - spike thing :S
+   */ 
+
+  struct ShapeObjSpike : public ShapeObj {
+    ShapeObjSpike() {
+      geometry = GeometryT<Vertex3, Face3, AllocationPolicyNew>(8,36,TRIANGLES);
+    }
+
+    void brew (gl::BrewFlags b) { gl_drawable.brew(geometry, b); }
+    void draw (GeometryPrimitive g = TRIANGLES) { gl_drawable.draw(geometry, g); }
+
+    GeometryT<Vertex3, Face3, AllocationPolicyNew> geometry;
+      
+  };
+
+  class SEBUROAPI Spike : public Shape {
+  public:
+
+    Spike() {};
+    Spike(float w, float h, float d);
+
+    const GeometryT<Vertex3, Face3, AllocationPolicyNew>* geometry();
+  
   };
 
 }

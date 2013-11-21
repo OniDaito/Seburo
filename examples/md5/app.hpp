@@ -20,6 +20,7 @@
 #include "s9/image.hpp"
 #include "s9/gl/texture.hpp"
 #include "s9/md5.hpp"
+#include "s9/composite_shapes.hpp"
 
 #include "anttweakbar/AntTweakBar.h"
 
@@ -47,10 +48,15 @@ namespace s9 {
 		Image image_;
 		gl::Texture texture_;
 		gl::Shader shader_;
+		gl::Shader shader_colour_;
 		Camera camera_;
 		Node node_;
 		Node node2_;
+		Node cylinder_node_;
 		MD5Model md5_;
+		glm::vec4 bone_colour_;
+		SkeletonShape skeleton_shape_;
+
 
 		float rotation_;
 		

@@ -18,6 +18,7 @@
 
 /*
  * Basic Shader class - loads and binds
+ * \todo shaders need tags so when we have loads & computed ones, we can tell where errors come from
  */
 
 namespace s9 {
@@ -73,6 +74,10 @@ namespace s9 {
 
 			template<typename T, size_t N>
 			void sign( ShaderClause<T, N> &c);
+
+			/// Vector4 single signing
+			void sign(ShaderClause<glm::vec4,1> &c);
+
 
 			/// Matrix4 single signing
 

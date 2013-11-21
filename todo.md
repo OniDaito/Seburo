@@ -1,7 +1,15 @@
 ## Todo
 
+MD5 Issues
+
+
+3) Cx to see if other code uses rotation and position for bones.
+4) Cx other peoples code (MD5 JS for example)
+5) Plot positions of the bones
+
 * Issue with adding shared objects to nodes is that they can be un-initialised (shapes often are) and then we loose the binding to the name. Consider adding a camera before the Camera(pos) constructor is called - COMPILER should check the Node.add method for un-initialised objects and warn the user
 
+* Compute shaders on the fly given information in a pre-draw pass?
 * Problem with nodes is they hold a shape and we often want the type (TriMesh, Quad etc) back out ><
 * Consider CPack with CMake for packaging examples and applications
 * FILE Sorting and packaging linux vs osx vs windows

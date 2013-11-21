@@ -21,14 +21,13 @@ using namespace s9::gl;
 void BasicApp::init(){
     shader_ = Shader( s9::File("./shaders/3/quad.vert"),  s9::File("./shaders/3/quad.frag"));
 
-   // camera_.set_pos(glm::vec3(0,0,20.0f));
-
     addWindowListener(this);
 
     cuboid_ = Cuboid(3.0,2.0,1.0);
-    Cuboid v = cuboid_;
 
-    node_.add (v);
+    camera_= Camera( glm::vec3(0,0,10.0f));
+
+    node_.add(cuboid_).add(camera_).add(shader_);
 
     rotation_ = 0;
 
@@ -46,25 +45,16 @@ void BasicApp::update(double_t dt) {
 		
 void BasicApp::display(double_t dt){
 
-
     glClearBufferfv(GL_COLOR, 0, &glm::vec4(0.9f, 0.9f, 0.9f, 1.0f)[0]);
     GLfloat depth = 1.0f;
     glClearBufferfv(GL_DEPTH, 0, &depth );
 
     rotation_ += 1.0;
-    camera_.update(dt);
-    shader_.bind();
-
-    glm::mat4 Projection = glm::perspective(45.0f, 4.0f / 3.0f, 0.1f, 100.f);
-    glm::mat4 View = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -10.0f));
+   
     glm::mat4 Model = glm::rotate(glm::mat4(1.0f), rotation_, glm::vec3(0.0f, 1.0f, 0.0f));
-
-    glm::mat4 MVP = Projection * View * Model;
-
-    shader_.s("uMVPMatrix",MVP);
+    node_.setMatrix(Model);
 
     node_.draw();
-    shader_.unbind();
    
 }
 
@@ -83,7 +73,7 @@ void BasicApp::processEvent(MouseEvent e){
 void BasicApp::processEvent(ResizeEvent e){
     cout << "Window Resized:" << e.w << "," << e.h << endl;
     glViewport(0,0,e.w,e.h);
-    //camera_.resize(e.w,e.h);
+    camera_.resize(e.w,e.h);
 }
 
 void BasicApp::processEvent(KeyboardEvent e){

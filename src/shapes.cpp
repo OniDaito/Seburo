@@ -11,7 +11,6 @@
 
 using namespace std;
 using namespace s9;
-using namespace s9::gl;
 
 /**
  * Build a Quad with w,h
@@ -132,6 +131,139 @@ TriMeshSkinned::TriMeshSkinned(size_t num_verts, size_t num_indices) : Shape() {
 
 const GeometryT<Vertex3Skin, Face3, AllocationPolicyNew>* TriMeshSkinned::geometry() {
 	std::shared_ptr<ShapeObjTriMeshSkinned> t = std::static_pointer_cast<ShapeObjTriMeshSkinned>(obj_) ;
+	return &(t->geometry);
+}
+
+
+
+/**
+ * Build a basic Cylinder with segments being the number of vertices around the edge
+ * and stacks being the number of segments along the length
+ */
+
+
+Cylinder::Cylinder (size_t segments, size_t stacks, float radius, float height){
+
+	// Stacks must always be 1 or more
+	if (stacks == 0 ) stacks = 1;
+
+  size_t num_verts = (segments * 2 + 2) + ((stacks -1) * segments);
+  size_t num_indices = ((segments * 2) + (stacks * segments * 2) ) * 3;
+
+
+	std::shared_ptr<ShapeObjCylinder> cylinder;
+	cylinder = std::make_shared<ShapeObjCylinder>(num_verts, num_indices);
+
+	float top = height/2.0f;
+	float bottom = -top;
+
+	IndicesType indices[num_indices];
+
+	// Top cap
+	size_t idx = 0;
+	Vertex3 top_center ( glm::vec3( 0, top, 0));
+	cylinder->geometry[idx] = top_center;
+	idx++;
+
+	for (size_t i = 0; i < segments; ++i){
+		float step = static_cast<float>( degToRad( (360.0f / segments) * i));
+		Vertex3 aa ( glm::vec3( sin(step) * radius, top, cos(step) * radius ));
+		cylinder->geometry[idx + i] = aa;
+	}
+
+	idx += segments;
+
+	for (size_t j = 0; j < stacks-1; ++j){
+		for (size_t i = 0; i < segments; ++i){
+			float step = static_cast<float>( degToRad( (360.0f / segments) * i));
+			Vertex3 aa ( glm::vec3( sin(step) * radius, height / stacks * j,  cos(step) * radius));
+			cylinder->geometry[idx + i] = aa;
+		}
+		idx += segments;
+	}
+
+	// Bottom Cap
+	
+	for (size_t i = 0; i < segments; ++i){
+		float step = static_cast<float>( degToRad( (360.0f / segments) * i));
+		Vertex3 aa ( glm::vec3( sin(step) * radius, bottom,  cos(step) * radius));
+		cylinder->geometry[idx + i] = aa;
+	}
+
+	idx += segments;
+
+	Vertex3 bottom_center ( glm::vec3( 0, bottom, 0));
+	cylinder->geometry[idx] = bottom_center;
+	idx++;
+
+	// Indices
+
+	// Top Cap
+	for (size_t i = 0; i < segments; ++i){
+		indices[i * 3] = 0;
+		indices[i * 3 + 1] = i+1;
+		if (i + 1 < segments)
+			indices[i * 3 + 2] = i+2;
+		else
+			indices[i * 3 + 2] = 1;
+
+	}
+
+	size_t indices_base = segments * 3;
+	size_t vertex_base = 1;
+	// Stacks  / sides
+	for (size_t j = 0; j < stacks; ++j){
+		for (size_t i = 0; i < segments; ++i){
+			// First triangle 
+			indices[indices_base ]	= vertex_base + i;
+			indices[indices_base + 1]	= vertex_base + segments + i;
+			
+			if (i + 1 < segments)
+				indices[indices_base + 2]	= vertex_base + i + 1;
+			else
+				indices[indices_base + 2]	= vertex_base;
+
+			// second triangle
+			if (i + 1 < segments)
+				indices[indices_base + 3]	= vertex_base + i + 1;
+			else
+				indices[indices_base + 3]	= vertex_base;
+
+			indices[indices_base + 4]	= vertex_base + segments + i;
+			
+			if (i + 1 < segments)
+				indices[indices_base + 5]	= vertex_base + segments + i + 1;
+			else
+				indices[indices_base + 5]	= vertex_base + segments;
+
+			indices_base += 6;
+		}
+		vertex_base += segments;
+	}
+
+	// Bottom cap - reverse direction :)
+	vertex_base = num_verts - segments - 1;
+	for (size_t i = 0; i < segments; ++i){
+		
+		indices[i * 3 + indices_base] = vertex_base + segments;
+
+		if (i + 1 < segments)
+			indices[i * 3 + 1 + indices_base] = vertex_base + i+1;
+		else
+			indices[i * 3 + 1 + indices_base] = vertex_base;
+
+		indices[i * 3 + 2 + indices_base] = vertex_base + i;
+		
+	}
+
+
+	cylinder->geometry.setIndices(indices);
+	obj_ = std::static_pointer_cast<ShapeObj>(cylinder);
+
+}
+
+const GeometryT<Vertex3, Face3, AllocationPolicyNew>* Cylinder::geometry() {
+	std::shared_ptr<ShapeObjCylinder> t = std::static_pointer_cast<ShapeObjCylinder>(obj_) ;
 	return &(t->geometry);
 }
 

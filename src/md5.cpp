@@ -16,8 +16,6 @@ MD5Model::MD5Model(const File &file) : Node() {
   _init(); // Init this node - we want a nice matrix
   parse(file);
 
-  // Add the matrix rotation as this is in American co-ords
-  set_matrix(glm::rotate(glm::mat4(1.0f), -90.0f, glm::vec3(1.0f, 0.0f, 0.0f)));
 }
 
 
@@ -50,6 +48,8 @@ typedef struct {
 typedef struct {
   glm::vec3 position;
   glm::quat rotation;
+  size_t parent;
+  std::string name;
 } md5_joint;
 
 
@@ -70,8 +70,6 @@ void MD5Model::parse(const File &file) {
 
   add(skeleton_);
 
-  // vector to hold indices for parent bones
-  vector<int> bone_indices; // Could be a -1 here you see, for the top tree
 
   md5_joint *joints;
 
@@ -115,26 +113,37 @@ void MD5Model::parse(const File &file) {
 
         if (!(tiss >> name >> parent >> p0 >> p1 >> p2 >> r0 >> r1 >> r2)) { break; }
 
-        bone_indices.push_back(parent);
         name = remove_char(name, '"');
 
         glm::quat q = glm::quat();
         q.x = r0; q.y = r1; q.z = r2; computeW(q);
+        q = glm::normalize(q);
+
         glm::vec3 p = glm::vec3(p0,p1,p2);
 
         // Double up on joints as well so we can compute positions later on
         joints[i].position = p;
         joints[i].rotation = q;
-
-        skeleton_.addBone ( new Bone(name, i, nullptr, q, p) );
+        joints[i].parent = parent;
+        joints[i].name = name;
 
         std::getline(ifs, tline);
       }
 
-      // Match up parents with actual pointers to bones
+
+      // Create the actual bones
+      // NOTE - we are assuming all joints are in order which means that 
+      // that parents should exist before their children
+
       for (size_t i = 0; i < num_joints_; ++i){
-        if (bone_indices[i] != -1)
-          skeleton_.bone(i)->set_parent(skeleton_.bone(bone_indices[i]));
+        
+          Bone * parent = nullptr;
+          if (joints[i].parent != -1){
+            parent = skeleton_.bone(joints[i].parent);
+          }
+
+          skeleton_.addBone(new Bone(joints[i].name, i, parent, joints[i].rotation, joints[i].position));
+
       }
 
     }
@@ -221,9 +230,9 @@ void MD5Model::parse(const File &file) {
           string s;
           if (!(tiss >> s >> idx >> a >> b >> c)) { cerr << "SEBURO MD5 Error - Failed to read triangle." << endl; break; }
 
-          geometry->indices()[idx * 3] = a;
+          geometry->indices()[idx * 3] = c;
           geometry->indices()[idx * 3 + 1] = b;
-          geometry->indices()[idx * 3 + 2] = c;
+          geometry->indices()[idx * 3 + 2] = a;
 
         }
 
@@ -264,7 +273,6 @@ void MD5Model::parse(const File &file) {
           weights[idx].position = glm::vec3(p0,p1,p2);
           weights[idx].bias = bias;
           weights[idx].bone = bone_id;
-
 
         }
 
