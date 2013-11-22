@@ -56,25 +56,23 @@ namespace s9{
     friend std::ostream& operator<<(std::ostream& out, const Bone& o);
 
     const std::string name () const {return name_;}
-    const glm::quat rotation_relative() const{ return rotation_relative_; }
-    const glm::vec3 position_relative() const { return position_relative_; }
+    glm::quat rotation_relative() const{ return rotation_relative_; }
+    glm::vec3 position_relative() const { return position_relative_; }
 
-    const glm::quat rotation() const{ return rotation_relative(); }
-    const glm::vec3 position() const { return position_relative(); }
+    glm::quat rotation() const { return rotation_relative(); }
+    glm::vec3 position() const  { return position_relative(); }
 
-    const glm::quat rotation_global() const{ return rotation_global_; }
-    const glm::vec3 position_global() const { return position_global_; }
+    glm::quat rotation_global() const{ return rotation_global_; }
+    glm::vec3 position_global() const { return position_global_; }
 
     const int id() const {return id_; }
 
     const Bone* parent() {return parent_; }
  
-    void set_rotation_relative(const glm::quat &q) {rotation_relative_ = q; } 
-    void set_position_relative(const glm::vec3 &p) {position_relative_ = p; }
+    void applyRotation(const glm::quat &q);
 
-    const glm::mat4 skinned_matrix() const { return skinned_matrix_; }
-
-    const glm::mat4 inverse_bind_pose() const { return inverse_bind_pose_; }
+    glm::mat4 skinned_matrix() const { return skinned_matrix_; }
+    glm::mat4 inverse_bind_pose() const { return inverse_bind_pose_; }
 
   protected:
 

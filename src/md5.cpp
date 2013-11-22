@@ -16,9 +16,6 @@ MD5Model::MD5Model(const File &file) : Node() {
   _init(); // Init this node - we want a nice matrix
   parse(file);
 
-  glm::quat american = glm::angleAxis(-90.0f, glm::vec3(1.0f,0.0f,0.0f));
-  skeleton_.set_matrix(glm::toMat4(american));
-
 }
 
 
@@ -73,6 +70,9 @@ void MD5Model::parse(const File &file) {
 
   add(skeleton_);
 
+  // Conversion into the right and proper British Co-ordinate system! :D
+  glm::quat british_quat = glm::angleAxis(90.0f, glm::vec3(1.0f,0.0f,0.0f));
+  glm::quat british_mat = glm::angleAxis(90.0f, glm::vec3(1.0f,0.0f,0.0f));
 
   md5_joint *joints;
 
@@ -120,6 +120,7 @@ void MD5Model::parse(const File &file) {
 
         glm::quat q = glm::quat();
         q.x = r0; q.y = r1; q.z = r2; computeW(q);
+      
         q = glm::normalize(q);
 
         glm::vec3 p = glm::vec3(p0,p1,p2);
@@ -145,7 +146,8 @@ void MD5Model::parse(const File &file) {
             parent = skeleton_.bone(joints[i].parent);
           }
 
-          skeleton_.addBone(new Bone(joints[i].name, i, parent, joints[i].rotation, joints[i].position));
+          skeleton_.addBone(new Bone(joints[i].name, i, parent, 
+            joints[i].rotation * british_quat, joints[i].position * british_mat));
 
       }
 
@@ -314,7 +316,7 @@ void MD5Model::parse(const File &file) {
           }
         }
 
-        geometry->vertices()[i].p = pos;
+        geometry->vertices()[i].p = pos * british_mat;
         geometry->vertices()[i].u = glm::vec2(verts[i].s, verts[i].t);
 
         ///\todo precompute normals and tangents

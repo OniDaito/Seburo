@@ -45,34 +45,38 @@ SkeletonShape::SkeletonShape(const Skeleton &s) : Node() {
 // Annoyingly we can't override directly so we go through the SharedObject 
 
 void SkeletonShape::SharedObject::update() {
-  
-  // Assuming that bones stay in the same order as their cylinders - not that it matters too much
+
+  // Assuming that bones stay in the same order as their spikes - not that it matters too much
   size_t idx = 0;
   for (Bone *b : skeleton.bones() ){
 
-   glm::mat4 mm = skeleton.matrix() ; 
+   glm::mat4 mm = glm::mat4(1.0f); 
   
     if (b->parent() != nullptr){
       float l = glm::length( b->position_relative() );
 
-      glm::mat4 trans = glm::translate( glm::mat4(1.0f), glm::vec3(0.0f,1.0f,0.0f));
+      glm::mat4 flip = glm::rotate(glm::mat4(1.0f), 180.0f, glm::vec3(1.0f,0.0f,0.0f));
 
-      mm = glm::translate( glm::mat4(1.0f), b->position_global()) * mm * trans ;
-      
-   /*   glm::vec3 dir = glm::normalize( b->parent()->position_global() - b->position_global() );
-      glm::vec3 yaxis = glm::vec3(0.0f,1.0f,0.0f);
+      // Figure out the alignment
+      glm::vec3 dir = glm::normalize( b->parent()->position_global() - b->position_global() );
+      glm::vec4 axis =  glm::vec4(0.0f,1.0f,0.0f,0.0f);
+      glm::vec3 axis3 =  glm::normalize(glm::vec3(axis.x, axis.y, axis.z));
+      float angle = acos(glm::dot( dir, axis3 ));
+      glm::vec3 cross = glm::normalize(glm::cross( axis3, dir));
+      glm::quat align_quat = glm::angleAxis(static_cast<float>(radToDeg(angle)),cross);
+      glm::mat4 align_mat = glm::toMat4( align_quat);
 
-      float angle = glm::dot( yaxis, dir );
-      glm::vec3 cross = glm::cross( dir,yaxis);
+      glm::vec3 mid_point =  (b->parent()->position_global() + b->position_global()) / 2.0f;
 
-      glm::quat align_rot = glm::angleAxis(static_cast<float>(radToDeg(angle)),cross);
+      // Scale for the length
+      glm::mat4 scale_mat = skeleton.matrix() * glm::scale(glm::mat4(1.0f),glm::vec3(l/10.0, l, l/10.0));
 
-      mm = mm * glm::toMat4( align_rot) * glm::scale(glm::mat4(1.0f),glm::vec3(1.0f, l, 1.0f));*/
+      // translate, scale, rotate then move to final
 
-
+      mm = glm::translate( glm::mat4(1.0f), mid_point) * align_mat * scale_mat * flip;
 
     } else {
-      mm = glm::translate( glm::mat4(1.0f), b->position_global()) * mm;
+      mm = glm::translate( glm::mat4(1.0f), b->position_global());
     }
 
     children[idx].setMatrix(mm);

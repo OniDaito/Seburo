@@ -15,6 +15,15 @@ using namespace s9;
   return l->id() < r->id();
  } 
 
+/// Rotate a bone (as oppose to a joint) by applying a quaternion to its alignment and local position
+void Bone::applyRotation(const glm::quat &q) {
+  glm::mat4 tm = glm::toMat4(q);
+
+  glm::vec4 tv = tm * glm::vec4(position_relative_.x, position_relative_.y, position_relative_.z, 1.0f) ;
+  position_relative_ = glm::vec3(tv.x, tv.y, tv.z);
+  rotation_relative_ = glm::normalize( q * rotation_relative_);
+}
+
 
 /// Create a skeleton by providing a skeleton type to the constructor.
 Skeleton::Skeleton(SkeletonType type) : obj_ (shared_ptr<SharedObject>( new SharedObject())){
