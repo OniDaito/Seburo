@@ -173,7 +173,7 @@ Cylinder::Cylinder (size_t segments, size_t stacks, float radius, float height){
 
 	idx += segments;
 
-	for (size_t j = 0; j < stacks-1; ++j){
+	for (size_t j = 1; j < stacks; ++j){
 		for (size_t i = 0; i < segments; ++i){
 			float step = static_cast<float>( degToRad( (360.0f / segments) * i));
 			Vertex3 aa ( glm::vec3( sin(step) * radius, height / stacks * j,  cos(step) * radius));
@@ -266,5 +266,141 @@ const GeometryT<Vertex3, Face3, AllocationPolicyNew>* Cylinder::geometry() {
 	std::shared_ptr<ShapeObjCylinder> t = std::static_pointer_cast<ShapeObjCylinder>(obj_) ;
 	return &(t->geometry);
 }
+
+
+
+/**
+ * Builds a spike with a rounded bottom (or any pyramid basically)
+ */
+
+
+Spike::Spike (size_t segments, size_t stacks, float radius, float height){
+
+	// Stacks must always be 1 or more
+	if (stacks == 0 ) stacks = 1;
+
+  size_t num_verts = (segments + 2) + ((stacks -1) * segments);
+  size_t num_indices = ((segments * 2) + ((stacks-1) * segments * 2) ) * 3;
+
+
+	std::shared_ptr<ShapeObjSpike> spike;
+	spike = std::make_shared<ShapeObjSpike>(num_verts, num_indices);
+
+	float top = height/2.0f;
+	float bottom = -top;
+
+	IndicesType indices[num_indices];
+
+	// Bottom cap
+	size_t idx = 0;
+	Vertex3 bottom_center ( glm::vec3( 0, top, 0));
+	spike->geometry[idx] = bottom_center;
+	idx++;
+
+	for (size_t i = 0; i < segments; ++i){
+		float step = static_cast<float>( degToRad( (360.0f / segments) * i));
+		Vertex3 aa ( glm::vec3( sin(step) * radius, bottom, cos(step) * radius ));
+		spike->geometry[idx + i] = aa;
+	}
+
+	idx += segments;
+
+	for (size_t j = 1; j < stacks; ++j){
+
+		float th = height / stacks * j;
+		float tr = radius / stacks * j;
+
+
+		for (size_t i = 0; i < segments; ++i){
+			float step = static_cast<float>( degToRad( (360.0f / segments) * i));
+			Vertex3 aa ( glm::vec3( sin(step) * tr, th,  cos(step) * tr));
+			spike->geometry[idx + i] = aa;
+		}
+		idx += segments;
+	}
+
+	// Top point
+
+	Vertex3 top_centre ( glm::vec3( 0, top, 0));
+	spike->geometry[idx] = top_centre;
+	idx++;
+
+	// Indices
+
+	// Top Cap
+	for (size_t i = 0; i < segments; ++i){
+		indices[i * 3] = 0;
+		indices[i * 3 + 1] = i+1;
+		if (i + 1 < segments)
+			indices[i * 3 + 2] = i+2;
+		else
+			indices[i * 3 + 2] = 1;
+
+	}
+
+	size_t indices_base = segments * 3;
+	size_t vertex_base = 1;
+
+
+	
+	// Stacks  / sides
+	for (size_t j = 1; j < stacks; ++j){
+		for (size_t i = 0; i < segments; ++i){
+			// First triangle 
+			indices[indices_base ]	= vertex_base + i;
+			indices[indices_base + 1]	= vertex_base + segments + i;
+			
+			if (i + 1 < segments)
+				indices[indices_base + 2]	= vertex_base + i + 1;
+			else
+				indices[indices_base + 2]	= vertex_base;
+
+			// second triangle
+			if (i + 1 < segments)
+				indices[indices_base + 3]	= vertex_base + i + 1;
+			else
+				indices[indices_base + 3]	= vertex_base;
+
+			indices[indices_base + 4]	= vertex_base + segments + i;
+			
+			if (i + 1 < segments)
+				indices[indices_base + 5]	= vertex_base + segments + i + 1;
+			else
+				indices[indices_base + 5]	= vertex_base + segments;
+
+			indices_base += 6;
+		}
+		vertex_base += segments;
+	}
+	
+
+	// Bottom cap - reverse direction :)
+	vertex_base = num_verts - segments - 1;
+	for (size_t i = 0; i < segments; ++i){
+		
+		indices[i * 3 + indices_base] = vertex_base + segments;
+
+		if (i + 1 < segments)
+			indices[i * 3 + 1 + indices_base] = vertex_base + i+1;
+		else
+			indices[i * 3 + 1 + indices_base] = vertex_base;
+
+		indices[i * 3 + 2 + indices_base] = vertex_base + i;
+		
+	}
+
+
+	spike->geometry.setIndices(indices);
+	obj_ = std::static_pointer_cast<ShapeObj>(spike);
+
+}
+
+const GeometryT<Vertex3, Face3, AllocationPolicyNew>* Spike::geometry() {
+	std::shared_ptr<ShapeObjSpike> t = std::static_pointer_cast<ShapeObjSpike>(obj_) ;
+	return &(t->geometry);
+}
+
+
+
 
 

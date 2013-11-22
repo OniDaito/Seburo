@@ -40,7 +40,7 @@ namespace s9 {
 
       void update();
 
-      Cylinder cylinder;
+      Spike spike;
       const Skeleton &skeleton;
     };
 

@@ -84,6 +84,7 @@ void Node::_init() {
 }
 
 
+
 /// Remove a childnode from this node \todo test this function
 Node& Node::removeChild(Node p) {
 	for (std::vector<Node>::iterator it = obj_->children.begin(); it != obj_->children.end(); ){

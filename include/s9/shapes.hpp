@@ -212,8 +212,8 @@ namespace s9 {
    */ 
 
   struct ShapeObjSpike : public ShapeObj {
-    ShapeObjSpike() {
-      geometry = GeometryT<Vertex3, Face3, AllocationPolicyNew>(8,36,TRIANGLES);
+    ShapeObjSpike(size_t s, size_t f) {
+      geometry = GeometryT<Vertex3, Face3, AllocationPolicyNew>(s,f,TRIANGLES);
     }
 
     void brew (gl::BrewFlags b) { gl_drawable.brew(geometry, b); }
@@ -227,7 +227,7 @@ namespace s9 {
   public:
 
     Spike() {};
-    Spike(float w, float h, float d);
+    Spike(size_t segments, size_t stacks, float radius, float height);
 
     const GeometryT<Vertex3, Face3, AllocationPolicyNew>* geometry();
   

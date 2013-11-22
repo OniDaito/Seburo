@@ -16,6 +16,9 @@ MD5Model::MD5Model(const File &file) : Node() {
   _init(); // Init this node - we want a nice matrix
   parse(file);
 
+  glm::quat american = glm::angleAxis(-90.0f, glm::vec3(1.0f,0.0f,0.0f));
+  skeleton_.set_matrix(glm::toMat4(american));
+
 }
 
 

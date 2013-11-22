@@ -36,22 +36,20 @@ namespace s9{
      */
 
     Bone(std::string n, int idx,  Bone* h = nullptr, glm::quat r = glm::quat(), 
-      glm::vec3 p = glm::vec3(1.0f)) : name_(n), id_(idx), parent_(h),
-      position_absolute_(p), rotation_absolute_(r){
+      glm::vec3 p = glm::vec3(1.0f)) : name_(n), id_(idx), parent_(h), 
+      position_global_(p), rotation_global_(r) { 
       
-      global_matrix_ =  glm::toMat4(rotation_absolute_) * glm::translate( glm::mat4(1.0f), position_absolute_) ;
-      inverse_bind_pose_ = glm::inverse(global_matrix_);
+      glm::mat4 global_matrix =  glm::translate( glm::mat4(1.0f), p) * glm::toMat4(r);
+      inverse_bind_pose_ = glm::inverse(global_matrix);
    
       // Create relative positions
       if (parent_ != nullptr){
-        rotation_relative_ = glm::inverse(parent_->rotation_absolute_) * rotation_absolute_;
-        position_relative_ = position_absolute_ - parent_->position_absolute_;
+        rotation_relative_ = glm::inverse(parent_->rotation_global_) * r;
+        position_relative_ = p - parent_->position_global_;
       } else {
-        rotation_relative_ = rotation_absolute_;
-        position_relative_ = position_absolute_;
+        rotation_relative_ = r;
+        position_relative_ = p;
       }
-
-      relative_matrix_ = glm::toMat4(rotation_relative_) * glm::translate( glm::mat4(1.0f), position_relative_) ;
   
     } 
 
@@ -64,23 +62,15 @@ namespace s9{
     const glm::quat rotation() const{ return rotation_relative(); }
     const glm::vec3 position() const { return position_relative(); }
 
-
-    const glm::quat rotation_absolute() const{ return rotation_absolute_; }
-    const glm::vec3 position_absolute() const { return position_absolute_; }
+    const glm::quat rotation_global() const{ return rotation_global_; }
+    const glm::vec3 position_global() const { return position_global_; }
 
     const int id() const {return id_; }
 
     const Bone* parent() {return parent_; }
-
-    const glm::mat4 global_matrix() const { return global_matrix_; }
-    const glm::mat4 relative_matrix() const { return relative_matrix_; }
-    void set_relative_matrix(const glm::mat4 &m) {relative_matrix_ = m; } 
-
+ 
     void set_rotation_relative(const glm::quat &q) {rotation_relative_ = q; } 
     void set_position_relative(const glm::vec3 &p) {position_relative_ = p; }
-
-    void set_rotation_absolute(const glm::quat &q) {rotation_absolute_ = q; } 
-    void set_position_absolute(const glm::vec3 &p) {position_absolute_ = p; }
 
     const glm::mat4 skinned_matrix() const { return skinned_matrix_; }
 
@@ -88,7 +78,6 @@ namespace s9{
 
   protected:
 
-    void set_global_matrix(const glm::mat4 &m) {global_matrix_ = m; } 
     void set_skinned_matrix(const glm::mat4 &m) {skinned_matrix_ = m; } 
 
     Bone* parent_;
@@ -97,13 +86,12 @@ namespace s9{
     glm::quat rotation_relative_; /// rotation relative to the parent 
     glm::vec3 position_relative_; /// position relative to the parent
 
-    glm::quat rotation_absolute_; /// rotation absolute - i.e to the model space
-    glm::vec3 position_absolute_; /// position absolute - i.e to the model space
 
-    glm::mat4 global_matrix_; /// The concatenation of the relative matrices
+    glm::quat rotation_global_;
+    glm::vec3 position_global_;
+
     glm::mat4 inverse_bind_pose_;
     glm::mat4 skinned_matrix_; /// The final skinned matrix, sent to the shader
-    glm::mat4 relative_matrix_;
 
     friend class Skeleton;
 
@@ -193,6 +181,12 @@ namespace s9{
 
     int getBoneIndex(Bone* b);
 
+    /// Get the matrix that corresponds to the skeleton transform.
+    glm::mat4 matrix() const {return obj_->matrix; }
+
+    /// Set the world to skeleton transform here
+    void set_matrix (const glm::mat4 &m) const {obj_->matrix = m; }
+
     void update();
 
     size_t size() {
@@ -217,6 +211,7 @@ namespace s9{
       ~SharedObject();
       Bone* top;
       std::forward_list<Bone*> bones;
+      glm::mat4 matrix;
 
     };
 

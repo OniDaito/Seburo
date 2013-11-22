@@ -27,7 +27,15 @@ void BasicApp::init(){
 
     camera_= Camera( glm::vec3(0,0,10.0f));
 
+    Spike s (4,1,1.0f,2.0f);
+
     node_.add(cuboid_).add(camera_).add(shader_);
+
+    Node spike_node(s);
+
+    spike_node.setMatrix(glm::translate(glm::mat4(1.0f), glm::vec3(0.0f,0.0f,2.0f)));
+
+    node_.add(spike_node);
 
     rotation_ = 0;
 

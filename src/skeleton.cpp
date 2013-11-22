@@ -21,6 +21,8 @@ Skeleton::Skeleton(SkeletonType type) : obj_ (shared_ptr<SharedObject>( new Shar
 
   if (type == OPENNI_SKELETON)
     createOpenNISkeleton();
+
+  obj_->matrix = glm::mat4(1.0f);
 }
 
 
@@ -107,26 +109,24 @@ void Skeleton::update() {
   for (Bone* b : obj_->bones){
 
     if (b->parent() == nullptr){
-      b->set_global_matrix( b->relative_matrix() );
-
+      b->rotation_global_ = b->rotation_relative_;
+      b->position_global_ = b->position_relative_;
     } else {
-
-        b->set_global_matrix( b->parent()->global_matrix() * b->relative_matrix() );
-    } 
+      b->rotation_global_ = b->parent()->rotation_global_ * b->rotation_relative_;
+      b->position_global_ = b->parent()->position_global_ + b->position_relative_;
+    }
   }
 
   for (Bone* b : obj_->bones){
-    b->set_skinned_matrix( b->global_matrix() * b->inverse_bind_pose() );
+    b->set_skinned_matrix( glm::translate(glm::mat4(1.0f), b->position_global_ ) * 
+      glm::toMat4(b->rotation_global_) * b->inverse_bind_pose() );
   }
 
 }
 
 /// Set all the bones' global matrices
 void Skeleton::resetGlobals() {
-  for (Bone* b : obj_->bones){
-    b->set_global_matrix(  glm::toMat4(b->rotation_absolute()) * 
-          glm::translate( glm::mat4(1.0f), b->position_absolute() ));
-  }
+  ///\todo fill this in :O
 
 }
 

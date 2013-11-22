@@ -32,11 +32,11 @@ SkeletonShape::SkeletonShape(const Skeleton &s) : Node() {
 
   // A unit cylinder that we will stretch
 
-  ss->cylinder = Cylinder(10,1,1.0f,1.0f);
+  ss->spike = Spike(10,1,1.0f,1.0f);
 
   // One Cylinder per bone
   for (Bone *b : ss->skeleton.bones() ){
-    Node n (ss->cylinder);
+    Node n (ss->spike);
     add(n);
   }
  
@@ -50,10 +50,35 @@ void SkeletonShape::SharedObject::update() {
   size_t idx = 0;
   for (Bone *b : skeleton.bones() ){
 
-   children[idx].setMatrix( b->global_matrix() );
+   glm::mat4 mm = skeleton.matrix() ; 
+  
+    if (b->parent() != nullptr){
+      float l = glm::length( b->position_relative() );
 
-   idx++;
+      glm::mat4 trans = glm::translate( glm::mat4(1.0f), glm::vec3(0.0f,1.0f,0.0f));
+
+      mm = glm::translate( glm::mat4(1.0f), b->position_global()) * mm * trans ;
+      
+   /*   glm::vec3 dir = glm::normalize( b->parent()->position_global() - b->position_global() );
+      glm::vec3 yaxis = glm::vec3(0.0f,1.0f,0.0f);
+
+      float angle = glm::dot( yaxis, dir );
+      glm::vec3 cross = glm::cross( dir,yaxis);
+
+      glm::quat align_rot = glm::angleAxis(static_cast<float>(radToDeg(angle)),cross);
+
+      mm = mm * glm::toMat4( align_rot) * glm::scale(glm::mat4(1.0f),glm::vec3(1.0f, l, 1.0f));*/
+
+
+
+    } else {
+      mm = glm::translate( glm::mat4(1.0f), b->position_global()) * mm;
+    }
+
+    children[idx].setMatrix(mm);
+
+    idx++;
   }
 
-   Node::SharedObject::update();
+  Node::SharedObject::update();
 }
