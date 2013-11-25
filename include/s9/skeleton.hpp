@@ -40,18 +40,9 @@ namespace s9{
       glm::vec3 p = glm::vec3(1.0f)) : name_(n), id_(idx), parent_(h), 
       position_pose_(p), rotation_pose_(r) { 
       
-
       // Create relative positions
       if (parent_ != nullptr){
-      /*
-        glm::vec3 dir = glm::normalize( parent_->position_pose_ - position_pose_ );
-        glm::vec4 axis =  glm::vec4(0.0f,1.0f,0.0f,0.0f);
-        glm::vec3 axis3 =  glm::normalize(glm::vec3(axis.x, axis.y, axis.z));
-        float angle = acos(glm::dot( dir, axis3 ));
-        glm::vec3 cross = glm::normalize(glm::cross( axis3, dir));
-        rotation_relative_ = glm::angleAxis(static_cast<float>(radToDeg(angle)),cross);
-      */
-
+    
         rotation_relative_ = glm::normalize(glm::inverse(parent_->rotation_pose_) * r) ;
         glm::vec3 tp = p - parent_->position_pose_;
         tp = tp * glm::toMat3(parent_->rotation_pose_);
@@ -62,6 +53,7 @@ namespace s9{
         position_relative_ = p;
       }
 
+      inverse_bind_pose_ =  glm::inverse( glm::translate(glm::mat4(1.0f),position_pose_ ) * glm::toMat4(rotation_pose_));
   
     } 
 
@@ -103,13 +95,11 @@ namespace s9{
     glm::quat rotation_pose_; /// rotation in the bind pose - calculates inverse bind pose
     glm::vec3 position_pose_; /// position in the bind pose - calculates inverse bind pose
 
-    glm::quat rotation_global_;
+    glm::quat rotation_global_; /// Cumulative global rotation, built from traversing the hierarchy
     glm::vec3 position_global_;
 
     glm::mat4 inverse_bind_pose_;
-
     glm::mat4 skinned_matrix_; /// The final skinned matrix, sent to the shader
-    glm::mat4 global_matrix_; /// The final skinned matrix, sent to the shader
 
 
     friend class Skeleton;

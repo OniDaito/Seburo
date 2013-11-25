@@ -43,9 +43,7 @@ void MD5App::init(){
     skeleton_shape_ = SkeletonShape(md5_.skeleton());
     skeleton_shape_.set_geometry_cast(WIREFRAME);
     skeleton_shape_.add(shader_colour_).add(camera_);
-    //skeleton_shape_.children()[0].add( ShaderClause<glm::vec4,1>("uColour", bone_colour_) );
-    //skeleton_shape_.children()[1].add( ShaderClause<glm::vec4,1>("uColour", orient_colour_) );
-
+  
     node_.add(skeleton_shape_);
 
     Bone * neck = md5_.skeleton().bone("neck");
@@ -60,9 +58,9 @@ void MD5App::init(){
     luparm->applyRotation( glm::angleAxis( -45.0f, glm::vec3(1.0,0.0,0.0))  );
     luparm->applyRotation( glm::angleAxis( 15.0f, glm::vec3(0.0,0.0,1.0))  );
 
-
-    //Bone * luparm = md5_.skeleton().bone("origin");
-    //luparm->set_rotation (glm::rotate( luparm->rotation() , 50.0, glm::vec3(0.0,1.0,0.0)));
+    Bone * lloarm = md5_.skeleton().bone("lloarm");
+    lloarm->applyRotation( glm::angleAxis( -45.0f, glm::vec3(1.0,0.0,0.0))  );
+    lloarm->applyRotation( glm::angleAxis( 15.0f, glm::vec3(0.0,0.0,1.0))  );
 
 
     cout << node_ << endl;

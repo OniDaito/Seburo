@@ -15,12 +15,8 @@ using namespace s9;
   return l->id() < r->id();
  } 
 
-/// Rotate a bone (as oppose to a joint) by applying a quaternion to its alignment and local position
+/// Rotate a joint/bone by applying a quaternion to its alignment and local position
 void Bone::applyRotation(const glm::quat &q) {
-  //glm::mat4 tm = glm::toMat4(q);
-
-  //glm::vec4 tv = tm * glm::vec4(position_relative_.x, position_relative_.y, position_relative_.z, 1.0f) ;
-  //position_relative_ = glm::vec3(tv.x, tv.y, tv.z);
   rotation_relative_ = glm::normalize(rotation_relative_ * q);
 }
 
@@ -112,7 +108,6 @@ Bone* Skeleton::bone(string tag){
 }
 
 /// Update all the bones in the skeleton. Assume an order for the bones (all parents come first)
-/// \todo enforce ordering somehow (on the add no doubt)
 
 void Skeleton::update() {
   for (Bone* b : obj_->bones){
@@ -121,33 +116,12 @@ void Skeleton::update() {
       b->rotation_global_ = b->rotation_relative_;
       b->position_global_ = b->position_relative_;
 
-      /*b->global_matrix_ =  
-      glm::translate(glm::mat4(1.0f), b->position_relative_) *
-      glm::toMat4(b->rotation_relative_) *
-      b->inverse_bind_pose();*/
-
     } else {
-
-      /*glm::vec3 dir = glm::normalize( b->parent()->position_global() - b->position_global() );
-      glm::vec4 axis =  glm::vec4(0.0f,1.0f,0.0f,0.0f);
-      glm::vec3 axis3 =  glm::normalize(glm::vec3(axis.x, axis.y, axis.z));
-      float angle = acos(glm::dot( dir, axis3 ));
-      glm::vec3 cross = glm::normalize(glm::cross( axis3, dir));
-      glm::quat align_quat = glm::angleAxis(static_cast<float>(radToDeg(angle)),cross);
-      glm::mat4 align_mat = glm::toMat4( align_quat);*/
 
       b->rotation_global_ = glm::normalize(  b->parent()->rotation_global() * b->rotation_relative_);
       glm::vec3 tp = glm::vec3( b->position_relative_);
       tp = tp * glm::inverse(glm::toMat3( b->parent()->rotation_global() ));
       b->position_global_ = b->parent()->position_global_ + tp;
-
-      /*b->global_matrix_ = 
-        b->parent()->global_matrix_ *
-        glm::translate(glm::mat4(1.0f), b->position_relative_) * 
-        glm::toMat4(b->rotation_relative_) *
-    
-        b->inverse_bind_pose() ;*/
-
     }
   }
 
@@ -156,18 +130,19 @@ void Skeleton::update() {
     glm::quat tq = glm::normalize( b->rotation_pose_ * b->rotation_global_  );
     glm::vec3 tp = b->position_pose_ -  b->position_global_;
 
-    glm::mat4 tm =  glm::translate(glm::mat4(1.0f),b->position_pose_ ) * glm::toMat4(b->rotation_pose_);
-
     glm::mat4 sm =  glm::translate(glm::mat4(1.0f),b->position_global_ ) *  glm::toMat4(b->rotation_global_);
 
-    b->set_skinned_matrix( sm * glm::inverse(tm));
+    b->set_skinned_matrix( sm * b->inverse_bind_pose_);
   }
 
 }
 
 /// Set all the bones' global matrices
 void Skeleton::resetGlobals() {
-  ///\todo fill this in :O
+  for (Bone* b : obj_->bones){
+
+
+  }
 
 }
 

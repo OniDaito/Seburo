@@ -59,7 +59,7 @@ SkeletonShape::SkeletonShape(const Skeleton &s) : Node() {
     ny.add(gl::ShaderClause<glm::vec4,1>("uColour", ss->orient_colour_y));
     ny.setMatrix( glm::scale(glm::mat4(1.0f),glm::vec3(1.4f, 4.0f, 1.4f)));
 
-    glm::mat4 mm = glm::toMat4(glm::angleAxis(90.0f, glm::vec3(0.0f,0.0f,1.0f))) *
+    glm::mat4 mm = glm::toMat4(glm::angleAxis(-90.0f, glm::vec3(0.0f,0.0f,1.0f))) *
      glm::scale(glm::mat4(1.0f),glm::vec3(1.4f, 4.0f, 1.4f));
     nx.setMatrix(mm);
 
@@ -127,8 +127,6 @@ void SkeletonShape::SharedObject::update() {
     // Figure out the alignment
     glm::mat4 align_mat = glm::toMat4( b->rotation_global());
     glm::mat4 flip = glm::rotate(glm::mat4(1.0f), 180.0f, glm::vec3(1.0f,0.0f,0.0f));
-
-    //glm::vec3 mid_point =  (b->parent()->position_global() + b->position_global()) / 2.0f;
 
     // translate, scale, rotate then move to final
 
