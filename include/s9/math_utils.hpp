@@ -10,8 +10,14 @@
 
 /// Useful maths stuff
 
+#ifndef MATH_UTILS_HPP
+#define MATH_UTILS_HPP
+
 
 static const double PI = M_PI;
 
 inline static double radToDeg(const double &x) { return x * 180.0 / PI; }
 inline static double degToRad(const double &x) { return x * PI / 180.0; }
+
+
+#endif

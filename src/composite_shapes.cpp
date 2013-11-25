@@ -34,10 +34,41 @@ SkeletonShape::SkeletonShape(const Skeleton &s) : Node() {
 
   ss->spike = Spike(10,1,1.0f,1.0f);
 
-  // One Cylinder per bone
+  Node node_bones;
+  Node node_orients;
+
+  node_bones.add(gl::ShaderClause<glm::vec4,1>("uColour", ss->bone_colour));
+
+  add(node_bones);
+  add(node_orients);
+
+  // One Spike per bone
   for (Bone *b : ss->skeleton.bones() ){
     Node n (ss->spike);
-    add(n);
+    node_bones.add(n);
+    ss->bones.push_back(n);
+  }
+
+  // One Spike per orientation
+  for (Bone *b : ss->skeleton.bones() ){
+    
+    Node nx (ss->spike);
+    nx.add(gl::ShaderClause<glm::vec4,1>("uColour", ss->orient_colour_x));
+
+    Node ny (ss->spike);
+    ny.add(gl::ShaderClause<glm::vec4,1>("uColour", ss->orient_colour_y));
+    ny.setMatrix( glm::scale(glm::mat4(1.0f),glm::vec3(1.4f, 4.0f, 1.4f)));
+
+    glm::mat4 mm = glm::toMat4(glm::angleAxis(90.0f, glm::vec3(0.0f,0.0f,1.0f))) *
+     glm::scale(glm::mat4(1.0f),glm::vec3(1.4f, 4.0f, 1.4f));
+    nx.setMatrix(mm);
+
+    Node n;
+    n.add(nx);
+    n.add(ny);
+
+    node_orients.add(n);
+    ss->orients.push_back(n);
   }
  
 }
@@ -69,7 +100,7 @@ void SkeletonShape::SharedObject::update() {
       glm::vec3 mid_point =  (b->parent()->position_global() + b->position_global()) / 2.0f;
 
       // Scale for the length
-      glm::mat4 scale_mat = skeleton.matrix() * glm::scale(glm::mat4(1.0f),glm::vec3(l/10.0, l, l/10.0));
+      glm::mat4 scale_mat = glm::scale(glm::mat4(1.0f),glm::vec3(l/10.0, l, l/10.0));
 
       // translate, scale, rotate then move to final
 
@@ -79,10 +110,38 @@ void SkeletonShape::SharedObject::update() {
       mm = glm::translate( glm::mat4(1.0f), b->position_global());
     }
 
-    children[idx].setMatrix(mm);
+    bones[idx].setMatrix(mm);
 
     idx++;
   }
+
+  // Now sort out the orientations
+  idx = 0;
+
+  for (Bone *b : skeleton.bones() ){
+
+    glm::mat4 mm = glm::mat4(1.0f); 
+  
+    float l = glm::length( b->position_relative() );
+
+    // Figure out the alignment
+    glm::mat4 align_mat = glm::toMat4( b->rotation_global());
+    glm::mat4 flip = glm::rotate(glm::mat4(1.0f), 180.0f, glm::vec3(1.0f,0.0f,0.0f));
+
+    //glm::vec3 mid_point =  (b->parent()->position_global() + b->position_global()) / 2.0f;
+
+    // translate, scale, rotate then move to final
+
+   
+    mm = glm::translate( glm::mat4(1.0f), b->position_global()) * align_mat;
+
+  
+    orients[idx].setMatrix(mm);
+
+    idx++;
+  }
+
+
 
   Node::SharedObject::update();
 }

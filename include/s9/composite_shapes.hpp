@@ -27,7 +27,6 @@ namespace s9 {
     SkeletonShape() {}
     SkeletonShape(const Skeleton &s);
 
-
   protected:
 
     // Annoyingly we can't override Node's draw method as we dont get a full copy of 
@@ -42,6 +41,13 @@ namespace s9 {
 
       Spike spike;
       const Skeleton &skeleton;
+
+      std::vector<Node> bones;
+      std::vector<Node> orients;
+
+      glm::vec4 bone_colour = glm::vec4(1.0,0.0,0.0,1.0);
+      glm::vec4 orient_colour_x = glm::vec4(0.0,0.0,1.0,1.0);
+      glm::vec4 orient_colour_y = glm::vec4(0.0,1.0,0.0,1.0);
     };
 
 

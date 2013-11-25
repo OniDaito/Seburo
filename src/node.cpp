@@ -31,8 +31,6 @@ void NodeShape::draw(GeometryPrimitive overide){
 }
 
 
-
-
 /**
  * NodeSkeleton Sign method. We create the clauses on the fly instead
  * This creates a matrix palette, packing the quaternion and position

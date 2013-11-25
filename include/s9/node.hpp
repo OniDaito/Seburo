@@ -261,6 +261,8 @@ namespace s9 {
 		Node& draw(GeometryPrimitive gp = NONE);
 		Node& reset();
 
+		std::vector<Node> & children() { if (obj_ == nullptr) assert(false); return obj_->children; }
+
 		void set_geometry_cast(GeometryPrimitive gc) {obj_->geometry_cast = gc; }
 
 		friend std::ostream& operator<<(std::ostream& out, const Node& o);

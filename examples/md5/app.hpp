@@ -54,7 +54,7 @@ namespace s9 {
 		Node node2_;
 		Node cylinder_node_;
 		MD5Model md5_;
-		glm::vec4 bone_colour_;
+		glm::vec4 bone_colour_, orient_colour_;
 		SkeletonShape skeleton_shape_;
 
 

@@ -12,6 +12,7 @@
 #include <forward_list>
 #include "common.hpp"
 #include "geometry.hpp"
+#include "math_utils.hpp"
 
 
 namespace s9{
@@ -37,19 +38,30 @@ namespace s9{
 
     Bone(std::string n, int idx,  Bone* h = nullptr, glm::quat r = glm::quat(), 
       glm::vec3 p = glm::vec3(1.0f)) : name_(n), id_(idx), parent_(h), 
-      position_global_(p), rotation_global_(r) { 
+      position_pose_(p), rotation_pose_(r) { 
       
-      glm::mat4 global_matrix =  glm::translate( glm::mat4(1.0f), p) * glm::toMat4(r);
-      inverse_bind_pose_ = glm::inverse(global_matrix);
-   
+
       // Create relative positions
       if (parent_ != nullptr){
-        rotation_relative_ = glm::inverse(parent_->rotation_global_) * r;
-        position_relative_ = p - parent_->position_global_;
+      /*
+        glm::vec3 dir = glm::normalize( parent_->position_pose_ - position_pose_ );
+        glm::vec4 axis =  glm::vec4(0.0f,1.0f,0.0f,0.0f);
+        glm::vec3 axis3 =  glm::normalize(glm::vec3(axis.x, axis.y, axis.z));
+        float angle = acos(glm::dot( dir, axis3 ));
+        glm::vec3 cross = glm::normalize(glm::cross( axis3, dir));
+        rotation_relative_ = glm::angleAxis(static_cast<float>(radToDeg(angle)),cross);
+      */
+
+        rotation_relative_ = glm::normalize(glm::inverse(parent_->rotation_pose_) * r) ;
+        glm::vec3 tp = p - parent_->position_pose_;
+        tp = tp * glm::toMat3(parent_->rotation_pose_);
+        position_relative_ = tp;
+
       } else {
         rotation_relative_ = r;
         position_relative_ = p;
       }
+
   
     } 
 
@@ -65,6 +77,9 @@ namespace s9{
     glm::quat rotation_global() const{ return rotation_global_; }
     glm::vec3 position_global() const { return position_global_; }
 
+    glm::quat rotation_pose() const{ return rotation_pose_; }
+    glm::vec3 position_pose() const { return position_pose_; }
+
     const int id() const {return id_; }
 
     const Bone* parent() {return parent_; }
@@ -72,7 +87,8 @@ namespace s9{
     void applyRotation(const glm::quat &q);
 
     glm::mat4 skinned_matrix() const { return skinned_matrix_; }
-    glm::mat4 inverse_bind_pose() const { return inverse_bind_pose_; }
+
+    glm::mat4 inverse_bind_pose() const { return inverse_bind_pose_;}
 
   protected:
 
@@ -84,12 +100,17 @@ namespace s9{
     glm::quat rotation_relative_; /// rotation relative to the parent 
     glm::vec3 position_relative_; /// position relative to the parent
 
+    glm::quat rotation_pose_; /// rotation in the bind pose - calculates inverse bind pose
+    glm::vec3 position_pose_; /// position in the bind pose - calculates inverse bind pose
 
     glm::quat rotation_global_;
     glm::vec3 position_global_;
 
     glm::mat4 inverse_bind_pose_;
+
     glm::mat4 skinned_matrix_; /// The final skinned matrix, sent to the shader
+    glm::mat4 global_matrix_; /// The final skinned matrix, sent to the shader
+
 
     friend class Skeleton;
 
