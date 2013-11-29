@@ -53,7 +53,8 @@ void Camera::resize(size_t w, size_t h){
 }
 
 void Camera::update() {	
- 	
+ 	if (obj_ == nullptr) { assert(false); } ///\todo this sort of thing should be caught at compile time if poss?
+ 	///\todo the above could potentially be moved into a general shared object pointer class?
  	obj_->view_matrix = glm::lookAt(obj_->pos, obj_->look, obj_->up);
  	if (obj_->orthographic)
  		obj_->projection_matrix = glm::ortho(static_cast<float>(obj_->left), static_cast<float>(obj_->right),

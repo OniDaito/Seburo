@@ -19,6 +19,8 @@
 #include "s9/node.hpp"
 #include "s9/gl/drawable.hpp"
 #include "s9/gl/texture.hpp"
+#include "s9/skeleton.hpp"
+#include "s9/composite_shapes.hpp"
 
 #include <anttweakbar/AntTweakBar.h>
 
@@ -43,21 +45,30 @@ namespace s9 {
     void processEvent(KeyboardEvent e);
     void processEvent(ResizeEvent e);
 
-
   protected:
   
     s9::oni::OpenNIBase openni_;
     s9::oni::OpenNISkeleton skeleton_;
 
+    Skeleton skeleton_base_;
+
     Quad quad_;
     Image image_;
+    
     gl::Shader shader_;
+    gl::Shader shader_colour_;
+
     Node node_depth_;
     Node node_colour_;
+    Node skeleton_node_;
+    
     glm::mat4 model_;
 
     byte_t *bytes_;
 
+    glm::vec4 bone_colour_, orient_colour_;
+    SkeletonShape skeleton_shape_;
+   
     gl::Texture texture_;
 
     Camera camera_;

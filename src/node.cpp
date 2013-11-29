@@ -15,6 +15,7 @@ using namespace s9::gl;
 vector<glm::mat4> NodeMinimal::matrix_stack_;
 static ShaderVisitor global_visitor;
 
+
 /**
  * Draw function - recursively draws all the children of this node creating a contract
  * as it goes down with whatever shader is bound.
@@ -81,15 +82,31 @@ void Node::_init() {
 	obj_->geometry_cast = NONE;
 }
 
+/// Remove a NodeBase or NodeBases given a responsibility
+Node& Node::remove(NodeResponsibility r){
+	if (obj_ != nullptr) {
+		for (auto it = obj_->bases.begin(); it != obj_->bases.end();) {
+	    if ((*it)->responsible() == r)  {
+	    	it = obj_->bases.erase(it);
+	    }
+	    else{
+	   		++it;
+	    }
+	  }
+	}
+}
+
 
 
 /// Remove a childnode from this node \todo test this function
 Node& Node::removeChild(Node p) {
-	for (std::vector<Node>::iterator it = obj_->children.begin(); it != obj_->children.end(); ){
-		if  ( (*it).obj_ == p.obj_ ){
-			obj_->children.erase(it);
-		} else {
-			++it;
+	if (obj_ != nullptr){
+		for (std::vector<Node>::iterator it = obj_->children.begin(); it != obj_->children.end(); ){
+			if  ( (*it).obj_ == p.obj_ ){
+				obj_->children.erase(it);
+			} else {
+				++it;
+			}
 		}
 	}
 	return *this;
@@ -113,6 +130,11 @@ Node& Node::add(Skin s) {
 	} else {
 		cerr << "SEBURO Node - Trying to add a skin to a node when one already exists." << endl;
 	}
+	return *this;
+}
+
+Node& Node::remove(Skin s) {
+	remove(SKIN_WEIGHTS);
 	return *this;
 }
 
@@ -143,6 +165,12 @@ Node& Node::add(gl::Shader s) {
 	return *this;
 }
 
+Node& Node::remove(Shader s) {
+	remove(SHADER);
+	return *this;
+}
+
+
 
 /// Add a shader to this node
 Node& Node::add(Camera c) {
@@ -156,6 +184,14 @@ Node& Node::add(Camera c) {
 	return *this;
 }
 
+
+Node& Node::remove(Camera s) {
+	remove(CAMERA);
+	return *this;
+}
+
+
+
 /// Add the drawable for this node 
 Node& Node::add(Shape s) {
 	if (obj_ == nullptr) _init();
@@ -165,6 +201,12 @@ Node& Node::add(Shape s) {
 	} else {
 		cerr << "SEBURO Node - Trying to add a Shape to a node when one already exists." << endl;
 	}
+	return *this;
+}
+
+
+Node& Node::remove(Shape s) {
+	remove(GEOMETRY);
 	return *this;
 }
 
@@ -181,6 +223,10 @@ Node& Node::add(Skeleton s) {
 	return *this;
 }
 
+Node& Node::remove(Skeleton s) {
+	remove(SKELETON);
+	return *this;
+}
 
 /**
  * Remove all nodebases from this node

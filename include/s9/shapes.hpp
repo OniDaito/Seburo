@@ -55,6 +55,10 @@ namespace s9 {
 			return *this;
 		}
 
+		inline bool operator==(const Shape& lhs){ return lhs.obj_ == obj_;  }
+		inline bool operator!=(const Shape& lhs){return lhs.obj_ != obj_;}
+
+
 	protected:
 	
 		std::shared_ptr<ShapeObj> obj_ = nullptr;

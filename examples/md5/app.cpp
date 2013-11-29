@@ -61,8 +61,7 @@ void MD5App::init(){
     Bone * lloarm = md5_.skeleton().bone("lloarm");
     lloarm->applyRotation( glm::angleAxis( -45.0f, glm::vec3(1.0,0.0,0.0))  );
     lloarm->applyRotation( glm::angleAxis( 15.0f, glm::vec3(0.0,0.0,1.0))  );
-
-
+    
     cout << node_ << endl;
 
     CXGLERROR

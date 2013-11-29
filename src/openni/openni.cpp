@@ -289,7 +289,6 @@ nite::Status OpenNISkeleton::readFrame() {
   
   if (rc !=  nite::STATUS_OK){
     cerr << "SEBURO NITE Error - Could not read frame: " << rc << endl;
-    return rc;
   }
 
   obj_->mFloor = obj_->pNiteFrame->floor;
@@ -396,63 +395,63 @@ void OpenNISkeleton::User::copySkeleton(){
 
   njoint = nskel.getJoint(nite::JOINT_TORSO);
   orientation = njoint.getOrientation();
-  skel.bone(idx++)->rotation = glm::quat(orientation.x, orientation.y, orientation.z, orientation.w );
+  skel.bone(idx++)->applyRotation(glm::quat(orientation.x, orientation.y, orientation.z, orientation.w ));
 
   njoint = nskel.getJoint(nite::JOINT_NECK);
   orientation = njoint.getOrientation();
-  skel.bone(idx++)->rotation = glm::quat(orientation.x, orientation.y, orientation.z, orientation.w );
+  skel.bone(idx++)->applyRotation(glm::quat(orientation.x, orientation.y, orientation.z, orientation.w ));
 
   njoint = nskel.getJoint(nite::JOINT_HEAD);
   orientation = njoint.getOrientation();
-  skel.bone(idx++)->rotation = glm::quat(orientation.x, orientation.y, orientation.z, orientation.w );
+  skel.bone(idx++)->applyRotation(glm::quat(orientation.x, orientation.y, orientation.z, orientation.w ));
 
   njoint = nskel.getJoint(nite::JOINT_LEFT_SHOULDER);
   orientation = njoint.getOrientation();
-  skel.bone(idx++)->rotation = glm::quat(orientation.x, orientation.y, orientation.z, orientation.w );
+  skel.bone(idx++)->applyRotation(glm::quat(orientation.x, orientation.y, orientation.z, orientation.w ));
 
   njoint = nskel.getJoint(nite::JOINT_LEFT_ELBOW);
   orientation = njoint.getOrientation();
-  skel.bone(idx++)->rotation = glm::quat(orientation.x, orientation.y, orientation.z, orientation.w );
+  skel.bone(idx++)->applyRotation(glm::quat(orientation.x, orientation.y, orientation.z, orientation.w ));
 
   njoint = nskel.getJoint(nite::JOINT_LEFT_HAND);
   orientation = njoint.getOrientation();
-  skel.bone(idx++)->rotation = glm::quat(orientation.x, orientation.y, orientation.z, orientation.w );
+  skel.bone(idx++)->applyRotation(glm::quat(orientation.x, orientation.y, orientation.z, orientation.w ));
 
   njoint = nskel.getJoint(nite::JOINT_RIGHT_SHOULDER);
   orientation = njoint.getOrientation();
-  skel.bone(idx++)->rotation = glm::quat(orientation.x, orientation.y, orientation.z, orientation.w );
+  skel.bone(idx++)->applyRotation(glm::quat(orientation.x, orientation.y, orientation.z, orientation.w ));
 
   njoint = nskel.getJoint(nite::JOINT_RIGHT_ELBOW);
   orientation = njoint.getOrientation();
-  skel.bone(idx++)->rotation = glm::quat(orientation.x, orientation.y, orientation.z, orientation.w );
+  skel.bone(idx++)->applyRotation( glm::quat(orientation.x, orientation.y, orientation.z, orientation.w ));
 
   njoint = nskel.getJoint(nite::JOINT_RIGHT_HAND);
   orientation = njoint.getOrientation();
-  skel.bone(idx++)->rotation = glm::quat(orientation.x, orientation.y, orientation.z, orientation.w );
+  skel.bone(idx++)->applyRotation(glm::quat(orientation.x, orientation.y, orientation.z, orientation.w ));
 
   njoint = nskel.getJoint(nite::JOINT_LEFT_HIP);
   orientation = njoint.getOrientation();
-  skel.bone(idx++)->rotation = glm::quat(orientation.x, orientation.y, orientation.z, orientation.w );
+  skel.bone(idx++)->applyRotation(glm::quat(orientation.x, orientation.y, orientation.z, orientation.w ));
 
   njoint = nskel.getJoint(nite::JOINT_LEFT_KNEE);
   orientation = njoint.getOrientation();
-  skel.bone(idx++)->rotation = glm::quat(orientation.x, orientation.y, orientation.z, orientation.w );
+  skel.bone(idx++)->applyRotation(glm::quat(orientation.x, orientation.y, orientation.z, orientation.w ));
 
   njoint = nskel.getJoint(nite::JOINT_LEFT_FOOT);
   orientation = njoint.getOrientation();
-  skel.bone(idx++)->rotation = glm::quat(orientation.x, orientation.y, orientation.z, orientation.w );
+  skel.bone(idx++)->applyRotation(glm::quat(orientation.x, orientation.y, orientation.z, orientation.w ));
 
   njoint = nskel.getJoint(nite::JOINT_RIGHT_HIP);
   orientation = njoint.getOrientation();
-  skel.bone(idx++)->rotation = glm::quat(orientation.x, orientation.y, orientation.z, orientation.w );
+  skel.bone(idx++)->applyRotation(glm::quat(orientation.x, orientation.y, orientation.z, orientation.w ));
 
   njoint = nskel.getJoint(nite::JOINT_RIGHT_KNEE);
   orientation = njoint.getOrientation();
-  skel.bone(idx++)->rotation = glm::quat(orientation.x, orientation.y, orientation.z, orientation.w );
+  skel.bone(idx++)->applyRotation(glm::quat(orientation.x, orientation.y, orientation.z, orientation.w ));
 
   njoint = nskel.getJoint(nite::JOINT_RIGHT_FOOT);
   orientation = njoint.getOrientation();
-  skel.bone(idx++)->rotation = glm::quat(orientation.x, orientation.y, orientation.z, orientation.w );
+  skel.bone(idx++)->applyRotation(glm::quat(orientation.x, orientation.y, orientation.z, orientation.w ));
 
   /*
    const nite::SkeletonJoint& head = user.getSkeleton().getJoint(nite::JOINT_HEAD);

@@ -37,7 +37,7 @@ namespace s9{
      */
 
     Bone(std::string n, int idx,  Bone* h = nullptr, glm::quat r = glm::quat(), 
-      glm::vec3 p = glm::vec3(1.0f)) : name_(n), id_(idx), parent_(h), 
+      glm::vec3 p = glm::vec3(0.0f)) : name_(n), id_(idx), parent_(h), 
       position_pose_(p), rotation_pose_(r) { 
       
       // Create relative positions
@@ -55,7 +55,11 @@ namespace s9{
 
       inverse_bind_pose_ =  glm::inverse( glm::translate(glm::mat4(1.0f),position_pose_ ) * glm::toMat4(rotation_pose_));
   
+      position_global_ = p;
+      rotation_global_ = r;
+
     } 
+
 
     friend std::ostream& operator<<(std::ostream& out, const Bone& o);
 
@@ -74,7 +78,7 @@ namespace s9{
 
     const int id() const {return id_; }
 
-    const Bone* parent() {return parent_; }
+    Bone* parent() const {return parent_; }
  
     void applyRotation(const glm::quat &q);
 
@@ -183,12 +187,14 @@ namespace s9{
     Skeleton() {};
     Skeleton(SkeletonType type);
 
-    Bone* bone(std::string tag);
-    Bone* bone(uint id);
+    Bone* bone(std::string tag) const;
+    Bone* bone(uint id) const;
 
     Skeleton& addBone(Bone* b);
 
-    int getBoneIndex(Bone* b);
+    int getBoneIndex(Bone* b) const;
+
+    void copyBoneValues( const Skeleton &skeleton);
 
     /// Get the matrix that corresponds to the skeleton transform.
     glm::mat4 matrix() const {return obj_->matrix; }

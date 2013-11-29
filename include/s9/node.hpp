@@ -18,7 +18,7 @@
 #include "gl/shader.hpp"
 #include "gl/utils.hpp"
 
-#include <forward_list>
+#include <list>
 
 /*
  * Node represents a *thing* that has a position in space and time (though not a size)
@@ -83,6 +83,7 @@ namespace s9 {
 				return true;
 			return false;
 		}
+
 
 		friend class Node;
 
@@ -246,6 +247,25 @@ namespace s9 {
 		Node& add(Camera c);
 		Node& add(Skeleton s);
 
+		// Removals
+		Node& remove(Shape s);
+		Node& remove(Node &n) { removeChild(n); return *this; };
+		Node& remove(Skin s);
+		Node& remove(gl::Shader s);
+		Node& remove(Camera c);
+		Node& remove(Skeleton s);
+
+		Node& remove(NodeResponsibility r);
+
+
+		bool hasResponsibility(NodeResponsibility r) {
+			for (NodeBasePtr b : obj_->bases){
+				if (b->responsible() == r)
+					return false;
+			}
+			return true;
+		}
+
 		template<typename T, size_t U>
 		Node& add(gl::ShaderClause<T,U> c) {
 			if (obj_ == nullptr) _init();
@@ -256,6 +276,7 @@ namespace s9 {
 
 		glm::mat4 matrix();
 		void setMatrix(const glm::mat4 &m);
+
 
 		Node& removeChild(Node p);
 		Node& draw(GeometryPrimitive gp = NONE);
@@ -280,7 +301,7 @@ namespace s9 {
 			std::vector< Node > 						children;
   		std::shared_ptr<NodeMinimal>  	matrix_node; 			// We keep this so we can always get to the matrix
   		std::shared_ptr<NodeShader>			shader_node; 			// Like the above, this is handy for adding data values to the shader
-  		std::forward_list<NodeBasePtr> 	bases;
+  		std::list<NodeBasePtr> 					bases;
   		GeometryPrimitive 							geometry_cast;		///\todo potentially replace this with something else we can pass to draw? User stuff
 		};
 
