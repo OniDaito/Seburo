@@ -91,17 +91,17 @@ void SkeletonShape::SharedObject::update() {
         glm::mat4 flip = glm::rotate(glm::mat4(1.0f), 180.0f, glm::vec3(1.0f,0.0f,0.0f));
 
         // Figure out the alignment
-        glm::vec3 dir = glm::normalize( b->position_relative() );
+        glm::vec3 dir = glm::normalize( b->position_global() - b->parent()->position_global());
 
-        glm::vec4 axis =  glm::vec4(0.0f,1.0f,0.0f,0.0f);
-        glm::vec3 axis3 =  glm::normalize(glm::vec3(axis.x, axis.y, axis.z));
+  
+        glm::vec3 axis3 =  glm::vec3(0.0f,1.0f,0.0f);
         glm::mat4 scale_mat = glm::scale(glm::mat4(1.0f),glm::vec3(l/10.0, l, l/10.0));
-        glm::vec3 mid_point =  p->position_global() +  b->position_relative() / 2.0f;
+        glm::vec3 mid_point =  (b->parent()->position_global() + b->position_global() )/ 2.0f;
 
         float dp = glm::dot( dir, axis3 );
 
         if (dp != -1 && dp != 1) {
-           float angle = acos(dp);
+          float angle = acos(dp);
           glm::vec3 cross = glm::normalize(glm::cross( axis3, dir));
           glm::quat align_quat = glm::angleAxis(static_cast<float>(radToDeg(angle)),cross);
           glm::mat4 align_mat = glm::toMat4( align_quat);

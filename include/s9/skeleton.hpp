@@ -76,6 +76,14 @@ namespace s9{
     glm::quat rotation_pose() const{ return rotation_pose_; }
     glm::vec3 position_pose() const { return position_pose_; }
 
+    void set_rotation_relative(const glm::quat &q) { rotation_relative_ = q;}
+    void set_rotation_global(const glm::quat &q) { rotation_global_ = q;}
+
+    void set_position_relative(const glm::vec3 &q) { position_relative_ = q;}
+    void set_position_global(const glm::vec3 &q) { position_global_ = q;}
+
+
+
     const int id() const {return id_; }
 
     Bone* parent() const {return parent_; }
@@ -111,8 +119,9 @@ namespace s9{
   };
 
   inline std::ostream& operator<<(std::ostream& os, const Bone& obj) {
-    return os << "Bone - " << obj.name() << " : " << obj.rotation().x << ", " 
-      << obj.rotation().y << ", " << obj.rotation().z << ", " << obj.rotation().w;
+    return os << "Bone - Rot " << obj.name() << " : " << obj.rotation().x << ", " 
+      << obj.rotation().y << ", " << obj.rotation().z << ", " << obj.rotation().w <<
+      " pos: " << obj.position().x << ", " << obj.position().y << ", " << obj.position().z;
   }
 
   /** 

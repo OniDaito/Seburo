@@ -21,6 +21,8 @@ void Bone::applyRotation(const glm::quat &q) {
 }
 
 
+
+
 /// Create a skeleton by providing a skeleton type to the constructor.
 Skeleton::Skeleton(SkeletonType type) : obj_ (shared_ptr<SharedObject>( new SharedObject())){
 
@@ -47,13 +49,13 @@ void Skeleton::createOpenNISkeleton() {
   obj_->bones.push_front (new Bone("Neck", 1, bone(0), glm::quat(), glm::vec3(0.0f,1.0f,0.0f)));
   obj_->bones.push_front (new Bone("Head", 2, bone(1), glm::quat(), glm::vec3(0.0f,2.0f,0.0f)));
   
-  obj_->bones.push_front (new Bone("Left Shoulder", 3, bone(0), glm::quat(), glm::vec3(1.0f,0.5f,0.0f)));
-  obj_->bones.push_front (new Bone("Left Elbow", 4, bone(3), glm::quat(), glm::vec3(2.0f,0.5f,0.0f)));
-  obj_->bones.push_front (new Bone("Left Wrist", 5, bone(4), glm::quat(), glm::vec3(3.0f,0.5f,0.0f)));
+  obj_->bones.push_front (new Bone("Left Shoulder", 3, bone(0), glm::quat(), glm::vec3(-1.0f,0.5f,0.0f)));
+  obj_->bones.push_front (new Bone("Left Elbow", 4, bone(3), glm::quat(), glm::vec3(-2.0f,0.5f,0.0f)));
+  obj_->bones.push_front (new Bone("Left Wrist", 5, bone(4), glm::quat(), glm::vec3(-3.0f,0.5f,0.0f)));
 
-  obj_->bones.push_front (new Bone("Right Shoulder", 6, bone(0), glm::quat(), glm::vec3(-1.0f,0.5f,0.0f)));
-  obj_->bones.push_front (new Bone("Right Elbow", 7, bone(6), glm::quat(), glm::vec3(-2.0f,0.5f,0.0f)));
-  obj_->bones.push_front (new Bone("Right Wrist", 8, bone(7), glm::quat(), glm::vec3(-3.0f,0.5f,0.0f)));
+  obj_->bones.push_front (new Bone("Right Shoulder", 6, bone(0), glm::quat(), glm::vec3(1.0f,0.5f,0.0f)));
+  obj_->bones.push_front (new Bone("Right Elbow", 7, bone(6), glm::quat(), glm::vec3(2.0f,0.5f,0.0f)));
+  obj_->bones.push_front (new Bone("Right Wrist", 8, bone(7), glm::quat(), glm::vec3(3.0f,0.5f,0.0f)));
 
   obj_->bones.push_front (new Bone("Left Hip", 9, bone(0), glm::quat(), glm::vec3(1.0f,-1.0f,0.0f)));
   obj_->bones.push_front (new Bone("Left Knee", 10, bone(9), glm::quat(), glm::vec3(1.0f,-2.0f,0.0f)));
@@ -76,6 +78,7 @@ void Skeleton::copyBoneValues(const Skeleton &skeleton) {
   for ( Bone * b : obj_->bones){
     Bone* sp = skeleton.bone(b->name());
     if (sp != nullptr){
+
       b->rotation_relative_ = sp->rotation_relative_;
       b->position_relative_ = sp->position_relative_;
       b->rotation_pose_ = sp->rotation_pose_;

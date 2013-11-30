@@ -119,8 +119,8 @@ OpenNIApp::~OpenNIApp(){
     node_colour_.draw();
     openni_.texture_colour().unbind();
 
-    //glm::mat4 skel_mat = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f,0.1f,0.1f));
-    //skeleton_node_.setMatrix(skel_mat);
+    glm::mat4 skel_mat = glm::scale(glm::mat4(1.0f), glm::vec3(0.01f,0.01f,0.01f));
+    skeleton_node_.setMatrix(skel_mat);
     skeleton_node_.draw();
 
     CXGLERROR
