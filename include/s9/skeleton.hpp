@@ -204,6 +204,7 @@ namespace s9{
     int getBoneIndex(Bone* b) const;
 
     void copyBoneValues( const Skeleton &skeleton);
+    void copyBoneRotations( const Skeleton &skeleton);
 
     /// Get the matrix that corresponds to the skeleton transform.
     glm::mat4 matrix() const {return obj_->matrix; }

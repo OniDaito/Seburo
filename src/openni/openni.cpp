@@ -12,6 +12,8 @@ using namespace std;
 using namespace s9;
 using namespace s9::oni;
 
+///\todo add OpenNI add/remove device listeners - update callbacks?
+
 
 bool OpenNISkeleton::sVisibleUsers[S9_NITE_MAX_USERS] = {false};
 nite::SkeletonState OpenNISkeleton::sSkeletonStates[S9_NITE_MAX_USERS] = {nite::SKELETON_NONE};
@@ -389,15 +391,25 @@ void setBone(int &idx, s9::Skeleton &skel, nite::Skeleton &nskel, nite::JointTyp
   Bone * parent = skel.bone(idx)->parent();
   NitePoint3f npoint = njoint.getPosition();
 
-  glm::quat local = glm::quat(orientation.x, orientation.y, orientation.z, orientation.w );
-  
+  glm::quat global_rot = glm::quat(orientation.w, orientation.x, orientation.y, orientation.z );
+  glm::vec3 global_pos = glm::vec3(npoint.x, npoint.y, npoint.z);
+
   if (parent != nullptr){
-    skel.bone(idx)->set_rotation_relative(glm::normalize(glm::inverse(parent->rotation_global()) * local));
-    skel.bone(idx)->set_position_relative(glm::vec3(npoint.x, npoint.y, -npoint.z) - parent->position_global() );
+    skel.bone(idx)->set_rotation_relative(glm::normalize(glm::inverse(parent->rotation_relative()) * global_rot));
+    glm::vec3 tp = global_pos - parent->position_relative();
+    tp = tp * glm::toMat3(parent->rotation_relative());
+    skel.bone(idx)->set_position_relative( tp );
+
+     skel.bone(idx)->set_rotation_global(global_rot);
+
   } else {
-    skel.bone(idx)->set_rotation_relative( local);
-    skel.bone(idx)->set_position_relative(glm::vec3(npoint.x, npoint.y, -npoint.z) );
+    skel.bone(idx)->set_rotation_relative(global_rot );
+    skel.bone(idx)->set_position_relative(global_pos );
   }
+
+  skel.bone(idx)->set_rotation_global(global_rot);
+  skel.bone(idx)->set_position_global(global_pos);
+  
   idx++;
 }
 
@@ -414,15 +426,7 @@ void OpenNISkeleton::User::copySkeleton(){
 
   ///\todo confidence checking here? Do we want to add that or deal with it here?
 
-  ///\todo should we both with positions here as well?
-
   // We do this in order, creating local transformations from OpenNI's global ones
-
-  glm::quat rz = glm::angleAxis( 180.0f, glm::vec3(0.0,0.0,1.0));
-  glm::quat ry = glm::angleAxis( 180.0f, glm::vec3(0.0,1.0,0.0));
-  glm::quat rx = glm::angleAxis( 90.0f, glm::vec3(1.0,0.0,0.0));
-  glm::quat rzi = glm::inverse(rz);
-
 
   setBone(idx,skel,nskel,nite::JOINT_TORSO);
   setBone(idx,skel,nskel,nite::JOINT_NECK);
