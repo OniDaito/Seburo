@@ -7,6 +7,8 @@ MD5 Issues
 4) Cx other peoples code (MD5 JS for example)
 5) Plot positions of the bones
 
+* Init method - seperate thread? that way we can load resources and display at the same time?
+
 * Issue with adding shared objects to nodes is that they can be un-initialised (shapes often are) and then we loose the binding to the name. Consider adding a camera before the Camera(pos) constructor is called - COMPILER should check the Node.add method for un-initialised objects and warn the user
 
 * Compute shaders on the fly given information in a pre-draw pass?

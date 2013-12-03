@@ -23,7 +23,8 @@ namespace s9 {
     File(std::string path);
 
     std::string path() const { return _finalPath; };
-    const bool exists() const { struct stat file_info; return stat(path().c_str(), &file_info) == 0; }
+    const bool exists() const { return exists(_finalPath); };
+    static const bool exists(const std::string &path) { struct stat file_info; return stat(path.c_str(), &file_info) == 0; }
 
     std::string extension() const {
       std::string p = path();

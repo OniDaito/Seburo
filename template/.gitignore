@@ -1,0 +1,5 @@
+build
+*.slo
+*.lo
+*.o
+.DS_Store

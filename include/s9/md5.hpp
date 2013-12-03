@@ -39,6 +39,8 @@ namespace s9 {
    * MD5 takes a file representing an MD5 and creates an array of s9::nodes we can draw
    */
 
+  ///\todo textures!
+
   class MD5Model : public s9::Node {
   public:
 

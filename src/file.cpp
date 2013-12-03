@@ -29,11 +29,19 @@ File::File(std::string path){
 #endif
 
 #ifdef _SEBURO_LINUX
-    _finalPath = "../../../" + path;
+
+    if (exists("../../../" + path) ) {
+      _finalPath = "../../../" + path;
+    } else if (exists(path)){
+      _finalPath = path;
+    }
+
 #endif
 
   }
   else {
-    // error - malformed! - hard quit - compiler error
+    // error - malformed!
+    cerr << "SEBURO FILE Error - Path was malformed: " << path << endl;
+    assert(false);
   }
 }

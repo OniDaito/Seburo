@@ -42,7 +42,7 @@ void OpenNIApp::init(){
     ortho_camera_.set_far(1.0f);
     ortho_camera_.set_orthographic(true);
 
-    camera_ = Camera(glm::vec3(0.0f,0.0f,20.0f));
+    camera_ = Camera(glm::vec3(0.0f,0.0f,10.0f));
     camera_.set_orthographic(false);
 
     quad_ = Quad(320,240);
@@ -142,6 +142,7 @@ OpenNIApp::~OpenNIApp(){
  void OpenNIApp::processEvent(ResizeEvent e){
     glViewport(0, 0, e.w, e.h);
     ortho_camera_.resize(e.w, e.h);
+    camera_.resize(e.w, e.h);
 
 
 }

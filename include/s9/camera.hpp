@@ -53,6 +53,7 @@ namespace s9{
 		void yaw(float a);
 		void pitch(float a);
 		void roll(float a);
+		void rotate(const glm::quat &q);
 
 		void set_orthographic(bool b) {obj_->orthographic = b; update();}
 		bool orthographic() {return obj_->orthographic;}

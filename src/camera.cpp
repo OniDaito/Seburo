@@ -134,4 +134,11 @@ void Camera::roll(float a){
 }
 
 
+/// Rotate the camera, basically moving the look point
+void Camera::rotate(const glm::quat &q) {
+	glm::vec3 dt = obj_->look - obj_->pos;
+	dt = dt * glm::toMat3(q);
+	obj_->look = obj_->pos + dt;
 
+	update();
+}

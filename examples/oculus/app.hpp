@@ -44,10 +44,12 @@ namespace s9 {
 		Cuboid cuboid_;
 		gl::Shader shader_;
 		Camera camera_;
+		Node node_;
 
 		oculus::OculusBase oculus_;
 
-		float rotation_;
+		glm::quat oculus_dt_;
+		glm::quat oculus_prev_;
 		
 	};
 }

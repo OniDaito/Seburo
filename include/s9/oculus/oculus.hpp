@@ -24,6 +24,8 @@ namespace s9 {
      * it listens for messages also.
      */
      
+    ///\todo we need to pass out the messages recieved - create some kind of handler mechanism
+
     class SEBUROAPI OculusBase : public OVR::MessageHandler {
     
     protected:

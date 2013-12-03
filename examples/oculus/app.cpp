@@ -28,17 +28,19 @@ using namespace s9::gl;
     cuboid_ = Cuboid(3.0,2.0,1.0);
     Cuboid v = cuboid_;
 
-    Node n;
-    v.brew();
+    camera_ = Camera(glm::vec3(0.0f,0.0f,10.0f));
 
-    rotation_ = 0;
+    node_.add(cuboid_).add(shader_).add(camera_);
+
     oculus_ = oculus::OculusBase(true);
+
 
 }
 
 ///\todo seems not to want to update member variables :(
 void OculusApp::update(double_t dt) {    
     oculus_.update(dt);
+
 
 }
 
@@ -53,25 +55,16 @@ void OculusApp::update(double_t dt) {
     GLfloat depth = 1.0f;
     glClearBufferfv(GL_DEPTH, 0, &depth );
 
-    rotation_ += 1.0;
-    camera_.update(dt);
-    shader_.bind();
-
-    glm::mat4 Projection = glm::perspective(45.0f, 4.0f / 3.0f, 0.1f, 100.f);
-    glm::mat4 View = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -6.0f));
-    glm::mat4 Model = glm::rotate(glm::mat4(1.0f), rotation_, glm::vec3(0.0f, 1.0f, 0.0f));
-
     glm::quat q = oculus_.orientation();
-
     glm::mat4 mq = glm::mat4_cast(q);
-    View = mq * View;
 
-    glm::mat4 MVP = Projection * View * Model;
 
-    shader_.s("uMVPMatrix",MVP);
+    oculus_dt_ = glm::inverse(oculus_prev_) * q;
+    camera_.rotate(oculus_dt_);
+    camera_.update(dt);
+    oculus_prev_ = q;
 
-    cuboid_.draw();
-    shader_.unbind();
+    node_.draw();
      
 }
 
