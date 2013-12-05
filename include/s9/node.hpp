@@ -15,6 +15,7 @@
 #include "shapes.hpp"
 #include "camera.hpp"
 #include "skeleton.hpp"
+#include "gl/texture.hpp"
 #include "gl/shader.hpp"
 #include "gl/utils.hpp"
 
@@ -39,11 +40,12 @@ namespace s9 {
 	
 	typedef std::shared_ptr<NodeBase> NodeBasePtr;
 
-	/// Responsibilities that a node has - allows some casting
+	/// Responsibilities that a NodeBase has.
 	/// Order here is important as objects are drawn in order - lowest first
 	typedef enum {
 		PREDRAW,
 		SHADER,
+		TEXTURE,
 		POINT_LIGHTS,
 		SKIN_WEIGHTS,
 		SKELETON,
@@ -226,6 +228,18 @@ namespace s9 {
 		gl::Shader shader_;
 	};
 
+	/**
+	 * Add a Texture to this node. We can have one per texture unit
+	 */
+
+	class NodeTexture : public NodeBase {
+	public:
+		NodeTexture(gl::Texture t) : NodeBase(TEXTURE), texture_(t) {  };
+		std::string tag() { return "Texture"; }
+		void draw(GeometryPrimitive overide) {	texture_.bind(); }
+		void postDraw() {texture_.unbind(); }
+		gl::Texture texture_;
+	};
 	
   /**
    * The Actual Node we instantiate and use in our code
@@ -240,12 +254,15 @@ namespace s9 {
 
 		// Overridden add methods for attaching things to this node.
 		///\todo template these? We could do! :)
+		///\todo normally we'd pass by reference. Should we do that?
+
 		Node& add(Shape s);
 		Node& add(Node &n);
 		Node& add(Skin s);
 		Node& add(gl::Shader s);
 		Node& add(Camera c);
 		Node& add(Skeleton s);
+		Node& add(gl::Texture t);
 
 		// Removals
 		Node& remove(Shape s);
@@ -254,9 +271,7 @@ namespace s9 {
 		Node& remove(gl::Shader s);
 		Node& remove(Camera c);
 		Node& remove(Skeleton s);
-
-		Node& remove(NodeResponsibility r);
-
+		Node& remove(gl::Texture s);
 
 		bool hasResponsibility(NodeResponsibility r) {
 			for (NodeBasePtr b : obj_->bases){
@@ -280,7 +295,7 @@ namespace s9 {
 
 		Node& removeChild(Node p);
 		Node& draw(GeometryPrimitive gp = NONE);
-		Node& reset();
+		Node& clear();
 
 		std::vector<Node> & children() { if (obj_ == nullptr) assert(false); return obj_->children; }
 
@@ -291,9 +306,10 @@ namespace s9 {
 
 	protected:
 
-
 		void _init();
 		NodeBasePtr getBase(NodeResponsibility r);
+		Node& remove(NodeBasePtr p);
+
 
 		struct SharedObject {
 			virtual void update() {} // A Cheeky function that allows overriding in subclasses 
@@ -306,6 +322,13 @@ namespace s9 {
 		};
 
 		std::shared_ptr<SharedObject> obj_ = nullptr;
+		
+	public:
+
+    bool operator == (const Node &ref) const { return this->obj_ == ref.obj_; }
+    typedef std::shared_ptr<SharedObject> Node::*unspecified_bool_type;
+    operator unspecified_bool_type() const { return ( obj_.get() == 0 ) ? 0 : &Node::obj_; }
+    void reset() { obj_.reset(); }
 
   };
 

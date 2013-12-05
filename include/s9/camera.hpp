@@ -58,7 +58,7 @@ namespace s9{
 		void set_orthographic(bool b) {obj_->orthographic = b; update();}
 		bool orthographic() {return obj_->orthographic;}
 
-		void reset();
+		void defaults();
 
 		void set_pos(const glm::vec3 &p) { obj_->pos = p; update();}
 		void set_look(const glm::vec3 &p) { obj_->look = p; update();}
@@ -105,6 +105,13 @@ namespace s9{
 		};
 		
 		std::shared_ptr<SharedObject> obj_ = nullptr;
+
+	public:
+
+	  bool operator == (const Camera &ref) const { return this->obj_ == ref.obj_; }
+	  typedef std::shared_ptr<SharedObject> Camera::*unspecified_bool_type;
+	  operator unspecified_bool_type() const { return ( obj_.get() == 0 ) ? 0 : &Camera::obj_; }
+	  void reset() { obj_.reset(); }
 
 	};
 

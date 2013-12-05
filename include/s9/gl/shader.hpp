@@ -189,9 +189,9 @@ namespace s9 {
 			
 			/// Restore the previous shader
 			void unbind() {	glUseProgram(obj_->prev); }
-						
+			
 		protected:
-		   
+		  
 			bool parse(std::string &glsl, std::string &vs, std::string &fs, std::string &gs);
 			bool createShader(GLenum type, GLuint &handle, std::string &data);
 			bool createAndLink();
@@ -203,6 +203,15 @@ namespace s9 {
 			};
 
 			std::shared_ptr<SharedObject> obj_ = nullptr;
+
+		public:
+
+	    bool operator == (const Shader &ref) const { return this->obj_ == ref.obj_; }
+	    typedef std::shared_ptr<SharedObject> Shader::*unspecified_bool_type;
+	    operator unspecified_bool_type() const { return ( obj_.get() == 0 ) ? 0 : &Shader::obj_; }
+	    void reset() { obj_.reset(); }
+
+
 		};
 	}
 }

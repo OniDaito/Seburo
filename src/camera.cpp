@@ -34,7 +34,7 @@ Camera::Camera(glm::vec3 pos, glm::vec3 look, glm::vec3 up) : obj_ (shared_ptr<S
 void Camera::init() {
 	if (obj_ == nullptr){
 		obj_ = shared_ptr<SharedObject>(new SharedObject());
-		reset();
+		defaults();
 	}
 }
 
@@ -63,7 +63,7 @@ void Camera::update() {
 		obj_->projection_matrix = glm::perspective(obj_->field, obj_->ratio, obj_->near, obj_->far);
 }
 
-void Camera::reset() {
+void Camera::defaults() {
 	obj_->up = glm::vec3(0,1,0);
 	obj_->pos = glm::vec3(0,0,1.0);
 	obj_->look = glm::vec3(0,0,0);

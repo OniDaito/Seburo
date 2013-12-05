@@ -19,10 +19,10 @@ using namespace s9::gl;
 
 /*
  * Basic Texture Rectangle Creation with data supplied
- * \TODO - Need more options! A lot more options! :O
+ * \todo - Need more options! A lot more options! :O
  */
 
-Texture::Texture(size_t width, size_t height, ColourComponent format, ColourType type, const byte_t* data) {
+Texture::Texture(size_t width, size_t height, ColourComponent format, ColourType type, int unit, const byte_t* data) {
   
   assert (width > 0);
   assert (height > 0);
@@ -30,6 +30,7 @@ Texture::Texture(size_t width, size_t height, ColourComponent format, ColourType
   width_ = width;
   height_ = height;
   format_ = format;
+  unit_ = unit;
 
   colour_type_ = type;
 
@@ -96,13 +97,13 @@ Texture::Texture(size_t width, size_t height, ColourComponent format, ColourType
  * Create a texture from an image
  */
 
-Texture::Texture(const Image &image){
+Texture::Texture(const Image &image, int unit){
   assert (image.width() > 0);
   assert (image.height() > 0);
 
   width_ = image.width();
   height_ = image.height();
-  format_ = RGB; ///\todo assuming RGB here :S
+  unit_ = unit;
 
   glGenTextures(1, &(id_));
   CXGLERROR
@@ -116,7 +117,6 @@ Texture::Texture(const Image &image){
   ///\todo This affects global texture state :S
   glPixelStorei(GL_UNPACK_ROW_LENGTH, width_);
   glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-
   glBindTexture(gl_type_, id_);
 
   ///\todo BGRA or RGBA or what?
@@ -141,19 +141,24 @@ Texture::Texture(const Image &image){
 
   switch (image.component()){
     case RGB:
+      format_ = RGB;
       glTexImage2D(gl_type_, 0, GL_RGB, width_, height_, 0, GL_RGB, tc, image.image_data());
     break;
     case RGBA:
+      format_ = RGBA;
       glTexImage2D(gl_type_, 0, GL_RGBA, width_, height_, 0, GL_RGBA, tc, image.image_data());
     break;
     case BGR:
+      format_ = BGR;
       glTexImage2D(gl_type_, 0, GL_RGB, width_, height_, 0, GL_BGR, tc, image.image_data());
     break;
     case BGRA:
+      format_ = BGRA;
       glTexImage2D(gl_type_, 0, GL_RGBA, width_, height_, 0, GL_BGRA, tc, image.image_data());
     break;
     case RED:
     case GREY:
+      format_ = RED;
       glTexImage2D(gl_type_, 0, GL_RED, width_, height_, 0, GL_RED, tc, image.image_data());
     break;
   }
@@ -208,16 +213,16 @@ void Texture::update(byte_t * data) {
 
 
 /*
- * Bind to Current Texture Unit. Default: 0
+ * Bind to texture unit.
  */
 
-void Texture::bind() { glBindTexture(gl_type_, id_); }
+void Texture::bind() { glActiveTexture(GL_TEXTURE0 + unit_); glBindTexture(gl_type_, id_); }
 
 /*
  * Unbind
  */
 
-void Texture::unbind(){ glBindTexture(gl_type_, 0); }
+void Texture::unbind(){ glActiveTexture(GL_TEXTURE0 + unit_); glBindTexture(gl_type_, 0); }
 
 
 /*
@@ -226,7 +231,7 @@ void Texture::unbind(){ glBindTexture(gl_type_, 0); }
  */
 
 TextureStream::TextureStream(size_t width, size_t height, ColourComponent format, 
-    ColourType type, const byte_t* data) : Texture(width,height,format,type,data),
+    ColourType type, int unit, const byte_t* data) : Texture(width,height,format,type,unit,data),
     obj_( shared_ptr<SharedObj> (new SharedObj())){
 
   bind();

@@ -177,6 +177,11 @@ namespace s9{
     std::vector<SkinIndex>& indices() { return obj_->indices; }
     std::vector<SkinWeight>& weights() { return obj_->weights; }
 
+    bool operator == (const Skin &ref) const { return this->obj_ == ref.obj_; }
+    typedef std::shared_ptr<SharedObject> Skin::*unspecified_bool_type;
+    operator unspecified_bool_type() const { return ( obj_.get() == 0 ) ? 0 : &Skin::obj_; }
+    void reset() { obj_.reset(); }
+
   };
 
   /// Types for the skeleton. We can have one created if we like.
@@ -241,6 +246,13 @@ namespace s9{
     };
 
     std::shared_ptr<SharedObject> obj_ = nullptr;
+
+  public:
+
+    bool operator == (const Skeleton &ref) const { return this->obj_ == ref.obj_; }
+    typedef std::shared_ptr<SharedObject> Skeleton::*unspecified_bool_type;
+    operator unspecified_bool_type() const { return ( obj_.get() == 0 ) ? 0 : &Skeleton::obj_; }
+    void reset() { obj_.reset(); }
 
   };
 

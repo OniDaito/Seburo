@@ -24,11 +24,12 @@ void TextureApp::init(){
     addWindowListener(this);
 
     quad_ = Quad(1.0,1.0);
-    node_.add(quad_);
     texture_ = Texture( Image(s9::File("./data/astley.jpg")) );
     rotation_ = 0;
+    camera_ = Camera(glm::vec3(0,0,-6.0f));
 
-    camera_.set_pos(glm::vec3(0,0,-6.0f));
+    node_.add(quad_).add(shader_).add(texture_).add(camera_);
+   
 }
 
 ///\todo seems not to want to update member variables :(
@@ -47,16 +48,11 @@ void TextureApp::display(double_t dt){
 
     rotation_ += 1.0;
     camera_.update(dt);
-    shader_.bind();
 
-    glm::mat4 Model = glm::rotate(glm::mat4(1.0f), rotation_, glm::vec3(0.0f, 1.0f, 0.0f));
-    glm::mat4 MVP = camera_.projection_matrix() * camera_.view_matrix() * Model;
+    glm::mat4 mat = glm::rotate(glm::mat4(1.0f), rotation_, glm::vec3(0.0f, 1.0f, 0.0f));
 
-    shader_.s("uMVPMatrix",MVP);
-    texture_.bind();
+    node_.setMatrix(mat);
     node_.draw();
-    texture_.unbind();
-    shader_.unbind();
 
 }
 

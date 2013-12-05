@@ -166,7 +166,8 @@ if (_SEBURO_LINUX)
   SEBURO_find_library(AntTweakBar)
   SEBURO_find_library(assimp)
 
-  #set (CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "-Wl")
+  # Glob the SOIL Sources and compile include
+  FILE(GLOB SOILSources src/soil/*)
 
   include_directories(${PROJECT_SOURCE_DIR}/lib/linux
     ${SEBURO_INCLUDES}
@@ -435,6 +436,7 @@ add_library(Seburo SHARED
   ${GLSources}
   ${GLUtils}
   ${OSSources}
+  ${SOILSources}
 ) 
 
 # Now link the found libraries to the SEBURO library

@@ -71,3 +71,44 @@ free(myData);*/
 }
 
 #endif
+
+#ifdef _SEBURO_LINUX
+
+byte_t * Image::imageReference(const char*  imageName){
+
+    int channels, w ,h;
+
+    // Could potentially be an issue here if SOIL returns a -1 for any of the sizes etc
+    byte_t * p = SOIL_load_image(imageName, &w, &h, &channels, SOIL_LOAD_AUTO);
+
+    width_ = w;
+    height_ = h;
+    
+    // Assumed?
+    colour_type_ = UNSIGNED_BYTE;
+
+    ///\todo we are guessing the order here :S
+    switch(channels){
+        case 0:
+            component_ = RED;
+        break;
+
+        case 3:
+            component_ = RGB;
+        break;
+
+        case 4:
+            component_ = RGBA;
+        break;
+
+        default:
+            component_ = RGB;
+        break;
+    }
+
+    return p;
+
+}
+
+
+#endif

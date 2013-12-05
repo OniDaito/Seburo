@@ -6,6 +6,8 @@
 *
 */
 
+///\todo Potentially the GLM Chap has a small lib for enhanced texture loading for OpenGL speedy! :D
+
 #ifndef S9_IMAGE
 #define S9_IMAGE
 
@@ -15,6 +17,11 @@
 #ifdef _SEBURO_OSX
 #include "QuartzCore/QuartzCore.h"
 #endif
+
+#ifdef _SEBURO_LINUX
+#include "soil/SOIL.h"
+#endif
+
 
 namespace s9{
 
@@ -44,9 +51,7 @@ namespace s9{
 
     Image(const File &f) : obj_( std::shared_ptr<SharedObj> (new SharedObj())){
 
-#ifdef _SEBURO_OSX
       obj_->image_data = imageReference( f.path().c_str() );
-#endif
 
     }
 
@@ -62,9 +67,7 @@ namespace s9{
 
   protected:
 
-#ifdef _SEBURO_OSX
     byte_t * imageReference (const char *imageName);
-#endif
 
     struct SharedObj{
       SharedObj() {
@@ -80,6 +83,7 @@ namespace s9{
 
     std::shared_ptr<SharedObj> obj_;
 
+    // Outside of the shared pointer as they are easy copy. Good idea?
     size_t width_, height_;
     size_t bits_per_component_;
     size_t bits_per_pixel_;

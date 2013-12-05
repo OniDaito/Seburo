@@ -26,20 +26,25 @@ namespace s9 {
     /*
      * Represents a texture in OpenGL. Use GL_TEXTURE_RECTANGLE
      * was previously a shared object but since it keeps no pointers or data on the CPU it need not be
+     * By keeping texture non-shared, we can seperate it from the data allowing us to take copies of the
+     * same image with different bind locations
      *   
-     * \todo binding unit
+     * \todo wrap around image a little better perhaps? - Shared object?
      *
      */
 
     class SEBUROAPI Texture{
     public:
       Texture() {};
-      Texture(size_t width, size_t height, ColourComponent format=RGB, ColourType type = UNSIGNED_BYTE, const byte_t* data = nullptr);
-      Texture(const Image &image);
+      Texture(size_t width, size_t height, ColourComponent format=RGB, ColourType type = UNSIGNED_BYTE, int unit = 0, const byte_t* data = nullptr);
+      Texture(const Image &image, int unit = 0);
 
       size_t width() const {return width_; }
       size_t height() const {return height_; }
       GLuint id() const {return id_; };
+      int unit() const { return unit_;}
+
+      void set_unit(int u) {unit_ = u;}
 
       ColourType colour_type () const  { return colour_type_; }
 
@@ -54,8 +59,12 @@ namespace s9 {
       GLenum gl_type_;
       size_t width_;
       size_t height_;
+      int unit_;
       ColourComponent format_;
       ColourType colour_type_;
+
+    public:
+      bool operator == (const Texture &ref) const { return this->id_ == ref.id_; }
 
     };
 
@@ -77,7 +86,7 @@ namespace s9 {
     class TextureStream : public Texture{
     public:
       TextureStream() {};
-      TextureStream(size_t width, size_t height, ColourComponent format=RGB, ColourType type = UNSIGNED_BYTE, const byte_t* data = nullptr);
+      TextureStream(size_t width, size_t height, ColourComponent format=RGB, ColourType type = UNSIGNED_BYTE, int unit = 0, const byte_t* data = nullptr);
       ~TextureStream();
 
       void update(byte_t *data);

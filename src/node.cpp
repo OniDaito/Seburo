@@ -82,11 +82,13 @@ void Node::_init() {
 	obj_->geometry_cast = NONE;
 }
 
-/// Remove a NodeBase or NodeBases given a responsibility
-Node& Node::remove(NodeResponsibility r){
+
+/// Remove a NodeBasePtr explicitly
+
+Node& Node::remove(NodeBasePtr p){
 	if (obj_ != nullptr) {
 		for (auto it = obj_->bases.begin(); it != obj_->bases.end();) {
-	    if ((*it)->responsible() == r)  {
+	    if (*it == p)  {
 	    	it = obj_->bases.erase(it);
 	    }
 	    else{
@@ -95,7 +97,6 @@ Node& Node::remove(NodeResponsibility r){
 	  }
 	}
 }
-
 
 
 /// Remove a childnode from this node \todo test this function
@@ -133,8 +134,15 @@ Node& Node::add(Skin s) {
 	return *this;
 }
 
+/// Remove a skin from this node. Annoying because we are casting to check a pointer! Messy! ><
 Node& Node::remove(Skin s) {
-	remove(SKIN_WEIGHTS);
+	NodeBasePtr t =  getBase(SKIN_WEIGHTS);
+	if (t != nullptr){
+		shared_ptr<NodeSkin> p =  std::static_pointer_cast<NodeSkin> (t);
+		if (p->skin_ == s){
+			remove(t);
+		}
+	}
 	return *this;
 }
 
@@ -166,10 +174,15 @@ Node& Node::add(gl::Shader s) {
 }
 
 Node& Node::remove(Shader s) {
-	remove(SHADER);
+	NodeBasePtr t =  getBase(SHADER);
+	if (t != nullptr){
+		shared_ptr<NodeShader> p =  std::static_pointer_cast<NodeShader> (t);
+		if (p->shader_ == s){
+			remove(t);
+		}
+	}
 	return *this;
 }
-
 
 
 /// Add a shader to this node
@@ -186,7 +199,13 @@ Node& Node::add(Camera c) {
 
 
 Node& Node::remove(Camera s) {
-	remove(CAMERA);
+	NodeBasePtr t =  getBase(CAMERA);
+	if (t != nullptr){
+		shared_ptr<NodeCamera> p =  std::static_pointer_cast<NodeCamera> (t);
+		if (p->camera_ == s){
+			remove(t);
+		}
+	}
 	return *this;
 }
 
@@ -206,7 +225,13 @@ Node& Node::add(Shape s) {
 
 
 Node& Node::remove(Shape s) {
-	remove(GEOMETRY);
+	NodeBasePtr t =  getBase(GEOMETRY);
+	if (t != nullptr){
+		shared_ptr<NodeShape> p =  std::static_pointer_cast<NodeShape> (t);
+		if (p->shape_ == s){
+			remove(t);
+		}
+	}
 	return *this;
 }
 
@@ -224,15 +249,62 @@ Node& Node::add(Skeleton s) {
 }
 
 Node& Node::remove(Skeleton s) {
-	remove(SKELETON);
+	NodeBasePtr t =  getBase(SKELETON);
+	if (t != nullptr){
+		shared_ptr<NodeSkeleton> p =  std::static_pointer_cast<NodeSkeleton> (t);
+		if (p->skeleton_ == s){
+			remove(t);
+		}
+	}
 	return *this;
 }
+
+/// Add a texture to this node - we can have multiple ones but one per unit only
+Node& Node::add(Texture t) {
+	if (obj_ == nullptr) _init();
+
+	// Replace existing texture with unit
+	for (NodeBasePtr p : obj_->bases){
+		if (p->responsible() == TEXTURE){
+			shared_ptr<NodeTexture> q =  std::static_pointer_cast<NodeTexture> (p);
+			if (q->texture_.unit() == t.unit()){
+				obj_->bases.remove(p);
+			}
+		}
+	}
+	
+	obj_->bases.push_front( NodeBasePtr(new NodeTexture(t)));
+	obj_->bases.sort(compareNodeBasePtr);
+	
+	return *this;
+}
+
+
+Node& Node::remove(gl::Texture t) {
+	if (obj_ != nullptr) {
+		for (auto it = obj_->bases.begin(); it != obj_->bases.end();) {
+	    if ((*it)->responsible() == TEXTURE)  {
+	    	shared_ptr<NodeTexture> p =  std::static_pointer_cast<NodeTexture> (*it);
+	    	if (p->texture_ == t)
+	    		it = obj_->bases.erase(it);
+	    	else
+	    		++it;
+	    }
+	    else{
+	   		++it;
+	    }
+	  }
+	}
+	return *this;
+}
+
+
 
 /**
  * Remove all nodebases from this node
  */
 
-Node& Node::reset() {
+Node& Node::clear() {
 	obj_->bases.clear();
 	obj_->matrix_node.reset();
 	obj_->shader_node.reset();

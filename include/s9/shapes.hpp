@@ -59,9 +59,16 @@ namespace s9 {
 		inline bool operator!=(const Shape& lhs){return lhs.obj_ != obj_;}
 
 
+
 	protected:
 	
 		std::shared_ptr<ShapeObj> obj_ = nullptr;
+
+  public:
+    
+    typedef std::shared_ptr<ShapeObj> Shape::*unspecified_bool_type;
+    operator unspecified_bool_type() const { return ( obj_.get() == 0 ) ? 0 : &Shape::obj_; }
+    void reset() { obj_.reset(); }
 
 	};
 
