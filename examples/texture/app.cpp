@@ -23,8 +23,6 @@ void TextureApp::init(){
 
     addWindowListener(this);
 
-    glEnable(GL_TEXTURE_RECTANGLE);
-    glEnable(GL_TEXTURE_2D);
 
     quad_ = Quad(1.0,1.0);
     texture_ = Texture( Image(s9::File("./data/astley.jpg")) );
@@ -35,7 +33,6 @@ void TextureApp::init(){
 
     shader_.bind();
     texture_.bind();
-   
 }
 
 ///\todo seems not to want to update member variables :(

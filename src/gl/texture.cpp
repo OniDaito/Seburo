@@ -29,8 +29,8 @@ Texture::Texture(size_t width, size_t height, ColourComponent format, ColourType
 
 Texture::SharedObject::SharedObject(size_t w, size_t h, ColourComponent f, ColourType t, int u, const byte_t* d) {
 
-  assert (width > 0);
-  assert (height > 0);
+  assert (w > 0);
+  assert (h > 0);
 
   width = w;
   height = h;
@@ -44,14 +44,12 @@ Texture::SharedObject::SharedObject(size_t w, size_t h, ColourComponent f, Colou
   }*/
 
   colour_type = t;
-
-  glGenTextures(1, &(id));
   
   glPixelStorei(GL_UNPACK_ROW_LENGTH, width);
   glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-
-  cout << "Tex ID: " << id << endl;
-
+  
+  glGenTextures(1, &(id));
+  
   // Automatic detection of power of two.
 
   if (((width & (~width + 1)) == width) && ((height & (~height + 1)) == height))
@@ -74,7 +72,7 @@ Texture::SharedObject::SharedObject(size_t w, size_t h, ColourComponent f, Colou
       tt = GL_UNSIGNED_BYTE;
     break;
   }
-
+  CXGLERROR
 
   glBindTexture(gl_type, id);
   
