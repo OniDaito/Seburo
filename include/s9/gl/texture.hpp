@@ -25,11 +25,6 @@ namespace s9 {
    
     /*
      * Represents a texture in OpenGL. Use GL_TEXTURE_RECTANGLE
-     * was previously a shared object but since it keeps no pointers or data on the CPU it need not be
-     * By keeping texture non-shared, we can seperate it from the data allowing us to take copies of the
-     * same image with different bind locations
-     *   
-     * \todo wrap around image a little better perhaps? - Shared object?
      *
      */
 
@@ -39,14 +34,15 @@ namespace s9 {
       Texture(size_t width, size_t height, ColourComponent format=RGB, ColourType type = UNSIGNED_BYTE, int unit = 0, const byte_t* data = nullptr);
       Texture(const Image &image, int unit = 0);
 
-      size_t width() const {return width_; }
-      size_t height() const {return height_; }
-      GLuint id() const {return id_; };
-      int unit() const { return unit_;}
 
-      void set_unit(int u) {unit_ = u;}
+      size_t width() const {return obj_->width; }
+      size_t height() const {return obj_->height; }
+      GLuint id() const {return obj_->id; };
+      int unit() const { return obj_->unit;}
 
-      ColourType colour_type () const  { return colour_type_; }
+      void set_unit(int u) {obj_->unit = u;}
+
+      ColourType colour_type () const  { return obj_->colour_type; }
 
       void bind();
       void unbind();
@@ -55,16 +51,27 @@ namespace s9 {
 
     protected: 
     
-      GLuint id_;
-      GLenum gl_type_;
-      size_t width_;
-      size_t height_;
-      int unit_;
-      ColourComponent format_;
-      ColourType colour_type_;
+      struct SharedObject {
 
+        SharedObject(size_t w, size_t h, ColourComponent f, ColourType t, int u, const byte_t* d);
+
+        ~SharedObject();
+
+        GLuint id;
+        GLenum gl_type;
+        size_t width;
+        size_t height;
+        int unit;
+        ColourComponent format;
+        ColourType colour_type;
+      };
+
+      std::shared_ptr <SharedObject> obj_;
+
+    
     public:
-      bool operator == (const Texture &ref) const { return this->id_ == ref.id_; }
+
+      bool operator == (const Texture &ref) const { return this->obj_ == ref.obj_; }
 
     };
 
@@ -86,25 +93,19 @@ namespace s9 {
     class TextureStream : public Texture{
     public:
       TextureStream() {};
-      TextureStream(size_t width, size_t height, ColourComponent format=RGB, ColourType type = UNSIGNED_BYTE, int unit = 0, const byte_t* data = nullptr);
-      ~TextureStream();
+      TextureStream(size_t w, size_t h, ColourComponent f=RGB, ColourType t = UNSIGNED_BYTE, int u = 0, const byte_t* d = nullptr);
 
       void update(byte_t *data);
     
     protected:
-      struct SharedObj {
-        SharedObj() {
-          pbo_memory = nullptr;
-          tex_data = nullptr;
-        }
-
+      struct SharedObject : public Texture::SharedObject {
+        SharedObject(size_t w, size_t h, ColourComponent f, ColourType t, int u, const byte_t* d);
         byte_t *tex_data;
         GLvoid *pbo_memory;
+        GLuint tex_buffer;
       };
 
-      GLuint tex_buffer_;
-   
-      std::shared_ptr <SharedObj> obj_;
+      std::shared_ptr <SharedObject> obj_;
 
     };
 

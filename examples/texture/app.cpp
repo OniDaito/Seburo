@@ -23,12 +23,18 @@ void TextureApp::init(){
 
     addWindowListener(this);
 
+    glEnable(GL_TEXTURE_RECTANGLE);
+    glEnable(GL_TEXTURE_2D);
+
     quad_ = Quad(1.0,1.0);
     texture_ = Texture( Image(s9::File("./data/astley.jpg")) );
     rotation_ = 0;
     camera_ = Camera(glm::vec3(0,0,-6.0f));
 
-    node_.add(quad_).add(shader_).add(texture_).add(camera_);
+    node_.add(quad_).add(camera_);
+
+    shader_.bind();
+    texture_.bind();
    
 }
 
@@ -53,7 +59,6 @@ void TextureApp::display(double_t dt){
 
     node_.setMatrix(mat);
     node_.draw();
-
 }
 
 

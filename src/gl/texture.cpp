@@ -22,30 +22,43 @@ using namespace s9::gl;
  * \todo - Need more options! A lot more options! :O
  */
 
-Texture::Texture(size_t width, size_t height, ColourComponent format, ColourType type, int unit, const byte_t* data) {
-  
+Texture::Texture(size_t width, size_t height, ColourComponent format, ColourType type, int unit, const byte_t* data) 
+  : obj_ (shared_ptr<SharedObject>(new SharedObject(width, height, format, type, unit, data))){
+ 
+}
+
+Texture::SharedObject::SharedObject(size_t w, size_t h, ColourComponent f, ColourType t, int u, const byte_t* d) {
+
   assert (width > 0);
   assert (height > 0);
 
-  width_ = width;
-  height_ = height;
-  format_ = format;
-  unit_ = unit;
+  width = w;
+  height = h;
+  format = f;
+  unit = u;
 
-  colour_type_ = type;
+  /*GLint ogl = 0;
+  glGetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, &ogl);
+  if (unit_ > ogl){
+    cerr << "SEBURO TEXTURE Error - Unit is greater than GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS." << endl;
+  }*/
 
-  glGenTextures(1, &(id_));
+  colour_type = t;
+
+  glGenTextures(1, &(id));
+
+  cout << "Tex ID: " << id << endl;
 
   // Automatic detection of power of two.
 
-  if (((width_ & (~width_ + 1)) == width_) && ((height_ & (~height_ + 1)) == height_))
-    gl_type_ = GL_TEXTURE_2D;
+  if (((width & (~width + 1)) == width) && ((height & (~height + 1)) == height))
+    gl_type = GL_TEXTURE_2D;
   else 
-    gl_type_ = GL_TEXTURE_RECTANGLE;
+    gl_type = GL_TEXTURE_RECTANGLE;
 
   GLenum tt = GL_UNSIGNED_BYTE;
 
-  switch (type){
+  switch (t){
     case UNSIGNED_BYTE:
       tt = GL_UNSIGNED_BYTE;
     break;
@@ -60,28 +73,28 @@ Texture::Texture(size_t width, size_t height, ColourComponent format, ColourType
   }
 
 
-  glBindTexture(gl_type_, id_);
+  glBindTexture(gl_type, id);
   
-  switch(format){
+  switch(f){
     case RGB:
-      glTexImage2D(gl_type_, 0, GL_RGB, width, height, 0, GL_RGB, tt, data);
+      glTexImage2D(gl_type, 0, GL_RGB, width, height, 0, GL_RGB, tt, d);
       break;
     
     case RED:
     case GREY:
-      glTexImage2D(gl_type_, 0, GL_RED, width, height, 0, GL_RED, tt, data);
+      glTexImage2D(gl_type, 0, GL_RED, width, height, 0, GL_RED, tt, d);
       break;
 
     case BGR:
-      glTexImage2D(gl_type_, 0, GL_RGB, width, height, 0, GL_BGR, tt, data);
+      glTexImage2D(gl_type, 0, GL_RGB, width, height, 0, GL_BGR, tt, d);
     break;
 
     case BGRA:
-      glTexImage2D(gl_type_, 0, GL_RGBA, width, height, 0, GL_BGRA, tt, data);
+      glTexImage2D(gl_type, 0, GL_RGBA, width, height, 0, GL_BGRA, tt, d);
     break;
     
     case RGBA:
-      glTexImage2D(gl_type_, 0, GL_RGBA, width, height, 0, GL_RGBA, tt, data);
+      glTexImage2D(gl_type, 0, GL_RGBA, width, height, 0, GL_RGBA, tt, d);
       break;
     
     default:
@@ -101,78 +114,24 @@ Texture::Texture(const Image &image, int unit){
   assert (image.width() > 0);
   assert (image.height() > 0);
 
-  width_ = image.width();
-  height_ = image.height();
-  unit_ = unit;
-
-  glGenTextures(1, &(id_));
-  CXGLERROR
-
-  // Automatic detection of power of two.
-  if (((width_ & (~width_ + 1)) == width_) && ((height_ & (~height_ + 1)) == height_))
-    gl_type_ = GL_TEXTURE_2D;
-  else 
-    gl_type_ = GL_TEXTURE_RECTANGLE;
-
-  ///\todo This affects global texture state :S
-  glPixelStorei(GL_UNPACK_ROW_LENGTH, width_);
-  glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-  glBindTexture(gl_type_, id_);
-
-  ///\todo BGRA or RGBA or what?
-  ///\todo also could do with the datatype as well
-  GLenum tc = GL_UNSIGNED_BYTE;
-  colour_type_ = image.colour_type();
-
-  switch (image.colour_type()) {
-    case UNSIGNED_BYTE:
-      tc = GL_UNSIGNED_BYTE;
-    break;
-
-    case FLOAT:
-      tc = GL_FLOAT;
-    break;
-
-    default:
-      tc = GL_UNSIGNED_BYTE;
-    break;
-  }
-  CXGLERROR
-
-  switch (image.component()){
-    case RGB:
-      format_ = RGB;
-      glTexImage2D(gl_type_, 0, GL_RGB, width_, height_, 0, GL_RGB, tc, image.image_data());
-    break;
-    case RGBA:
-      format_ = RGBA;
-      glTexImage2D(gl_type_, 0, GL_RGBA, width_, height_, 0, GL_RGBA, tc, image.image_data());
-    break;
-    case BGR:
-      format_ = BGR;
-      glTexImage2D(gl_type_, 0, GL_RGB, width_, height_, 0, GL_BGR, tc, image.image_data());
-    break;
-    case BGRA:
-      format_ = BGRA;
-      glTexImage2D(gl_type_, 0, GL_RGBA, width_, height_, 0, GL_BGRA, tc, image.image_data());
-    break;
-    case RED:
-    case GREY:
-      format_ = RED;
-      glTexImage2D(gl_type_, 0, GL_RED, width_, height_, 0, GL_RED, tc, image.image_data());
-    break;
-  }
+  obj_ = shared_ptr<SharedObject>(new SharedObject(image.width(), image.height(), 
+      image.component(), image.colour_type(), unit, image.image_data()));
 
   CXGLERROR
 
 }
+
+Texture::SharedObject::~SharedObject() {
+  if (id != 0) glDeleteTextures( 1, &id );
+}
+
 
 void Texture::update(byte_t * data) {
  
   bind();
 
   GLenum tc  = GL_UNSIGNED_BYTE;
-  switch (colour_type_) {
+  switch (obj_->colour_type) {
     case UNSIGNED_BYTE:
       tc = GL_UNSIGNED_BYTE;
     break;
@@ -187,17 +146,17 @@ void Texture::update(byte_t * data) {
   }
 
 
-  switch(format_){
+  switch(obj_->format){
     case RGB:{
-      glTexSubImage2D(gl_type_, 0, 0, 0, width_, height_, GL_RGB, tc, data );    
+      glTexSubImage2D(obj_->gl_type, 0, 0, 0, obj_->width, obj_->height, GL_RGB, tc, data );    
       break;
     }
     case GREY:{
-     glTexSubImage2D(gl_type_, 0, 0, 0, width_, height_,  GL_RED, tc, data );    
+     glTexSubImage2D(obj_->gl_type, 0, 0, 0, obj_->width, obj_->height,  GL_RED, tc, data );    
       break;
     }
     case RGBA: {
-     glTexSubImage2D(gl_type_, 0, 0, 0, width_, height_, GL_RGBA, tc, data );    
+     glTexSubImage2D(obj_->gl_type, 0, 0, 0, obj_->width, obj_->height, GL_RGBA, tc, data );    
       break;
     }
     default: {
@@ -206,7 +165,6 @@ void Texture::update(byte_t * data) {
       break;
     }
   }
-
   
   unbind();
 }
@@ -216,29 +174,38 @@ void Texture::update(byte_t * data) {
  * Bind to texture unit.
  */
 
-void Texture::bind() { glActiveTexture(GL_TEXTURE0 + unit_); glBindTexture(gl_type_, id_); }
+void Texture::bind() { glActiveTexture(GL_TEXTURE0 + obj_->unit); glBindTexture(obj_->gl_type, obj_->id); std::cout << "Binding: " << obj_->id << std::endl;}
 
 /*
  * Unbind
  */
 
-void Texture::unbind(){ glActiveTexture(GL_TEXTURE0 + unit_); glBindTexture(gl_type_, 0); }
+void Texture::unbind(){ glActiveTexture(GL_TEXTURE0 + obj_->unit); glBindTexture(obj_->gl_type, 0); }
 
+
+
+TextureStream::SharedObject::SharedObject(size_t w, size_t h, ColourComponent f, 
+    ColourType t, int u, const byte_t* d) : Texture::SharedObject(w, h, f, t, u, d) {
+  pbo_memory = nullptr;
+  tex_data = nullptr;
+}
 
 /*
  * Texture Streamer with a pointer to some memory we stream in
  * \todo eventually pass in an image that can change (when images replace byte_t arrays)
  */
 
+
 TextureStream::TextureStream(size_t width, size_t height, ColourComponent format, 
-    ColourType type, int unit, const byte_t* data) : Texture(width,height,format,type,unit,data),
-    obj_( shared_ptr<SharedObj> (new SharedObj())){
+    ColourType type, int unit, const byte_t* data) : Texture() {
+
+  obj_ = shared_ptr<SharedObject>(new SharedObject(width,height,format,type,unit,data));
 
   bind();
 
-  glGenBuffers(1, &(tex_buffer_));
-  glBindBuffer(GL_PIXEL_UNPACK_BUFFER, tex_buffer_);
-  int texsize = width_ * height_;
+  glGenBuffers(1, &(obj_->tex_buffer));
+  glBindBuffer(GL_PIXEL_UNPACK_BUFFER, obj_->tex_buffer);
+  int texsize = obj_->width * obj_->height;
 
   ///\todo assuming unsigned byte?
   switch (format){
@@ -278,16 +245,16 @@ void TextureStream::update(byte_t *data){
   if (data == nullptr)
     return;
 
-  int texsize = width_ * height_;
+  int texsize = obj_->width * obj_->height;
   bind();
 
-  glBindBuffer(GL_PIXEL_UNPACK_BUFFER, tex_buffer_);
+  glBindBuffer(GL_PIXEL_UNPACK_BUFFER, obj_->tex_buffer);
 
   obj_->pbo_memory = glMapBuffer(GL_PIXEL_UNPACK_BUFFER, GL_WRITE_ONLY);
   CXGLERROR
 
   GLenum tc  = GL_UNSIGNED_BYTE;
-  switch (colour_type_) {
+  switch (obj_->colour_type) {
     case UNSIGNED_BYTE:
       tc = GL_UNSIGNED_BYTE;
     break;
@@ -301,15 +268,14 @@ void TextureStream::update(byte_t *data){
     break;
   }
 
-
-  switch (format_){
+  switch (obj_->format){
     
     case RGBA:
     case BGRA:
       memcpy(obj_->pbo_memory, data, texsize * 4);
       CXGLERROR
       glUnmapBuffer(GL_PIXEL_UNPACK_BUFFER);
-      glTexSubImage2D(gl_type_, 0, 0, 0, width_, height_,GL_RGBA, tc, 0);
+      glTexSubImage2D(obj_->gl_type, 0, 0, 0, obj_->width, obj_->height,GL_RGBA, tc, 0);
       break;
     
     case RGB:
@@ -317,7 +283,7 @@ void TextureStream::update(byte_t *data){
       memcpy(obj_->pbo_memory, data, texsize * 3);
       CXGLERROR
       glUnmapBuffer(GL_PIXEL_UNPACK_BUFFER);
-      glTexSubImage2D(gl_type_, 0, 0, 0, width_, height_, GL_RGB, tc, 0);
+      glTexSubImage2D(obj_->gl_type, 0, 0, 0, obj_->width, obj_->height, GL_RGB, tc, 0);
 
       CXGLERROR
       break;
@@ -326,7 +292,7 @@ void TextureStream::update(byte_t *data){
     case RED:
       memcpy(obj_->pbo_memory, data, texsize);
       glUnmapBuffer(GL_PIXEL_UNPACK_BUFFER);
-      glTexSubImage2D(gl_type_, 0, 0, 0, width_, height_, GL_RED, tc, 0);
+      glTexSubImage2D(obj_->gl_type, 0, 0, 0, obj_->width, obj_->height, GL_RED, tc, 0);
 
       CXGLERROR
       break;
@@ -340,9 +306,5 @@ void TextureStream::update(byte_t *data){
   glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0);
   unbind();
   CXGLERROR
-}
-
-TextureStream::~TextureStream() {
-
 }
 
