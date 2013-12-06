@@ -46,6 +46,9 @@ Texture::SharedObject::SharedObject(size_t w, size_t h, ColourComponent f, Colou
   colour_type = t;
 
   glGenTextures(1, &(id));
+  
+  glPixelStorei(GL_UNPACK_ROW_LENGTH, width);
+  glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
   cout << "Tex ID: " << id << endl;
 
