@@ -59,6 +59,8 @@ Texture::SharedObject::SharedObject(size_t w, size_t h, ColourComponent f, Colou
 
   GLenum tt = GL_UNSIGNED_BYTE;
 
+  glBindTexture(gl_type, id);
+
   switch (t){
     case UNSIGNED_BYTE:
       tt = GL_UNSIGNED_BYTE;
@@ -72,38 +74,67 @@ Texture::SharedObject::SharedObject(size_t w, size_t h, ColourComponent f, Colou
       tt = GL_UNSIGNED_BYTE;
     break;
   }
-  CXGLERROR
-
-  glBindTexture(gl_type, id);
   
+  GLuint tfa = GL_RGB;
+  GLuint tfb = GL_RGB;
+
+  GLuint storage_type = GL_RGB8;
+
   switch(f){
     case RGB:
-      glTexImage2D(gl_type, 0, GL_RGB, width, height, 0, GL_RGB, tt, d);
+      tfa = tfb = GL_RGB;
+      if (t == UNSIGNED_BYTE)
+        storage_type = GL_RGB8; ///\todo signed or unsigned here ? :S
+      if (t == FLOAT)
+        storage_type = GL_RGB32F; ///\todo is FLOAT always 32 bit? Cx that
       break;
     
     case RED:
     case GREY:
-      glTexImage2D(gl_type, 0, GL_RED, width, height, 0, GL_RED, tt, d);
+      tfa = tfb = GL_RED;
+      if (t == UNSIGNED_BYTE)
+        storage_type = GL_R8;
+      if (t == FLOAT)
+        storage_type = GL_R32F; 
       break;
 
     case BGR:
-      glTexImage2D(gl_type, 0, GL_RGB, width, height, 0, GL_BGR, tt, d);
-    break;
+      tfb = GL_BGR;
+      if (t == UNSIGNED_BYTE)
+        storage_type = GL_RGB8;
+      if (t == FLOAT)
+        storage_type = GL_RGB32F; 
+      break;
 
     case BGRA:
-      glTexImage2D(gl_type, 0, GL_RGBA, width, height, 0, GL_BGRA, tt, d);
-    break;
+      tfa = GL_RGBA; tfb = GL_BGRA;
+      if (t == UNSIGNED_BYTE)
+        storage_type = GL_RGBA8;
+      if (t == FLOAT)
+        storage_type = GL_RGBA32F; 
+      break;
     
     case RGBA:
-      glTexImage2D(gl_type, 0, GL_RGBA, width, height, 0, GL_RGBA, tt, d);
+      tfa = tfb = GL_RGBA;
+      if (t == UNSIGNED_BYTE)
+        storage_type = GL_RGBA8;
+      if (t == FLOAT)
+        storage_type = GL_RGBA32F; 
       break;
     
     default:
       cerr << "SEBURO ERROR - No Format specified for texture." << endl;
       assert(false);
       break;
-
   }
+
+  // Specify storage if a 2D type.
+  ///\ todo potential for passing mipmap levels?
+
+  glTexStorage2D(gl_type, 1, storage_type, width, height);
+  CXGLERROR
+
+  glTexSubImage2D(gl_type, 0, 0, 0, width, height, tfb, tt, d);
   CXGLERROR
 }
 
