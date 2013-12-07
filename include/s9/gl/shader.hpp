@@ -35,7 +35,7 @@ namespace s9 {
 		};*/
 
 		/**
-		 *
+		 * Shader Clause Template for data references with more than one entry
 		 */
 
 		template <typename T, size_t N>
@@ -57,6 +57,8 @@ namespace s9 {
 			size_t size;
 
 		};
+
+
 
 		/**
 		 * Called by nodes to present data to the currently bound shader
@@ -151,7 +153,10 @@ namespace s9 {
 
 			template<size_t N>
 			void sign( ShaderClause<float, N> &c);
+
 			void sign(ShaderClause<float, 1> &c);
+			void sign(ShaderClause<uint, 1> &c);
+			void sign(ShaderClause<int, 1> &c);
 
 		};
 

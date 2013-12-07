@@ -38,13 +38,25 @@ void ShaderVisitor::sign( ShaderClause<float, N> &c) {
 
 void ShaderVisitor::sign( ShaderClause<float, 1> &c) {
 	GLuint l = location(c.name.c_str());
-  glUniform1f( l, c.data); ///\todo test this!
+  glUniform1f( l, c.data);
 }
 
 void ShaderVisitor::sign( ShaderClause<glm::vec4, 1> &c) {
 	GLuint l = location(c.name.c_str());
   glUniform4f( l, c.data.x, c.data.y, c.data.z, c.data.w );
 }
+
+
+void ShaderVisitor::sign( ShaderClause<uint, 1> &c) {
+	GLuint l = location(c.name.c_str());
+  glUniform1ui( l, c.data );
+}
+
+void ShaderVisitor::sign( ShaderClause<int, 1> &c) {
+	GLuint l = location(c.name.c_str());
+  glUniform1i( l, c.data );
+}
+
 
 
 

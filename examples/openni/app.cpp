@@ -49,10 +49,6 @@ void OpenNIApp::init(){
     node_depth_.add(quad_).add(shader_).add(ortho_camera_);
     node_colour_.add(quad_).add(shader_).add(ortho_camera_);
 
-    bytes_ = new byte_t[320 * 240 * 4];
-    memset(bytes_, 255, 320 * 240 * 4);
-
-    texture_ = Texture(320, 240, RGBA, UNSIGNED_BYTE, bytes_);
 
     skeleton_base_ = Skeleton(OPENNI_SKELETON);
     skeleton_shape_ = SkeletonShape(skeleton_base_);

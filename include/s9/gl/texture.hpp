@@ -83,7 +83,7 @@ namespace s9 {
      * updated and then stopped. Potentially could be merged - inherit above
      */
 
-    class TextureStream : public Texture{
+    class SEBUROAPI TextureStream : public Texture{
     public:
       TextureStream() {};
       TextureStream(size_t width, size_t height, ColourComponent format=RGB, ColourType type = UNSIGNED_BYTE, int unit = 0, const byte_t* data = nullptr);

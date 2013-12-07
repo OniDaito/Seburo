@@ -50,9 +50,7 @@ namespace s9{
 
 
     Image(const File &f) : obj_( std::shared_ptr<SharedObj> (new SharedObj())){
-
       obj_->image_data = imageReference( f.path().c_str() );
-
     }
 
     byte_t * image_data() const { return obj_->image_data;}

@@ -24,15 +24,16 @@ void TextureApp::init(){
     addWindowListener(this);
 
     quad_ = Quad(1.0,1.0);
-    texture_ = Texture( Image(s9::File("./data/astley.jpg")) );
+    texture_ = Texture( Image(s9::File("./data/astley.jpg")));
     rotation_ = 0;
     camera_ = Camera(glm::vec3(0,0,-6.0f));
+    unit_ = 0;
 
-    node_.add(quad_).add(shader_).add(texture_).add(camera_);
-   
+    node_.add(quad_).add(shader_).add(texture_).add(camera_).add( gl::ShaderClause<int,1>("uTexSampler0", unit_) );
+
 }
 
-///\todo seems not to want to update member variables :(
+
 void TextureApp::update(double_t dt) {}
 
 

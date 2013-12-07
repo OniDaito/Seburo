@@ -65,7 +65,7 @@ glTexImage2D(GL_TEXTURE_RECTANGLE_ARB, 0, GL_RGBA8, width, height,
                     0, GL_BGRA_EXT, GL_UNSIGNED_INT_8_8_8_8_REV, myData);
 free(myData);*/
 
-    cout << "SEBURO IMAGE: " <<  width_ << "x" << height_ << " bpp: " << bits_per_pixel_ << endl;
+    //cout << "SEBURO IMAGE: " <<  width_ << "x" << height_ << " bpp: " << bits_per_pixel_ << endl;
 
     return data;
 }
@@ -81,9 +81,12 @@ byte_t * Image::imageReference(const char*  imageName){
     // Could potentially be an issue here if SOIL returns a -1 for any of the sizes etc
     byte_t * p = SOIL_load_image(imageName, &w, &h, &channels, SOIL_LOAD_AUTO);
 
+    if( 0 == p )
+        cerr <<  "SEBURO SOIL loading error: " << SOIL_last_result() << endl;
+
     width_ = w;
     height_ = h;
-    
+
     // Assumed?
     colour_type_ = UNSIGNED_BYTE;
 

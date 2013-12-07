@@ -45,11 +45,11 @@ namespace s9 {
 	typedef enum {
 		PREDRAW,
 		SHADER,
-		TEXTURE,
 		POINT_LIGHTS,
 		SKIN_WEIGHTS,
 		SKELETON,
 		CAMERA,
+		TEXTURE,
 		MATRIX,
 		CLAUSE,
 		GEOMETRY
@@ -236,7 +236,7 @@ namespace s9 {
 	public:
 		NodeTexture(gl::Texture t) : NodeBase(TEXTURE), texture_(t) {  };
 		std::string tag() { return "Texture"; }
-		void draw(GeometryPrimitive overide) {	texture_.bind(); }
+		void draw(GeometryPrimitive overide) { texture_.bind(); }
 		void postDraw() {texture_.unbind(); }
 		gl::Texture texture_;
 	};
