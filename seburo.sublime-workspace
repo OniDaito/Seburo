@@ -4,16 +4,220 @@
 		"selected_items":
 		[
 			[
+				"set",
+				"setMatrix(const glm::mat4 &m)	void"
+			],
+			[
+				"rotat",
+				"rotation_relative_	glm::quat"
+			],
+			[
+				"lu",
+				"lupleg"
+			],
+			[
+				"ske",
+				"skeleton_shape_	s9::SkeletonShape"
+			],
+			[
+				"position",
+				"position_pose_	glm::vec3"
+			],
+			[
+				"brit",
+				"british_mat	glm::quat"
+			],
+			[
+				"rot",
+				"rotation_relative_	glm::quat"
+			],
+			[
+				"po",
+				"position_global() const	const glm::vec3"
+			],
+			[
+				"p",
+				"position_global() const	const glm::vec3"
+			],
+			[
+				"Ske",
+				"Skeleton	class"
+			],
+			[
+				"Skel",
+				"SkeletonShape	class"
+			],
+			[
+				"in",
+				"indices	IndicesType[]"
+			],
+			[
+				"fr",
+				"fragColor"
+			],
+			[
+				"Shader",
+				"ShaderClause	size_t"
+			],
+			[
+				"Nde",
+				"NodeBase	class"
+			],
+			[
+				"cla",
+				"clause_	gl::ShaderClause<T, U>"
+			],
+			[
+				"GL_P",
+				"GL_POINT	macro"
+			],
+			[
+				"LINE",
+				"LINE_LOOP	s9::GeometryPrimitive"
+			],
+			[
+				"loc",
+				"local_start	glm::mat4"
+			],
+			[
+				"paren",
+				"parent_	s9::Bone *"
+			],
+			[
+				"local",
+				"local_final	glm::mat4"
+			],
+			[
+				"nu",
+				"num_joints_	size_t"
+			],
+			[
+				"md5",
+				"md5_joint	typedef"
+			],
+			[
+				"aVert",
+				"aVertPosition"
+			],
+			[
+				"glo",
+				"global_rotation() const	const glm::quat"
+			],
+			[
+				"glob",
+				"global_rotation	glm::quat"
+			],
+			[
+				"g",
+				"global_rotation	glm::quat"
+			],
+			[
+				"GL_UNSIGNED_IN",
+				"GL_UNSIGNED_INT_VEC4	macro"
+			],
+			[
+				"uin",
+				"uint16_t	typedef"
+			],
+			[
+				"ui",
+				"uint16_t	typedef"
+			],
+			[
+				"GL_UNS",
+				"GL_UNSIGNED_INT	macro"
+			],
+			[
+				"bone",
+				"bone_position"
+			],
+			[
+				"aVer",
+				"aVertWeightBias"
+			],
+			[
+				"max",
+				"geometry_max_bones"
+			],
+			[
+				"mat",
+				"mat4x2"
+			],
+			[
+				"value_ptr",
+				"value_ptr(const detail::tvec4<T> &vec)	const T *"
+			],
+			[
+				"b",
+				"bones() const	const std::vector<Bone *> &"
+			],
+			[
+				"NodeS",
+				"NodeSkeleton	class"
+			],
+			[
+				"skel",
+				"skeleton_	s9::Skeleton"
+			],
+			[
+				"skele",
+				"Skeleton	class"
+			],
+			[
+				"matr",
+				"matrixToString(const glm::mat4 &mat)	std::string"
+			],
+			[
+				"Nod",
+				"NodeMinimal	class"
+			],
+			[
+				"matri",
+				"matrix_	glm::mat4"
+			],
+			[
+				"clause",
+				"clause_camera_view_	gl::ShaderClause<glm::mat4>"
+			],
+			[
+				"Node",
+				"NodeResponsibility	typedef"
+			],
+			[
+				"vec",
+				"vec3	typedef"
+			],
+			[
+				"ve",
+				"vec3	typedef"
+			],
+			[
+				"frag",
+				"frag_string	std::string"
+			],
+			[
+				"GL_ACTIVE",
+				"GL_ACTIVE_PROGRAM	macro"
+			],
+			[
+				"glGetIntegerv",
+				"glGetIntegeri_v	macro"
+			],
+			[
+				"re",
+				"responsible_	NodeResponsibility"
+			],
+			[
+				"No",
+				"NodeBase	class"
+			],
+			[
 				"bub",
 				"bubble_"
 			],
 			[
 				"sh",
 				"shader"
-			],
-			[
-				"p",
-				"program_"
 			],
 			[
 				"cre",
@@ -48,10 +252,6 @@
 				"SkinIndex"
 			],
 			[
-				"in",
-				"indices"
-			],
-			[
 				"Ski",
 				"SkinWeight"
 			],
@@ -60,20 +260,8 @@
 				"responsible_"
 			],
 			[
-				"Nod",
-				"NodeMinimal"
-			],
-			[
 				"NodeBase",
 				"NodeBasePtr"
-			],
-			[
-				"re",
-				"responsible_"
-			],
-			[
-				"Node",
-				"NodePtr"
 			],
 			[
 				"image",
@@ -292,10 +480,6 @@
 				"xaxis"
 			],
 			[
-				"set",
-				"setPos"
-			],
-			[
 				"sun",
 				"sunCirclePoint"
 			],
@@ -330,312 +514,32 @@
 			[
 				"strin",
 				"string_height"
-			],
-			[
-				"ned",
-				"needle_model"
-			],
-			[
-				"black",
-				"black_end"
-			],
-			[
-				"need",
-				"needle_model"
-			],
-			[
-				"mu",
-				"multScalar"
-			],
-			[
-				"mean",
-				"meanAux"
-			],
-			[
-				"date",
-				"datestring"
-			],
-			[
-				"po",
-				"position"
-			],
-			[
-				"t",
-				"thickness"
-			],
-			[
-				"start",
-				"startUp"
-			],
-			[
-				"string",
-				"string_nodes"
-			],
-			[
-				"se",
-				"seglength"
-			],
-			[
-				"_ma",
-				"_makeSegments"
-			],
-			[
-				"moon",
-				"moon_latitude"
-			],
-			[
-				"cur",
-				"current_state"
-			],
-			[
-				"add",
-				"addItem"
-			],
-			[
-				"item",
-				"itemCompleted"
-			],
-			[
-				"complet",
-				"completed_items"
-			],
-			[
-				"D",
-				"DEPTH_TEST"
-			],
-			[
-				"cub",
-				"cube_thin"
-			],
-			[
-				"mer",
-				"mercuryDeferentPosition"
-			],
-			[
-				"bl",
-				"black_end"
-			],
-			[
-				"signal",
-				"signal_progress"
-			],
-			[
-				"Co",
-				"CoffeeGL"
-			],
-			[
-				"ac",
-				"_activate"
-			],
-			[
-				"dr",
-				"dragging"
-			],
-			[
-				"pi",
-				"picked_item"
-			],
-			[
-				"eq",
-				"equants"
-			],
-			[
-				"de",
-				"deferents"
-			],
-			[
-				"ad",
-				"advance_date"
-			],
-			[
-				"whit",
-				"white_end"
-			],
-			[
-				"Eq",
-				"EquatorieInteract"
-			],
-			[
-				"dat",
-				"datgui"
-			],
-			[
-				"epoc",
-				"epoch_julian"
-			],
-			[
-				"_lo",
-				"_loadPicking"
-			],
-			[
-				"sig",
-				"sig_basic"
-			],
-			[
-				"deg",
-				"degToRad"
-			],
-			[
-				"ca",
-				"calculateDeferentPosition"
-			],
-			[
-				"base",
-				"base_radius"
-			],
-			[
-				"cal",
-				"calculateParallel"
-			],
-			[
-				"calculateEpi",
-				"calculateInitialEpicyclePosition"
-			],
-			[
-				"ch",
-				"chosen_planet"
-			],
-			[
-				"chose",
-				"chosen_planet"
-			],
-			[
-				"to",
-				"degToRad"
-			],
-			[
-				"calcu",
-				"calculateEpicyclePosition"
-			],
-			[
-				"blc",
-				"black_string"
-			],
-			[
-				"whi",
-				"white_string"
 			]
 		]
 	},
 	"buffers":
 	[
 		{
-			"file": "examples/basic/app.hpp",
-			"settings":
-			{
-				"buffer_size": 930,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "include/s9/shapes.hpp",
-			"settings":
-			{
-				"buffer_size": 3376,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "include/s9/md5.hpp",
-			"settings":
-			{
-				"buffer_size": 2107,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "include/s9/node.hpp",
-			"settings":
-			{
-				"buffer_size": 4911,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "src/md5.cpp",
-			"settings":
-			{
-				"buffer_size": 6907,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "include/s9/skeleton.hpp",
-			"settings":
-			{
-				"buffer_size": 3463,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "src/skeleton.cpp",
-			"settings":
-			{
-				"buffer_size": 2142,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "src/node.cpp",
-			"settings":
-			{
-				"buffer_size": 2126,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "/Users/oni/Library/Application Support/Sublime Text 2/Packages/SublimeClang/SublimeClang.sublime-settings",
-			"settings":
-			{
-				"buffer_size": 13516,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "examples/md5/app.hpp",
-			"settings":
-			{
-				"buffer_size": 1036,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "examples/texture/app.cpp",
-			"settings":
-			{
-				"buffer_size": 2030,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "examples/md5/app.cpp",
-			"settings":
-			{
-				"buffer_size": 2276,
-				"line_ending": "Unix"
-			}
-		},
-		{
 			"file": "include/s9/gl/drawable.hpp",
 			"settings":
 			{
-				"buffer_size": 9444,
+				"buffer_size": 12986,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "src/gl/texture.cpp",
+			"file": "shaders/3/skinning.glsl",
 			"settings":
 			{
-				"buffer_size": 7057,
+				"buffer_size": 2352,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "src/shapes.cpp",
+			"file": "shaders/3/solid_colour.glsl",
 			"settings":
 			{
-				"buffer_size": 3363,
+				"buffer_size": 837,
 				"line_ending": "Unix"
 			}
 		},
@@ -643,95 +547,119 @@
 			"file": "include/s9/primitives.hpp",
 			"settings":
 			{
-				"buffer_size": 2802,
+				"buffer_size": 3997,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "src/gl/shader.cpp",
+			"file": "include/s9/md5.hpp",
 			"settings":
 			{
-				"buffer_size": 6256,
+				"buffer_size": 2252,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "include/s9/utils.hpp",
+			"file": "include/s9/skeleton.hpp",
 			"settings":
 			{
-				"buffer_size": 3490,
+				"buffer_size": 7819,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "include/s9/s9xml.hpp",
+			"file": "src/md5.cpp",
 			"settings":
 			{
-				"buffer_size": 1170,
+				"buffer_size": 8982,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "src/s9xml.cpp",
+			"file": "include/s9/node.hpp",
 			"settings":
 			{
-				"buffer_size": 3114,
+				"buffer_size": 9015,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "src/camera.cpp",
+			"file": "src/node.cpp",
 			"settings":
 			{
-				"buffer_size": 1704,
+				"buffer_size": 8016,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "examples/texture/app.hpp",
+			"file": "examples/md5/app.cpp",
 			"settings":
 			{
-				"buffer_size": 1025,
+				"buffer_size": 3623,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "include/s9/image.hpp",
+			"file": "include/s9/composite_shapes.hpp",
 			"settings":
 			{
-				"buffer_size": 1829,
+				"buffer_size": 1222,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "src/image.cpp",
+			"file": "src/skeleton.cpp",
 			"settings":
 			{
-				"buffer_size": 2478,
+				"buffer_size": 6039,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "include/s9/gl/texture.hpp",
+			"file": "data/boblampclean.md5anim",
 			"settings":
 			{
-				"buffer_size": 2391,
+				"buffer_size": 283134,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "include/s9/string_utils.hpp",
+			"settings":
+			{
+				"buffer_size": 3580,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "src/gl/video.cpp",
+			"file": "include/s9/shapes.hpp",
 			"settings":
 			{
-				"buffer_size": 4219,
+				"buffer_size": 5935,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "shaders/3/quad_texture.frag",
+			"file": "include/s9/common.hpp",
 			"settings":
 			{
-				"buffer_size": 453,
+				"buffer_size": 1360,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "include/s9/math_utils.hpp",
+			"settings":
+			{
+				"buffer_size": 405,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "include/s9/geometry.hpp",
+			"settings":
+			{
+				"buffer_size": 6678,
 				"line_ending": "Unix"
 			}
 		},
@@ -739,7 +667,142 @@
 			"file": "include/s9/gl/shader.hpp",
 			"settings":
 			{
-				"buffer_size": 1482,
+				"buffer_size": 5682,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/shapes.cpp",
+			"settings":
+			{
+				"buffer_size": 10437,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/composite_shapes.cpp",
+			"settings":
+			{
+				"buffer_size": 4364,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"settings":
+			{
+				"buffer_size": 0,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "examples/basic/app.hpp",
+			"settings":
+			{
+				"buffer_size": 926,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "examples/md5/app.hpp",
+			"settings":
+			{
+				"buffer_size": 1210,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "data/hellknight.md5mesh",
+			"settings":
+			{
+				"buffer_size": 404306,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "doc/html/skeleton_8cpp.html",
+			"settings":
+			{
+				"buffer_size": 7065,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/gl/shader.cpp",
+			"settings":
+			{
+				"buffer_size": 8209,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "examples/basic/app.cpp",
+			"settings":
+			{
+				"buffer_size": 2099,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "doc/latex/classs9_1_1Node.eps",
+			"settings":
+			{
+				"buffer_size": 3782,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "include/s9/gl/utils.hpp",
+			"settings":
+			{
+				"buffer_size": 1279,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "data/test_bones.md5mesh",
+			"settings":
+			{
+				"buffer_size": 144696,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "todo.md",
+			"settings":
+			{
+				"buffer_size": 1613,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "shaders/3/quad.vert",
+			"settings":
+			{
+				"buffer_size": 588,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "shaders/3/quad.frag",
+			"settings":
+			{
+				"buffer_size": 138,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/camera.cpp",
+			"settings":
+			{
+				"buffer_size": 3277,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "examples/oculus/app.cpp",
+			"settings":
+			{
+				"buffer_size": 2084,
 				"line_ending": "Unix"
 			}
 		}
@@ -780,48 +843,74 @@
 	},
 	"file_history":
 	[
+		"/Users/oni/Projects/Seburo/data/hellknight.md5mesh",
+		"/Users/oni/Projects/Seburo/src/gl/texture.cpp",
+		"/Users/oni/Projects/Seburo/src/shapes.cpp",
+		"/Users/oni/Projects/Seburo/src/camera.cpp",
 		"/Users/oni/Projects/Seburo/include/s9/shapes.hpp",
-		"/Users/oni/Projects/Seburo/include/s9/primitives.hpp",
-		"/Users/oni/Projects/Seburo/include/s9/gl/drawable.hpp",
-		"/Users/oni/Projects/Seburo/include/s9/geometry.hpp",
-		"/Users/oni/Projects/Seburo/CMakeLists.txt",
-		"/Users/oni/Projects/Seburo/include/s9/node.hpp",
-		"/Users/oni/Projects/Seburo/examples/texture/CMakeLists.txt",
-		"/Users/oni/Projects/Seburo/include/s9/gl/texture.hpp",
-		"/Users/oni/Projects/Seburo/include/s9/file.hpp",
+		"/Users/oni/Projects/Seburo/examples/texture/app.hpp",
+		"/Users/oni/Projects/Seburo/examples/texture/app.cpp",
 		"/Users/oni/Projects/Seburo/include/s9/image.hpp",
 		"/Users/oni/Projects/Seburo/src/image.cpp",
-		"/Users/oni/Projects/Seburo/src/shapes.cpp",
+		"/Users/oni/Projects/Seburo/include/s9/gl/texture.hpp",
+		"/Users/oni/Projects/Seburo/src/gl/video.cpp",
+		"/Users/oni/Projects/Seburo/shaders/3/quad_texture.frag",
+		"/Users/oni/Projects/Seburo/shaders/3/skinning.glsl",
+		"/Users/oni/Projects/Seburo/include/s9/md5.hpp",
+		"/Users/oni/Projects/Seburo/include/s9/skeleton.hpp",
+		"/Users/oni/Projects/Seburo/src/skeleton.cpp",
+		"/Users/oni/Projects/Seburo/src/md5.cpp",
+		"/Users/oni/Projects/Seburo/include/s9/node.hpp",
+		"/Users/oni/Projects/Seburo/examples/md5/app.cpp",
+		"/Users/oni/Projects/Seburo/include/s9/gl/drawable.hpp",
+		"/Users/oni/Projects/Seburo/include/s9/gl/shader.hpp",
+		"/Users/oni/Projects/Seburo/include/s9/camera.hpp",
+		"/Users/oni/Projects/Seburo/src/gl/shader.cpp",
+		"/Users/oni/Projects/Seburo/examples/basic/app.cpp",
+		"/Users/oni/Projects/Seburo/examples/md5/app.hpp",
+		"/Users/oni/Projects/Seburo/examples/basic/app.hpp",
+		"/Users/oni/Projects/Seburo/shaders/3/quad.vert",
+		"/Users/oni/Projects/Seburo/src/geometry.cpp",
+		"/Users/oni/Projects/Seburo/doc/html/files.html",
+		"/Users/oni/Projects/Seburo/include/s9/file.hpp",
+		"/Users/oni/Projects/Seburo/src/file.cpp",
+		"/Users/oni/Projects/Seburo/include/s9/primitives.hpp",
+		"/Users/oni/Projects/Seburo/include/s9/common.hpp",
+		"/Users/oni/Projects/Seburo/include/s9/gl/common.hpp",
+		"/Users/oni/Projects/Seburo/include/s9/compiler_utils.hpp",
+		"/Users/oni/Projects/Seburo/include/s9/geometry.hpp",
+		"/Users/oni/Projects/Seburo/src/node.cpp",
+		"/Users/oni/Library/Application Support/Sublime Text 2/Packages/SublimeClang/SublimeClang.sublime-settings",
+		"/Users/oni/Projects/Seburo/seburo.sublime-project",
+		"/Users/oni/Projects/Seburo/include/s9/string_utils.hpp",
+		"/Users/oni/Projects/Seburo/include/s9/s9xml.hpp",
+		"/Users/oni/Projects/Seburo/src/s9xml.cpp",
+		"/Users/oni/Projects/Seburo/examples/oculus/app.cpp",
+		"/Users/oni/Projects/Seburo/src/gl/glfw_app.cpp",
+		"/Users/oni/Projects/Seburo/include/s9/openni/openni.hpp",
+		"/Users/oni/Projects/Seburo/examples/oculus/app.hpp",
+		"/Users/oni/Projects/Seburo/examples/openni/app.hpp",
+		"/Users/oni/Projects/Seburo/include/s9/gl/asset.hpp",
+		"/Users/oni/Projects/Seburo/include/s9/gl/utils.hpp",
+		"/Users/oni/Projects/Seburo/todo.md",
+		"/Users/oni/Projects/Seburo/src/gl/drawable.cpp",
+		"/Users/oni/Projects/Seburo/shaders/3/quad_texture.vert",
+		"/Users/oni/Projects/Seburo/CMakeLists.txt",
+		"/Users/oni/Projects/Seburo/examples/texture/CMakeLists.txt",
 		"/Users/oni/Projects/Seburo/src/gl/fbo.cpp",
-		"/Users/oni/Projects/Seburo/src/gl/texture.cpp",
 		"/Users/oni/Projects/Seburo/include/assimp/texture.h",
 		"/Users/oni/Projects/Seburo/include/s9/gl/video.hpp",
-		"/Users/oni/Projects/Seburo/src/node.cpp",
-		"/Users/oni/Projects/Seburo/include/s9/skeleton.hpp",
-		"/Users/oni/Projects/Seburo/examples/basic/app.cpp",
-		"/Users/oni/Projects/Seburo/examples/basic/app.hpp",
 		"/Users/oni/Projects/Seburo/src/osx/image.cpp",
 		"/Users/oni/Projects/Seburo/include/s9/osx/image.hpp",
-		"/Users/oni/Projects/Seburo/src/file.cpp",
-		"/Users/oni/Projects/Seburo/examples/texture/app.cpp",
-		"/Users/oni/Projects/Seburo/examples/texture/app.hpp",
 		"/Users/oni/Projects/Seburo/src/openni/openni.cpp",
 		"/Users/oni/Projects/Seburo/src/osx/quicktime_capture.cpp",
 		"/Users/oni/Projects/Seburo/include/s9/utils.hpp",
-		"/Users/oni/Projects/Seburo/include/s9/camera.hpp",
 		"/Users/oni/Projects/Seburo/include/s9/visualapp.hpp",
-		"/Users/oni/Projects/Seburo/src/geometry.cpp",
-		"/Users/oni/Projects/Seburo/shaders/3/quad.vert",
 		"/Users/oni/Projects/Seburo/shaders/3/quad.frag",
 		"/Users/oni/Projects/Seburo/examples/openni/app.cpp",
-		"/Users/oni/Projects/Seburo/src/gl/drawable.cpp",
 		"/Users/oni/Projects/OpenNI2/Samples/SimpleViewer/Viewer.cpp",
-		"/Users/oni/Projects/Seburo/src/camera.cpp",
-		"/Users/oni/Projects/Seburo/src/gl/glfw_app.cpp",
 		"/Users/oni/Projects/Seburo/include/s9/asset.hpp",
-		"/Users/oni/Projects/Seburo/include/s9/common.hpp",
 		"/Users/oni/Projects/Seburo/include/s9/events.hpp",
-		"/Users/oni/Projects/Seburo/src/gl/shader.cpp",
 		"/Users/oni/Projects/Seburo/include/s9/gl/glfw_app.hpp",
 		"/Users/oni/Projects/Seburo/include/s9/gl/shapes.hpp",
 		"/Users/oni/Projects/Seburo/README.md",
@@ -829,9 +918,7 @@
 		"/Users/oni/Projects/Seburo/src/wingedge.cpp",
 		"/Users/oni/Projects/Seburo/include/s9/geometry.old",
 		"/Users/oni/Projects/Seburo/src/asset.old",
-		"/Users/oni/Projects/Seburo/examples/openni/app.hpp",
 		"/Users/oni/Projects/Seburo/examples/openni/CMakeLists.txt",
-		"/Users/oni/Projects/Seburo/include/s9/openni/openni.hpp",
 		"/Users/oni/Projects/Seburo/build/osx_paths.sh",
 		"/Users/oni/Projects/ManchesterPhantomLimb/xcode/include/CinderOpenNI.h",
 		"/Users/oni/Projects/NiTE-2.2/Samples/SimpleUserTracker/main.cpp",
@@ -840,7 +927,6 @@
 		"/Users/oni/Projects/NiTE-2.2/Samples/UserViewer/Viewer.cpp",
 		"/Users/oni/Projects/NiTE-2.2/Samples/UserViewer/Viewer.h",
 		"/Users/oni/Projects/Seburo/include/s9/gl/fbo.hpp",
-		"/Users/oni/Projects/Seburo/todo.md",
 		"/Users/oni/Projects/OpenNI2/Samples/SimpleViewer/Viewer.h",
 		"/Users/oni/Projects/OpenNI2/Samples/SimpleViewer/main.cpp",
 		"/Users/oni/Projects/OpenNI2/Samples/SimpleViewer/OniSampleUtilities.h",
@@ -857,7 +943,6 @@
 		"/Users/oni/Projects/Seburo/applications/touchwall/include/app.hpp",
 		"/Users/oni/Projects/Seburo/include/s9/cvprocess.hpp",
 		"/Users/oni/Projects/Seburo/include/s9/primitive.hpp",
-		"/Users/oni/Projects/Seburo/include/s9/s9xml.hpp",
 		"/Users/oni/Projects/Seburo/include/s9/state.hpp",
 		"/Users/oni/Projects/Seburo/src/asset.cpp",
 		"/Users/oni/Projects/Seburo/scripts/osx_paths.sh",
@@ -867,13 +952,7 @@
 		"/Users/oni/Projects/Seburo/examples/video/CMakeLists.txt",
 		"/Users/oni/Projects/Seburo/examples/picking/app.cpp",
 		"/Users/oni/Projects/Seburo/examples/video/app.cpp",
-		"/Users/oni/Projects/Seburo/src/gl/video.cpp",
-		"/Users/oni/Projects/Seburo/src/s9xml.cpp",
-		"/Users/oni/Projects/Seburo/include/s9/gl/utils.hpp",
-		"/Users/oni/Projects/Seburo/shaders/3/quad_texture.frag",
 		"/Users/oni/Projects/OpenGLCourse/CMakeLists.txt",
-		"/Users/oni/Projects/Seburo/include/s9/gl/asset.hpp",
-		"/Users/oni/Projects/Seburo/include/s9/gl/shader.hpp",
 		"/Users/oni/Projects/s9blog/key.html",
 		"/Users/oni/Projects/Equatorie/html/js/bootstrap-datepicker.js",
 		"/Users/oni/Projects/Equatorie/html/shaders/background.glsl",
@@ -891,23 +970,7 @@
 		"/Users/oni/Downloads/Makefile",
 		"/Users/oni/Projects/Equatorie/build/equatorie.js",
 		"/Users/oni/Projects/Equatorie/src/equatorie.coffee",
-		"/Users/oni/Projects/matrix/inverse_index_lab.py",
-		"/Users/oni/Projects/PythonCourse/bomberman/part2/part2.py",
-		"/Users/oni/Projects/PythonCourse/bomberman/part3/part3.py",
-		"/Users/oni/Projects/PythonCourse/bomberman/part5/level.py",
-		"/Users/oni/Projects/PythonCourse/bomberman/part6/level.py",
-		"/Users/oni/Projects/PythonCourse/bomberman/part7/level.py",
-		"/Users/oni/Projects/PythonCourse/bomberman/part8/level.py",
-		"/Users/oni/Projects/PythonCourse/bomberman_solutions/part1/part1.py",
-		"/Users/oni/Projects/PythonCourse/bomberman_solutions/part2/part2.py",
-		"/Users/oni/Projects/PythonCourse/bomberman_solutions/part3/part3.py",
-		"/Users/oni/Projects/PythonCourse/bomberman_solutions/part4/level.py",
-		"/Users/oni/Projects/PythonCourse/bomberman_solutions/part5/level.py",
-		"/Users/oni/Projects/PythonCourse/bomberman_solutions/part6/level.py",
-		"/Users/oni/Projects/PythonCourse/bomberman_solutions/part6/bomberman.py",
-		"/Users/oni/Projects/PythonCourse/bomberman_solutions/part6/square.py",
-		"/Users/oni/Projects/PythonCourse/bomberman_solutions/part7/level.py",
-		"/Users/oni/Projects/PythonCourse/bomberman_solutions/part8/level.py"
+		"/Users/oni/Projects/matrix/inverse_index_lab.py"
 	],
 	"find":
 	{
@@ -935,6 +998,49 @@
 		"case_sensitive": true,
 		"find_history":
 		[
+			"british",
+			"british_quat",
+			"skeleton_",
+			"british_quat",
+			"britis",
+			"brit",
+			"cylinder",
+			"position_absolute_",
+			"rotation_absolute_",
+			"mesh_node",
+			"obj_->",
+			"set_matrix",
+			"set_",
+			"set_matrix",
+			"draw",
+			"relative",
+			"push_back",
+			"parent",
+			"(GLvoid*",
+			"trimesh",
+			"indexed_",
+			"Unable to open text file",
+			"camera",
+			"sort",
+			"_init",
+			"push_front",
+			"_init()",
+			"cloned",
+			"brewed",
+			"sign()",
+			"signt()",
+			"contract_",
+			"cout",
+			"obj_->",
+			"obj_->pos = glm::vec3(0,0,1.0);\n	obj_->look = glm::vec3(0,0,0);\n	obj_->near = 0.1f;\n	obj_->far = 100.0f;\n	obj_->ratio = 1.0;\n	obj_->left = 0;\n	obj_->top = 0;\n	obj_->right = 100;\n	obj_->bottom = 100;\n	obj_->field = 55.0f;",
+			"uProjectionMatrix",
+			"projection_matrix",
+			"Tw",
+			"_",
+			"stringstre",
+			"add",
+			"->node",
+			"location",
 			"split_string",
 			"isCompiled_FS",
 			"isCompiled_VS",
@@ -1019,50 +1125,7 @@
 			"mMX",
 			"vWindows",
 			"mRunning",
-			"();\n",
-			"mRunning",
-			"_update_thread",
-			"CXGLERROR",
-			"_update_thread",
-			"mTitle",
-			"pThis",
-			"mFlag",
-			"mMY",
-			"mMX",
-			"_dt",
-			"])",
-			"&(",
-			"indices_",
-			"vChildren",
-			"mChildren",
-			"mPos",
-			"mViewMatrix",
-			"mProjectionMatrix",
-			"mW",
-			"_sense",
-			"viewmatrix_",
-			"p_rojectionMatrix",
-			"mViewMatrix",
-			"mFlag",
-			"resize",
-			"mP",
-			"mPrev",
-			"mShift",
-			"mZoom",
-			"h_eld",
-			"mDT",
-			"mDegrade",
-			"mAngle",
-			"mNow",
-			"mH",
-			"mW",
-			"_mouse_pre",
-			"_sense",
-			"mUp",
-			"mLook",
-			"mPos",
-			"mR",
-			"mNear"
+			"();\n"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -1070,6 +1133,15 @@
 		"regex": false,
 		"replace_history":
 		[
+			"spike",
+			"position_pose_",
+			"rotation_pose_",
+			"",
+			"setMatrix",
+			"absolute",
+			"push_front",
+			"reinterpret_cast<void*>(",
+			"",
 			"is_compiled_fs",
 			"is_compiled_vs",
 			"vs_",
@@ -1188,16 +1260,7 @@
 			"black_end",
 			"black",
 			"white_end",
-			".jpg",
-			"new CoffeeGL.Colour.WHITE()",
-			"j",
-			"resolution",
-			"add",
-			"chosen_planet",
-			"date",
-			"base_radius",
-			"white",
-			"*"
+			".jpg"
 		],
 		"reverse": false,
 		"show_context": true,
@@ -1208,82 +1271,84 @@
 	"groups":
 	[
 		{
-			"selected": 8,
+			"selected": 20,
 			"sheets":
 			[
 				{
 					"buffer": 0,
-					"file": "examples/basic/app.hpp",
+					"file": "include/s9/gl/drawable.hpp",
 					"settings":
 					{
-						"buffer_size": 930,
+						"buffer_size": 12986,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								234,
-								234
+								9066,
+								9066
 							]
 						],
 						"settings":
 						{
 							"syntax": "Packages/C++/C++.tmLanguage",
-							"translate_tabs_to_spaces": false
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 3874.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 1,
-					"file": "include/s9/shapes.hpp",
+					"file": "shaders/3/skinning.glsl",
 					"settings":
 					{
-						"buffer_size": 3376,
+						"buffer_size": 2352,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								2547,
-								2547
+								885,
+								885
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/C++/C++.tmLanguage",
-							"translate_tabs_to_spaces": false
+							"syntax": "Packages/OpenGL Shading Language (GLSL)/GLSL.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
 						},
-						"translation.x": 1.0,
-						"translation.y": 1010.0,
+						"translation.x": 0.0,
+						"translation.y": 148.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 2,
-					"file": "include/s9/md5.hpp",
+					"file": "shaders/3/solid_colour.glsl",
 					"settings":
 					{
-						"buffer_size": 2107,
+						"buffer_size": 837,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								364,
-								364
+								694,
+								694
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/C++/C++.tmLanguage",
+							"syntax": "Packages/OpenGL Shading Language (GLSL)/GLSL.tmLanguage",
 							"tab_size": 2,
 							"translate_tabs_to_spaces": true
 						},
@@ -1295,18 +1360,18 @@
 				},
 				{
 					"buffer": 3,
-					"file": "include/s9/node.hpp",
+					"file": "include/s9/primitives.hpp",
 					"settings":
 					{
-						"buffer_size": 4911,
+						"buffer_size": 3997,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								2902,
-								2902
+								3282,
+								3282
 							]
 						],
 						"settings":
@@ -1315,25 +1380,25 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 1170.0,
+						"translation.y": 1806.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 4,
-					"file": "src/md5.cpp",
+					"file": "include/s9/md5.hpp",
 					"settings":
 					{
-						"buffer_size": 6907,
+						"buffer_size": 2252,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								5765,
-								5765
+								0,
+								0
 							]
 						],
 						"settings":
@@ -1342,8 +1407,8 @@
 							"tab_size": 2,
 							"translate_tabs_to_spaces": true
 						},
-						"translation.x": 1.0,
-						"translation.y": 2664.0,
+						"translation.x": 0.0,
+						"translation.y": 323.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -1353,15 +1418,15 @@
 					"file": "include/s9/skeleton.hpp",
 					"settings":
 					{
-						"buffer_size": 3463,
+						"buffer_size": 7819,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1293,
-								1293
+								0,
+								0
 							]
 						],
 						"settings":
@@ -1370,26 +1435,26 @@
 							"tab_size": 2,
 							"translate_tabs_to_spaces": true
 						},
-						"translation.x": 1.0,
-						"translation.y": 17.0,
+						"translation.x": 0.0,
+						"translation.y": 2365.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 6,
-					"file": "src/skeleton.cpp",
+					"file": "src/md5.cpp",
 					"settings":
 					{
-						"buffer_size": 2142,
+						"buffer_size": 8982,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1658,
-								1658
+								3594,
+								3594
 							]
 						],
 						"settings":
@@ -1398,100 +1463,72 @@
 							"tab_size": 2,
 							"translate_tabs_to_spaces": true
 						},
-						"translation.x": 8.0,
-						"translation.y": 187.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 7,
-					"file": "src/node.cpp",
-					"settings":
-					{
-						"buffer_size": 2126,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								501,
-								501
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C++.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 35.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 8,
-					"file": "/Users/oni/Library/Application Support/Sublime Text 2/Packages/SublimeClang/SublimeClang.sublime-settings",
-					"settings":
-					{
-						"buffer_size": 13516,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								6086,
-								6265
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/JavaScript/JSON.tmLanguage",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 5.0,
-						"translation.y": 2239.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 9,
-					"file": "examples/md5/app.hpp",
-					"settings":
-					{
-						"buffer_size": 1036,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								390,
-								390
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C++.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
+						"translation.x": 17.0,
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 10,
-					"file": "examples/texture/app.cpp",
+					"buffer": 7,
+					"file": "include/s9/node.hpp",
 					"settings":
 					{
-						"buffer_size": 2030,
+						"buffer_size": 9015,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 3520.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 8,
+					"file": "src/node.cpp",
+					"settings":
+					{
+						"buffer_size": 8016,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 1172.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 9,
+					"file": "examples/md5/app.cpp",
+					"settings":
+					{
+						"buffer_size": 3623,
 						"regions":
 						{
 						},
@@ -1506,6 +1543,34 @@
 						{
 							"syntax": "Packages/C++/C++.tmLanguage",
 							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 39.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 10,
+					"file": "include/s9/composite_shapes.hpp",
+					"settings":
+					{
+						"buffer_size": 1222,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								281,
+								281
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"tab_size": 2,
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
@@ -1516,66 +1581,10 @@
 				},
 				{
 					"buffer": 11,
-					"file": "examples/md5/app.cpp",
+					"file": "src/skeleton.cpp",
 					"settings":
 					{
-						"buffer_size": 2276,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								430,
-								430
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C++.tmLanguage",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 107.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 12,
-					"file": "include/s9/gl/drawable.hpp",
-					"settings":
-					{
-						"buffer_size": 9444,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								840,
-								840
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C++.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 275.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 13,
-					"file": "src/gl/texture.cpp",
-					"settings":
-					{
-						"buffer_size": 7057,
+						"buffer_size": 6039,
 						"regions":
 						{
 						},
@@ -1591,6 +1600,60 @@
 							"syntax": "Packages/C++/C++.tmLanguage",
 							"tab_size": 2,
 							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 1.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 12,
+					"file": "data/boblampclean.md5anim",
+					"settings":
+					{
+						"buffer_size": 283134,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								289,
+								289
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 13,
+					"file": "include/s9/string_utils.hpp",
+					"settings":
+					{
+						"buffer_size": 3580,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								212,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
@@ -1600,78 +1663,77 @@
 				},
 				{
 					"buffer": 14,
-					"file": "src/shapes.cpp",
+					"file": "include/s9/shapes.hpp",
 					"settings":
 					{
-						"buffer_size": 3363,
+						"buffer_size": 5935,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								2251,
-								2251
+								0,
+								0
 							]
 						],
 						"settings":
 						{
 							"syntax": "Packages/C++/C++.tmLanguage",
-							"translate_tabs_to_spaces": false
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 886.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 15,
-					"file": "include/s9/primitives.hpp",
+					"file": "include/s9/common.hpp",
 					"settings":
 					{
-						"buffer_size": 2802,
+						"buffer_size": 1360,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								264,
-								264
+								138,
+								0
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/C++/C++.tmLanguage",
-							"translate_tabs_to_spaces": false
+							"syntax": "Packages/C++/C++.tmLanguage"
 						},
 						"translation.x": 0.0,
-						"translation.y": 89.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 16,
-					"file": "src/gl/shader.cpp",
+					"file": "include/s9/math_utils.hpp",
 					"settings":
 					{
-						"buffer_size": 6256,
+						"buffer_size": 405,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								589,
-								589
+								405,
+								405
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/C++/C++.tmLanguage",
-							"translate_tabs_to_spaces": false
+							"syntax": "Packages/C++/C++.tmLanguage"
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
@@ -1681,37 +1743,38 @@
 				},
 				{
 					"buffer": 17,
-					"file": "include/s9/utils.hpp",
+					"file": "include/s9/geometry.hpp",
 					"settings":
 					{
-						"buffer_size": 3490,
+						"buffer_size": 6678,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1031,
-								1050
+								1255,
+								1255
 							]
 						],
 						"settings":
 						{
 							"syntax": "Packages/C++/C++.tmLanguage",
-							"translate_tabs_to_spaces": false
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 331.0,
+						"translation.y": 1655.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 18,
-					"file": "include/s9/s9xml.hpp",
+					"file": "include/s9/gl/shader.hpp",
 					"settings":
 					{
-						"buffer_size": 1170,
+						"buffer_size": 5682,
 						"regions":
 						{
 						},
@@ -1728,31 +1791,194 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 11.0,
+						"translation.y": 1331.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 19,
-					"file": "src/s9xml.cpp",
+					"file": "src/shapes.cpp",
 					"settings":
 					{
-						"buffer_size": 3114,
+						"buffer_size": 10437,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								398,
-								398
+								3614,
+								3614
 							]
 						],
 						"settings":
 						{
 							"syntax": "Packages/C++/C++.tmLanguage",
 							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 1581.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 20,
+					"file": "src/composite_shapes.cpp",
+					"settings":
+					{
+						"buffer_size": 4364,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1806,
+								1806
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 829.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 21,
+					"settings":
+					{
+						"buffer_size": 0,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 22,
+					"file": "examples/basic/app.hpp",
+					"settings":
+					{
+						"buffer_size": 926,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								408,
+								408
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 23,
+					"file": "examples/md5/app.hpp",
+					"settings":
+					{
+						"buffer_size": 1210,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1009,
+								1009
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 111.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 24,
+					"file": "data/hellknight.md5mesh",
+					"settings":
+					{
+						"buffer_size": 404306,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1895,
+								1895
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 25,
+					"file": "doc/html/skeleton_8cpp.html",
+					"settings":
+					{
+						"buffer_size": 7065,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/HTML/HTML.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
@@ -1763,23 +1989,216 @@
 			]
 		},
 		{
-			"selected": 17,
+			"selected": 4,
 			"sheets":
 			[
 				{
-					"buffer": 13,
-					"file": "src/gl/texture.cpp",
+					"buffer": 8,
+					"file": "src/node.cpp",
 					"settings":
 					{
-						"buffer_size": 7057,
+						"buffer_size": 8016,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								383,
-								383
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 840.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "shaders/3/skinning.glsl",
+					"settings":
+					{
+						"buffer_size": 2352,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								752,
+								752
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/OpenGL Shading Language (GLSL)/GLSL.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "src/md5.cpp",
+					"settings":
+					{
+						"buffer_size": 8982,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								8879,
+								8879
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 3780.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 17,
+					"file": "include/s9/geometry.hpp",
+					"settings":
+					{
+						"buffer_size": 6678,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								3161,
+								3161
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 661.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "include/s9/skeleton.hpp",
+					"settings":
+					{
+						"buffer_size": 7819,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 2751.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "include/s9/primitives.hpp",
+					"settings":
+					{
+						"buffer_size": 3997,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								3512,
+								3512
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 1806.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"file": "include/s9/node.hpp",
+					"settings":
+					{
+						"buffer_size": 9015,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 3577.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 11,
+					"file": "src/skeleton.cpp",
+					"settings":
+					{
+						"buffer_size": 6039,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
 							]
 						],
 						"settings":
@@ -1795,46 +2214,45 @@
 					"type": "text"
 				},
 				{
-					"buffer": 14,
-					"file": "src/shapes.cpp",
-					"settings":
-					{
-						"buffer_size": 3363,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								1606,
-								1606
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C++.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 1.0,
-						"translation.y": 199.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
 					"buffer": 20,
-					"file": "src/camera.cpp",
+					"file": "src/composite_shapes.cpp",
 					"settings":
 					{
-						"buffer_size": 1704,
+						"buffer_size": 4364,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								424,
-								424
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 342.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 18,
+					"file": "include/s9/gl/shader.hpp",
+					"settings":
+					{
+						"buffer_size": 5682,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
 							]
 						],
 						"settings":
@@ -1843,25 +2261,80 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
+						"translation.y": 1149.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 26,
+					"file": "src/gl/shader.cpp",
+					"settings":
+					{
+						"buffer_size": 8209,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								887,
+								887
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 252.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 0,
+					"file": "include/s9/gl/drawable.hpp",
+					"settings":
+					{
+						"buffer_size": 12986,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								3522,
+								3522
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 9.0,
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 7,
-					"file": "src/node.cpp",
+					"buffer": 23,
+					"file": "examples/md5/app.hpp",
 					"settings":
 					{
-						"buffer_size": 2126,
+						"buffer_size": 1210,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								967,
-								967
+								1041,
+								1041
 							]
 						],
 						"settings":
@@ -1870,79 +2343,25 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 405.0,
+						"translation.y": 46.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 1,
-					"file": "include/s9/shapes.hpp",
+					"buffer": 27,
+					"file": "examples/basic/app.cpp",
 					"settings":
 					{
-						"buffer_size": 3376,
+						"buffer_size": 2099,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1771,
-								1771
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C++.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 7.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 21,
-					"file": "examples/texture/app.hpp",
-					"settings":
-					{
-						"buffer_size": 1025,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								483,
-								483
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C++.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 10,
-					"file": "examples/texture/app.cpp",
-					"settings":
-					{
-						"buffer_size": 2030,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								1245,
-								1245
+								1344,
+								1344
 							]
 						],
 						"settings":
@@ -1952,53 +2371,25 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 428.0,
+						"translation.y": 741.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 22,
-					"file": "include/s9/image.hpp",
+					"buffer": 9,
+					"file": "examples/md5/app.cpp",
 					"settings":
 					{
-						"buffer_size": 1829,
+						"buffer_size": 3623,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								269,
-								269
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C++.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 23,
-					"file": "src/image.cpp",
-					"settings":
-					{
-						"buffer_size": 2478,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								1706,
-								1706
+								0,
+								0
 							]
 						],
 						"settings":
@@ -2015,18 +2406,261 @@
 				},
 				{
 					"buffer": 24,
-					"file": "include/s9/gl/texture.hpp",
+					"file": "data/hellknight.md5mesh",
 					"settings":
 					{
-						"buffer_size": 2391,
+						"buffer_size": 404306,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1148,
-								1148
+								1707,
+								1707
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 28,
+					"file": "doc/latex/classs9_1_1Node.eps",
+					"settings":
+					{
+						"buffer_size": 3782,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 29,
+					"file": "include/s9/gl/utils.hpp",
+					"settings":
+					{
+						"buffer_size": 1279,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 13,
+					"file": "include/s9/string_utils.hpp",
+					"settings":
+					{
+						"buffer_size": 3580,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2806,
+								2806
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 1522.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 30,
+					"file": "data/test_bones.md5mesh",
+					"settings":
+					{
+						"buffer_size": 144696,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 12,
+					"file": "data/boblampclean.md5anim",
+					"settings":
+					{
+						"buffer_size": 283134,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								237,
+								237
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 31,
+					"file": "todo.md",
+					"settings":
+					{
+						"buffer_size": 1613,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Markdown/Markdown.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 19,
+					"file": "src/shapes.cpp",
+					"settings":
+					{
+						"buffer_size": 10437,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								6974,
+								6974
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 3171.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 14,
+					"file": "include/s9/shapes.hpp",
+					"settings":
+					{
+						"buffer_size": 5935,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "include/s9/md5.hpp",
+					"settings":
+					{
+						"buffer_size": 2252,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
 							]
 						],
 						"settings":
@@ -2036,52 +2670,51 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 276.0,
+						"translation.y": 422.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 25,
-					"file": "src/gl/video.cpp",
+					"buffer": 32,
+					"file": "shaders/3/quad.vert",
 					"settings":
 					{
-						"buffer_size": 4219,
+						"buffer_size": 588,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								380,
-								380
+								330,
+								330
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/C++/C++.tmLanguage",
-							"translate_tabs_to_spaces": false
+							"syntax": "Packages/OpenGL Shading Language (GLSL)/GLSL.tmLanguage"
 						},
 						"translation.x": 0.0,
-						"translation.y": 22.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 26,
-					"file": "shaders/3/quad_texture.frag",
+					"buffer": 33,
+					"file": "shaders/3/quad.frag",
 					"settings":
 					{
-						"buffer_size": 453,
+						"buffer_size": 138,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								318,
-								318
+								138,
+								138
 							]
 						],
 						"settings":
@@ -2096,130 +2729,46 @@
 				},
 				{
 					"buffer": 2,
-					"file": "include/s9/md5.hpp",
+					"file": "shaders/3/solid_colour.glsl",
 					"settings":
 					{
-						"buffer_size": 2107,
+						"buffer_size": 837,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								565,
-								565
+								645,
+								645
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/C++/C++.tmLanguage",
+							"syntax": "Packages/OpenGL Shading Language (GLSL)/GLSL.tmLanguage",
 							"tab_size": 2,
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 371.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 5,
-					"file": "include/s9/skeleton.hpp",
+					"buffer": 34,
+					"file": "src/camera.cpp",
 					"settings":
 					{
-						"buffer_size": 3463,
+						"buffer_size": 3277,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1848,
-								1848
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C++.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 541.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 6,
-					"file": "src/skeleton.cpp",
-					"settings":
-					{
-						"buffer_size": 2142,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								1452,
-								1452
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C++.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 226.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 4,
-					"file": "src/md5.cpp",
-					"settings":
-					{
-						"buffer_size": 6907,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								417,
-								417
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C++.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 79.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 3,
-					"file": "include/s9/node.hpp",
-					"settings":
-					{
-						"buffer_size": 4911,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								2607,
-								2607
+								0,
+								0
 							]
 						],
 						"settings":
@@ -2228,25 +2777,51 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 660.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 11,
-					"file": "examples/md5/app.cpp",
+					"buffer": 10,
+					"file": "include/s9/composite_shapes.hpp",
 					"settings":
 					{
-						"buffer_size": 2276,
+						"buffer_size": 1222,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1536,
-								1536
+								382,
+								382
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 35,
+					"file": "examples/oculus/app.cpp",
+					"settings":
+					{
+						"buffer_size": 2084,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
 							]
 						],
 						"settings":
@@ -2255,54 +2830,26 @@
 							"tab_size": 4,
 							"translate_tabs_to_spaces": true
 						},
-						"translation.x": 1.0,
-						"translation.y": 308.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 12,
-					"file": "include/s9/gl/drawable.hpp",
-					"settings":
-					{
-						"buffer_size": 9444,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								2062,
-								2062
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C++.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
 						"translation.x": 0.0,
-						"translation.y": 702.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 27,
-					"file": "include/s9/gl/shader.hpp",
+					"buffer": 22,
+					"file": "examples/basic/app.hpp",
 					"settings":
 					{
-						"buffer_size": 1482,
+						"buffer_size": 926,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								302,
-								302
+								834,
+								834
 							]
 						],
 						"settings":
@@ -2347,7 +2894,7 @@
 		"cols":
 		[
 			0.0,
-			0.463211457121,
+			0.472123415849,
 			1.0
 		],
 		"rows":
@@ -2376,36 +2923,396 @@
 		"selected_items":
 		[
 			[
-				"node",
-				"src/node.cpp"
+				"skele",
+				"include/s9/skeleton.hpp"
 			],
 			[
-				"md5",
-				"include/s9/md5.hpp"
+				"comp",
+				"src/composite_shapes.cpp"
+			],
+			[
+				"",
+				"include/s9/skeleton.hpp"
+			],
+			[
+				"hel",
+				"data/hellknight.md5mesh"
 			],
 			[
 				"app",
 				"examples/md5/app.cpp"
 			],
 			[
+				"shader",
+				"include/s9/gl/shader.hpp"
+			],
+			[
+				"com",
+				"include/s9/composite_shapes.hpp"
+			],
+			[
+				"md5",
+				"src/md5.cpp"
+			],
+			[
+				"como",
+				"include/s9/composite_shapes.hpp"
+			],
+			[
+				"ske",
+				"include/s9/skeleton.hpp"
+			],
+			[
+				"math",
+				"include/s9/math_utils.hpp"
+			],
+			[
+				"geom",
+				"include/s9/geometry.hpp"
+			],
+			[
+				"compo",
+				"src/composite_shapes.cpp"
+			],
+			[
+				"node.",
+				"src/node.cpp"
+			],
+			[
+				"node",
+				"include/s9/node.hpp"
+			],
+			[
+				"app.h",
+				"examples/md5/app.hpp"
+			],
+			[
+				"skel",
+				"include/s9/skeleton.hpp"
+			],
+			[
+				"ap",
+				"examples/md5/app.cpp"
+			],
+			[
+				"skinn",
+				"shaders/3/skinning.glsl"
+			],
+			[
+				"skin",
+				"shaders/3/skinning.glsl"
+			],
+			[
+				"skeleton.",
+				"include/s9/skeleton.hpp"
+			],
+			[
+				"hell",
+				"data/hellknight.md5mesh"
+			],
+			[
+				"skeleton",
+				"src/skeleton.cpp"
+			],
+			[
+				"app.c",
+				"examples/basic/app.cpp"
+			],
+			[
+				"shape",
+				"src/shapes.cpp"
+			],
+			[
+				"shapes.c",
+				"src/shapes.cpp"
+			],
+			[
+				"ge",
+				"include/s9/geometry.hpp"
+			],
+			[
+				"m",
+				"src/md5.cpp"
+			],
+			[
+				"md",
+				"include/s9/md5.hpp"
+			],
+			[
 				"no",
 				"include/s9/node.hpp"
+			],
+			[
+				"md5.cpp",
+				"src/md5.cpp"
+			],
+			[
+				"compos",
+				"src/composite_shapes.cpp"
+			],
+			[
+				"n",
+				"include/s9/node.hpp"
+			],
+			[
+				"md5.",
+				"include/s9/md5.hpp"
+			],
+			[
+				"app.hpp",
+				"examples/md5/app.hpp"
+			],
+			[
+				"camera",
+				"src/camera.cpp"
+			],
+			[
+				"solid",
+				"shaders/3/solid_colour.glsl"
+			],
+			[
+				"prim",
+				"include/s9/primitives.hpp"
+			],
+			[
+				"quad",
+				"shaders/3/quad.frag"
 			],
 			[
 				"draw",
 				"include/s9/gl/drawable.hpp"
 			],
 			[
+				"tod",
+				"todo.md"
+			],
+			[
+				"geo",
+				"include/s9/geometry.hpp"
+			],
+			[
 				"nod",
+				"include/s9/node.hpp"
+			],
+			[
+				"sha",
+				"include/s9/shapes.hpp"
+			],
+			[
+				"shae",
+				"include/s9/shapes.hpp"
+			],
+			[
+				"string",
+				"include/s9/string_utils.hpp"
+			],
+			[
+				"sk",
+				"src/skeleton.cpp"
+			],
+			[
+				"bob",
+				"data/boblampclean.md5anim"
+			],
+			[
+				"bo",
+				"data/boblampclean.md5anim"
+			],
+			[
+				"test",
+				"data/test_bones.md5mesh"
+			],
+			[
+				"strin",
+				"include/s9/string_utils.hpp"
+			],
+			[
+				"uti",
+				"include/s9/gl/utils.hpp"
+			],
+			[
+				"noe",
+				"doc/latex/classs9_1_1Node.eps"
+			],
+			[
+				"ski",
+				"shaders/3/skinning.glsl"
+			],
+			[
+				"node.c",
 				"src/node.cpp"
 			],
 			[
-				"",
+				"app.cpp",
+				"examples/basic/app.cpp"
+			],
+			[
+				"pr",
+				"include/s9/primitives.hpp"
+			],
+			[
+				"pri",
+				"include/s9/primitives.hpp"
+			],
+			[
+				"p",
+				"include/s9/primitives.hpp"
+			],
+			[
+				"node.cp",
+				"src/node.cpp"
+			],
+			[
+				"shade",
+				"include/s9/gl/shader.hpp"
+			],
+			[
+				"shaer",
+				"src/gl/shader.cpp"
+			],
+			[
+				"shad",
+				"include/s9/gl/shader.hpp"
+			],
+			[
+				"todo",
+				"todo.md"
+			],
+			[
+				"shapes",
+				"include/s9/shapes.hpp"
+			],
+			[
+				"compiler",
+				"include/s9/compiler_utils.hpp"
+			],
+			[
+				"comm",
+				"include/s9/common.hpp"
+			],
+			[
+				"md5.c",
+				"src/md5.cpp"
+			],
+			[
+				"file",
+				"include/s9/file.hpp"
+			],
+			[
+				"file.",
+				"src/file.cpp"
+			],
+			[
+				"commo",
+				"include/s9/common.hpp"
+			],
+			[
+				"drawp",
+				"include/s9/gl/drawable.hpp"
+			],
+			[
+				"shap",
+				"include/s9/shapes.hpp"
+			],
+			[
+				"m5",
+				"src/md5.cpp"
+			],
+			[
+				"utils",
+				"include/s9/utils.hpp"
+			],
+			[
+				"file.c",
+				"src/file.cpp"
+			],
+			[
+				"quad_te",
+				"shaders/3/quad_texture.frag"
+			],
+			[
+				"node.hpp",
+				"include/s9/node.hpp"
+			],
+			[
+				"dr",
+				"include/s9/gl/drawable.hpp"
+			],
+			[
+				"a",
 				"examples/md5/app.cpp"
 			],
 			[
-				"shader",
+				"shape.cpp",
+				"src/shapes.cpp"
+			],
+			[
+				"camer",
+				"src/camera.cpp"
+			],
+			[
+				"shader.hpp",
+				"include/s9/gl/shader.hpp"
+			],
+			[
+				"quad.",
+				"shaders/3/quad.vert"
+			],
+			[
+				"util",
+				"include/s9/utils.hpp"
+			],
+			[
+				"app.cp",
+				"examples/basic/app.cpp"
+			],
+			[
+				"app.hp",
+				"examples/md5/app.hpp"
+			],
+			[
+				"open",
+				"include/s9/openni/openni.hpp"
+			],
+			[
+				"glfw",
+				"src/gl/glfw_app.cpp"
+			],
+			[
+				"shader.c",
 				"src/gl/shader.cpp"
+			],
+			[
+				"shader.cp",
+				"src/gl/shader.cpp"
+			],
+			[
+				"app.",
+				"examples/md5/app.cpp"
+			],
+			[
+				"quad_texture",
+				"shaders/3/quad_texture.vert"
+			],
+			[
+				"md5.hpp",
+				"include/s9/md5.hpp"
+			],
+			[
+				"quad_tx",
+				"shaders/3/quad_texture.vert"
+			],
+			[
+				"sgader",
+				"include/s9/gl/shader.hpp"
+			],
+			[
+				"shader.",
+				"src/gl/shader.cpp"
+			],
+			[
+				"shader.h",
+				"include/s9/gl/shader.hpp"
 			],
 			[
 				"utl",
@@ -2420,88 +3327,20 @@
 				"include/s9/s9xml.hpp"
 			],
 			[
-				"util",
-				"include/s9/utils.hpp"
-			],
-			[
 				"shader.hp",
 				"include/s9/gl/shader.hpp"
-			],
-			[
-				"pr",
-				"include/s9/primitives.hpp"
-			],
-			[
-				"skele",
-				"include/s9/skeleton.hpp"
-			],
-			[
-				"md",
-				"include/s9/md5.hpp"
-			],
-			[
-				"sha",
-				"include/s9/shapes.hpp"
-			],
-			[
-				"node.",
-				"include/s9/node.hpp"
-			],
-			[
-				"shape",
-				"include/s9/shapes.hpp"
 			],
 			[
 				"md5.cp",
 				"src/md5.cpp"
 			],
 			[
-				"skel",
-				"include/s9/skeleton.hpp"
-			],
-			[
-				"md5.",
-				"include/s9/md5.hpp"
-			],
-			[
 				"md5.h",
 				"include/s9/md5.hpp"
 			],
 			[
-				"dr",
-				"include/s9/gl/drawable.hpp"
-			],
-			[
-				"shap",
-				"src/shapes.cpp"
-			],
-			[
-				"ske",
-				"include/s9/skeleton.hpp"
-			],
-			[
-				"md5.c",
-				"src/md5.cpp"
-			],
-			[
 				"dra",
 				"include/s9/gl/drawable.hpp"
-			],
-			[
-				"n",
-				"src/node.cpp"
-			],
-			[
-				"app.c",
-				"examples/md5/app.cpp"
-			],
-			[
-				"ap",
-				"examples/md5/app.hpp"
-			],
-			[
-				"shapes",
-				"include/s9/shapes.hpp"
 			],
 			[
 				"sh",
@@ -2514,10 +3353,6 @@
 			[
 				"ima",
 				"include/s9/image.hpp"
-			],
-			[
-				"shae",
-				"include/s9/shapes.hpp"
 			],
 			[
 				"quad_text",
@@ -2560,40 +3395,12 @@
 				"src/file.cpp"
 			],
 			[
-				"prim",
-				"include/s9/primitives.hpp"
-			],
-			[
 				"c",
 				"CMakeLists.txt"
 			],
 			[
-				"geom",
-				"include/s9/geometry.hpp"
-			],
-			[
-				"ge",
-				"include/s9/geometry.hpp"
-			],
-			[
 				"visa",
 				"include/s9/visualapp.hpp"
-			],
-			[
-				"camer",
-				"src/camera.cpp"
-			],
-			[
-				"camera",
-				"include/s9/camera.hpp"
-			],
-			[
-				"uti",
-				"include/s9/utils.hpp"
-			],
-			[
-				"pri",
-				"include/s9/primitives.hpp"
 			],
 			[
 				"quic",
@@ -2612,16 +3419,8 @@
 				"include/s9/gl/glfw_app.hpp"
 			],
 			[
-				"glfw",
-				"src/gl/glfw_app.cpp"
-			],
-			[
 				"win",
 				"src/wingedge.cpp"
-			],
-			[
-				"file",
-				"src/file.cpp"
 			],
 			[
 				"via",
@@ -2634,258 +3433,6 @@
 			[
 				"cmake",
 				"CMakeLists.txt"
-			],
-			[
-				"open",
-				"include/s9/openni/openni.hpp"
-			],
-			[
-				"oc",
-				"src/oculus/oculus.cpp"
-			],
-			[
-				"cma",
-				"CMakeLists.txt"
-			],
-			[
-				"fb",
-				"include/s9/gl/fbo.hpp"
-			],
-			[
-				"cm",
-				"CMakeLists.txt"
-			],
-			[
-				"to",
-				"todo.md"
-			],
-			[
-				"fbo.cp",
-				"src/gl/fbo.cpp"
-			],
-			[
-				"fbo.hpp",
-				"include/s9/gl/fbo.hpp"
-			],
-			[
-				"texture.hpp",
-				"include/s9/gl/texture.hpp"
-			],
-			[
-				"glfw_",
-				"src/gl/glfw_app.cpp"
-			],
-			[
-				"app.cpp",
-				"examples/basic/app.cpp"
-			],
-			[
-				"glfw_app",
-				"src/gl/glfw_app.cpp"
-			],
-			[
-				"file.cp",
-				"src/file.cpp"
-			],
-			[
-				"ind",
-				"html/index.html"
-			],
-			[
-				"eq",
-				"src/equatorie.coffee"
-			],
-			[
-				"sys",
-				"src/system.coffee"
-			],
-			[
-				"test",
-				"useful/test.coffee"
-			],
-			[
-				"venus_eq",
-				"useful/venus_eq.csv"
-			],
-			[
-				"er",
-				"useful/error.py"
-			],
-			[
-				"venus",
-				"useful/venus_eq.csv"
-			],
-			[
-				"ven",
-				"useful/venus_nasa.csv"
-			],
-			[
-				"depth",
-				"html/shaders/depth.glsl"
-			],
-			[
-				"load",
-				"src/load.coffee"
-			],
-			[
-				"lo",
-				"src/load.coffee"
-			],
-			[
-				"ssa",
-				"html/shaders/ssao.glsl"
-			],
-			[
-				"inter",
-				"src/interact.coffee"
-			],
-			[
-				"mars",
-				"useful/mars_nasa.csv"
-			],
-			[
-				"mar",
-				"useful/mars_eq.csv"
-			],
-			[
-				"mer",
-				"useful/mercury_py.csv"
-			],
-			[
-				"err",
-				"useful/error.py"
-			],
-			[
-				"jup",
-				"useful/jupiter_eq.csv"
-			],
-			[
-				"ve",
-				"useful/venus_eq.csv"
-			],
-			[
-				"test.c",
-				"useful/test.coffee"
-			],
-			[
-				"e",
-				"src/equatorie.coffee"
-			],
-			[
-				"make",
-				"Makefile"
-			],
-			[
-				"equa",
-				"src/equatorie.coffee"
-			],
-			[
-				"system",
-				"src/system.coffee"
-			],
-			[
-				"syste",
-				"src/system.coffee"
-			],
-			[
-				"inde",
-				"html/index.html"
-			],
-			[
-				"equ",
-				"src/equatorie.coffee"
-			],
-			[
-				"usef",
-				"useful/test.py"
-			],
-			[
-				"sytem",
-				"src/system.coffee"
-			],
-			[
-				"ans",
-				"html/shaders/anisotropic.glsl"
-			],
-			[
-				"equat",
-				"html/css/equatorie.css"
-			],
-			[
-				"needle",
-				"html/models/needle.js"
-			],
-			[
-				"l",
-				"src/load.coffee"
-			],
-			[
-				"index",
-				"html/index.html"
-			],
-			[
-				"equatorie.cs",
-				"html/css/equatorie.css"
-			],
-			[
-				"boot",
-				"html/css/bootstrap.css"
-			],
-			[
-				"in",
-				"src/interact.coffee"
-			],
-			[
-				"date",
-				"html/css/datepicker.css"
-			],
-			[
-				"physcs",
-				"src/physics.coffee"
-			],
-			[
-				"pick",
-				"html/shaders/picking.glsl"
-			],
-			[
-				"bas",
-				"html/shaders/basic.glsl"
-			],
-			[
-				"phys",
-				"src/physics.coffee"
-			],
-			[
-				"str",
-				"html/shaders/string.glsl"
-			],
-			[
-				"string",
-				"src/string.coffee"
-			],
-			[
-				"math",
-				"src/math.coffee"
-			],
-			[
-				"anis",
-				"html/shaders/anisotropic.glsl"
-			],
-			[
-				"i",
-				"src/interact.coffee"
-			],
-			[
-				"t",
-				"TODO.markdown"
-			],
-			[
-				"webgl",
-				"src/webgl.coffee"
-			],
-			[
-				"cam",
-				"src/camera.coffee"
 			]
 		],
 		"width": 0.0

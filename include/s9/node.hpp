@@ -230,14 +230,21 @@ namespace s9 {
 
 	/**
 	 * Add a Texture to this node. We can have one per texture unit
+	 * \todo consider the tree here. What if we bind textures that override others? 
+	 * We dont at present go back to previous binding in history :S
 	 */
 
 	class NodeTexture : public NodeBase {
 	public:
 		NodeTexture(gl::Texture t) : NodeBase(TEXTURE), texture_(t) {  };
 		std::string tag() { return "Texture"; }
+<<<<<<< HEAD
 		void draw(GeometryPrimitive overide) { texture_.bind(); }
 		void postDraw() {texture_.unbind(); }
+=======
+		void draw(GeometryPrimitive overide) {	texture_.bind(); }
+		void postDraw() { texture_.unbind(); }
+>>>>>>> e4be133eee23a18fb1112a2ca0e764800d332d6a
 		gl::Texture texture_;
 	};
 	

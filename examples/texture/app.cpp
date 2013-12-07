@@ -23,6 +23,7 @@ void TextureApp::init(){
 
     addWindowListener(this);
 
+
     quad_ = Quad(1.0,1.0);
     texture_ = Texture( Image(s9::File("./data/astley.jpg")));
     rotation_ = 0;
@@ -30,7 +31,6 @@ void TextureApp::init(){
     unit_ = 0;
 
     node_.add(quad_).add(shader_).add(texture_).add(camera_).add( gl::ShaderClause<int,1>("uTexSampler0", unit_) );
-
 }
 
 
@@ -54,7 +54,6 @@ void TextureApp::display(double_t dt){
 
     node_.setMatrix(mat);
     node_.draw();
-
 }
 
 
