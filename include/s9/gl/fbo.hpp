@@ -26,40 +26,43 @@ namespace s9 {
 		/**
 		 * Basic FBO Class with depth buffer and colour texture attachments
 		 * \TODO - needs more options! Many more options
+		 * \todo - depth?
+		 * \todo we may end up with GL_TEXTURE_2D on creation. If we then resize, it wont work :S
 		 */
 		 
 		class SEBUROAPI FBO {
 
 		protected:
-			struct SharedObj {
-				GLuint mW,mH,mID,mDepth;
-				Texture _colour;
-				bool mOk;
+			struct SharedObject {
+
+				~SharedObject();
+
+				GLuint width, height, id, depth;
+				Texture colour;
+				bool ok;
 			};
-			std::shared_ptr<SharedObj> _obj;
+			std::shared_ptr<SharedObject> obj_;
 			
 		public:
 			FBO() {};
 			FBO(size_t w, size_t h);
 
-			virtual operator int() const { return _obj.use_count() > 0; };
+			virtual operator int() const { return obj_.use_count() > 0; };
 
-			void bind() { glBindFramebuffer(GL_DRAW_FRAMEBUFFER, _obj->mID);  glViewport(0,0,_obj->mW,_obj->mH); };
+			void bind() { glBindFramebuffer(GL_DRAW_FRAMEBUFFER, obj_->id);  glViewport(0, 0, obj_->width, obj_->height); };
 			void unbind() { glBindFramebuffer(GL_FRAMEBUFFER, 0); } ;
 			bool checkStatus();
 			void printFramebufferInfo();
 			void resize(size_t w, size_t h);
-			void bindColour() { _obj->_colour.bind(); }
-			void unbindColour() { _obj->_colour.unbind(); }
-			void bindDepth() { glBindTexture(GL_TEXTURE_RECTANGLE, _obj->mDepth); }
-			void unbindDepth() { glBindTexture(GL_TEXTURE_RECTANGLE, 0);  }
-			glm::vec2 size() { return glm::vec2(_obj->mW, _obj->mH); }
-
-			GLuint getWidth() {return _obj->mW; };
-			GLuint getHeight() {return _obj->mH; }
 			
-		
+			Texture colour() { return obj_->colour; }
+			
+			glm::vec2 size() { return glm::vec2(obj_->width, obj_->height); }
 
+			GLuint width() {return obj_->width; };
+			GLuint height() {return obj_->height; }
+			
+	
 		};
 
 		std::string getTextureParameters(GLuint id);

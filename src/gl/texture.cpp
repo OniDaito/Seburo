@@ -47,7 +47,6 @@ Texture::SharedObject::SharedObject(size_t w, size_t h, ColourComponent f, Colou
   
   glPixelStorei(GL_UNPACK_ROW_LENGTH, width);
   glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-  
   glGenTextures(1, &(id));
   
   // Automatic detection of power of two.
@@ -57,32 +56,40 @@ Texture::SharedObject::SharedObject(size_t w, size_t h, ColourComponent f, Colou
   else 
     gl_type = GL_TEXTURE_RECTANGLE;
 
-  GLenum tt = GL_UNSIGNED_BYTE;
+  basic_type = GL_UNSIGNED_BYTE;
 
   glBindTexture(gl_type, id);
 
+  ///\todo we need a really nice way to pass these parameters
+  glTexParameterf(gl_type, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+  glTexParameterf(gl_type, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  glTexParameterf(gl_type, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+  glTexParameterf(gl_type, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
   switch (t){
     case UNSIGNED_BYTE:
-      tt = GL_UNSIGNED_BYTE;
+      basic_type = GL_UNSIGNED_BYTE;
     break;
 
     case FLOAT: 
-      tt = GL_FLOAT;
+      basic_type = GL_FLOAT;
     break;
 
     default:
-      tt = GL_UNSIGNED_BYTE;
+      basic_type = GL_UNSIGNED_BYTE;
     break;
   }
   
-  GLuint tfa = GL_RGB;
-  GLuint tfb = GL_RGB;
+  colour_type_a = GL_RGB;
+  colour_type_b = GL_RGB;
 
-  GLuint storage_type = GL_RGB8;
+  storage_type = GL_RGB8;
+
+
 
   switch(f){
     case RGB:
-      tfa = tfb = GL_RGB;
+      colour_type_a = colour_type_b = GL_RGB;
       if (t == UNSIGNED_BYTE)
         storage_type = GL_RGB8; ///\todo signed or unsigned here ? :S
       if (t == FLOAT)
@@ -91,7 +98,7 @@ Texture::SharedObject::SharedObject(size_t w, size_t h, ColourComponent f, Colou
     
     case RED:
     case GREY:
-      tfa = tfb = GL_RED;
+      colour_type_a = colour_type_b = GL_RED;
       if (t == UNSIGNED_BYTE)
         storage_type = GL_R8;
       if (t == FLOAT)
@@ -99,7 +106,7 @@ Texture::SharedObject::SharedObject(size_t w, size_t h, ColourComponent f, Colou
       break;
 
     case BGR:
-      tfb = GL_BGR;
+      colour_type_b = GL_BGR;
       if (t == UNSIGNED_BYTE)
         storage_type = GL_RGB8;
       if (t == FLOAT)
@@ -107,7 +114,7 @@ Texture::SharedObject::SharedObject(size_t w, size_t h, ColourComponent f, Colou
       break;
 
     case BGRA:
-      tfa = GL_RGBA; tfb = GL_BGRA;
+      colour_type_a = GL_RGBA; colour_type_b = GL_BGRA;
       if (t == UNSIGNED_BYTE)
         storage_type = GL_RGBA8;
       if (t == FLOAT)
@@ -115,7 +122,7 @@ Texture::SharedObject::SharedObject(size_t w, size_t h, ColourComponent f, Colou
       break;
     
     case RGBA:
-      tfa = tfb = GL_RGBA;
+      colour_type_a = colour_type_b = GL_RGBA;
       if (t == UNSIGNED_BYTE)
         storage_type = GL_RGBA8;
       if (t == FLOAT)
@@ -128,13 +135,17 @@ Texture::SharedObject::SharedObject(size_t w, size_t h, ColourComponent f, Colou
       break;
   }
 
+  // Copy data if no nullptr
   // Specify storage if a 2D type.
   ///\ todo potential for passing mipmap levels?
+  
 
-  glTexStorage2D(gl_type, 1, storage_type, width, height);
-  CXGLERROR
-
-  glTexSubImage2D(gl_type, 0, 0, 0, width, height, tfb, tt, d);
+  if (d != nullptr) {
+    glTexStorage2D(gl_type, 1, storage_type, width, height);
+    glTexSubImage2D(gl_type, 0, 0, 0, width, height, colour_type_b, basic_type, d);
+  } else {
+    glTexImage2D(gl_type, 0, storage_type, width, height, 0, colour_type_b, basic_type, NULL);
+  }
   CXGLERROR
 }
 
@@ -206,7 +217,7 @@ void Texture::update(byte_t * data) {
  * Bind to texture unit.
  */
 
-void Texture::bind() { glActiveTexture(GL_TEXTURE0 + obj_->unit); glBindTexture(obj_->gl_type, obj_->id); std::cout << "Binding: " << obj_->id << std::endl;}
+void Texture::bind() { glActiveTexture(GL_TEXTURE0 + obj_->unit); glBindTexture(obj_->gl_type, obj_->id); }
 
 /*
  * Unbind
@@ -214,6 +225,22 @@ void Texture::bind() { glActiveTexture(GL_TEXTURE0 + obj_->unit); glBindTexture(
 
 void Texture::unbind(){ glActiveTexture(GL_TEXTURE0 + obj_->unit); glBindTexture(obj_->gl_type, 0); }
 
+
+/// Resize a texture in memory - used mostly with FBOs. Clears all data
+
+void Texture::resize(size_t w, size_t h) {
+  if (obj_ == nullptr) return;
+
+  obj_->width = w;
+  obj_->height = h;
+
+  bind();
+  glTexImage2D(obj_->gl_type, 0, obj_->storage_type, obj_->width, obj_->height, 0, obj_->colour_type_b, obj_->basic_type, NULL);
+
+  unbind();
+
+  CXGLERROR
+}
 
 
 TextureStream::SharedObject::SharedObject(size_t w, size_t h, ColourComponent f, 
