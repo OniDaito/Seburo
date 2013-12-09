@@ -303,7 +303,8 @@ if (USE_OPENNI)
   # OPENNI_LIBRARIES - Libraries needed to use OPENNI.
 
   # This setup includes NITE by default
- 
+
+   
   find_path(OPENNI_INCLUDE_DIR XnStatus.h
             HINTS  /usr/include/openni /usr/include/ni
             PATHS "$ENV{PROGRAMFILES}/OpenNI/Include" "$ENV{PROGRAMW6432}/OpenNI/Include"
@@ -367,7 +368,9 @@ if (USE_OCULUS)
   # OCULUS_INCLUDE_DIR - Directories containing the OCULUS include files
   # OCULUS_LIBRARIES - Libraries needed to use OCULUS.
 
- 
+  # turn off rtti if it isnt already
+  SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-rtti")
+
   find_path(OCULUS_INCLUDE_DIR OVR.h
             HINTS  /opt/OculusSDK/libOVR/Include
             PATHS "$ENV{PROGRAMFILES}/OculusSDK/LibOVR/Include" "$ENV{PROGRAMW6432}/OculusSDK/LibOVR/Include"

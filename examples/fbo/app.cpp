@@ -20,7 +20,7 @@ using namespace s9::gl;
 
 void FBOApp::init(){
     shader_ = Shader( s9::File("./shaders/3/quad.vert"), s9::File("./shaders/3/quad.frag"));
-    shader_warp_ = Shader( s9::File("./shaders/glsl/oculus_warp.glsl"));
+    shader_warp_ = Shader( s9::File("./shaders/3/quad_texture.vert"), s9::File("./shaders/3/quad_texture.frag"));
 
     addWindowListener(this);
 

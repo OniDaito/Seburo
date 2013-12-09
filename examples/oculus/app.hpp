@@ -15,6 +15,7 @@
 #include "s9/shapes.hpp"
 #include "s9/node.hpp"
 #include "s9/gl/drawable.hpp"
+#include "s9/gl/fbo.hpp"
 #include "s9/gl/shader.hpp"
 #include "s9/gl/glfw_app.hpp"
 
@@ -41,10 +42,18 @@ namespace s9 {
 		void processEvent(ResizeEvent e);
 		
 	protected:
-		Cuboid cuboid_;
-		gl::Shader shader_;
-		Camera camera_;
-		Node node_;
+		Cuboid 				cuboid_;
+		Quad					quad_;
+
+		gl::Shader 		shader_;
+		gl::Shader 		shader_warp_;
+		Camera 				camera_;
+		Camera 				camera_ortho_;
+
+		Node 					node_;
+		Node					node_quad_;
+
+		gl::FBO				fbo_;
 
 		oculus::OculusBase oculus_;
 

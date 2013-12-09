@@ -13,15 +13,21 @@ using namespace s9;
 using namespace s9::oculus;
 using namespace OVR;
 
+OculusBase::SharedObject::SharedObject() {
+  manager=*DeviceManager::Create();
+  manager->SetMessageHandler(this);
+}
+
 ///\todo - pass in a window listener as window events will affect this
 
-OculusBase::OculusBase(bool b) : obj_ ( std::shared_ptr<SharedObj>(new SharedObj(this))) {
+OculusBase::OculusBase(bool b) {
   
-  System::Init( Log::ConfigureDefaultLog (LogMask_All));
-  obj_->manager=*DeviceManager::Create();
-  obj_->manager->SetMessageHandler(this);
+  System::Init( Log::ConfigureDefaultLog (LogMask_All));  
 
-  
+  obj_ = std::shared_ptr<SharedObject>(new SharedObject());
+
+
+  /*
   obj_->HMD=*(obj_->manager->EnumerateDevices<HMDDevice>().CreateDevice());
   
   if (obj_->HMD){
@@ -46,9 +52,7 @@ OculusBase::OculusBase(bool b) : obj_ ( std::shared_ptr<SharedObj>(new SharedObj
 
     obj_->profile = obj_->HMD->GetProfile();
   
-    /*if (obj_->profile){
-      
-    }*/
+
 
   } else{
      obj_->sensor = *(obj_->manager->EnumerateDevices<SensorDevice>().CreateDevice());
@@ -101,18 +105,18 @@ OculusBase::OculusBase(bool b) : obj_ ( std::shared_ptr<SharedObj>(new SharedObj
     */
 }
 
-void OculusBase::update(double_t dt) {
+void OculusBase::SharedObject::update(double_t dt) {
    // Check if any new devices were connected.
 
   bool queueIsEmpty = false;
   while (!queueIsEmpty) {
     DeviceStatusNotificationDesc desc;
     {
-      Lock::Locker lock(obj_->manager->GetHandlerLock());
-      if (obj_->device_status_notifications_queue.GetSize() == 0)
+      Lock::Locker lock(manager->GetHandlerLock());
+      if (device_status_notifications_queue.GetSize() == 0)
         break;
 
-      desc = obj_->device_status_notifications_queue.Front();
+      desc = device_status_notifications_queue.Front();
        
       // We can't call Clear under the lock since this may introduce a dead lock:
       // this thread is locked by HandlerLock and the Clear might cause 
@@ -122,8 +126,8 @@ void OculusBase::update(double_t dt) {
       // So, just grab the first element, save a copy of it and remove
       // the element (Device->Release won't be called since we made a copy).
       
-      obj_->device_status_notifications_queue.RemoveAt(0);
-      queueIsEmpty = (obj_->device_status_notifications_queue.GetSize() == 0);
+      device_status_notifications_queue.RemoveAt(0);
+      queueIsEmpty = (device_status_notifications_queue.GetSize() == 0);
     }
     cout << "OC" << endl;
 
@@ -134,9 +138,9 @@ void OculusBase::update(double_t dt) {
         case Device_Sensor:
           if (desc.Handle.IsAvailable() && !desc.Handle.IsCreated()) {
                   
-            if (!obj_->sensor){
-              obj_->sensor = *desc.Handle.CreateDeviceTyped<SensorDevice>();
-              obj_->fusion.AttachToSensor(obj_->sensor);
+            if (!sensor){
+              sensor = *desc.Handle.CreateDeviceTyped<SensorDevice>();
+              //fusion.AttachToSensor(sensor);
               cout << "SEBURO OCULUS - Sensor Connected" << endl;
             } else if (!wasAlreadyCreated) {
                cout << "SEBURO OCULUS - A new SENSOR has been detected, but it is not currently used." << endl;
@@ -146,9 +150,9 @@ void OculusBase::update(double_t dt) {
           
         case Device_LatencyTester:
           if (desc.Handle.IsAvailable() && !desc.Handle.IsCreated()) {
-            if (!obj_->latency_tester) {
-              obj_->latency_tester = *desc.Handle.CreateDeviceTyped<LatencyTestDevice>();
-              obj_->latency_util.SetDevice(obj_->latency_tester);
+            if (!latency_tester) {
+              latency_tester = *desc.Handle.CreateDeviceTyped<LatencyTestDevice>();
+              latency_util.SetDevice(latency_tester);
               if (!wasAlreadyCreated)
                 cout << "SEBURO OCULUS - Latency Tester Connected" << endl;
               }
@@ -163,16 +167,16 @@ void OculusBase::update(double_t dt) {
             // if strlen(info.DisplayDeviceName) == 0 then
             // this HMD is 'fake' (created using sensor).
           
-            if (strlen(info.DisplayDeviceName) > 0 && (!obj_->HMD || !info.IsSameDisplay(obj_->info))) {
+            if (strlen(info.DisplayDeviceName) > 0 && (!HMD || !info.IsSameDisplay(info))) {
               cout << "SEBURO OCULUS - HMD Connected" << endl;
               
-              if (!obj_->HMD || !desc.Handle.IsDevice(obj_->HMD))
-                obj_->HMD = *desc.Handle.CreateDeviceTyped<HMDDevice>();
+              if (!HMD || !desc.Handle.IsDevice(HMD))
+                HMD = *desc.Handle.CreateDeviceTyped<HMDDevice>();
                       
               // update stereo config with new HMDInfo
-              if (obj_->HMD && obj_->HMD->GetDeviceInfo(&obj_->info)) {
+              if (HMD && HMD->GetDeviceInfo(&info)) {
                 //RenderParams.MonitorName = hmd.DisplayDeviceName;
-                obj_->config.SetHMDInfo(obj_->info);
+                config.SetHMDInfo(info);
               }
               cout << "SEBURO OCULUS - HMD device added." << endl;
             }
@@ -183,29 +187,29 @@ void OculusBase::update(double_t dt) {
       }
     } else if (desc.Action == Message_DeviceRemoved) {
       
-      if (desc.Handle.IsDevice(obj_->sensor)) {
+      if (desc.Handle.IsDevice(sensor)) {
         cout << "SEBURO OCULUS - Sensor reported device removed." << endl;
-        obj_->fusion.AttachToSensor(NULL);
-        obj_->sensor.Clear();
+      //  fusion.AttachToSensor(NULL);
+        sensor.Clear();
         cout << "SEBURO OCULUS - Sensor disconnected" << endl;
-      } else if (desc.Handle.IsDevice(obj_->latency_tester)) {
+      } else if (desc.Handle.IsDevice(latency_tester)) {
         cout << "SEBURO OCULUS - Latency Tester reported device removed." << endl;
-        obj_->latency_util.SetDevice(NULL);
-        obj_->latency_tester.Clear();
+        latency_util.SetDevice(NULL);
+        latency_tester.Clear();
         cout << "SEBURO OCULUS - Latency Sensor disconnected" << endl;
-      } else if (desc.Handle.IsDevice(obj_->HMD)) {
-        if (obj_->HMD && !obj_->HMD->IsDisconnected()) {
+      } else if (desc.Handle.IsDevice(HMD)) {
+        if (HMD && !HMD->IsDisconnected()) {
           cout << "SEBURO OCULUS - HMD disconnected" << endl;
                
-          obj_->HMD = obj_->HMD->Disconnect(obj_->sensor);
+          HMD = HMD->Disconnect(sensor);
 
-          // This will initialize obj_->info with information about configured IPD,
+          // This will initialize info with information about configured IPD,
           // screen size and other variables needed for correct projection.
           // We pass HMD DisplayDeviceName into the renderer to select the
           // correct monitor in full-screen mode.
-          if (obj_->HMD && obj_->HMD->GetDeviceInfo(&obj_->info)) {
+          if (HMD && HMD->GetDeviceInfo(&info)) {
             //RenderParams.MonitorName = hmd.DisplayDeviceName;
-            obj_->config.SetHMDInfo(obj_->info);
+            config.SetHMDInfo(info);
           }
           cout << "SEBURO OCULUS - HMD device removed." << endl;
         }
@@ -216,23 +220,22 @@ void OculusBase::update(double_t dt) {
 
 
   // Process latency tester results.
-  const char* results = obj_->latency_util.GetResultsString();
+  const char* results = latency_util.GetResultsString();
   if (results != NULL) {
         cout << "SEBURO OCULUS - Latency Tester: " <<  results << endl; 
   }
 
   // >>> THIS MUST BE PLACED AS CLOSE AS POSSIBLE TO WHERE THE HMD ORIENTATION IS READ <<<
-  obj_->latency_util.ProcessInputs();
+  latency_util.ProcessInputs();
 
   // Handle Sensor motion.
   // We extract Yaw, Pitch, Roll instead of directly using the orientation
   // to allow "additional" yaw manipulation with mouse/controller.
-  if(obj_->sensor) {
-      Quatf    q = obj_->fusion.GetPredictedOrientation();
-      //OVR::Quatf q = obj_->fusion.GetOrientation(); 
-      orientation_ = glm::quat(q.w,q.x,q.y,q.z); 
+  if(sensor) {
+      //Quatf    q = fusion.GetPredictedOrientation();
+      //OVR::Quatf q = fusion.GetOrientation(); 
+      //orientation = glm::quat(q.w,q.x,q.y,q.z); 
       
-
       //float    yaw = 0.0f;
       //hmdOrient.GetEulerAngles<Axis_Y, Axis_X, Axis_Z>(&yaw, &ThePlayer.EyePitch, &ThePlayer.EyeRoll);
   }
@@ -240,32 +243,28 @@ void OculusBase::update(double_t dt) {
 
 }
 
-void OculusBase::onMessage(const Message& msg) {
-    if (msg.Type == Message_DeviceAdded || msg.Type == Message_DeviceRemoved)
-    {
-        if (msg.pDevice == obj_->manager)
-        {
-            const MessageDeviceStatus& statusMsg =
-                static_cast<const MessageDeviceStatus&>(msg);
+void OculusBase::SharedObject::onMessage(const Message& msg) {
+  if (msg.Type == Message_DeviceAdded || msg.Type == Message_DeviceRemoved) {
+    if (msg.pDevice == manager) {
+      const MessageDeviceStatus& statusMsg = static_cast<const MessageDeviceStatus&>(msg);
 
-            { // limit the scope of the lock
-                Lock::Locker lock(obj_->manager->GetHandlerLock());
-                obj_->device_status_notifications_queue.PushBack(
-                    DeviceStatusNotificationDesc(statusMsg.Type, statusMsg.Handle));
-            }
+      { // limit the scope of the lock
+        Lock::Locker lock(manager->GetHandlerLock());
+        device_status_notifications_queue.PushBack(
+          DeviceStatusNotificationDesc(statusMsg.Type, statusMsg.Handle));
+      }
 
-            switch (statusMsg.Type)
-            {
-                case OVR::Message_DeviceAdded:
-                    cout << "DeviceManager reported device added." << endl;
-                    break;
-                
-                case OVR::Message_DeviceRemoved:
-                    cout << "DeviceManager reported device removed." << endl;
-                    break;
-                
-                default: OVR_ASSERT(0); // unexpected type
-            }
-        }
+      switch (statusMsg.Type) {
+        case OVR::Message_DeviceAdded:
+        cout << "SEBURO OCULUS DeviceManager reported device added." << endl;
+        break;
+
+        case OVR::Message_DeviceRemoved:
+        cout << "SEBURO OCULUS DeviceManager reported device removed." << endl;
+        break;
+
+        default: OVR_ASSERT(0); // unexpected type
+      }
     }
+  }
 }
