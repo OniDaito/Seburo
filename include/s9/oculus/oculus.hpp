@@ -25,48 +25,31 @@ namespace s9 {
      */
      
     ///\todo we need to pass out the messages recieved - create some kind of handler mechanism
+    // Oculus Base can probably extend for window listening or similar and pass on from its shared object
 
-    class SEBUROAPI OculusBase : public OVR::MessageHandler {
+    class SEBUROAPI OculusBase  {
     
     protected:
 
-      void onMessage(const OVR::Message& msg);
+      struct SharedObject : public OVR::MessageHandler {
 
-      struct DeviceStatusNotificationDesc {
-        OVR::DeviceHandle    Handle;
-        OVR::MessageType     Action;
+        SharedObject();
 
-        DeviceStatusNotificationDesc():Action(OVR::Message_None) {}
-        DeviceStatusNotificationDesc(OVR::MessageType mt, const OVR::DeviceHandle& dev) 
+        void onMessage(const OVR::Message& msg);
+        void update(double_t dt);
+
+        struct DeviceStatusNotificationDesc {
+          OVR::DeviceHandle    Handle;
+          OVR::MessageType     Action;
+
+          DeviceStatusNotificationDesc():Action(OVR::Message_None) {}
+          DeviceStatusNotificationDesc(OVR::MessageType mt, const OVR::DeviceHandle& dev) 
             : Handle(dev), Action(mt) {}
-      };
+        };
     
-
-      struct SharedObj {
-
-        SharedObj(OculusBase* pb) {
-          addHandler(pb);
-        }
-
-        void removeHandler(OculusBase* pb) {
-          for (std::vector<OculusBase*>::iterator it = handlers.begin(); it != handlers.end(); ){
-            if  (*it == pb){
-              handlers.erase(it);
-            } else {
-              ++it;
-            } 
-          }
-        }
-
-        void addHandler(OculusBase* pb) {
-          handlers.push_back(pb);
-        }
-        
-        ~SharedObj() {
-          for(OculusBase* pb : handlers){
-            pb->RemoveHandlerFromDevices();
-          }
-
+           
+        ~SharedObject() {
+         
           latency_tester.Clear();
           sensor.Clear();
           HMD.Clear();
@@ -89,27 +72,23 @@ namespace s9 {
 
         OVR::SensorFusion fusion;
         OVR::HMDInfo info;
+
+        glm::quat orientation;
       };
 
-      std::shared_ptr<SharedObj> obj_ = nullptr;
+      std::shared_ptr<SharedObject> obj_ = nullptr;
 
-      glm::quat orientation_;
   
     public:
   
       OculusBase() {}
       OculusBase(bool b);
-      ~OculusBase() { if (obj_) obj_->removeHandler(this);}
+      ~OculusBase() { }
 
-      /*const OculusBase& operator= (const OculusBase & b) {
+      void update(double_t dt) { if(obj_ != nullptr) obj_->update(dt); }
 
-      }*/
-
-      void update(double_t dt);
-
-      glm::quat orientation() { return orientation_; } 
+      glm::quat orientation() { if(obj_ != nullptr) return obj_->orientation; else return glm::quat(); } 
      
-
     };
   }
 

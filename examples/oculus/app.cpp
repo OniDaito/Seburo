@@ -20,19 +20,25 @@ using namespace s9::gl;
 
  void OculusApp::init(){
     shader_ = Shader( s9::File("./shaders/3/quad.vert"),  s9::File("./shaders/3/quad.frag"));
-
-   // camera_.set_pos(glm::vec3(0,0,20.0f));
+    shader_warp_ = Shader( s9::File("./shaders/glsl/oculus_warp.glsl"));
 
     addWindowListener(this);
 
     cuboid_ = Cuboid(3.0,2.0,1.0);
     Cuboid v = cuboid_;
+    quad_ = Quad(640,480);
 
     camera_ = Camera(glm::vec3(0.0f,0.0f,10.0f));
-
-    node_.add(cuboid_).add(shader_).add(camera_);
+    camera_ortho_ = Camera(glm::vec3(0.0f,0.0f,1.0f));
+    camera_ortho_.set_orthographic(true);
 
     oculus_ = oculus::OculusBase(true);
+
+    fbo_ = FBO(800,600);
+    
+    node_.add(cuboid_).add(shader_).add(camera_);
+    node_quad_.add(quad_).add(shader_warp_).add(camera_ortho_).add(fbo_.colour());
+
 
 
 }
@@ -50,9 +56,11 @@ void OculusApp::update(double_t dt) {
  */
 
  void OculusApp::display(double_t dt){
-
-    glClearBufferfv(GL_COLOR, 0, &glm::vec4(0.9f, 0.9f, 0.9f, 1.0f)[0]);
     GLfloat depth = 1.0f;
+
+    // Draw to the FBO
+    fbo_.bind();
+    glClearBufferfv(GL_COLOR, 0, &glm::vec4(0.9f, 0.9f, 0.9f, 1.0f)[0]);
     glClearBufferfv(GL_DEPTH, 0, &depth );
 
     glm::quat q = oculus_.orientation();
@@ -65,6 +73,14 @@ void OculusApp::update(double_t dt) {
     oculus_prev_ = q;
 
     node_.draw();
+
+    fbo_.unbind();
+
+    // Draw to main screen
+    glClearBufferfv(GL_COLOR, 0, &glm::vec4(0.9f, 0.9f, 0.9f, 1.0f)[0]);
+    glClearBufferfv(GL_DEPTH, 0, &depth );
+
+    node_quad_.draw();
      
 }
 
@@ -84,6 +100,10 @@ void OculusApp::update(double_t dt) {
     cout << "Window Resized:" << e.w << "," << e.h << endl;
     glViewport(0,0,e.w,e.h);
     camera_.resize(e.w,e.h);
+    camera_ortho_.resize(e.w, e.h);
+    fbo_.resize(e.w, e.h);
+
+    node_quad_.setMatrix(glm::translate(glm::mat4(1.0f), glm::vec3(e.w/2.0f, e.h/2.0f, 0.0f)));
 }
 
 void OculusApp::processEvent(KeyboardEvent e){

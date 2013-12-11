@@ -47,7 +47,6 @@ Texture::SharedObject::SharedObject(size_t w, size_t h, ColourComponent f, Colou
   
   glPixelStorei(GL_UNPACK_ROW_LENGTH, width);
   glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-  
   glGenTextures(1, &(id));
   
   // Automatic detection of power of two.
@@ -57,52 +56,95 @@ Texture::SharedObject::SharedObject(size_t w, size_t h, ColourComponent f, Colou
   else 
     gl_type = GL_TEXTURE_RECTANGLE;
 
-  GLenum tt = GL_UNSIGNED_BYTE;
+  basic_type = GL_UNSIGNED_BYTE;
+
+  glBindTexture(gl_type, id);
+
+  ///\todo we need a really nice way to pass these parameters
+  glTexParameterf(gl_type, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+  glTexParameterf(gl_type, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  glTexParameterf(gl_type, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+  glTexParameterf(gl_type, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
   switch (t){
     case UNSIGNED_BYTE:
-      tt = GL_UNSIGNED_BYTE;
+      basic_type = GL_UNSIGNED_BYTE;
     break;
 
     case FLOAT: 
-      tt = GL_FLOAT;
+      basic_type = GL_FLOAT;
     break;
 
     default:
-      tt = GL_UNSIGNED_BYTE;
+      basic_type = GL_UNSIGNED_BYTE;
     break;
   }
-  CXGLERROR
-
-  glBindTexture(gl_type, id);
   
+  colour_type_a = GL_RGB;
+  colour_type_b = GL_RGB;
+
+  storage_type = GL_RGB8;
+
+
+
   switch(f){
     case RGB:
-      glTexImage2D(gl_type, 0, GL_RGB, width, height, 0, GL_RGB, tt, d);
+      colour_type_a = colour_type_b = GL_RGB;
+      if (t == UNSIGNED_BYTE)
+        storage_type = GL_RGB8; ///\todo signed or unsigned here ? :S
+      if (t == FLOAT)
+        storage_type = GL_RGB32F; ///\todo is FLOAT always 32 bit? Cx that
       break;
     
     case RED:
     case GREY:
-      glTexImage2D(gl_type, 0, GL_RED, width, height, 0, GL_RED, tt, d);
+      colour_type_a = colour_type_b = GL_RED;
+      if (t == UNSIGNED_BYTE)
+        storage_type = GL_R8;
+      if (t == FLOAT)
+        storage_type = GL_R32F; 
       break;
 
     case BGR:
-      glTexImage2D(gl_type, 0, GL_RGB, width, height, 0, GL_BGR, tt, d);
-    break;
+      colour_type_b = GL_BGR;
+      if (t == UNSIGNED_BYTE)
+        storage_type = GL_RGB8;
+      if (t == FLOAT)
+        storage_type = GL_RGB32F; 
+      break;
 
     case BGRA:
-      glTexImage2D(gl_type, 0, GL_RGBA, width, height, 0, GL_BGRA, tt, d);
-    break;
+      colour_type_a = GL_RGBA; colour_type_b = GL_BGRA;
+      if (t == UNSIGNED_BYTE)
+        storage_type = GL_RGBA8;
+      if (t == FLOAT)
+        storage_type = GL_RGBA32F; 
+      break;
     
     case RGBA:
-      glTexImage2D(gl_type, 0, GL_RGBA, width, height, 0, GL_RGBA, tt, d);
+      colour_type_a = colour_type_b = GL_RGBA;
+      if (t == UNSIGNED_BYTE)
+        storage_type = GL_RGBA8;
+      if (t == FLOAT)
+        storage_type = GL_RGBA32F; 
       break;
     
     default:
       cerr << "SEBURO ERROR - No Format specified for texture." << endl;
       assert(false);
       break;
+  }
 
+  // Copy data if no nullptr
+  // Specify storage if a 2D type.
+  ///\ todo potential for passing mipmap levels?
+  
+
+  if (d != nullptr) {
+    glTexStorage2D(gl_type, 1, storage_type, width, height);
+    glTexSubImage2D(gl_type, 0, 0, 0, width, height, colour_type_b, basic_type, d);
+  } else {
+    glTexImage2D(gl_type, 0, storage_type, width, height, 0, colour_type_b, basic_type, NULL);
   }
   CXGLERROR
 }
@@ -177,12 +219,29 @@ void Texture::update(byte_t * data) {
 
 void Texture::bind() { glActiveTexture(GL_TEXTURE0 + obj_->unit); glBindTexture(obj_->gl_type, obj_->id);}
 
+
 /*
  * Unbind
  */
 
 void Texture::unbind(){ glActiveTexture(GL_TEXTURE0 + obj_->unit); glBindTexture(obj_->gl_type, 0); }
 
+
+/// Resize a texture in memory - used mostly with FBOs. Clears all data
+
+void Texture::resize(size_t w, size_t h) {
+  if (obj_ == nullptr) return;
+
+  obj_->width = w;
+  obj_->height = h;
+
+  bind();
+  glTexImage2D(obj_->gl_type, 0, obj_->storage_type, obj_->width, obj_->height, 0, obj_->colour_type_b, obj_->basic_type, NULL);
+
+  unbind();
+
+  CXGLERROR
+}
 
 
 TextureStream::SharedObject::SharedObject(size_t w, size_t h, ColourComponent f, 

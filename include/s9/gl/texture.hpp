@@ -22,7 +22,6 @@ namespace s9 {
 
   namespace gl {
 
-   
     /*
      * Represents a texture in OpenGL. Use GL_TEXTURE_RECTANGLE
      *
@@ -44,8 +43,13 @@ namespace s9 {
 
       ColourType colour_type () const  { return obj_->colour_type; }
 
+      GLenum gl_type() {return obj_->gl_type; }
+      GLenum basic_type() {return obj_->basic_type; }
+
       void bind();
       void unbind();
+
+      void resize(size_t w, size_t h);
 
       void update(byte_t * data);
 
@@ -57,13 +61,14 @@ namespace s9 {
 
         ~SharedObject();
 
-        GLuint id;
-        GLenum gl_type;
+        GLuint id, storage_type, colour_type_a, colour_type_b;
+        GLenum gl_type, basic_type;
         size_t width;
         size_t height;
         int unit;
         ColourComponent format;
         ColourType colour_type;
+
       };
 
       std::shared_ptr <SharedObject> obj_;

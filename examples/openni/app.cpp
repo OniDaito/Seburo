@@ -102,7 +102,6 @@ OpenNIApp::~OpenNIApp(){
     ortho_camera_.update(dt);
     camera_.update(dt);
 
-
     model_ = glm::translate(glm::mat4(1.0f), glm::vec3(160,120,0));
     node_depth_.setMatrix(model_);
     openni_.texture_depth().bind();
