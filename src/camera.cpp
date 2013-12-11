@@ -8,6 +8,8 @@
 
 #include "s9/camera.hpp"
 
+#include "GL/glew.h"
+
 using namespace std;
 using namespace s9; 
 
@@ -48,6 +50,15 @@ void Camera::resize(size_t w, size_t h){
 	obj_->bottom = 0;
 	obj_->left = 0;
 	obj_->top = h;
+
+	// Assume a 0,0 w, h for viewport for now
+	obj_->view_left = 0;
+	obj_->view_bottom = 0;
+	obj_->view_width = w;
+	obj_->view_height = h;
+
+	///\todo having a gl command here is perhaps a bit naughty as it breaks the purity of the camera?
+	glViewport(obj_->view_left, obj_->view_bottom, obj_->view_width, obj_->view_height);
 
 	update();
 }

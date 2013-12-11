@@ -49,14 +49,14 @@ namespace s9 {
 
 			virtual operator int() const { return obj_.use_count() > 0; };
 
-			void bind() { glBindFramebuffer(GL_DRAW_FRAMEBUFFER, obj_->id);  glViewport(0, 0, obj_->width, obj_->height); };
+			void bind() { glBindFramebuffer(GL_DRAW_FRAMEBUFFER, obj_->id);};
 			void unbind() { glBindFramebuffer(GL_FRAMEBUFFER, 0); } ;
 			bool checkStatus();
 			void printFramebufferInfo();
 			void resize(size_t w, size_t h);
 			
 			Texture colour() { return obj_->colour; }
-			
+
 			glm::vec2 size() { return glm::vec2(obj_->width, obj_->height); }
 
 			GLuint width() {return obj_->width; };

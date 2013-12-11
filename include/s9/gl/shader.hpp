@@ -80,6 +80,9 @@ namespace s9 {
 			/// Vector4 single signing
 			void sign(ShaderClause<glm::vec4,1> &c);
 
+			/// Vector2 single signing
+			void sign(ShaderClause<glm::vec2,1> &c);
+
 
 			/// Matrix4 single signing
 

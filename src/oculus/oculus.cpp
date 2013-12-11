@@ -26,37 +26,7 @@ OculusBase::OculusBase(bool b) {
 
   obj_ = std::shared_ptr<SharedObject>(new SharedObject());
 
-
-  /*
-  obj_->HMD=*(obj_->manager->EnumerateDevices<HMDDevice>().CreateDevice());
-  
-  if (obj_->HMD){
-
-    obj_->sensor = *(obj_->HMD->GetSensor());
-
-    HMDInfo hmd;
-    
-    if(obj_->HMD->GetDeviceInfo(&hmd)) {  
-      obj_->config.SetHMDInfo(hmd);
-      // Print out config
-      cout << "SEBURO OCULUS - Resolution: " << hmd.HResolution << " x " << hmd.VResolution << endl;
-      cout << "SEBURO OCULUS - Screen Size: " << hmd.HScreenSize << " x " << hmd.VScreenSize << endl;
-      cout << "SEBURO OCULUS - Display Devicename: " << hmd.DisplayDeviceName << endl;
-      cout << "SEBURO OCULUS - DisplayID: " << hmd.DisplayId << endl;
-
-      cout << "SEBURO OCULUS - DistortionK 0: " << hmd.DistortionK[0] << endl;
-      cout << "SEBURO OCULUS - DistortionK 1: " << hmd.DistortionK[1] << endl;
-      cout << "SEBURO OCULUS - DistortionK 2: " << hmd.DistortionK[2] << endl;
-      cout << "SEBURO OCULUS - DistortionK 3: " << hmd.DistortionK[3] << endl;
-    }
-
-    obj_->profile = obj_->HMD->GetProfile();
-  
-
-
-  } else{
-     obj_->sensor = *(obj_->manager->EnumerateDevices<SensorDevice>().CreateDevice());
-  }
+ /*
 
 
   obj_->latency_tester = *(obj_->manager->EnumerateDevices<LatencyTestDevice>().CreateDevice());
@@ -89,9 +59,9 @@ OculusBase::OculusBase(bool b) {
     // For 7" screen, fit to touch left side of the view, leaving a bit of
     // invisible screen on the top (saves on rendering cost).
     // For smaller screens (5.5"), fit to the top.
-    /*if (obj_->info.HScreenSize > 0.0f)
+    /*if (obj_->hmd_info.HScreenSize > 0.0f)
     {
-        if (obj_->info.HScreenSize > 0.140f)  // 7"
+        if (obj_->hmd_info.HScreenSize > 0.140f)  // 7"
             SConfig.SetDistortionFitPointVP(-1.0f, 0.0f);        
         else        
             SConfig.SetDistortionFitPointVP(0.0f, 1.0f);        
@@ -129,7 +99,6 @@ void OculusBase::SharedObject::update(double_t dt) {
       device_status_notifications_queue.RemoveAt(0);
       queueIsEmpty = (device_status_notifications_queue.GetSize() == 0);
     }
-    cout << "OC" << endl;
 
     bool wasAlreadyCreated = desc.Handle.IsCreated();
 
@@ -140,12 +109,14 @@ void OculusBase::SharedObject::update(double_t dt) {
                   
             if (!sensor){
               sensor = *desc.Handle.CreateDeviceTyped<SensorDevice>();
-              //fusion.AttachToSensor(sensor);
+              fusion.AttachToSensor(sensor);
               cout << "SEBURO OCULUS - Sensor Connected" << endl;
             } else if (!wasAlreadyCreated) {
                cout << "SEBURO OCULUS - A new SENSOR has been detected, but it is not currently used." << endl;
             }
           }
+
+
           break;
           
         case Device_LatencyTester:
@@ -162,23 +133,45 @@ void OculusBase::SharedObject::update(double_t dt) {
           
         case Device_HMD: 
           {
-            OVR::HMDInfo info;
-            desc.Handle.GetDeviceInfo(&info);
-            // if strlen(info.DisplayDeviceName) == 0 then
+            desc.Handle.GetDeviceInfo(&hmd_info);
+            // if strlen(hmd_info.DisplayDeviceName) == 0 then
             // this HMD is 'fake' (created using sensor).
           
-            if (strlen(info.DisplayDeviceName) > 0 && (!HMD || !info.IsSameDisplay(info))) {
+            if (strlen(hmd_info.DisplayDeviceName) > 0 && (!HMD || !hmd_info.IsSameDisplay(hmd_info))) {
               cout << "SEBURO OCULUS - HMD Connected" << endl;
               
               if (!HMD || !desc.Handle.IsDevice(HMD))
                 HMD = *desc.Handle.CreateDeviceTyped<HMDDevice>();
                       
               // update stereo config with new HMDInfo
-              if (HMD && HMD->GetDeviceInfo(&info)) {
-                //RenderParams.MonitorName = hmd.DisplayDeviceName;
-                config.SetHMDInfo(info);
+              if (HMD && HMD->GetDeviceInfo(&hmd_info)) {
+                monitor_name = hmd_info.DisplayDeviceName;
+                stereo_config.SetHMDInfo(hmd_info);
+
+                stereo_config.SetFullViewport(OVR::Util::Render::Viewport(0,0, hmd_info.HScreenSize, hmd_info.VScreenSize));
+                stereo_config.SetStereoMode(OVR::Util::Render::Stereo_LeftRight_Multipass);
+                stereo_config.SetHMDInfo(hmd_info);
+                stereo_config.SetDistortionFitPointVP(-1.0f, 0.0f);
+                render_scale = stereo_config.GetDistortionScale();
+
+                left_eye_params = stereo_config.GetEyeRenderParams(OVR::Util::Render::StereoEye_Left);
+                right_eye_params = stereo_config.GetEyeRenderParams(OVR::Util::Render::StereoEye_Right);
+
+                left_eye_viewport = glm::ivec4(left_eye_params.VP.x, left_eye_params.VP.y, left_eye_params.VP.w, left_eye_params.VP.h);
+                right_eye_viewport = glm::ivec4(right_eye_params.VP.x, right_eye_params.VP.y, right_eye_params.VP.w, right_eye_params.VP.h);
+
+                cout << "SEBURO OCULUS - HMD device added." << endl;
+
+                cout << "SEBURO OCULUS - Resolution: " << hmd_info.HResolution << " x " << hmd_info.VResolution << endl;
+                cout << "SEBURO OCULUS - Screen Size: " << hmd_info.HScreenSize << " x " << hmd_info.VScreenSize << endl;
+                cout << "SEBURO OCULUS - Display Devicename: " << hmd_info.DisplayDeviceName << endl;
+                cout << "SEBURO OCULUS - DisplayID: " << hmd_info.DisplayId << endl;
+
+                cout << "SEBURO OCULUS - DistortionK 0: " << hmd_info.DistortionK[0] << endl;
+                cout << "SEBURO OCULUS - DistortionK 1: " << hmd_info.DistortionK[1] << endl;
+                cout << "SEBURO OCULUS - DistortionK 2: " << hmd_info.DistortionK[2] << endl;
+                cout << "SEBURO OCULUS - DistortionK 3: " << hmd_info.DistortionK[3] << endl;
               }
-              cout << "SEBURO OCULUS - HMD device added." << endl;
             }
             break;
           }
@@ -189,7 +182,7 @@ void OculusBase::SharedObject::update(double_t dt) {
       
       if (desc.Handle.IsDevice(sensor)) {
         cout << "SEBURO OCULUS - Sensor reported device removed." << endl;
-      //  fusion.AttachToSensor(NULL);
+        fusion.AttachToSensor(NULL);
         sensor.Clear();
         cout << "SEBURO OCULUS - Sensor disconnected" << endl;
       } else if (desc.Handle.IsDevice(latency_tester)) {
@@ -203,13 +196,13 @@ void OculusBase::SharedObject::update(double_t dt) {
                
           HMD = HMD->Disconnect(sensor);
 
-          // This will initialize info with information about configured IPD,
+          // This will initialize hmd_info with hmd_information about configured IPD,
           // screen size and other variables needed for correct projection.
           // We pass HMD DisplayDeviceName into the renderer to select the
           // correct monitor in full-screen mode.
-          if (HMD && HMD->GetDeviceInfo(&info)) {
+          if (HMD && HMD->GetDeviceInfo(&hmd_info)) {
             //RenderParams.MonitorName = hmd.DisplayDeviceName;
-            config.SetHMDInfo(info);
+            stereo_config.SetHMDInfo(hmd_info);
           }
           cout << "SEBURO OCULUS - HMD device removed." << endl;
         }
@@ -232,9 +225,9 @@ void OculusBase::SharedObject::update(double_t dt) {
   // We extract Yaw, Pitch, Roll instead of directly using the orientation
   // to allow "additional" yaw manipulation with mouse/controller.
   if(sensor) {
-      //Quatf    q = fusion.GetPredictedOrientation();
+      Quatf    q = fusion.GetPredictedOrientation();
       //OVR::Quatf q = fusion.GetOrientation(); 
-      //orientation = glm::quat(q.w,q.x,q.y,q.z); 
+      orientation = glm::quat(q.w,q.x,q.y,q.z); 
       
       //float    yaw = 0.0f;
       //hmdOrient.GetEulerAngles<Axis_Y, Axis_X, Axis_Z>(&yaw, &ThePlayer.EyePitch, &ThePlayer.EyeRoll);
