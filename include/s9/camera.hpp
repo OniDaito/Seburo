@@ -92,6 +92,11 @@ namespace s9{
 				bottom = 100;
 				field = 55.0f;
 				orthographic = false;
+				view_left = 0;
+				view_bottom = 0;
+				view_width = 800;
+				view_height = 600;
+	
 			}
 
 			glm::mat4 view_matrix;
@@ -100,6 +105,7 @@ namespace s9{
 			bool orthographic;
 			float ratio, far, near, field;
 			size_t left, top, bottom, right; // Held for orthographic as well
+			size_t view_width, view_left, view_bottom, view_height; // Viewport settings
 		
 			glm::vec3 pos, look, up;
 		};

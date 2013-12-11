@@ -46,6 +46,11 @@ void ShaderVisitor::sign( ShaderClause<glm::vec4, 1> &c) {
   glUniform4f( l, c.data.x, c.data.y, c.data.z, c.data.w );
 }
 
+void ShaderVisitor::sign( ShaderClause<glm::vec2, 1> &c) {
+	GLuint l = location(c.name.c_str());
+  glUniform2f( l, c.data.x, c.data.y );
+}
+
 
 void ShaderVisitor::sign( ShaderClause<uint, 1> &c) {
 	GLuint l = location(c.name.c_str());

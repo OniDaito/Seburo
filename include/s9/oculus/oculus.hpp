@@ -64,21 +64,31 @@ namespace s9 {
         OVR::Ptr<OVR::SensorDevice> sensor; 
         OVR::Ptr<OVR::Profile> profile;
 
-        OVR::Util::Render::StereoConfig config;
+        OVR::Util::Render::StereoConfig stereo_config;
         OVR::Util::LatencyTest latency_util;
         OVR::Ptr<OVR::LatencyTestDevice> latency_tester;
 
         OVR::Array<DeviceStatusNotificationDesc> device_status_notifications_queue; 
 
         OVR::SensorFusion fusion;
-        OVR::HMDInfo info;
-
+        OVR::HMDInfo hmd_info;
         glm::quat orientation;
+
+        OVR::Util::Render::StereoEyeParams left_eye_params;
+        OVR::Util::Render::StereoEyeParams right_eye_params;
+
+        float render_scale;
+        std::string monitor_name;
+
+        // Distortion parameters
+        glm::ivec4 left_eye_viewport;
+        glm::ivec4 right_eye_viewport;
+  
+
       };
 
       std::shared_ptr<SharedObject> obj_ = nullptr;
 
-  
     public:
   
       OculusBase() {}
@@ -89,6 +99,44 @@ namespace s9 {
 
       glm::quat orientation() { if(obj_ != nullptr) return obj_->orientation; else return glm::quat(); } 
      
+      glm::ivec4 left_eye_viewport() { if(obj_ != nullptr) return obj_->left_eye_viewport; else return glm::ivec4(1.0f); }
+      glm::ivec4 right_eye_viewport() { if(obj_ != nullptr) return obj_->right_eye_viewport; else return glm::ivec4(1.0f); }
+
+      std::string monitor_name()  { if(obj_ != nullptr) return obj_->monitor_name; else return ""; }
+
+      float render_scale() {if(obj_ != nullptr) return obj_->render_scale; else return 1.0f; }
+
+      glm::vec4 distortion_parameters() { if(obj_ != nullptr) 
+          return glm::vec4(obj_->hmd_info.DistortionK[0], obj_->hmd_info.DistortionK[1],
+            obj_->hmd_info.DistortionK[2],obj_->hmd_info.DistortionK[3]);
+        else
+          return glm::vec4(1.0f);
+      }
+
+      /// Return the interpupillary distance if the device exists, else 1.0f
+      float interpupillary_distance() {
+         if(obj_ != nullptr) return obj_->hmd_info.InterpupillaryDistance; else return 1.0f;
+      }
+
+      /// Return the lens separation distance if the device exists, else 1.0f
+      float lens_separation_distance() {
+        if(obj_ != nullptr) return obj_->hmd_info.LensSeparationDistance; else return 1.0f;
+      }
+
+      /// Return the eye to screen distance if the device exists, else 1.0f
+      float eye_to_screen_distance() {
+        if(obj_ != nullptr) return obj_->hmd_info.EyeToScreenDistance; else return 1.0f;
+      }
+
+      /// Return the screen center if the device exists, else 1.0f
+      glm::vec2 screen_center() {
+        if(obj_ != nullptr) return glm::vec2(obj_->hmd_info.HScreenSize / 2.0, obj_->hmd_info.VScreenCenter ); else return glm::vec2(1.0f);
+      }
+
+      /// Return the screen size if the device exists, else 1.0f
+      glm::vec2 screen_size() {
+        if(obj_ != nullptr) return glm::vec2(obj_->hmd_info.HScreenSize, obj_->hmd_info.VScreenSize); else return glm::vec2(1.0f);
+      }
     };
   }
 
