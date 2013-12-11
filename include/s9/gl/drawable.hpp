@@ -118,8 +118,9 @@ namespace s9{
 
       template< typename VertexType, typename FaceType, typename AllocationPolicy> 
       void brew( GeometryT<VertexType, FaceType, AllocationPolicy> &g, BrewFlags b=BrewFlagsDefault) {
-        glGenVertexArrays(1, &(vao_));
         
+        glGenVertexArrays(1, &(vao_));
+
         // for now, always interleaved
         if (b.interleaved || true){
           handles_.push_back(0);
@@ -127,7 +128,7 @@ namespace s9{
           ///\todo non interleaved buffers
           assert(false);
         }
-
+        
         /// Last handle is always the indices
 
         if (g.indexed()) {
@@ -140,13 +141,12 @@ namespace s9{
 
         brewed_ = true;
 
-        CXGLERROR
-
       }
       
       /// Basic destruction of the buffers created
       ~Drawable() {
-        glDeleteBuffers(handles_.size(), &(handles_[0]));
+        if (brewed_)
+          glDeleteBuffers(handles_.size(), &(handles_[0]));
       } 
 
       void bind() { glBindVertexArray(vao_); }

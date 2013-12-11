@@ -28,16 +28,20 @@ using namespace s9::gl;
     Cuboid v = cuboid_;
     quad_ = Quad(640,480);
 
-    camera_ = Camera(glm::vec3(0.0f,0.0f,10.0f));
+    camera_left_ = Camera(glm::vec3(0.0f,0.0f,10.0f));
+    camera_right_ = Camera(glm::vec3(0.0f,0.0f,10.0f));
+    
     camera_ortho_ = Camera(glm::vec3(0.0f,0.0f,1.0f));
     camera_ortho_.set_orthographic(true);
 
     oculus_ = oculus::OculusBase(true);
 
-    fbo_ = FBO(800,600);
     
-    node_.add(cuboid_).add(shader_).add(camera_);
-    node_quad_.add(quad_).add(shader_warp_).add(camera_ortho_).add(fbo_.colour());
+    node_.add(cuboid_).add(shader_);
+    node_quad_.add(quad_).add(shader_warp_).add(camera_ortho_);
+
+    node_left_.add(camera_left_).add(node_);
+    node_right_.add(camera_right_).add(node_);
 
     // Oculus Shader values
     node_quad_.add( ShaderClause<glm::vec2,1>("uLensCenter", oculus_lens_center_) );
@@ -49,14 +53,15 @@ using namespace s9::gl;
 
 ///\todo seems not to want to update member variables :(
 void OculusApp::update(double_t dt) {    
+  
     oculus_.update(dt);
-
     ///\todo These probably only need to be set once. We'll get a cache at some point for shader values
     //oculus_lens_center_ = oculus_.
     oculus_screen_center_ = oculus_.screen_center();
     //oculus_scale_ = 
     //oculus_scale_in_ = 
     oculus_hmd_warp_param_ = oculus_.distortion_parameters();
+
 }
 
 
@@ -65,32 +70,45 @@ void OculusApp::update(double_t dt) {
  */
 
  void OculusApp::display(double_t dt){
+
+
+    if (!fbo_ && oculus_.connected()){
+        glm::ivec2 s = oculus_.screen_resolution();
+        fbo_ = FBO(static_cast<size_t>(s.x),static_cast<size_t>(s.y)); // Match the oculus rift
+        node_.add(fbo_.colour());
+    }
+
+
     GLfloat depth = 1.0f;
 
     // Draw to the FBO
-    fbo_.bind();
-    glClearBufferfv(GL_COLOR, 0, &glm::vec4(0.9f, 0.9f, 0.9f, 1.0f)[0]);
-    glClearBufferfv(GL_DEPTH, 0, &depth );
+    if (fbo_){
+        fbo_.bind();
+        glClearBufferfv(GL_COLOR, 0, &glm::vec4(0.6f, 0.6f, 0.6f, 1.0f)[0]);
+        glClearBufferfv(GL_DEPTH, 0, &depth );
 
-    glm::quat q = oculus_.orientation();
-    glm::mat4 mq = glm::mat4_cast(q);
+        glm::quat q = oculus_.orientation();
+        glm::mat4 mq = glm::mat4_cast(q);
 
 
-    oculus_dt_ = glm::inverse(oculus_prev_) * q;
-    camera_.rotate(oculus_dt_);
-    camera_.update(dt);
-    oculus_prev_ = q;
+        oculus_dt_ = glm::inverse(oculus_prev_) * q;
+        //camera_.rotate(oculus_dt_);
+        //camera_.update(dt);
+        oculus_prev_ = q;
 
-    node_.draw();
+        node_left_.draw();
+        node_right_.draw();
 
-    fbo_.unbind();
+        fbo_.unbind();
+    }
+   
 
     // Draw to main screen
     glClearBufferfv(GL_COLOR, 0, &glm::vec4(0.9f, 0.9f, 0.9f, 1.0f)[0]);
     glClearBufferfv(GL_DEPTH, 0, &depth );
 
     node_quad_.draw();
-     
+
 }
 
 
@@ -107,10 +125,7 @@ void OculusApp::update(double_t dt) {
 
  void OculusApp::processEvent(ResizeEvent e){
     cout << "Window Resized:" << e.w << "," << e.h << endl;
-    camera_.resize(e.w,e.h);
     camera_ortho_.resize(e.w, e.h);
-    fbo_.resize(e.w, e.h);
-
     node_quad_.setMatrix(glm::translate(glm::mat4(1.0f), glm::vec3(e.w/2.0f, e.h/2.0f, 0.0f)));
 }
 

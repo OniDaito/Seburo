@@ -226,7 +226,6 @@ void Texture::bind() { glActiveTexture(GL_TEXTURE0 + obj_->unit); glBindTexture(
 
 void Texture::unbind(){ glActiveTexture(GL_TEXTURE0 + obj_->unit); glBindTexture(obj_->gl_type, 0); }
 
-
 /// Resize a texture in memory - used mostly with FBOs. Clears all data
 
 void Texture::resize(size_t w, size_t h) {
@@ -259,13 +258,15 @@ TextureStream::SharedObject::SharedObject(size_t w, size_t h, ColourComponent f,
 TextureStream::TextureStream(size_t width, size_t height, ColourComponent format, 
     ColourType type, int unit, const byte_t* data) : Texture() {
 
-  obj_ = shared_ptr<SharedObject>(new SharedObject(width,height,format,type,unit,data));
+  obj_ = shared_ptr<SharedObject>(new TextureStream::SharedObject(width,height,format,type,unit,data));
+
+  shared_ptr<TextureStream::SharedObject> tsobj = std::static_pointer_cast<TextureStream::SharedObject>(obj_);
 
   bind();
 
-  glGenBuffers(1, &(obj_->tex_buffer));
-  glBindBuffer(GL_PIXEL_UNPACK_BUFFER, obj_->tex_buffer);
-  int texsize = obj_->width * obj_->height;
+  glGenBuffers(1, &(tsobj->tex_buffer));
+  glBindBuffer(GL_PIXEL_UNPACK_BUFFER, tsobj->tex_buffer);
+  int texsize = tsobj->width * tsobj->height;
 
   ///\todo assuming unsigned byte?
   switch (format){
@@ -305,12 +306,14 @@ void TextureStream::update(byte_t *data){
   if (data == nullptr)
     return;
 
+  shared_ptr<TextureStream::SharedObject> tsobj = std::static_pointer_cast<TextureStream::SharedObject>(obj_);
   int texsize = obj_->width * obj_->height;
+  
   bind();
 
-  glBindBuffer(GL_PIXEL_UNPACK_BUFFER, obj_->tex_buffer);
+  glBindBuffer(GL_PIXEL_UNPACK_BUFFER, tsobj->tex_buffer);
 
-  obj_->pbo_memory = glMapBuffer(GL_PIXEL_UNPACK_BUFFER, GL_WRITE_ONLY);
+  tsobj->pbo_memory = glMapBuffer(GL_PIXEL_UNPACK_BUFFER, GL_WRITE_ONLY);
   CXGLERROR
 
   GLenum tc  = GL_UNSIGNED_BYTE;
@@ -332,7 +335,7 @@ void TextureStream::update(byte_t *data){
     
     case RGBA:
     case BGRA:
-      memcpy(obj_->pbo_memory, data, texsize * 4);
+      memcpy(tsobj->pbo_memory, data, texsize * 4);
       CXGLERROR
       glUnmapBuffer(GL_PIXEL_UNPACK_BUFFER);
       glTexSubImage2D(obj_->gl_type, 0, 0, 0, obj_->width, obj_->height,GL_RGBA, tc, 0);
@@ -340,7 +343,7 @@ void TextureStream::update(byte_t *data){
     
     case RGB:
     case BGR:
-      memcpy(obj_->pbo_memory, data, texsize * 3);
+      memcpy(tsobj->pbo_memory, data, texsize * 3);
       CXGLERROR
       glUnmapBuffer(GL_PIXEL_UNPACK_BUFFER);
       glTexSubImage2D(obj_->gl_type, 0, 0, 0, obj_->width, obj_->height, GL_RGB, tc, 0);
@@ -350,7 +353,7 @@ void TextureStream::update(byte_t *data){
     
     case GREY:
     case RED:
-      memcpy(obj_->pbo_memory, data, texsize);
+      memcpy(tsobj->pbo_memory, data, texsize);
       glUnmapBuffer(GL_PIXEL_UNPACK_BUFFER);
       glTexSubImage2D(obj_->gl_type, 0, 0, 0, obj_->width, obj_->height, GL_RED, tc, 0);
 

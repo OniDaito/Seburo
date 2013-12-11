@@ -29,13 +29,16 @@ void BasicApp::init(){
 
     Spike s (4,1,1.0f,2.0f);
 
-    node_.add(cuboid_).add(camera_).add(shader_);
+    node_.add(camera_).add(cuboid_).add(shader_);
 
     Node spike_node(s);
 
     spike_node.setMatrix(glm::translate(glm::mat4(1.0f), glm::vec3(0.0f,0.0f,2.0f)));
 
     node_.add(spike_node);
+
+    top_node_.add(node_);
+    top_node_.setMatrix(glm::translate(glm::mat4(1.0f), glm::vec3(2.0f,0.0f,0.0f)));
 
     rotation_ = 0;
 
@@ -62,7 +65,7 @@ void BasicApp::display(double_t dt){
     glm::mat4 Model = glm::rotate(glm::mat4(1.0f), rotation_, glm::vec3(0.0f, 1.0f, 0.0f));
     node_.setMatrix(Model);
 
-    node_.draw();
+    top_node_.draw();
    
 }
 

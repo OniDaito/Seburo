@@ -14,43 +14,61 @@ using namespace s9::oculus;
 using namespace OVR;
 
 OculusBase::SharedObject::SharedObject() {
-  manager=*DeviceManager::Create();
-  manager->SetMessageHandler(this);
-}
-
-///\todo - pass in a window listener as window events will affect this
-
-OculusBase::OculusBase(bool b) {
+  initialized = false;
+  manager = *DeviceManager::Create();
   
-  System::Init( Log::ConfigureDefaultLog (LogMask_All));  
+  HMD=*(manager->EnumerateDevices<HMDDevice>().CreateDevice());
+  
+  if (HMD){
 
-  obj_ = std::shared_ptr<SharedObject>(new SharedObject());
+    sensor = *(HMD->GetSensor());
+    
+    if(HMD->GetDeviceInfo(&hmd_info)) {  
+      stereo_config.SetHMDInfo(hmd_info);
+      // Print out config
+      cout << "SEBURO OCULUS - Resolution: " << hmd_info.HResolution << " x " << hmd_info.VResolution << endl;
+      cout << "SEBURO OCULUS - Screen Size: " << hmd_info.HScreenSize << " x " << hmd_info.VScreenSize << endl;
+      cout << "SEBURO OCULUS - Display Devicename: " << hmd_info.DisplayDeviceName << endl;
+      cout << "SEBURO OCULUS - DisplayID: " << hmd_info.DisplayId << endl;
 
- /*
+      cout << "SEBURO OCULUS - DistortionK 0: " << hmd_info.DistortionK[0] << endl;
+      cout << "SEBURO OCULUS - DistortionK 1: " << hmd_info.DistortionK[1] << endl;
+      cout << "SEBURO OCULUS - DistortionK 2: " << hmd_info.DistortionK[2] << endl;
+      cout << "SEBURO OCULUS - DistortionK 3: " << hmd_info.DistortionK[3] << endl;
+    }
+
+    profile = HMD->GetProfile();
 
 
-  obj_->latency_tester = *(obj_->manager->EnumerateDevices<LatencyTestDevice>().CreateDevice());
-  if (obj_->latency_tester) {
-    obj_->latency_util.SetDevice(obj_->latency_tester);
+  } else{
+     sensor = *(manager->EnumerateDevices<SensorDevice>().CreateDevice());
   }
 
-  // Make the user aware which devices are present.
-  if(obj_->HMD == NULL && obj_->sensor == NULL){
-    cerr << "SEBURO OCULUS ERROR - No HMD or Sensor detected" << endl;
-  } else if(obj_->HMD  == NULL) {
-    cerr << "SEBURO OCULUS ERROR - No HMD detected" << endl;
-  } else if(obj_->sensor == NULL) {
-    cerr << "SEBURO OCULUS ERROR - No Sensor detected" << endl;
+
+  latency_tester = *(manager->EnumerateDevices<LatencyTestDevice>().CreateDevice());
+  if (latency_tester) {
+    latency_util.SetDevice(latency_tester);
+  }
+
+  // Make the user aware which devices are present. Not an error per-se as we wait for plugging in
+  if(HMD == NULL && sensor == NULL){
+    cout << "SEBURO OCULUS Startup - No HMD or Sensor detected" << endl;
+  } else if(HMD  == NULL) {
+    cout << "SEBURO OCULUS Startup - No HMD detected" << endl;
+  } else if(sensor == NULL) {
+    cout << "SEBURO OCULUS Startup - No Sensor detected" << endl;
+  } else {
+    initialized = true;
   }
  
 
-  if(obj_->sensor) {
+  if(sensor) {
     // We need to attach sensor to SensorFusion object for it to receive
     // body frame messages and update orientation. SFusion.GetOrientation()
     // is used in OnIdle() to orient the view.
-    obj_->fusion.AttachToSensor(obj_->sensor);
-    obj_->fusion.SetDelegateMessageHandler(this);
-    obj_->fusion.SetPredictionEnabled(true);
+    fusion.AttachToSensor(sensor);
+    fusion.SetDelegateMessageHandler(this);
+    fusion.SetPredictionEnabled(true);
 
   }
 
@@ -59,9 +77,9 @@ OculusBase::OculusBase(bool b) {
     // For 7" screen, fit to touch left side of the view, leaving a bit of
     // invisible screen on the top (saves on rendering cost).
     // For smaller screens (5.5"), fit to the top.
-    /*if (obj_->hmd_info.HScreenSize > 0.0f)
+    /*if (info.HScreenSize > 0.0f)
     {
-        if (obj_->hmd_info.HScreenSize > 0.140f)  // 7"
+        if (info.HScreenSize > 0.140f)  // 7"
             SConfig.SetDistortionFitPointVP(-1.0f, 0.0f);        
         else        
             SConfig.SetDistortionFitPointVP(0.0f, 1.0f);        
@@ -73,6 +91,19 @@ OculusBase::OculusBase(bool b) {
     SConfig.Set2DAreaFov(DegreeToRad(85.0f));
 
     */
+
+  // This goes last as we want to attempt full setup before we allow the update thread access
+  manager->SetMessageHandler(this);
+}
+
+///\todo - pass in a window listener as window events will affect this
+
+OculusBase::OculusBase(bool b) {
+  
+  System::Init( Log::ConfigureDefaultLog (LogMask_All));  
+  obj_ = std::shared_ptr<SharedObject>(new SharedObject());
+
+
 }
 
 void OculusBase::SharedObject::update(double_t dt) {
@@ -171,6 +202,8 @@ void OculusBase::SharedObject::update(double_t dt) {
                 cout << "SEBURO OCULUS - DistortionK 1: " << hmd_info.DistortionK[1] << endl;
                 cout << "SEBURO OCULUS - DistortionK 2: " << hmd_info.DistortionK[2] << endl;
                 cout << "SEBURO OCULUS - DistortionK 3: " << hmd_info.DistortionK[3] << endl;
+
+                initialized = true;
               }
             }
             break;
@@ -179,6 +212,8 @@ void OculusBase::SharedObject::update(double_t dt) {
         default:;
       }
     } else if (desc.Action == Message_DeviceRemoved) {
+      
+      initialized = false;
       
       if (desc.Handle.IsDevice(sensor)) {
         cout << "SEBURO OCULUS - Sensor reported device removed." << endl;
@@ -236,7 +271,8 @@ void OculusBase::SharedObject::update(double_t dt) {
 
 }
 
-void OculusBase::SharedObject::onMessage(const Message& msg) {
+void OculusBase::SharedObject::OnMessage(const Message& msg) {
+
   if (msg.Type == Message_DeviceAdded || msg.Type == Message_DeviceRemoved) {
     if (msg.pDevice == manager) {
       const MessageDeviceStatus& statusMsg = static_cast<const MessageDeviceStatus&>(msg);

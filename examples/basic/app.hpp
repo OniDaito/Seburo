@@ -41,6 +41,7 @@ namespace s9 {
 	protected:
 		Cuboid cuboid_;
 		Node node_;
+		Node top_node_;
 		gl::Shader shader_;
 		Camera camera_;
 

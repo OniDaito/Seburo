@@ -47,10 +47,14 @@ namespace s9 {
 
 		gl::Shader 		shader_;
 		gl::Shader 		shader_warp_;
-		Camera 				camera_;
+		
+		Camera 				camera_left_;
+		Camera 				camera_right_;
 		Camera 				camera_ortho_;
 
 		Node 					node_;
+		Node 					node_left_;
+		Node 					node_right_;
 		Node					node_quad_;
 
 

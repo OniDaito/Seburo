@@ -31,12 +31,24 @@ namespace s9 {
     
     protected:
 
+      /// Internal object that can be shared around other instances. Watches after an oculus rift.
       struct SharedObject : public OVR::MessageHandler {
 
         SharedObject();
 
-        void onMessage(const OVR::Message& msg);
+        void OnMessage(const OVR::Message& msg);
         void update(double_t dt);
+        bool connected() { return IsHandlerInstalled(); }
+
+        ~SharedObject() {
+          RemoveHandlerFromDevices();
+          latency_tester.Clear();
+          sensor.Clear();
+          HMD.Clear();
+
+          std::cout << "SEBURO OCCULUS - Shutting down oculus manager." << std::endl;
+        }
+
 
         struct DeviceStatusNotificationDesc {
           OVR::DeviceHandle    Handle;
@@ -47,16 +59,7 @@ namespace s9 {
             : Handle(dev), Action(mt) {}
         };
     
-           
-        ~SharedObject() {
-         
-          latency_tester.Clear();
-          sensor.Clear();
-          HMD.Clear();
-
-          std::cout << "SEBURO OCCULUS - Shutting down oculus manager." << std::endl;
-        }
-
+      
         std::vector<OculusBase*> handlers;
        
         OVR::Ptr<OVR::DeviceManager> manager;
@@ -83,6 +86,8 @@ namespace s9 {
         // Distortion parameters
         glm::ivec4 left_eye_viewport;
         glm::ivec4 right_eye_viewport;
+
+        bool initialized;
   
 
       };
@@ -96,6 +101,8 @@ namespace s9 {
       ~OculusBase() { }
 
       void update(double_t dt) { if(obj_ != nullptr) obj_->update(dt); }
+
+      bool connected() { if (obj_ != nullptr) return (obj_->connected() && obj_->initialized); return false; }
 
       glm::quat orientation() { if(obj_ != nullptr) return obj_->orientation; else return glm::quat(); } 
      
@@ -133,7 +140,13 @@ namespace s9 {
         if(obj_ != nullptr) return glm::vec2(obj_->hmd_info.HScreenSize / 2.0, obj_->hmd_info.VScreenCenter ); else return glm::vec2(1.0f);
       }
 
-      /// Return the screen size if the device exists, else 1.0f
+      /// Return the resoultion in pixels or zero
+      glm::ivec2 screen_resolution() {
+        if(obj_ != nullptr) return glm::ivec2(obj_->hmd_info.HResolution, obj_->hmd_info.VResolution); else return glm::ivec2(0.0f);
+
+      }
+
+      /// Return the screen size in metres (I think) if the device exists, else 1.0f
       glm::vec2 screen_size() {
         if(obj_ != nullptr) return glm::vec2(obj_->hmd_info.HScreenSize, obj_->hmd_info.VScreenSize); else return glm::vec2(1.0f);
       }

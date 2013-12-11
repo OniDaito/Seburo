@@ -175,6 +175,7 @@ void FBO::printFramebufferInfo() {
 
 
 void FBO::resize(size_t w, size_t h){
+  if(obj_ == nullptr) return;
 	if(!obj_->ok) return;
 	
 	obj_->width = w;

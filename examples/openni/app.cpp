@@ -1,4 +1,4 @@
-/**
+#/**
 * @brief GLFW Window based solution
 * @file app.hpp
 * @author Benjamin Blundell <oni@section9.co.uk>
@@ -7,9 +7,6 @@
 */
 
 #include "app.hpp"
-
-
-#include <boost/program_options.hpp>
 #include <signal.h>
 
 using namespace std;
@@ -80,7 +77,6 @@ void OpenNIApp::init(){
 }
 
 OpenNIApp::~OpenNIApp(){
-    delete[] bytes_;
 }
 
 

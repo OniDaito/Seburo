@@ -47,8 +47,6 @@ namespace s9 {
 			FBO() {};
 			FBO(size_t w, size_t h);
 
-			virtual operator int() const { return obj_.use_count() > 0; };
-
 			void bind() { glBindFramebuffer(GL_DRAW_FRAMEBUFFER, obj_->id);};
 			void unbind() { glBindFramebuffer(GL_FRAMEBUFFER, 0); } ;
 			bool checkStatus();
@@ -61,6 +59,10 @@ namespace s9 {
 
 			GLuint width() {return obj_->width; };
 			GLuint height() {return obj_->height; }
+
+			typedef std::shared_ptr<SharedObject> FBO::*unspecified_bool_type;
+    	operator unspecified_bool_type() const { return ( obj_.get() == 0 ) ? 0 : &FBO::obj_; }
+    	void reset() { obj_.reset(); }
 			
 	
 		};

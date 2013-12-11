@@ -105,12 +105,21 @@ namespace s9 {
     protected:
       struct SharedObject : public Texture::SharedObject {
         SharedObject(size_t w, size_t h, ColourComponent f, ColourType t, int u, const byte_t* d);
+        
+        ~SharedObject() {
+          //delete pbo_memory;
+          if (tex_data != nullptr)
+            delete tex_data;
+        }
+
         byte_t *tex_data;
         GLvoid *pbo_memory;
         GLuint tex_buffer;
+      
+
       };
 
-      std::shared_ptr <SharedObject> obj_;
+
 
     };
 

@@ -27,8 +27,9 @@ void NodeShape::draw(GeometryPrimitive overide){
 	if (shape_.brewed()) {
 		shape_.draw(overide);
 	}
-	else
+	else{
 		shape_.brew(); ///\todo allow passing of flags
+	}
 }
 
 
@@ -330,6 +331,9 @@ NodeBasePtr Node::getBase(NodeResponsibility r) {
 
 Node& Node::draw(GeometryPrimitive gp) {
 
+	using namespace gl;
+	CXGLERROR
+
 	// Call the shared object update - allows Node subclasses polymorphism
 	obj_->update();
 
@@ -339,6 +343,7 @@ Node& Node::draw(GeometryPrimitive gp) {
 		fp = obj_->geometry_cast;
 
 	for (NodeBasePtr p : obj_->bases){
+		p->preDraw();
 		p->sign(global_visitor);
 		p->draw(fp);
 

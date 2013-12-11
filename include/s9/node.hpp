@@ -18,6 +18,7 @@
 #include "gl/texture.hpp"
 #include "gl/shader.hpp"
 #include "gl/utils.hpp"
+#include "gl/utils.hpp"
 
 #include <list>
 
@@ -67,6 +68,9 @@ namespace s9 {
 		/// Called by the Node's draw method and sets up the shader / geometry
 		virtual void 					draw(GeometryPrimitive overide) { }
 
+		/// Called before draw and sign
+		virtual void 					preDraw() {}
+
 		/// Operation called after this node has been drawn and we move up the tree
 		virtual void 					postDraw() { }
 
@@ -113,8 +117,8 @@ namespace s9 {
 		glm::mat4 		matrix() { return matrix_; } ;
 		void 					set_matrix( const glm::mat4 &matrix) { matrix_ = matrix;  } ;
 		std::string 	tag() { return "Matrix"; }
-		// Careful not to call this without calling the pop as well
-		void					sign(gl::ShaderVisitor &v ) {
+
+		void preDraw() {
 			if (matrix_stack_.size() > 0){
 				matrix_global_ =  matrix_stack_.back() * matrix_;
 			}
@@ -122,6 +126,10 @@ namespace s9 {
 				matrix_global_ = matrix_;
 			
 			matrix_stack_.push_back(matrix_global_);
+		}
+
+		// Careful not to call this without calling the pop as well
+		void					sign(gl::ShaderVisitor &v ) {
 			v.sign(clause_matrix_); 
 		}
 
@@ -223,7 +231,7 @@ namespace s9 {
 	public:
 		NodeShader(gl::Shader s) : NodeBase(SHADER), shader_(s) {  };
 		std::string tag() { return "Shader"; }
-		void draw(GeometryPrimitive overide) {	shader_.bind(); }
+		void draw(GeometryPrimitive overide) { shader_.bind(); }
 		void postDraw() {shader_.unbind(); }
 		gl::Shader shader_;
 	};
