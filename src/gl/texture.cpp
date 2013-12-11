@@ -175,7 +175,7 @@ void Texture::update(byte_t * data) {
  * Bind to texture unit.
  */
 
-void Texture::bind() { glActiveTexture(GL_TEXTURE0 + obj_->unit); glBindTexture(obj_->gl_type, obj_->id); std::cout << "Binding: " << obj_->id << std::endl;}
+void Texture::bind() { glActiveTexture(GL_TEXTURE0 + obj_->unit); glBindTexture(obj_->gl_type, obj_->id);}
 
 /*
  * Unbind
