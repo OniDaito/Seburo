@@ -29,7 +29,7 @@ void BasicApp::init(){
 
     Spike s (4,1,1.0f,2.0f);
 
-    node_.add(camera_).add(cuboid_).add(shader_);
+    node_.add(cuboid_).add(camera_).add(shader_);
 
     Node spike_node(s);
 

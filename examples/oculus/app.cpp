@@ -37,7 +37,7 @@ using namespace s9::gl;
     oculus_ = oculus::OculusBase(true);
 
     
-    node_.add(cuboid_).add(shader_);
+    node_.add(cuboid_).add(shader_).add(camera_left_);
     node_quad_.add(quad_).add(shader_warp_).add(camera_ortho_);
 
     node_left_.add(camera_left_).add(node_);
@@ -57,10 +57,10 @@ void OculusApp::update(double_t dt) {
     oculus_.update(dt);
     ///\todo These probably only need to be set once. We'll get a cache at some point for shader values
     //oculus_lens_center_ = oculus_.
-    oculus_screen_center_ = oculus_.screen_center();
+    //oculus_screen_center_ = oculus_.screen_center();
     //oculus_scale_ = 
     //oculus_scale_in_ = 
-    oculus_hmd_warp_param_ = oculus_.distortion_parameters();
+    //oculus_hmd_warp_param_ = oculus_.distortion_parameters();
 
 }
 
@@ -76,6 +76,9 @@ void OculusApp::update(double_t dt) {
         glm::ivec2 s = oculus_.screen_resolution();
         fbo_ = FBO(static_cast<size_t>(s.x),static_cast<size_t>(s.y)); // Match the oculus rift
         node_.add(fbo_.colour());
+
+        camera_left_.resize(static_cast<size_t>(s.x), static_cast<size_t>(s.y));
+        camera_right_.resize(static_cast<size_t>(s.x), static_cast<size_t>(s.y));
     }
 
 
@@ -90,14 +93,15 @@ void OculusApp::update(double_t dt) {
         glm::quat q = oculus_.orientation();
         glm::mat4 mq = glm::mat4_cast(q);
 
-
+        // Update cameras for both eyes
         oculus_dt_ = glm::inverse(oculus_prev_) * q;
-        //camera_.rotate(oculus_dt_);
-        //camera_.update(dt);
+        //camera_left_.rotate(oculus_dt_);
+        //camera_right_.rotate(oculus_dt_);
         oculus_prev_ = q;
 
+        // Draw twice (sadly)
         node_left_.draw();
-        node_right_.draw();
+        //node_right_.draw();
 
         fbo_.unbind();
     }
@@ -126,6 +130,7 @@ void OculusApp::update(double_t dt) {
  void OculusApp::processEvent(ResizeEvent e){
     cout << "Window Resized:" << e.w << "," << e.h << endl;
     camera_ortho_.resize(e.w, e.h);
+
     node_quad_.setMatrix(glm::translate(glm::mat4(1.0f), glm::vec3(e.w/2.0f, e.h/2.0f, 0.0f)));
 }
 

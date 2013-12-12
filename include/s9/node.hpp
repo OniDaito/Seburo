@@ -68,7 +68,7 @@ namespace s9 {
 		/// Called by the Node's draw method and sets up the shader / geometry
 		virtual void 					draw(GeometryPrimitive overide) { }
 
-		/// Called before draw and sign
+		/// Called before draw and collect
 		virtual void 					preDraw() {}
 
 		/// Operation called after this node has been drawn and we move up the tree
@@ -80,8 +80,8 @@ namespace s9 {
 		/// What is this node responsible for?
 		NodeResponsibility 		responsible() {return responsible_; }
 	
-
-		virtual void sign (gl::ShaderVisitor &v ) {};
+		/// Allow a shader to come in and collect data
+		virtual void collect (gl::ShaderVisitor &v ) {};
 	
 
 		bool operator < (const NodeBase& rhs) const {
@@ -118,18 +118,18 @@ namespace s9 {
 		void 					set_matrix( const glm::mat4 &matrix) { matrix_ = matrix;  } ;
 		std::string 	tag() { return "Matrix"; }
 
+		// Careful not to call this without calling the pop as well
 		void preDraw() {
 			if (matrix_stack_.size() > 0){
 				matrix_global_ =  matrix_stack_.back() * matrix_;
 			}
 			else
 				matrix_global_ = matrix_;
-			
+
 			matrix_stack_.push_back(matrix_global_);
 		}
 
-		// Careful not to call this without calling the pop as well
-		void					sign(gl::ShaderVisitor &v ) {
+		void collect(gl::ShaderVisitor &v ) {
 			v.sign(clause_matrix_); 
 		}
 
@@ -139,7 +139,7 @@ namespace s9 {
 
 		glm::mat4 matrix_;
 		glm::mat4 matrix_global_;
-		static std::vector<glm::mat4> matrix_stack_;
+		static std::vector<glm::mat4> matrix_stack_; // works because of the tree traversal
 		gl::ShaderClause<glm::mat4,1> clause_matrix_; 
 						
 	};
@@ -153,7 +153,7 @@ namespace s9 {
 	public:
 		NodeClause( gl::ShaderClause<T,U> c ) : NodeBase(CLAUSE), clause_(c) {}		
 
-		void sign(gl::ShaderVisitor &v ) {
+		void collect(gl::ShaderVisitor &v ) {
 			v.sign(clause_);
 		}
 
@@ -166,23 +166,70 @@ namespace s9 {
 
 	/**
 	 * A Camera Decorator
+	 * Cameras are odd because unless they are overridden, they are global in scope. 
+	 * Therefore every node has a blank Camera that works in very much the same way as the
+	 * matrix node above except we override instead of multiply the matrices
 	 */
 
 	class NodeCamera : public NodeBase {
 		    	
 	public:
 		NodeCamera(Camera c) : NodeBase(CAMERA), camera_(c), 
-			clause_camera_view_("uViewMatrix", c.view_matrix()), 
-			clause_camera_projection_("uProjectionMatrix", c.projection_matrix()) {} 
+			clause_camera_view_("uViewMatrix", view_matrix_global_), 
+			clause_camera_projection_("uProjectionMatrix", projection_matrix_global_) {
+				projection_matrix_global_ = glm::mat4(1.0f);
+				view_matrix_global_ = glm::mat4(1.0f);
+			} 
+
+		NodeCamera() : NodeBase(CAMERA), 
+			clause_camera_view_("uViewMatrix", view_matrix_global_), 
+			clause_camera_projection_("uProjectionMatrix", projection_matrix_global_) {
+				projection_matrix_global_ = glm::mat4(1.0f);
+				view_matrix_global_ = glm::mat4(1.0f);
+			} 
+
+		void preDraw() {
+
+		/*	if (camera_){
+				projection_matrix_global_ = camera_.projection_matrix();
+				view_matrix_global_ = camera_.view_matrix();
+
+				projection_matrix_stack_.push_back(projection_matrix_global_);
+				view_matrix_stack_.push_back(view_matrix_global_);
+
+			} else {
+				if (projection_matrix_stack_.size() > 0){
+					projection_matrix_global_ = projection_matrix_stack_.back();
+				}
+				if (view_matrix_stack_.size() > 0){
+					view_matrix_global_ = view_matrix_stack_.back();
+				}
+			}	
+			*/
+		}
+
+		void	postDraw() {
+			//projection_matrix_stack_.pop_back();
+			//view_matrix_stack_.pop_back();
+		}
+
 	
 		std::string 	tag() { return "Camera"; }
-		void					sign(gl::ShaderVisitor &v ) { v.sign(clause_camera_projection_); v.sign(clause_camera_view_); }
+		void					collect(gl::ShaderVisitor &v ) { 
+			v.sign(clause_camera_projection_); 
+			v.sign(clause_camera_view_); 
+		}
 
 		Camera			camera_;	
 
 		gl::ShaderClause<glm::mat4,1> clause_camera_projection_; 
 		gl::ShaderClause<glm::mat4,1> clause_camera_view_; 
-	
+
+		glm::mat4 projection_matrix_global_;
+		glm::mat4 view_matrix_global_;
+		static std::vector<glm::mat4> projection_matrix_stack_;
+		static std::vector<glm::mat4> view_matrix_stack_;
+
 	};
 
 	/**
@@ -217,7 +264,7 @@ namespace s9 {
 	public:
 		NodeSkeleton (Skeleton s) : NodeBase(SKELETON), skeleton_(s){}
 		std::string 	tag() { return "Skeleton"; }
-		void					sign(gl::ShaderVisitor &v );
+		void					collect(gl::ShaderVisitor &v );
 
 		Skeleton skeleton_;
 
@@ -328,6 +375,7 @@ namespace s9 {
 			std::vector< Node > 						children;
   		std::shared_ptr<NodeMinimal>  	matrix_node; 			// We keep this so we can always get to the matrix
   		std::shared_ptr<NodeShader>			shader_node; 			// Like the above, this is handy for adding data values to the shader
+  		std::shared_ptr<NodeCamera>			camera_node;			// Temporary / Blank Camera Node
   		std::list<NodeBasePtr> 					bases;
   		GeometryPrimitive 							geometry_cast;		///\todo potentially replace this with something else we can pass to draw? User stuff
 		};

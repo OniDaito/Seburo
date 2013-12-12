@@ -65,14 +65,13 @@ vec4 oculus(in vec4 oPosition, in vec2 oTexCoord) {
 void main() {
 
   vec4 colour = oculus(vVertexPosition, vTexCoord );
-
   vec2 texsize = textureSize(uTexSampler0); 
 
   // This texture comes from an FBO so flip it
   vec2 tc = vTexCoord * texsize;
   tc.y = texsize.y - tc.y;
   vec4 texcolor = texture(uTexSampler0,tc);
-  //fragColor = vec4(texcolor.rgb,1.0);
-  fragColor = colour;
-
+  fragColor = vec4(texcolor.rgb,1.0);
+  //fragColor = colour;
+  //fragColor= vec4(1.0,0.0,0.0,1.0);
 }

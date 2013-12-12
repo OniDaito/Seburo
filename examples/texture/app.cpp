@@ -23,7 +23,6 @@ void TextureApp::init(){
 
     addWindowListener(this);
 
-
     quad_ = Quad(1.0,1.0);
     texture_ = Texture( Image(s9::File("./data/astley.jpg")));
     rotation_ = 0;

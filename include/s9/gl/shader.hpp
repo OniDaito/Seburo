@@ -62,6 +62,7 @@ namespace s9 {
 		/**
 		 * Called by nodes to present data to the currently bound shader
 		 * Follows the visitor pattern. 
+		 * \todo put a cache here perhaps?
 		 */
 
 		class SEBUROAPI ShaderVisitor {
@@ -70,14 +71,15 @@ namespace s9 {
 			GLuint location(const char * name ){ 
       	GLint p;
         glGetIntegerv(GL_CURRENT_PROGRAM, &p);
-        return glGetUniformLocation(p, name);
-
+        if (p > -1)
+        	return glGetUniformLocation(p, name);
+        return 0;
       }
 
       bool bound() {
       	GLint p;
         glGetIntegerv(GL_CURRENT_PROGRAM, &p);
-        return p > 0;
+        return p > -1;
       }
 
 			template<typename T, size_t N>
@@ -101,7 +103,6 @@ namespace s9 {
 				if(!bound()) return;
 
 				GLuint l = location(c.name.c_str());
-				if (l == 0 ) return;
 				GLfloat tp [N * 16];
 				for (int i = 0; i < N; ++i){
 					tp[i*16] = c.data[i][0][0];
@@ -129,7 +130,6 @@ namespace s9 {
 			void sign( ShaderClause<glm::mat4x2, N> &c) {
 				if(!bound()) return;
 				GLuint l = location(c.name.c_str());
-				if (l == 0 ) return;
 				GLfloat tp [N * 8];
 				for (int i = 0; i < N; ++i){
 					tp[i*8] = c.data[i][0][0];
@@ -149,7 +149,6 @@ namespace s9 {
 			void sign( ShaderClause<glm::mat2x4, N> &c) {
 				if(!bound()) return;
 				GLuint l = location(c.name.c_str());
-				if (l == 0 ) return;
 				GLfloat tp [N * 8];
 				for (int i = 0; i < N; ++i){
 					tp[i*8] = c.data[i][0][0];

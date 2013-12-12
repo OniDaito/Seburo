@@ -150,6 +150,10 @@ namespace s9 {
       glm::vec2 screen_size() {
         if(obj_ != nullptr) return glm::vec2(obj_->hmd_info.HScreenSize, obj_->hmd_info.VScreenSize); else return glm::vec2(1.0f);
       }
+
+      /// Compute and return the perspective matrix for the left eye or identity if not
+      
+
     };
   }
 

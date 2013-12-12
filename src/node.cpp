@@ -15,6 +15,9 @@ using namespace s9::gl;
 vector<glm::mat4> NodeMinimal::matrix_stack_;
 static ShaderVisitor global_visitor;
 
+// If OpenGL was multi-threaded, dang we'd be in trouble
+vector<glm::mat4> NodeCamera::projection_matrix_stack_;
+vector<glm::mat4> NodeCamera::view_matrix_stack_;
 
 /**
  * Draw function - recursively draws all the children of this node creating a contract
@@ -39,7 +42,7 @@ void NodeShape::draw(GeometryPrimitive overide){
  * into a matrix4x2
  */
 
-void NodeSkeleton::sign(gl::ShaderVisitor &v) {
+void NodeSkeleton::collect(gl::ShaderVisitor &v) {
 
 	size_t bsize = skeleton_.size();
 	glm::mat4 bone_data[shader_bone_limit];
@@ -74,12 +77,15 @@ Node::Node(Shape s) {
 	add(s);
 }
 
-/// _init - This is internal.  Creates a shared object, adding a NodeMinimal for the matrix
+/// _init - This is internal.  Creates a shared object, adding a NodeMinimal for the matrix and a camera
 /// \todo by using init here we have to call it when we make any add call or similar. Is this verbose or even nice?
 void Node::_init() {
 	obj_ = shared_ptr<SharedObject>(new SharedObject());
+	obj_->camera_node = std::shared_ptr<NodeCamera>(new NodeCamera());
+	obj_->bases.push_front(obj_->camera_node);
 	obj_->matrix_node = std::shared_ptr<NodeMinimal>(new NodeMinimal());
 	obj_->bases.push_front(obj_->matrix_node);
+
 	obj_->geometry_cast = NONE;
 }
 
@@ -175,7 +181,7 @@ Node& Node::add(gl::Shader s) {
 }
 
 Node& Node::remove(Shader s) {
-	NodeBasePtr t =  getBase(SHADER);
+	NodeBasePtr t = getBase(SHADER);
 	if (t != nullptr){
 		shared_ptr<NodeShader> p =  std::static_pointer_cast<NodeShader> (t);
 		if (p->shader_ == s){
@@ -186,25 +192,25 @@ Node& Node::remove(Shader s) {
 }
 
 
-/// Add a shader to this node
+/// Add a camera to this node. We always have a basic camera node so we can swap the camera in
 Node& Node::add(Camera c) {
 	if (obj_ == nullptr) _init();
-	if ( getBase(CAMERA) == nullptr ){
-		obj_->bases.push_front( NodeBasePtr(new NodeCamera(c)));
-		obj_->bases.sort(compareNodeBasePtr);
-	} else {
-		cerr << "SEBURO Node - Trying to add a camera to a node when one already exists." << endl;
-	}
+
+	// Nasty line
+	shared_ptr<NodeCamera> p =  std::static_pointer_cast<NodeCamera> (getBase(CAMERA));	
+	p->camera_ = c;
+
 	return *this;
 }
 
 
+/// Remove a camera from this node, reverting back to the blank camera node
 Node& Node::remove(Camera s) {
 	NodeBasePtr t =  getBase(CAMERA);
 	if (t != nullptr){
 		shared_ptr<NodeCamera> p =  std::static_pointer_cast<NodeCamera> (t);
 		if (p->camera_ == s){
-			remove(t);
+			p->camera_.reset();
 		}
 	}
 	return *this;
@@ -331,9 +337,6 @@ NodeBasePtr Node::getBase(NodeResponsibility r) {
 
 Node& Node::draw(GeometryPrimitive gp) {
 
-	using namespace gl;
-	CXGLERROR
-
 	// Call the shared object update - allows Node subclasses polymorphism
 	obj_->update();
 
@@ -344,7 +347,7 @@ Node& Node::draw(GeometryPrimitive gp) {
 
 	for (NodeBasePtr p : obj_->bases){
 		p->preDraw();
-		p->sign(global_visitor);
+		p->collect(global_visitor);
 		p->draw(fp);
 
 	}
