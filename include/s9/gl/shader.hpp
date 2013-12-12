@@ -71,6 +71,7 @@ namespace s9 {
 			GLuint location(const char * name ){ 
       	GLint p;
         glGetIntegerv(GL_CURRENT_PROGRAM, &p);
+        CXGLERROR
         if (p > -1)
         	return glGetUniformLocation(p, name);
         return 0;
@@ -100,8 +101,7 @@ namespace s9 {
 			///\todo - speed up?
 			template<size_t N>
 			void sign( ShaderClause<glm::mat4, N> &c) {
-				if(!bound()) return;
-
+			
 				GLuint l = location(c.name.c_str());
 				GLfloat tp [N * 16];
 				for (int i = 0; i < N; ++i){
@@ -124,11 +124,11 @@ namespace s9 {
 				}
 
   			glUniformMatrix4fv( l, N, GL_FALSE, &(tp[0]) );
+  			CXGLERROR
 			}
 
 			template<size_t N>
 			void sign( ShaderClause<glm::mat4x2, N> &c) {
-				if(!bound()) return;
 				GLuint l = location(c.name.c_str());
 				GLfloat tp [N * 8];
 				for (int i = 0; i < N; ++i){
@@ -143,11 +143,11 @@ namespace s9 {
 				}
 
   			glUniformMatrix4x2fv( l, N, GL_FALSE, &(tp[0]) ); ///\todo test this
+  				CXGLERROR
 			}
 
 			template<size_t N>
 			void sign( ShaderClause<glm::mat2x4, N> &c) {
-				if(!bound()) return;
 				GLuint l = location(c.name.c_str());
 				GLfloat tp [N * 8];
 				for (int i = 0; i < N; ++i){
@@ -162,6 +162,7 @@ namespace s9 {
 				}
 
   			glUniformMatrix2x4fv( l, N, GL_FALSE, &(tp[0]) ); ///\todo test this
+  				CXGLERROR
 			}
 
 			template<size_t N>

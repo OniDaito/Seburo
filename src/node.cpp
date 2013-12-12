@@ -14,6 +14,7 @@ using namespace s9::gl;
 
 vector<glm::mat4> NodeMinimal::matrix_stack_;
 static ShaderVisitor global_visitor;
+size_t NodeShader::bind_count_ = 0;
 
 // If OpenGL was multi-threaded, dang we'd be in trouble
 vector<glm::mat4> NodeCamera::projection_matrix_stack_;
@@ -29,9 +30,11 @@ void NodeShape::draw(GeometryPrimitive overide){
 
 	if (shape_.brewed()) {
 		shape_.draw(overide);
+			CXGLERROR
 	}
 	else{
 		shape_.brew(); ///\todo allow passing of flags
+			CXGLERROR
 	}
 }
 
@@ -336,7 +339,6 @@ NodeBasePtr Node::getBase(NodeResponsibility r) {
  */
 
 Node& Node::draw(GeometryPrimitive gp) {
-
 	// Call the shared object update - allows Node subclasses polymorphism
 	obj_->update();
 
@@ -347,7 +349,8 @@ Node& Node::draw(GeometryPrimitive gp) {
 
 	for (NodeBasePtr p : obj_->bases){
 		p->preDraw();
-		p->collect(global_visitor);
+		if (NodeShader::bind_count_ > 0)
+			p->collect(global_visitor);
 		p->draw(fp);
 
 	}

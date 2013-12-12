@@ -155,6 +155,7 @@ namespace s9 {
 
 		void collect(gl::ShaderVisitor &v ) {
 			v.sign(clause_);
+				
 		}
 
 		std::string 	tag() { return "Clause"; }
@@ -190,7 +191,7 @@ namespace s9 {
 
 		void preDraw() {
 
-		/*	if (camera_){
+			if (camera_){
 				projection_matrix_global_ = camera_.projection_matrix();
 				view_matrix_global_ = camera_.view_matrix();
 
@@ -205,12 +206,16 @@ namespace s9 {
 					view_matrix_global_ = view_matrix_stack_.back();
 				}
 			}	
-			*/
+			
+			//std::cout << projection_matrix_stack_.size() << std::endl;
 		}
 
 		void	postDraw() {
-			//projection_matrix_stack_.pop_back();
-			//view_matrix_stack_.pop_back();
+			// Pop if we've hit our camera node again
+			if (camera_){
+				projection_matrix_stack_.pop_back();
+				view_matrix_stack_.pop_back();
+			}
 		}
 
 	
@@ -218,6 +223,7 @@ namespace s9 {
 		void					collect(gl::ShaderVisitor &v ) { 
 			v.sign(clause_camera_projection_); 
 			v.sign(clause_camera_view_); 
+
 		}
 
 		Camera			camera_;	
@@ -278,9 +284,11 @@ namespace s9 {
 	public:
 		NodeShader(gl::Shader s) : NodeBase(SHADER), shader_(s) {  };
 		std::string tag() { return "Shader"; }
-		void draw(GeometryPrimitive overide) { shader_.bind(); }
-		void postDraw() {shader_.unbind(); }
+		void preDraw(){ bind_count_++; }
+		void draw(GeometryPrimitive overide) { shader_.bind(); 	}
+		void postDraw() {shader_.unbind(); bind_count_--; }
 		gl::Shader shader_;
+		static size_t bind_count_;
 	};
 
 	/**
