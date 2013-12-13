@@ -74,11 +74,35 @@ void OculusApp::update(double_t dt) {
 
     if (!fbo_ && oculus_.connected()){
         glm::ivec2 s = oculus_.screen_resolution();
+        glm::vec2 f = oculus_.screen_size();
         fbo_ = FBO(static_cast<size_t>(s.x),static_cast<size_t>(s.y)); // Match the oculus rift
         node_.add(fbo_.colour());
 
-        camera_left_.resize(static_cast<size_t>(s.x), static_cast<size_t>(s.y));
-        camera_right_.resize(static_cast<size_t>(s.x), static_cast<size_t>(s.y));
+        float aspect = s.x / (2.0 * s.y);
+        float fov = 2.0 * atan( s.y / (2.0 * oculus_.eye_to_screen_distance()));
+
+        glm::mat4 perspective = glm::perspective( fov, aspect, 0.1f, 100.0f);
+
+        camera_left_.resize(static_cast<size_t>(s.x / 2), static_cast<size_t>(s.y));
+        camera_right_.resize(static_cast<size_t>(s.x / 2), static_cast<size_t>(s.y));
+
+        // Is this the absoulte seperation? Should we be dividing by two?
+        // Make sure - is on the right side
+
+        float offset_metres = f.x /4.0 -  oculus_.lens_separation_distance() / 2.0; // in metres
+        float offset = 4.0 * offset / f.x;
+
+        glm::mat4 left_offset = glm::translate(glm::mat4(1.0f), glm::vec3(offset,0.0f,0.0f));
+        glm::mat4 right_offset = glm::translate(glm::mat4(1.0f), glm::vec3(-offset,0.0f,0.0f));
+
+        float dip = oculus_.interpupillary_distance() / 2.0;
+
+        glm::mat4 left_inter = glm::translate(glm::mat4(1.0f), glm::vec3(dip,0.0f,0.0f));
+        glm::mat4 right_inter = glm::translate(glm::mat4(1.0f), glm::vec3(-dip,0.0f,0.0f));
+
+        camera_left_.set_projection_matrix(left_inter * left_offset * perspective);
+        camera_right_.set_projection_matrix(right_inter * right_offset * perspective);
+
     }
 
 

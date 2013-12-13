@@ -72,6 +72,9 @@ namespace s9{
 		glm::mat4& view_matrix() { return obj_->view_matrix; };
 		glm::mat4& projection_matrix() { return obj_->projection_matrix; };
 
+		void set_view_matrix(const glm::mat4  &m) { obj_->view_matrix = m; };
+		void set_projection_matrix(const glm::mat4  &m) { obj_->projection_matrix = m; }; 
+
 		virtual void update();
 		virtual void update(double_t dt) { update(); };
 

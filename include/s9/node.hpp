@@ -207,7 +207,6 @@ namespace s9 {
 				}
 			}	
 			
-			//std::cout << projection_matrix_stack_.size() << std::endl;
 		}
 
 		void	postDraw() {

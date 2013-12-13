@@ -38,10 +38,9 @@ void BasicApp::init(){
     node_.add(spike_node);
 
     top_node_.add(node_).add(camera_);
-    top_node_.setMatrix(glm::translate(glm::mat4(1.0f), glm::vec3(2.0f,0.0f,0.0f)));
+    top_node_.setMatrix(glm::translate(glm::mat4(1.0f), glm::vec3(-1.0f,0.0f,0.0f)));
 
     rotation_ = 0;
-
 }
 
 ///\todo seems not to want to update member variables :(
