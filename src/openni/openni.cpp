@@ -172,7 +172,7 @@ OpenNIBase::OpenNIBase( const char* deviceURI) : obj_( shared_ptr<SharedObj> (ne
 }
 
 
-
+ 
 void OpenNIBase::update() {
   int changedIndex;
 

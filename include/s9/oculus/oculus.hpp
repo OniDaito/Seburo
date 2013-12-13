@@ -67,9 +67,10 @@ namespace s9 {
         OVR::Ptr<OVR::SensorDevice> sensor; 
         OVR::Ptr<OVR::Profile> profile;
 
-        OVR::Util::Render::StereoConfig stereo_config;
-        OVR::Util::LatencyTest latency_util;
-        OVR::Ptr<OVR::LatencyTestDevice> latency_tester;
+        OVR::Util::Render::StereoConfig   stereo_config;
+        OVR::Util::LatencyTest            latency_util;
+        OVR::Ptr<OVR::LatencyTestDevice>  latency_tester;
+        OVR::Util::MagCalibration         mag_cal;
 
         OVR::Array<DeviceStatusNotificationDesc> device_status_notifications_queue; 
 

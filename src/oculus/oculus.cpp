@@ -69,6 +69,7 @@ OculusBase::SharedObject::SharedObject() {
     fusion.AttachToSensor(sensor);
     fusion.SetDelegateMessageHandler(this);
     fusion.SetPredictionEnabled(true);
+    fusion.SetYawCorrectionEnabled(true);
 
   }
 
@@ -77,20 +78,13 @@ OculusBase::SharedObject::SharedObject() {
     // For 7" screen, fit to touch left side of the view, leaving a bit of
     // invisible screen on the top (saves on rendering cost).
     // For smaller screens (5.5"), fit to the top.
-    /*if (info.HScreenSize > 0.0f)
-    {
-        if (info.HScreenSize > 0.140f)  // 7"
-            SConfig.SetDistortionFitPointVP(-1.0f, 0.0f);        
+    if (hmd_info.HScreenSize > 0.0f) {
+        if (hmd_info.HScreenSize > 0.140f)  // 7"
+            stereo_config.SetDistortionFitPointVP(-1.0f, 0.0f);        
         else        
-            SConfig.SetDistortionFitPointVP(0.0f, 1.0f);        
+            stereo_config.SetDistortionFitPointVP(0.0f, 1.0f);        
     }
 
-    pRender->SetSceneRenderScale(SConfig.GetDistortionScale());
-    //pRender->SetSceneRenderScale(1.0f);
-
-    SConfig.Set2DAreaFov(DegreeToRad(85.0f));
-
-    */
 
   // This goes last as we want to attempt full setup before we allow the update thread access
   manager->SetMessageHandler(this);
@@ -178,12 +172,18 @@ void OculusBase::SharedObject::update(double_t dt) {
               if (HMD && HMD->GetDeviceInfo(&hmd_info)) {
                 monitor_name = hmd_info.DisplayDeviceName;
                 stereo_config.SetHMDInfo(hmd_info);
-
                 stereo_config.SetFullViewport(OVR::Util::Render::Viewport(0,0, hmd_info.HScreenSize, hmd_info.VScreenSize));
                 stereo_config.SetStereoMode(OVR::Util::Render::Stereo_LeftRight_Multipass);
-                stereo_config.SetHMDInfo(hmd_info);
-                stereo_config.SetDistortionFitPointVP(-1.0f, 0.0f);
+                if (hmd_info.HScreenSize > 0.0f) {
+                  if (hmd_info.HScreenSize > 0.140f)  // 7"
+                    stereo_config.SetDistortionFitPointVP(-1.0f, 0.0f);        
+                  else        
+                    stereo_config.SetDistortionFitPointVP(0.0f, 1.0f);        
+                }
+                
+
                 render_scale = stereo_config.GetDistortionScale();
+
 
                 left_eye_params = stereo_config.GetEyeRenderParams(OVR::Util::Render::StereoEye_Left);
                 right_eye_params = stereo_config.GetEyeRenderParams(OVR::Util::Render::StereoEye_Right);

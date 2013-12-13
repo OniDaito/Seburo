@@ -64,7 +64,7 @@ vec4 oculus(in vec4 oPosition, in vec2 oTexCoord) {
 
 void main() {
 
-  vec4 colour = oculus(vVertexPosition, vTexCoord );
+  //vec4 colour = oculus(vVertexPosition, vTexCoord );
   vec2 texsize = textureSize(uTexSampler0); 
 
   // This texture comes from an FBO so flip it

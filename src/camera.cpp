@@ -42,25 +42,16 @@ void Camera::init() {
 
 
 	
-void Camera::resize(size_t w, size_t h){ 	
+void Camera::resize(size_t w, size_t h, size_t l, size_t b){ 	
 	set_ratio( static_cast<float>(w) / h);
 
-	// For ortho, we are setting bottom left to 0,0 :)
-	obj_->right = w;
-	obj_->bottom = 0;
-	obj_->left = 0;
-	obj_->top = h;
+	// Viewport values
+	obj_->left = l;
+	obj_->bottom = b;
+	obj_->width = w;
+	obj_->height = h;
 
-	// Assume a 0,0 w, h for viewport for now
-	obj_->view_left = 0;
-	obj_->view_bottom = 0;
-	obj_->view_width = w;
-	obj_->view_height = h;
 
-	///\todo having a gl command here is perhaps a bit naughty as it breaks the purity of the camera?
-	glViewport(obj_->view_left, obj_->view_bottom, obj_->view_width, obj_->view_height);
-
-	update();
 }
 
 void Camera::update() {	
@@ -68,10 +59,12 @@ void Camera::update() {
  	///\todo the above could potentially be moved into a general shared object pointer class?
  	obj_->view_matrix = glm::lookAt(obj_->pos, obj_->look, obj_->up);
  	if (obj_->orthographic)
- 		obj_->projection_matrix = glm::ortho(static_cast<float>(obj_->left), static_cast<float>(obj_->right),
- 			static_cast<float>(obj_->bottom), static_cast<float>(obj_->top), obj_->near, obj_->far);
+ 		// 0 -> width, 0 -> height for ortho matrix
+ 		obj_->projection_matrix = glm::ortho(0.0f, static_cast<float>(obj_->width),
+ 			0.0f, static_cast<float>(obj_->height), obj_->near, obj_->far);
  	else
 		obj_->projection_matrix = glm::perspective(obj_->field, obj_->ratio, obj_->near, obj_->far);
+
 }
 
 void Camera::defaults() {
@@ -82,18 +75,16 @@ void Camera::defaults() {
 	obj_->far = 100.0f;
 	obj_->ratio = 1.0;
 	obj_->left = 0;
-	obj_->top = 0;
-	obj_->right = 100;
-	obj_->bottom = 100;
+	obj_->height = 100;
+	obj_->width = 100;
+	obj_->bottom = 0;
 	obj_->field = 55.0f;
 
-	update();
 }
 
 
 void Camera::set_ratio(float r) {
 	obj_->ratio = r;
-	update();
 }
 
 
@@ -102,7 +93,6 @@ void Camera::zoom(float z) {
 	dir = glm::normalize(dir);
 	dir *= z;
 	obj_->pos += dir;
-	update();
 
 }
 
@@ -115,7 +105,6 @@ void Camera::shift(glm::vec2 s) {
 
 	obj_->pos += shiftx + shifty;
 	obj_->look += shiftx + shifty;
-	update();
 }
 
 void Camera::yaw(float a){
@@ -123,7 +112,6 @@ void Camera::yaw(float a){
 	q_rotate = glm::rotate( q_rotate, a, obj_->up );
 	obj_->up = q_rotate * obj_->up;
 	obj_->pos = q_rotate * obj_->pos;
-	update();
 }
 
 void Camera::pitch(float a){
@@ -134,14 +122,12 @@ void Camera::pitch(float a){
 	q_rotate = glm::rotate( q_rotate, a, right );
 	obj_->up = q_rotate * obj_->up;
 	obj_->pos = q_rotate * obj_->pos;
-	update();
 }
 
 void Camera::roll(float a){
 	glm::quat q_rotate;
 	q_rotate = glm::rotate( q_rotate, a,  glm::normalize(obj_->look - obj_->pos));
 	obj_->up = q_rotate * obj_->up;	
-	update();
 }
 
 
@@ -150,6 +136,4 @@ void Camera::rotate(const glm::quat &q) {
 	glm::vec3 dt = obj_->look - obj_->pos;
 	dt = dt * glm::toMat3(q);
 	obj_->look = obj_->pos + dt;
-
-	update();
 }

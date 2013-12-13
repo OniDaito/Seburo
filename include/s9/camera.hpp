@@ -36,17 +36,22 @@ namespace s9{
 
 		void init(); // Called to init this class with default params
 			
-		void resize(size_t w, size_t h);
+		void resize(size_t w, size_t h, size_t l=0, size_t b=0);
 
-		void set_near(float n) {obj_->near = n; update();};
-		void set_far(float n) {obj_->far = n; update();};
+		void set_near(float n) {obj_->near = n;};
+		void set_far(float n) {obj_->far = n;};
 		
 		void set_ratio(float r);
-		void set_field(float a) {obj_->field = a; update();};
+		void set_field(float a) {obj_->field = a;};
 		
 		inline glm::vec3 pos()	{return obj_->pos; };
 		inline glm::vec3 look() {return obj_->look; };
 		inline glm::vec3 up() {return obj_->up; };
+
+		inline size_t left()	{return obj_->left; };
+		inline size_t bottom() {return obj_->bottom; };
+		inline size_t width() {return obj_->width; };
+		inline size_t height() {return obj_->height; };
 
 		void zoom(float z);
 		void shift(glm::vec2 s);
@@ -55,19 +60,23 @@ namespace s9{
 		void roll(float a);
 		void rotate(const glm::quat &q);
 
-		void set_orthographic(bool b) {obj_->orthographic = b; update();}
+		void set_orthographic(bool b) {obj_->orthographic = b;}
 		bool orthographic() {return obj_->orthographic;}
 
 		void defaults();
 
-		void set_pos(const glm::vec3 &p) { obj_->pos = p; update();}
-		void set_look(const glm::vec3 &p) { obj_->look = p; update();}
-		void set_up(const glm::vec3 &p) { obj_->up = p; update();}
-		void set_left(size_t p) { obj_->left = p; update();}
-		void set_top(size_t p) { obj_->top = p; update();}
-		void set_right(size_t p) { obj_->right = p; update();}
-		void set_bottom(size_t p) { obj_->bottom = p; update();}
+		void set_pos(const glm::vec3 &p) { obj_->pos = p;}
+		void set_look(const glm::vec3 &p) { obj_->look = p;}
+		void set_up(const glm::vec3 &p) { obj_->up = p;}
+		void set_left(size_t p) { obj_->left = p; }
+		void set_height(size_t p) { obj_->height = p;}
+		void set_width(size_t p) { obj_->width = p; }
+		void set_bottom(size_t p) { obj_->bottom = p;}
 		
+		// Not ideal but provides an override for when we want to update the matrices manually
+		bool update_on_node_draw() {return obj_->update_on_node_draw; }
+		void set_update_on_node_draw(bool b) {obj_->update_on_node_draw =b; }
+
 		///\todo Could this be misleading? Its mostly used in setting shaders through a contract
 		glm::mat4& view_matrix() { return obj_->view_matrix; };
 		glm::mat4& projection_matrix() { return obj_->projection_matrix; };
@@ -89,26 +98,23 @@ namespace s9{
 				near = 0.1f;
 				far = 100.0f;
 				ratio = 1.0;
-				left = 0;
-				top = 0;
-				right = 100;
-				bottom = 100;
+			
 				field = 55.0f;
 				orthographic = false;
-				view_left = 0;
-				view_bottom = 0;
-				view_width = 800;
-				view_height = 600;
+				update_on_node_draw = true;
+				left = 0;
+				bottom = 0;
+				width = 800;
+				height = 600;
 	
 			}
 
 			glm::mat4 view_matrix;
 			glm::mat4 projection_matrix;
 
-			bool orthographic;
+			bool orthographic, update_on_node_draw;
 			float ratio, far, near, field;
-			size_t left, top, bottom, right; // Held for orthographic as well
-			size_t view_width, view_left, view_bottom, view_height; // Viewport settings
+			size_t left, width, bottom, height; // Held for orthographic as well
 		
 			glm::vec3 pos, look, up;
 		};

@@ -192,6 +192,11 @@ namespace s9 {
 		void preDraw() {
 
 			if (camera_){
+				// Would call here but we override these matrices with the oculus 
+				// Not sure what to do here - could set the camera completely with existing options?
+				if (camera_.update_on_node_draw()) camera_.update();
+				glViewport(camera_.left(), camera_.bottom(), camera_.width(), camera_.height());
+
 				projection_matrix_global_ = camera_.projection_matrix();
 				view_matrix_global_ = camera_.view_matrix();
 
