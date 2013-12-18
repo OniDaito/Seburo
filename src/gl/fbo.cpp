@@ -48,7 +48,7 @@ bool FBO::checkStatus() {
     switch(status)
     {
     case GL_FRAMEBUFFER_COMPLETE:
-        std::cout << "SEBURO Framebuffer complete." << std::endl;
+        std::cout << "SEBURO Framebuffer complete: " << obj_->width << "x" << obj_->height << std::endl;
         return true;
 
     case GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT:

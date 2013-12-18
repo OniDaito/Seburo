@@ -54,24 +54,25 @@ vec2 HmdWarp(vec2 in01) {
 
 vec4 oculus(in vec4 oPosition, in vec2 oTexCoord) {
   vec2 tc = HmdWarp(oTexCoord);
+  vec2 texsize = textureSize(uTexSampler0); 
   
   // Not sure abiout this just yet
-  //if ( clamp(tc, uScreenCenter-vec2(0.25,0.5), uScreenCenter+vec2(0.25, 0.5))  ))
-  //  return vec4(0.0,0.0,0.0,1.0);
+  if (!all(equal(clamp(tc, uScreenCenter-vec2(0.25,0.5), uScreenCenter+vec2(0.25,0.5)), tc)))
+    return vec4(0.0,0.0,0.0,1.0);
 
-  return texture(uTexSampler0, tc);
+  return texture(uTexSampler0, tc * texsize);
 }
 
 void main() {
 
-  //vec4 colour = oculus(vVertexPosition, vTexCoord );
+  vec4 colour = oculus(vVertexPosition, vTexCoord );
   vec2 texsize = textureSize(uTexSampler0); 
 
   // This texture comes from an FBO so flip it
   vec2 tc = vTexCoord * texsize;
   tc.y = texsize.y - tc.y;
   vec4 texcolor = texture(uTexSampler0,tc);
-  fragColor = vec4(texcolor.rgb,1.0);
-  //fragColor = colour;
+  //fragColor = vec4(texcolor.rgb,1.0);
+  fragColor = colour;
   //fragColor= vec4(1.0,0.0,0.0,1.0);
 }

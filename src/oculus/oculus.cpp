@@ -182,8 +182,6 @@ void OculusBase::SharedObject::update(double_t dt) {
                 }
                 
 
-                render_scale = stereo_config.GetDistortionScale();
-
 
                 left_eye_params = stereo_config.GetEyeRenderParams(OVR::Util::Render::StereoEye_Left);
                 right_eye_params = stereo_config.GetEyeRenderParams(OVR::Util::Render::StereoEye_Right);

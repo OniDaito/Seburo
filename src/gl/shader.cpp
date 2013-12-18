@@ -119,7 +119,7 @@ Shader::Shader(s9::File vert, s9::File frag, s9::File geom) : obj_(shared_ptr<Sh
 
 	if(!createShader(GL_VERTEX_SHADER, obj_->vs, vs)) return;
 	if(!createShader(GL_FRAGMENT_SHADER, obj_->fs, fs)) return;
-	if(!createShader(GL_FRAGMENT_SHADER, obj_->gs, gs)) return;
+	if(!createShader(GL_GEOMETRY_SHADER, obj_->gs, gs)) return;
 
 	createAndLink();
 }

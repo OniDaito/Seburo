@@ -65,20 +65,15 @@ namespace s9 {
 		Node					node_quad_;
 
 
-
 		gl::FBO				fbo_;
+
+		GLuint				null_VAO_;
 
 		oculus::OculusBase oculus_;
 
 		glm::quat oculus_dt_;
 		glm::quat oculus_prev_;
 
-		// Oculus shader deformations
-		glm::vec2 oculus_lens_center_;
-		glm::vec2 oculus_screen_center_;
-		glm::vec2 oculus_scale_;
-		glm::vec2 oculus_scale_in_;
-		glm::vec4 oculus_hmd_warp_param_;
 
 		
 	};

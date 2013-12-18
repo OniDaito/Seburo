@@ -67,10 +67,10 @@ namespace s9 {
         OVR::Ptr<OVR::SensorDevice> sensor; 
         OVR::Ptr<OVR::Profile> profile;
 
-        OVR::Util::Render::StereoConfig   stereo_config;
-        OVR::Util::LatencyTest            latency_util;
-        OVR::Ptr<OVR::LatencyTestDevice>  latency_tester;
-        OVR::Util::MagCalibration         mag_cal;
+        OVR::Util::Render::StereoConfig     stereo_config;
+        OVR::Util::LatencyTest              latency_util;
+        OVR::Ptr<OVR::LatencyTestDevice>    latency_tester;
+        OVR::Util::MagCalibration           mag_cal;
 
         OVR::Array<DeviceStatusNotificationDesc> device_status_notifications_queue; 
 
@@ -81,7 +81,6 @@ namespace s9 {
         OVR::Util::Render::StereoEyeParams left_eye_params;
         OVR::Util::Render::StereoEyeParams right_eye_params;
 
-        float render_scale;
         std::string monitor_name;
 
         // Distortion parameters
@@ -112,7 +111,6 @@ namespace s9 {
 
       std::string monitor_name()  { if(obj_ != nullptr) return obj_->monitor_name; else return ""; }
 
-      float render_scale() {if(obj_ != nullptr) return obj_->render_scale; else return 1.0f; }
 
       glm::vec4 distortion_parameters() { if(obj_ != nullptr) 
           return glm::vec4(obj_->hmd_info.DistortionK[0], obj_->hmd_info.DistortionK[1],
@@ -120,6 +118,20 @@ namespace s9 {
         else
           return glm::vec4(1.0f);
       }
+
+      glm::vec4 chromatic_abberation() { 
+        if(obj_ != nullptr) {
+          OVR::Util::Render::DistortionConfig dc = obj_->stereo_config.GetDistortionConfig();
+          return glm::vec4(dc.ChromaticAberration[0], dc.ChromaticAberration[1],
+            dc.ChromaticAberration[2],dc.ChromaticAberration[3]);
+        }
+        else
+          return glm::vec4(1.0f);
+      }
+
+      float distortion_xcenter_offset() { {if(obj_ != nullptr) return obj_->stereo_config.GetDistortionConfig().XCenterOffset; else return 1.0f; }}
+
+      float distortion_scale() { if(obj_ != nullptr) return obj_->stereo_config.GetDistortionScale(); else return 1.0f; }
 
       /// Return the interpupillary distance if the device exists, else 1.0f
       float interpupillary_distance() {
