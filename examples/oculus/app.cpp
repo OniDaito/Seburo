@@ -76,44 +76,22 @@ void OculusApp::update(double_t dt) {
 
  void OculusApp::display(double_t dt){
 
-
+    // Create the FBO and setup the cameras
     if (!fbo_ && oculus_.connected()){
-        glm::vec2 s = glm::vec2( oculus_.screen_resolution().x * oculus_.distortion_scale(), oculus_.screen_resolution().y * oculus_.distortion_scale());
-        glm::vec2 f = oculus_.screen_size() * oculus_.distortion_scale();
+      
+        glm::vec2 s = oculus_.fbo_size();
         fbo_ = FBO(static_cast<size_t>(s.x), static_cast<size_t>(s.y)); 
         node_quad_.add(fbo_.colour());
 
-        float aspect = static_cast<float>(s.x) * 0.5f / static_cast<float>(s.y);
-        float half_screen = f.y * 0.5f;
-        float fov = 2.0f * atan( half_screen / oculus_.eye_to_screen_distance());
-
         camera_left_.resize(static_cast<size_t>(s.x / 2.0f), static_cast<size_t>(s.y ));
         camera_right_.resize(static_cast<size_t>(s.x / 2.0f), static_cast<size_t>(s.y ),static_cast<size_t>(s.x / 2.0f) );
+
         camera_main_.resize(static_cast<size_t>(s.x ), static_cast<size_t>(s.y ));
 
-        // Is this the absoulte seperation? Should we be dividing by two?
-        // Make sure - is on the right side
+        camera_left_.set_projection_matrix(oculus_.left_projection());
+        camera_right_.set_projection_matrix(oculus_.right_projection());
 
-        float view_center = f.x * 0.25f;
-        float eye_shift = view_center - (oculus_.lens_separation_distance() * 0.5f);
-        float projection_offset = (4.0f * eye_shift) / f.x;
-
-        // Concerned with the FOV. I'm halving it twice. Once for sure but twice?
-        glm::mat4 perspective = glm::perspective( radToDeg(fov) * 0.5f, aspect, 0.3f, 1000.0f);
-
-
-        glm::mat4 left_proj = glm::translate(perspective, glm::vec3(projection_offset,0.0f,0.0f));
-        glm::mat4 right_proj = glm::translate(perspective, glm::vec3(-projection_offset,0.0f,0.0f));
-
-        camera_left_.set_projection_matrix(left_proj);
-        camera_right_.set_projection_matrix(right_proj);
-
-        float dip = oculus_.interpupillary_distance() * 0.5f;
-
-        left_inter_ = glm::translate(glm::mat4(1.0f), glm::vec3(dip,0.0f,0.0f));
-        right_inter_ = glm::translate(glm::mat4(1.0f), glm::vec3(-dip,0.0f,0.0f));
-
-        camera_ortho_.resize(1280, 800);
+        camera_ortho_.resize(oculus_.screen_resolution().x, oculus_.screen_resolution().y);
 
         glGenVertexArrays(1, &(null_VAO_));
         
@@ -136,8 +114,8 @@ void OculusApp::update(double_t dt) {
         camera_main_.update();
 
         // Now set the view matrices given the oculus values
-        camera_left_.set_view_matrix( camera_main_.view_matrix() * left_inter_ );
-        camera_right_.set_view_matrix(  camera_main_.view_matrix() * right_inter_ );
+        camera_left_.set_view_matrix( camera_main_.view_matrix() * oculus_.left_inter() );
+        camera_right_.set_view_matrix(  camera_main_.view_matrix() * oculus_.right_inter() );
 
         oculus_prev_ = q;
 

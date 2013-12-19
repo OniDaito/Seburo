@@ -21,6 +21,8 @@ void MD5App::init(){
     shader_ = Shader(s9::File("./shaders/3/skinning.glsl"));
     shader_colour_ = Shader(s9::File("./shaders/3/solid_colour.glsl"));
 
+    show_wireframe_ = true;
+
     addWindowListener(this);
 
     quad_ = Quad(1.0,1.0);
@@ -29,8 +31,8 @@ void MD5App::init(){
     bone_colour_ = glm::vec4(1.0,0.0,0.0,1.0);
     orient_colour_ = glm::vec4(0.0,0.0,1.0,1.0);
    
-    camera_= Camera( glm::vec3(0,0,18.0f));
-    md5_ = MD5Model( s9::File("./data/hellknight.md5mesh") ); 
+    camera_ = Camera( glm::vec3(0,0,18.0f));
+    md5_ = MD5Model( s9::File("./data/hellknight/hellknight.md5mesh") ); 
     md5_.set_geometry_cast(WIREFRAME);
 
     node_.add(md5_).add(camera_).add(shader_);
@@ -46,13 +48,15 @@ void MD5App::init(){
   
     node_.add(skeleton_shape_);
 
+
+    node_full_.add(md5_).add(camera_).add(shader_);
+
     Bone * neck = md5_.skeleton().bone("neck");
     neck->applyRotation ( glm::angleAxis( 20.0f, glm::vec3(0.0,1.0,0.0)) );
 
     Bone * waist = md5_.skeleton().bone("waist");
     waist->applyRotation( glm::angleAxis( -45.0f, glm::vec3(1.0,0.0,0.0)) );
     waist->applyRotation( glm::angleAxis( -25.0f, glm::vec3(0.0,1.0,0.0)) );
-
 
     Bone * luparm = md5_.skeleton().bone("luparm");
     luparm->applyRotation( glm::angleAxis( -45.0f, glm::vec3(1.0,0.0,0.0))  );
@@ -66,8 +70,7 @@ void MD5App::init(){
 
     CXGLERROR
 
-    glEnable(GL_CULL_FACE);
-    glCullFace(GL_BACK);
+
 }
 
 ///\todo seems not to want to update member variables :(
@@ -86,23 +89,33 @@ void MD5App::update(double_t dt) {
 		
 void MD5App::display(double_t dt){
 
-
     glClearBufferfv(GL_COLOR, 0, &glm::vec4(0.9f, 0.9f, 0.9f, 1.0f)[0]);
     GLfloat depth = 1.0f;
     glClearBufferfv(GL_DEPTH, 0, &depth );
     
+    if (show_wireframe_){
+        glDisable(GL_CULL_FACE);
+        glDisable(GL_DEPTH_TEST);
+    } else {
+        glEnable(GL_CULL_FACE);
+        glCullFace(GL_BACK);
+        glEnable(GL_DEPTH_TEST);
+    }
+
     rotation_ += 0.5;
     glm::mat4 Model = glm::rotate(glm::mat4(), rotation_, glm::vec3(0.0f, 1.0f, 0.0f));
     Model = glm::translate(Model, glm::vec3(0.0,-6.0,0.0));
     Model = glm::scale(Model, glm::vec3(0.1,0.1,0.1));
     Model = glm::rotate(Model, -90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
     node_.setMatrix(Model);
+    node_full_.setMatrix(Model);
 
-    
-    node_.draw();
+    if (show_wireframe_)
+        node_.draw();
+    else
+        node_full_.draw();
 
-
-    //CXGLERROR
+    CXGLERROR
 }
 
 
@@ -122,7 +135,24 @@ void MD5App::processEvent(ResizeEvent e){
     camera_.resize(e.w,e.h);
 }
 
-void MD5App::processEvent(KeyboardEvent e){}
+void MD5App::processEvent(KeyboardEvent e){
+    // If 'w' pressed
+
+
+    if (e.key == 87) {
+        if (e.action == GLFW_PRESS){
+          
+            show_wireframe_ = !show_wireframe_;
+            if (show_wireframe_){
+                md5_.set_geometry_cast(WIREFRAME);
+            } else {
+                md5_.set_geometry_cast(NONE);
+            }
+        }
+        
+    }
+
+}
 
 /*
  * Main function - uses boost to parse program arguments

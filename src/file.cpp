@@ -12,28 +12,30 @@ using namespace std;
 
 using namespace s9;
 
-File::File() {
-  _finalPath = ".";
+Path::Path() {
+  final_path_ = ".";
 }
 
 
-File::File(std::string path){
+Path::Path(std::string path){
   if ( path.find("/") == 0 ){
     // Absolute path
-
+    final_path_ = path;
   } 
   else if (path.find(".") == 0){
     // relative path - setup the data dir
 #ifdef _SEBURO_OSX 
-    _finalPath = "../Resources/" + ltrim(path);
+    final_path_ = "../Resources/" + ltrim(path);
 #endif
 
 #ifdef _SEBURO_LINUX
-
+    // This exists path is a bit naughty and only here for examples but hey
     if (exists("../../../" + path) ) {
-      _finalPath = "../../../" + path;
+      final_path_ = "../../../" + path;
     } else if (exists(path)){
-      _finalPath = path;
+      final_path_ = path;
+    } else {
+      cout << "does not exist" << endl;
     }
 
 #endif
@@ -44,4 +46,26 @@ File::File(std::string path){
     cerr << "SEBURO FILE Error - Path was malformed: " << path << endl;
     assert(false);
   }
+}
+
+/// list all the files inside this directory
+std::vector<File> Directory::list_files() {
+
+  std::vector<File> files;
+
+  DIR *dir;
+  struct dirent *ent;
+  if ((dir = opendir (final_path_.c_str())) != NULL) {
+    while ((ent = readdir (dir)) != NULL) {
+      struct stat st;
+      lstat(ent->d_name, &st);
+      if(!S_ISDIR(st.st_mode))
+        files.push_back(File(final_path_ + "/" + string(ent->d_name)));
+    }
+    closedir (dir);
+  } else {
+    /* could not open directory */
+    cerr << "SEBURO DIRECTORY ERROR - Could not open " << final_path_ << endl;
+  }
+  return files;
 }

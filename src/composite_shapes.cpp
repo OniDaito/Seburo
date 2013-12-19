@@ -21,12 +21,15 @@ using namespace s9;
 SkeletonShape::SkeletonShape(const Skeleton &s) : Node() {
 
   // Don't call node::init() - override that here
+  // Bit annoying as we need to add camera and matrix drawables
   obj_ = shared_ptr<SharedObject>(new SkeletonShape::SharedObject(s));
 
 
   // Now cast - Which I really dont like ><
   shared_ptr<SkeletonShape::SharedObject> ss = std::static_pointer_cast<SkeletonShape::SharedObject>(obj_);
 
+  ss->camera_node = std::shared_ptr<NodeCamera>(new NodeCamera());
+  ss->bases.push_front(obj_->camera_node);
   ss->matrix_node = std::shared_ptr<NodeMinimal>(new NodeMinimal());
   ss->bases.push_front(obj_->matrix_node);
   ss->geometry_cast = NONE;

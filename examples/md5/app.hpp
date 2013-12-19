@@ -49,14 +49,18 @@ namespace s9 {
 		gl::Texture texture_;
 		gl::Shader shader_;
 		gl::Shader shader_colour_;
+		
+
 		Camera camera_;
 		Node node_;
 		Node node2_;
+		Node node_full_;
 		Node cylinder_node_;
 		MD5Model md5_;
 		glm::vec4 bone_colour_, orient_colour_;
 		SkeletonShape skeleton_shape_;
 
+		bool show_wireframe_;
 
 		float rotation_;
 		

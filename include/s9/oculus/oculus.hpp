@@ -11,6 +11,8 @@
 
 #include "../common.hpp"
 
+#include "../math_utils.hpp"
+
 #include <OVR.h>
 #include <OVRVersion.h>
 
@@ -31,6 +33,7 @@ namespace s9 {
     
     protected:
 
+
       /// Internal object that can be shared around other instances. Watches after an oculus rift.
       struct SharedObject : public OVR::MessageHandler {
 
@@ -39,6 +42,9 @@ namespace s9 {
         void OnMessage(const OVR::Message& msg);
         void update(double_t dt);
         bool connected() { return IsHandlerInstalled(); }
+
+        /// Internal function to setup parameters for S9 Cameras
+        void setupCameras();
 
         ~SharedObject() {
           RemoveHandlerFromDevices();
@@ -78,8 +84,6 @@ namespace s9 {
         OVR::HMDInfo hmd_info;
         glm::quat orientation;
 
-        OVR::Util::Render::StereoEyeParams left_eye_params;
-        OVR::Util::Render::StereoEyeParams right_eye_params;
 
         std::string monitor_name;
 
@@ -88,7 +92,18 @@ namespace s9 {
         glm::ivec4 right_eye_viewport;
 
         bool initialized;
-  
+
+        // Screen parameters - scaled for final output
+        glm::vec2 fbo_size;
+        glm::vec2 screen_size_scaled;
+
+        // Cameras and matrices for our final output
+
+        glm::mat4 left_inter;
+        glm::mat4 right_inter;
+
+        glm::mat4 left_projection;
+        glm::mat4 right_projection;
 
       };
 
@@ -164,8 +179,24 @@ namespace s9 {
         if(obj_ != nullptr) return glm::vec2(obj_->hmd_info.HScreenSize, obj_->hmd_info.VScreenSize); else return glm::vec2(1.0f);
       }
 
-      /// Compute and return the perspective matrix for the left eye or identity if not
+     
+      /// Return the final FBO rendering size. This is scaled up
+      glm::vec2 fbo_size(){ if(obj_ != nullptr) return obj_->fbo_size; else return glm::vec2(1.0f);}
       
+      /// Return the screen size, scaled by rendering scale
+      glm::vec2 screen_size_scaled(){ if(obj_ != nullptr) return obj_->screen_size_scaled; else return glm::vec2(1.0f); }
+
+      /// Return the left interval view matrix
+      glm::mat4 left_inter(){ if(obj_ != nullptr) return obj_->left_inter; else return glm::mat4(1.0f); }
+
+      /// Return the right interval view matrix
+      glm::mat4 right_inter(){ if(obj_ != nullptr) return obj_->right_inter; else return glm::mat4(1.0f); }
+
+      /// Return the left projection matrix
+      glm::mat4 left_projection() { if(obj_ != nullptr) return obj_->left_projection; else return glm::mat4(1.0f); }
+      
+      /// Return the right projection matrix
+      glm::mat4 right_projection() { if(obj_ != nullptr) return obj_->right_projection; else return glm::mat4(1.0f); }
 
     };
   }

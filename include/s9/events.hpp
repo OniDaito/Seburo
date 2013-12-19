@@ -12,6 +12,8 @@
 #include "common.hpp"
 
 
+///\todo how does this tie in to GLFW and such? We have some good defines there already!
+
 namespace s9{
 
 	typedef enum {

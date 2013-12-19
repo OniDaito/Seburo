@@ -44,6 +44,7 @@ namespace s9 {
 		Node top_node_;
 		gl::Shader shader_;
 		Camera camera_;
+		Node top_node_2_;
 
 		float rotation_;
 		

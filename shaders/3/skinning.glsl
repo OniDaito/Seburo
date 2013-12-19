@@ -3,8 +3,8 @@
 #version 330
 precision highp float;
 
-out vec4 vVertexPosition;
-out vec2 vTexCoord;
+out vec4 sVertexPosition;
+out vec2 sTexCoord;
 
 // Default layout from Seburo
 // 16 being the geometry_max_bones that Seburo sets
@@ -61,9 +61,9 @@ void main() {
   bp = vec4(aVertPosition,1.0) * uBonePalette[aVertBoneIndex[1].y] * bias;
   skinnedPosition += bp.xyz;
 
-  vVertexPosition = uProjectionMatrix * uViewMatrix * uModelMatrix * vec4(skinnedPosition,1.0);
-  gl_Position = vVertexPosition;
-  vTexCoord = aVertTexCoord;
+  sVertexPosition = uProjectionMatrix * uViewMatrix * uModelMatrix * vec4(skinnedPosition,1.0);
+  gl_Position = sVertexPosition;
+  sTexCoord = aVertTexCoord;
 } 
 
 ##>FRAGMENT
@@ -71,18 +71,18 @@ void main() {
 #version 330
 precision highp float;
 
-in vec4 vVertexPosition;
-in vec2 vTexCoord;
+in vec4 sVertexPosition;
+in vec2 sTexCoord;
 
 out vec4 fragColor;
 
 ///\todo choose between both in the uber shader
 // At present rect works well but we are sending normalised coordinates
-uniform sampler2DRect uBaseTex;
+uniform sampler2D uTexSampler0;
 //uniform sampler2D uBaseTex;
 
 void main() {
-  vec2 texsize = textureSize(uBaseTex); 
-  vec4 texcolor = texture(uBaseTex,vTexCoord * texsize);
+  //vec2 texsize = textureSize(uTexSampler0); 
+  vec4 texcolor = texture2D(uTexSampler0, sTexCoord);
   fragColor = vec4(texcolor.rgb,1.0);
 }

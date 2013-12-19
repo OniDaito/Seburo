@@ -18,6 +18,8 @@
 #include "common.hpp"
 #include "string_utils.hpp"
 
+#include "gl/texture.hpp" // Breaks the GL wall here :(
+
 
 
 namespace s9 {

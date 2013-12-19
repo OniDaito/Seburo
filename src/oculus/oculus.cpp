@@ -39,6 +39,7 @@ OculusBase::SharedObject::SharedObject() {
 
     profile = HMD->GetProfile();
 
+    setupCameras();
 
   } else{
      sensor = *(manager->EnumerateDevices<SensorDevice>().CreateDevice());
@@ -180,15 +181,7 @@ void OculusBase::SharedObject::update(double_t dt) {
                   else        
                     stereo_config.SetDistortionFitPointVP(0.0f, 1.0f);        
                 }
-                
-
-
-                left_eye_params = stereo_config.GetEyeRenderParams(OVR::Util::Render::StereoEye_Left);
-                right_eye_params = stereo_config.GetEyeRenderParams(OVR::Util::Render::StereoEye_Right);
-
-                left_eye_viewport = glm::ivec4(left_eye_params.VP.x, left_eye_params.VP.y, left_eye_params.VP.w, left_eye_params.VP.h);
-                right_eye_viewport = glm::ivec4(right_eye_params.VP.x, right_eye_params.VP.y, right_eye_params.VP.w, right_eye_params.VP.h);
-
+         
                 cout << "SEBURO OCULUS - HMD device added." << endl;
 
                 cout << "SEBURO OCULUS - Resolution: " << hmd_info.HResolution << " x " << hmd_info.VResolution << endl;
@@ -200,6 +193,8 @@ void OculusBase::SharedObject::update(double_t dt) {
                 cout << "SEBURO OCULUS - DistortionK 1: " << hmd_info.DistortionK[1] << endl;
                 cout << "SEBURO OCULUS - DistortionK 2: " << hmd_info.DistortionK[2] << endl;
                 cout << "SEBURO OCULUS - DistortionK 3: " << hmd_info.DistortionK[3] << endl;
+
+                setupCameras();
 
                 initialized = true;
               }
@@ -266,8 +261,38 @@ void OculusBase::SharedObject::update(double_t dt) {
       //hmdOrient.GetEulerAngles<Axis_Y, Axis_X, Axis_Z>(&yaw, &ThePlayer.EyePitch, &ThePlayer.EyeRoll);
   }
 
-
+ 
 }
+
+
+void OculusBase::SharedObject::setupCameras( ){
+    fbo_size = glm::vec2( hmd_info.HResolution * stereo_config.GetDistortionScale(), hmd_info.VResolution * stereo_config.GetDistortionScale());
+    
+    screen_size_scaled = glm::vec2(hmd_info.HScreenSize,hmd_info.VScreenSize) * stereo_config.GetDistortionScale();
+
+    float aspect = static_cast<float>(fbo_size.x) * 0.5f / static_cast<float>(fbo_size.y);
+    float half_screen = screen_size_scaled.y * 0.5f;
+    float fov = 2.0f * atan( half_screen / hmd_info.EyeToScreenDistance);
+
+    // Is this the absoulte seperation? Should we be dividing by two?
+    // Make sure - is on the right side
+
+    float view_center = screen_size_scaled.x * 0.25f;
+    float eye_shift = view_center - (hmd_info.LensSeparationDistance * 0.5f);
+    float projection_offset = (4.0f * eye_shift) / screen_size_scaled.x;
+
+    // Concerned with the FOV. I'm halving it twice. Once for sure but twice?
+    glm::mat4 perspective = glm::perspective( radToDeg(fov) * 0.5f, aspect, 0.3f, 1000.0f);
+
+    left_projection = glm::translate(perspective, glm::vec3(projection_offset,0.0f,0.0f));
+    right_projection = glm::translate(perspective, glm::vec3(-projection_offset,0.0f,0.0f));
+
+    float dip = hmd_info.InterpupillaryDistance * 0.5f;
+
+    left_inter = glm::translate(glm::mat4(1.0f), glm::vec3(dip,0.0f,0.0f));
+    right_inter = glm::translate(glm::mat4(1.0f), glm::vec3(-dip,0.0f,0.0f));
+}
+
 
 void OculusBase::SharedObject::OnMessage(const Message& msg) {
 

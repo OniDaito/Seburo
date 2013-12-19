@@ -66,6 +66,14 @@ void MD5Model::parse(const File &file) {
 
   ifs.open (file.path(), std::ifstream::in);
 
+  Directory directory (file.directory_name());
+
+  std::vector<File> dir_files = directory.list_files();
+
+  for (File f : dir_files){
+    cout << f.path() << endl;
+  }
+
   skeleton_ = Skeleton(CUSTOM_SKELETON);
 
   add(skeleton_);
@@ -278,6 +286,39 @@ void MD5Model::parse(const File &file) {
           weights[idx].position = glm::vec3(p0,p1,p2);
           weights[idx].bias = bias;
           weights[idx].bone = bone_id;
+
+        } else if (string_contains(tline, "shader")) {
+          // Here is where we read in the textures. Take the shader and take the last bit of the the
+          // path. Look for a filename with the 
+          std::istringstream tiss(tline);
+          
+          string s, shader_path;
+
+          if (!(tiss >> s >> shader_path)) { cerr << "SEBURO MD5 Error - Failed to read shader mesh." << endl; break; }
+
+          shader_path = remove_char(shader_path, '"');
+
+          size_t i = shader_path.rfind('/',shader_path.length());
+          if (i != std::string::npos) {
+            string mesh_name = shader_path.substr(i+1,shader_path.length() - i);
+            
+            
+
+            for (File f : dir_files){
+              if (string_contains(f.path(), mesh_name )){
+                // Search for albedo textures - name of mesh then extension
+                string test = mesh_name + "." + f.extension();
+                if (test.compare(f.filename()) == 0){
+                  cout << "SEBURO MD5 Texture - Found: " << f.path() << endl;
+
+                  Image img(f);
+                  gl::Texture t (img);
+                  mesh_node.add(t);
+                }
+              }
+            }
+
+          }
 
         }
 
