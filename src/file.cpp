@@ -35,7 +35,7 @@ Path::Path(std::string path){
     } else if (exists(path)){
       final_path_ = path;
     } else {
-      cout << "does not exist" << endl;
+      cerr << "SEBURO FILE Error - Path does not exist: " << path << endl;
     }
 
 #endif

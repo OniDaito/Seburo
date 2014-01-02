@@ -53,10 +53,6 @@ namespace s9 {
 		Camera 				camera_right_;
 		Camera 				camera_ortho_;
 		
-		// Setup from the oculus rift. we use them to update the view from
-		// the master camera to the left and right eye
-		glm::mat4 		left_inter_;
-		glm::mat4 		right_inter_;
 
 		Node 					node_;
 		Node 					node_main_;

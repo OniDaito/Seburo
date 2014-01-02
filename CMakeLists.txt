@@ -368,8 +368,8 @@ if (USE_OCULUS)
   # OCULUS_INCLUDE_DIR - Directories containing the OCULUS include files
   # OCULUS_LIBRARIES - Libraries needed to use OCULUS.
 
-  # turn off rtti if it isnt already
-  SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-rtti")
+  # turn off rtti if it isnt already. This is turned off at present because gtkmm uses it! ><
+  # SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-rtti")
 
   find_path(OCULUS_INCLUDE_DIR OVR.h
             HINTS  /opt/OculusSDK/libOVR/Include

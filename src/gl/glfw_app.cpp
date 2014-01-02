@@ -8,6 +8,10 @@
 
 #include "s9/gl/glfw_app.hpp"
 
+#ifdef _SEBURO_LINUX
+#include <gtkmm.h>
+#endif
+
 using namespace s9;
 using namespace s9::gl;
 using namespace std;
@@ -18,60 +22,65 @@ string GLFWApp::title_;
 
 GLFWApp::GLFWApp (WindowApp &app, const size_t w, const size_t h, 
 	bool fullscreen, int argc, const char * argv[], 
-	const char * title, const int major, const int minor, const int depthbits) : WindowSystem(app) {
+	const char * title, const int major, const int minor, const int depthbits, bool auto_start) : WindowSystem(app) {
 	
 	if( !glfwInit() ){
 		cerr << "SEBURO ERROR - Failed to initialize GLFW." << endl;
 		exit( EXIT_FAILURE );
 	}
+
 	pp_ = this;
 	flag_ = 0x00;
 	title_ = title;
-	initGL(w,h,major,minor,depthbits);
+	requested_depth_bits_ = depthbits;
+	initial_width_ = w;
+	initial_height_ = h;
+	requested_major_ = major;
+	requested_minor_ = minor;
+
+	initGL(initial_width_, initial_height_, requested_major_, requested_minor_, requested_depth_bits_);
 
 	pp_->_app.init();
 
 	// Initial startup here - fire a resize event
-	ResizeEvent e (w,h,glfwGetTime());
+	ResizeEvent e (initial_width_, initial_height_, glfwGetTime());
 	pp_->_app.fireEvent(e);
-
-	// Fire up the thread to keep update happy
-	// Use a thread for the updates
- 	pp_->update_thread_ =  new std::thread(&GLFWApp::_update);
-
-	mainLoop();
+	
+	if (auto_start) {
+		mainLoop();
+	}
+	
+	
 }
 
+/// Run for one frame
+void GLFWApp::run() {
+
+	double_t t = glfwGetTime();
+
+	for ( GLFWwindow* b : windows_) {	
+		glfwMakeContextCurrent(b);
+		glfwSwapInterval( 1 );
+		_display(b);
+		glfwSwapBuffers(b);
+	}
+
+	dt_ = glfwGetTime() - t;
+	
+	glfwPollEvents();
+	
+}
+
+// Start the main loop
 
 void GLFWApp::mainLoop() {
-	pp_->running_ = true;
+	running_ = true;
 
-	
-	while (pp_->running_){
-
-		double_t t = glfwGetTime();
-
-		for ( GLFWwindow* b : pp_->windows_) {	
-			glfwMakeContextCurrent(b);
-			glfwSwapInterval( 1 );
-			_display(b);
-			glfwSwapBuffers(b);
-		}
-
-		pp_->dt_ = glfwGetTime() - t;
-		
-		glfwPollEvents();
-
-#ifdef _SEBURO_LINUX
-		//gtk_main_iteration_do(false);
-#endif
-		
+	while (running_){
+		run();
  	}
- 	_shutdown();
-  // Exiting state
-	glfwTerminate();
-	
-	// return to mainloop in the application for GLFW
+
+ 	shutdown();
 }
 
 
@@ -90,11 +99,13 @@ void GLFWApp::_reshape(GLFWwindow* window, int w, int h) {
  * GLFW Shutdown
  */
 
-void GLFWApp::_shutdown() {
-	pp_->running_ = false;
-	if (pp_->update_thread_->joinable())
-		pp_->update_thread_->join();
-	pp_->_app.shutdown();
+void GLFWApp::shutdown() {
+	running_ = false;
+	
+	
+	_app.shutdown();
+
+	glfwTerminate();
 }
 
 /*
@@ -207,9 +218,9 @@ void GLFWApp::_mousePositionCallback(GLFWwindow* window, double x, double y){
 
 }
 
-// TODO - Just the single window at present
+/// todo - Just the single window at present
 void GLFWApp::_window_close_callback(GLFWwindow* window) {
-	GLFWApp::_shutdown();
+	pp_->shutdown();
 }
 
 
@@ -244,16 +255,6 @@ GLFWwindow* GLFWApp::createWindow(const char * title ="SEBURO", int w=800, int h
 	
 	return  win;
 }
-
-/*
- * Threaded update function. NO GL calls can be made from it
- */
-
-void GLFWApp::_update(){
-	while(pp_->running_)
-		pp_->_app.update(pp_->dt_);
-}
-
 
 
 void GLFWApp::_error_callback(int error, const char* description) {
@@ -333,9 +334,6 @@ void GLFWApp::_error_callback(int error, const char* description) {
 	pp_->dt_ = 0.0;
 	
 	CXGLERROR
-
-
-
 
 }
 

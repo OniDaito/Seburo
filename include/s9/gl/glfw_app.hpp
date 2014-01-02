@@ -43,14 +43,9 @@ namespace s9 {
 			size_t mx_, my_;
 			uint16_t flag_;
 
-			static void initGL(const size_t w, const size_t h,
-				const int major, const int minor, const int depthbits);
+			static void initGL(size_t w, size_t h, int major, int minor, int depthbits);
 
 			static void _error_callback(int error, const char* description);
-
-			static void _shutdown();
-
-			static void mainLoop();
 
 			static void _update();
 
@@ -72,20 +67,41 @@ namespace s9 {
 
 			static void _mouseWheelCallback(GLFWwindow* window, double xpos, double ypos);
 
+			
+
 		public:
 
 			GLFWApp (WindowApp &app, const size_t w = 800, const size_t h = 600, 
 				bool fullscreen = false, int argc = 0, const char * argv[] = NULL, 
 				const char * title = "SEBURO", const int major = -1, const int minor = -1, 
-				const int depthbits = 16 );
+				const int depthbits = 16,  bool auto_start = true);
+
+			void run();
+
+			void shutdown();
+
+			void mainLoop();
+
+			virtual void MainLoopCallback() {};
+
+
+
 
 			static GLFWwindow* createWindow(const char * title, int w, int h);
 			
+			std::vector<GLFWwindow* >& windows() { return windows_; }
+
+
 		private:
 
 			static GLFWApp *pp_;
 			static std::string title_;
-			std::thread *update_thread_;
+
+			int requested_major_;
+			int requested_minor_;
+			int requested_depth_bits_;
+			size_t initial_width_;
+			size_t initial_height_;
 
 		};
 
