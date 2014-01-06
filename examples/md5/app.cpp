@@ -163,9 +163,9 @@ int main (int argc, const char * argv[]) {
     MD5App b;
 
 #ifdef _SEBURO_OSX
-    GLFWApp a(b, 800, 600, false, argc, argv, "MD5", 3, 2);
+    GLFWApp a(b, 800, 600, argc, argv, "MD5", 3, 2);
 #else
-    GLFWApp a(b, 800, 600, false, argc, argv, "MD5");
+    GLFWApp a(b, 800, 600, argc, argv, "MD5");
 #endif
 
     return EXIT_SUCCESS;

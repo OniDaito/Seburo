@@ -83,9 +83,9 @@ int main (int argc, const char * argv[]) {
     TextureApp b;
 
 #ifdef _SEBURO_OSX
-    GLFWApp a(b, 800, 600, false, argc, argv, "Texture", 3, 2);
+    GLFWApp a(b, 800, 600, argc, argv, "Texture", 3, 2);
 #else
-    GLFWApp a(b, 800, 600, false, argc, argv, "Texture");
+    GLFWApp a(b, 800, 600, argc, argv, "Texture");
 #endif
 
     return EXIT_SUCCESS;

@@ -44,14 +44,11 @@ void UxApp::init(){
 
     rotation_ = 0;
 
-    window_.show();
 }
 
-///\todo seems not to want to update member variables :(
+
 void UxApp::update(double_t dt) {
-#ifdef _SEBURO_LINUX
-    gtk_main_iteration_do(false);
-#endif
+
 }
 
 
@@ -61,6 +58,10 @@ void UxApp::update(double_t dt) {
 		
 void UxApp::display(double_t dt){
 
+    // Place on the main thread 
+#ifdef _SEBURO_LINUX
+    gtk_main_iteration_do(false);
+#endif
 
     glClearBufferfv(GL_COLOR, 0, &glm::vec4(0.9f, 0.9f, 0.9f, 1.0f)[0]);
     GLfloat depth = 1.0f;
@@ -107,41 +108,30 @@ void UxApp::processEvent(KeyboardEvent e){
 #ifdef _SEBURO_LINUX
 
 
-UXWindow::UXWindow() : m_button("Hello World") {   // creates a new button with label "Hello World".
+UXWindow::UXWindow(UxApp &app) : app_(app), button_ ("Hello World")  {   // creates a new button with label "Hello World".
   // Sets the border width of the window.
   set_border_width(10);
 
   // When the button receives the "clicked" signal, it will call the
   // on_button_clicked() method defined below.
-  m_button.signal_clicked().connect(sigc::mem_fun(*this,
-              &UXWindow::on_button_clicked));
+  button_.signal_clicked().connect(sigc::mem_fun(*this, &UXWindow::on_button_clicked));
 
   // This packs the button into the Window (a container).
-  add(m_button);
+  add(button_);
 
-  // The final step is to display this newly created widget...
-  m_button.show();
+  show_all();
 
 }
 
 UXWindow::~UXWindow() {
+  app_.shutdown();
 }
 
 void UXWindow::on_button_clicked() {
-  std::cout << "Hello World" << std::endl;
+  cout << "Hello World" << endl;
 }
 
 #endif
-/*
-cout << "Override" << endl;
-
-  GLFWmonitor* monitor = glfwGetWindowMonitor(windows_[0]);
-
-  cout << "Monitor Name" << glfwGetMonitorName(monitor) << endl;
-
-
-
-*/
 
 /*
  * Main function - uses boost to parse program arguments
@@ -149,31 +139,16 @@ cout << "Override" << endl;
 
 int main (int argc, const char * argv[]) {
 
+  UxApp b;
 
-#ifdef _SEBURO_LINUX
-  Gtk::Main kit;
+#ifdef _SEBURO_OSX
+  GLFWGTKApp a(b, 800, 600, argc, argv, "UX", 3, 2);
+#else
+  GLFWGTKApp a(b, 800, 600, argc, argv, "UX");
 #endif
 
-  UxApp b;
-  GLFWApp a(b, 800, 600, false, argc, argv, "UX", 4, 1, 16, false);
+  UXWindow ux(b);
 
-  // Monitor is NULL if we are in windowed mode :S
-  GLFWmonitor * monitor = glfwGetWindowMonitor(a.windows()[0]);
-
-  std::thread * update_thread =  new std::thread(&UxApp::update);
-
-  //glfwGetMonitorName(monitor);
-
-  a.mainLoop();
-
-  // Now kill the thread
-
-  if (update_thread->joinable())
-    update_thread->join();
-
-  delete update_thread;
-
-
-  return EXIT_SUCCESS;
+  return a.run(ux);
 
 }

@@ -1,6 +1,6 @@
 /**
 * @brief GLFW Bit
-* @file glfwpp_->_app.cpp
+* @file glfwpp_->app_.cpp
 * @author Benjamin Blundell <oni@section9.co.uk>
 * @date 25/07/2012
 *
@@ -20,9 +20,12 @@ GLFWApp* GLFWApp::pp_;
 string GLFWApp::title_;
 
 
+///\todo potentially dont call the loop here as we might want to get a return value
+
 GLFWApp::GLFWApp (WindowApp &app, const size_t w, const size_t h, 
-	bool fullscreen, int argc, const char * argv[], 
-	const char * title, const int major, const int minor, const int depthbits, bool auto_start) : WindowSystem(app) {
+	int argc, const char * argv[], 
+	const char * title, const int major, const int minor, const int depthbits,
+	const char* monitor_name) : WindowSystem(app) {
 	
 	if( !glfwInit() ){
 		cerr << "SEBURO ERROR - Failed to initialize GLFW." << endl;
@@ -37,61 +40,76 @@ GLFWApp::GLFWApp (WindowApp &app, const size_t w, const size_t h,
 	initial_height_ = h;
 	requested_major_ = major;
 	requested_minor_ = minor;
+	monitor_name_ = monitor_name;
 
-	initGL(initial_width_, initial_height_, requested_major_, requested_minor_, requested_depth_bits_);
+	// Grab Monitor Details and print them out
+	int count = 0;
+	GLFWmonitor **monitors =  glfwGetMonitors(&count);
 
-	pp_->_app.init();
+	if (count != 0) {
+		for (size_t i = 0; i < count; ++i)
+			cout << "SEBURO GLFW Monitor Name: " << glfwGetMonitorName(monitors[i]) << endl;
+	}
+
+	initGL();
+
+		// Call the application init method
+	pp_->app_.init();
 
 	// Initial startup here - fire a resize event
 	ResizeEvent e (initial_width_, initial_height_, glfwGetTime());
-	pp_->_app.fireEvent(e);
-	
-	if (auto_start) {
-		mainLoop();
-	}
-	
-	
+	pp_->app_.fireEvent(e);
+
 }
 
-/// Run for one frame
-void GLFWApp::run() {
+/// Call this to start the application Running
+int GLFWApp::Run() {
 
+	// Fire up the thread to keep update happy
+	// Use a thread for the updates
+	pp_->update_thread_ = new std::thread(&GLFWApp::Update);
+	running_ = true;
+
+	while (running_){
+		MainLoop();
+ 	}
+
+ 	Shutdown();
+
+ 	return 1; ///\todo actually fix this please
+
+}
+
+bool GLFWApp::MainLoop() {
 	double_t t = glfwGetTime();
 
 	for ( GLFWwindow* b : windows_) {	
 		glfwMakeContextCurrent(b);
 		glfwSwapInterval( 1 );
-		_display(b);
+		Display(b);
 		glfwSwapBuffers(b);
+
 	}
 
+	// check to see if the app connected to this window is shutdown
+
+	///\todo when we have multiple windows we need to decide how a Window App responds to that
+
 	dt_ = glfwGetTime() - t;
-	
+
 	glfwPollEvents();
-	
+
+	return true;
 }
-
-// Start the main loop
-
-void GLFWApp::mainLoop() {
-	running_ = true;
-
-	while (running_){
-		run();
- 	}
-
- 	shutdown();
-}
-
 
 /*
- * shutdown Callback for resizing a window
+ * Shutdown Callback for resizing a window
  */
 
-void GLFWApp::_reshape(GLFWwindow* window, int w, int h) {
+void GLFWApp::Reshape(GLFWwindow* window, int w, int h) {
 	ResizeEvent e (w,h,glfwGetTime());
 	//TwWindowSize(e.w, e.h);
-	pp_->_app.fireEvent(e);
+	pp_->app_.fireEvent(e);
 }
 
 
@@ -99,11 +117,10 @@ void GLFWApp::_reshape(GLFWwindow* window, int w, int h) {
  * GLFW Shutdown
  */
 
-void GLFWApp::shutdown() {
+void GLFWApp::Shutdown() {
 	running_ = false;
-	
-	
-	_app.shutdown();
+		
+	app_.shutdown(); ///\tod move this to the window it is currently in I think.
 
 	glfwTerminate();
 }
@@ -112,14 +129,14 @@ void GLFWApp::shutdown() {
  * GLFW display
  */
 
-void GLFWApp::_display(GLFWwindow* window) {
-	pp_->_app.display(pp_->dt_);
+void GLFWApp::Display(GLFWwindow* window) {
+	pp_->app_.display(pp_->dt_);
 	//TwDraw();
 	//CXGLERROR
 }
 
-void GLFWApp::_display(){
-  pp_->_app.display(pp_->dt_);
+void GLFWApp::Display(){
+  pp_->app_.display(pp_->dt_);
   //TwDraw();
  //CXGLERROR - TwDraw keeps throwing out invalid operations. Not so good! ><
 }
@@ -129,9 +146,9 @@ void GLFWApp::_display(){
  * GLFW Callback for the keyboard
  */
 
-void GLFWApp::_scrollCallback(GLFWwindow* window, double xoffset, double yoffset) {
+void GLFWApp::ScrollCallback(GLFWwindow* window, double xoffset, double yoffset) {
 	ScrollEvent e (xoffset,yoffset,glfwGetTime());
-	pp_->_app.fireEvent(e);
+	pp_->app_.fireEvent(e);
 
 }
 
@@ -141,16 +158,16 @@ void GLFWApp::_scrollCallback(GLFWwindow* window, double xoffset, double yoffset
  */
 
 
-void GLFWApp::_keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
+void GLFWApp::KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
 	KeyboardEvent e (key,action,glfwGetTime());
-	pp_->_app.fireEvent(e);
+	pp_->app_.fireEvent(e);
 }
 
 /*
  * GLFW Mouse button callback - sends a full event with current position as well
  */
 
-void GLFWApp::_mouseButtonCallback(GLFWwindow* window, int button, int action, int mods) {
+void GLFWApp::MouseButtonCallback(GLFWwindow* window, int button, int action, int mods) {
 	//if (!TwEventMouseButtonGLFW(button,action)){
 		switch(button){
 			case 0: {
@@ -158,13 +175,13 @@ void GLFWApp::_mouseButtonCallback(GLFWwindow* window, int button, int action, i
 					pp_->flag_ |= MOUSE_LEFT_DOWN;
 					pp_->flag_ ^= MOUSE_LEFT_UP;
 					MouseEvent e (pp_->mx_, pp_->my_, pp_->flag_,glfwGetTime());
-					pp_->_app.fireEvent(e);
+					pp_->app_.fireEvent(e);
 				}
 				else{
 					pp_->flag_ |= MOUSE_LEFT_UP;
 					pp_->flag_ ^= MOUSE_LEFT_DOWN;
 					MouseEvent e (pp_->mx_, pp_->my_, pp_->flag_,glfwGetTime());
-					pp_->_app.fireEvent(e);
+					pp_->app_.fireEvent(e);
 					pp_->flag_ ^= MOUSE_LEFT_UP;
 				}
 				break;
@@ -174,13 +191,13 @@ void GLFWApp::_mouseButtonCallback(GLFWwindow* window, int button, int action, i
 					pp_->flag_ |= MOUSE_RIGHT_DOWN;
 					pp_->flag_ ^= MOUSE_RIGHT_UP;
 					MouseEvent e (pp_->mx_, pp_->my_, pp_->flag_,glfwGetTime());
-					pp_->_app.fireEvent(e);
+					pp_->app_.fireEvent(e);
 				}
 				else{
 					pp_->flag_ |= MOUSE_RIGHT_UP;
 					pp_->flag_ ^= MOUSE_RIGHT_DOWN;
 					MouseEvent e (pp_->mx_, pp_->my_, pp_->flag_,glfwGetTime());
-					pp_->_app.fireEvent(e);
+					pp_->app_.fireEvent(e);
 					pp_->flag_ ^= MOUSE_RIGHT_UP;
 				}
 				break;
@@ -190,7 +207,7 @@ void GLFWApp::_mouseButtonCallback(GLFWwindow* window, int button, int action, i
 					pp_->flag_ |= MOUSE_MIDDLE_DOWN;
 					pp_->flag_ ^= MOUSE_MIDDLE_UP;
 					MouseEvent e (pp_->mx_, pp_->my_, pp_->flag_,glfwGetTime());
-					pp_->_app.fireEvent(e);
+					pp_->app_.fireEvent(e);
 				}
 					
 				else{
@@ -198,7 +215,7 @@ void GLFWApp::_mouseButtonCallback(GLFWwindow* window, int button, int action, i
 					pp_->flag_ |= MOUSE_MIDDLE_UP;
 					pp_->flag_ ^= MOUSE_MIDDLE_DOWN;
 					MouseEvent e (pp_->mx_,pp_->my_,pp_->flag_,glfwGetTime());
-					pp_->_app.fireEvent(e);
+					pp_->app_.fireEvent(e);
 					pp_->flag_ ^= MOUSE_MIDDLE_UP;
 				}
 				break;
@@ -208,56 +225,131 @@ void GLFWApp::_mouseButtonCallback(GLFWwindow* window, int button, int action, i
 }
 
 
-void GLFWApp::_mousePositionCallback(GLFWwindow* window, double x, double y){
+void GLFWApp::MousePositionCallback(GLFWwindow* window, double x, double y){
 	//if( !TwEventMousePosGLFW(x, y) ){  
 		pp_->mx_ = x;
 		pp_->my_ = y;
 		MouseEvent e (pp_->mx_,pp_->my_,pp_->flag_,glfwGetTime());
-		pp_->_app.fireEvent(e);
+		pp_->app_.fireEvent(e);
 	//}
 
 }
 
 /// todo - Just the single window at present
-void GLFWApp::_window_close_callback(GLFWwindow* window) {
-	pp_->shutdown();
+void GLFWApp::WindowCloseCallback(GLFWwindow* window) {
+	pp_->app_.shutdown();
 }
 
 
-void GLFWApp::_mouseWheelCallback(GLFWwindow* window, double xpos, double ypos) {
+/*
+* Threaded update function. NO GL calls can be made from it
+*/
+
+void GLFWApp::Update(){
+  while(pp_->running_)
+  	pp_->app_.update(pp_->dt_);
+}
+
+
+
+void GLFWApp::MouseWheelCallback(GLFWwindow* window, double xpos, double ypos) {
 
 	if (ypos == 1) {
 		pp_->flag_ |= MOUSE_WHEEL_UP;	
 		MouseEvent e (pp_->mx_,pp_->my_,pp_->flag_,glfwGetTime());
-		pp_->_app.fireEvent(e);
+		pp_->app_.fireEvent(e);
 		pp_->flag_ ^= MOUSE_WHEEL_UP;
 		
 	} else if (ypos == -1) {
 		pp_->flag_ |= MOUSE_WHEEL_DOWN;
 		MouseEvent e (pp_->mx_,pp_->my_,pp_->flag_,glfwGetTime());
-		pp_->_app.fireEvent(e);
+		pp_->app_.fireEvent(e);
 		pp_->flag_ ^= MOUSE_WHEEL_DOWN;
 	}	
 }
 
 
-GLFWwindow* GLFWApp::createWindow(const char * title ="SEBURO", int w=800, int h=600) {
+GLFWwindow* GLFWApp::CreateWindow(const char * title ="SEBURO", int w=800, int h=600, const char * monitor_name) {
 
-  GLFWwindow* win = glfwCreateWindow(w,h, title, NULL, NULL);
+	GLFWwindow* window;
 
-  if (!win){
-		std::cerr << "SEBURO: Failed to open GLFW window" << std::endl;				
+	///\todo potential to share resources with another window
+
+	// Check if we are going fullscreen on one particular monitor
+	if (monitor_name != nullptr){
+		int count = 0;
+		string s0 (monitor_name);
+		GLFWmonitor ** monitors = glfwGetMonitors(&count);
+
+		if (count != 0) {
+			bool found = false;
+	
+			for (size_t i = 0; i < count; ++i){
+				const char* mn = glfwGetMonitorName(monitors[i]);
+				string s1 (mn);
+				if (s1.compare(s0) == 0 ){
+					found = true;
+					window = glfwCreateWindow(w, h, title, monitors[i], NULL);
+					break;
+				}
+			}
+
+			if (!found){
+				std::cerr << "SEBURO: No Monitors found (that match the given name)!" << std::endl;				
+				glfwTerminate();
+				exit(EXIT_FAILURE);
+			}
+
+		} else {
+			std::cerr << "SEBURO: No Monitors found!" << std::endl;				
+			glfwTerminate();
+			exit(EXIT_FAILURE);
+		}
+
+	} else if (w == 0 || h == 0) {
+		// Go fullscreen on the primary monitor
+		GLFWmonitor * m = glfwGetPrimaryMonitor();
+		const GLFWvidmode * mode = glfwGetVideoMode (m);
+		
+		w = mode->width;
+		h = mode->height;
+
+		window = glfwCreateWindow(w, h, title, m, NULL);
+
+	} else {
+		window = glfwCreateWindow(w,h, title, NULL, NULL);
+		glfwSetWindowPos(window,100,100);
+	}
+
+  if (!window){
+		std::cerr << "SEBURO: Failed to open GLFW window." << std::endl;				
 		glfwTerminate();
 		exit(EXIT_FAILURE);
 	}
 
-	glfwSetWindowPos(win,100,100);
-	
-	return  win;
+
+	CXGLERROR
+
+	glfwSetFramebufferSizeCallback(window, Reshape);
+	glfwMakeContextCurrent(window);
+	glfwSwapInterval( 1 );
+
+	CXGLERROR
+
+	cout << "SEBURO OpenGL Version: " << glGetString(GL_VERSION) << endl;
+
+	// Set Basic Callbacks
+	glfwSetKeyCallback(window, KeyCallback);
+	glfwSetCursorPosCallback(window, MousePositionCallback);
+	glfwSetMouseButtonCallback(window, MouseButtonCallback);
+	glfwSetScrollCallback(window, MouseWheelCallback);
+	glfwSetWindowCloseCallback(window, WindowCloseCallback );
+		
+	return  window;
 }
 
 
-void GLFWApp::_error_callback(int error, const char* description) {
+void GLFWApp::ErrorCallback(int error, const char* description) {
     std::cerr << "SEBURO - GLFW Error: " <<  error << " - " << description << std::endl;
 }
 
@@ -267,15 +359,14 @@ void GLFWApp::_error_callback(int error, const char* description) {
  * \todo pass params as a struct perhaps?
  */
 
- void GLFWApp::initGL( const size_t w = 800, const size_t h =600,
- 		const int major = -1, const int minor = -1, const int depthbits = 16) {
+ void GLFWApp::initGL() {
 
- 	if (major != -1 and minor != -1) {
- 		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, major);
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, minor);
+ 	if (pp_->requested_major_ != -1 || pp_->requested_minor_ != -1) {
+ 		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, pp_->requested_major_);
+		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, pp_->requested_minor_);
  	}
 
- 	glfwWindowHint(GLFW_DEPTH_BITS, depthbits);
+ 	glfwWindowHint(GLFW_DEPTH_BITS, pp_->requested_depth_bits_);
 
 #ifdef _SEBURO_OSX
  	// Forward compatible and CORE Profile
@@ -285,32 +376,11 @@ void GLFWApp::_error_callback(int error, const char* description) {
 
 	//glfwWindowHint(GLFW_FSAA_SAMPLES, 4);
 
- 	glfwSetErrorCallback(_error_callback);
+ 	glfwSetErrorCallback(ErrorCallback);
 
-	GLFWwindow* window = createWindow(title_.c_str(),w, h);
+	GLFWwindow* window = CreateWindow(pp_->title_.c_str(), pp_->initial_width_, pp_->initial_height_, pp_->monitor_name_);
 
-	if( !window ) {
-		std::cerr << "SEBURO Failed to open GLFW window\n" << std::endl;
-		glfwTerminate();
-		exit( EXIT_FAILURE );
-	}
-	CXGLERROR
 
-	glfwSetFramebufferSizeCallback(window, _reshape);
-	glfwMakeContextCurrent(window);
-	glfwSwapInterval( 1 );
-
-	CXGLERROR
-
-	std::cout << "OpenGL Version: " << glGetString(GL_VERSION) << std::endl;
-
-	// Set Basic Callbacks
-	glfwSetKeyCallback(window, _keyCallback);
-	glfwSetCursorPosCallback(window, _mousePositionCallback);
-	glfwSetMouseButtonCallback(window, _mouseButtonCallback);
-	glfwSetScrollCallback(window, _mouseWheelCallback);
-	glfwSetWindowCloseCallback(window, _window_close_callback );
-		
 	// Call only after one window / context has been created!
 	
 	glewExperimental = true;
@@ -337,3 +407,50 @@ void GLFWApp::_error_callback(int error, const char* description) {
 
 }
 
+#ifdef _SEBURO_LINUX
+
+/**
+ *	The GTK GLFW Class that allows a second GTK Control panel under Linux
+ * 
+ */
+
+GLFWGTKApp::GLFWGTKApp (WindowApp &app, const size_t w, const size_t h, 
+	int argc, const char* argv[], 
+	const char* title, const int major, const int minor, const int depthbits,
+	const char* monitor_name) : GLFWApp(app,w,h,argc,argv,title,major,minor,depthbits, monitor_name) {
+
+	char ** casted =  new char* [argc];
+
+  for (size_t i =0; i < argc; ++i){
+    casted[i] = new char[strlen(argv[i])];
+    strcpy(casted[i],argv[i]);
+  }
+		
+  gtk_init(&argc, &casted);
+	gtk_app_ = Gtk::Application::create(argc, casted, "uk.co.section9.seburo");
+	idle_connection_ = Glib::signal_idle().connect( sigc::mem_fun(*this, &GLFWGTKApp::MainLoop) );
+
+}
+
+/// Overridden Run method that takes a reference to a GTK window in order to get Running
+int GLFWGTKApp::Run(Gtk::Window &window) {
+
+	update_thread_ = new std::thread(&GLFWApp::Update);
+	running_ = true;
+	return gtk_app_->run(window);
+}
+
+void GLFWGTKApp::Shutdown() {
+	running_ = false;
+	
+	// Disconnect signals
+	idle_connection_.disconnect();
+
+	app_.shutdown();
+	glfwTerminate();	
+	gtk_app_->quit();
+
+}
+
+
+#endif

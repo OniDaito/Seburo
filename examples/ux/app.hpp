@@ -20,31 +20,31 @@
 
 #include "anttweakbar/AntTweakBar.h"
 
-// Build a basic GTK+ Second window with its own thread
-#include <gtkmm.h>
-#include <gtkmm/button.h>
-#include <gtkmm/window.h>
+// Build a basic GTK2+ Second window
 
-#include <thread>
 
+#include <gtk/gtk.h>
 
 
 namespace s9 {
 
 	#ifdef _SEBURO_LINUX
 
+	class UxApp;
+
 	class UXWindow : public Gtk::Window {
 
 	public:
-	  UXWindow();
+	  UXWindow(UxApp &app);
 	  virtual ~UXWindow();
 
 	protected:
 	  //Signal handlers:
 	  void on_button_clicked();
 
-	  //Member widgets:
-	  Gtk::Button m_button;
+	  Gtk::Button button_;
+
+	  UxApp& app_;
 
 	};
 
@@ -74,8 +74,6 @@ namespace s9 {
 		Node top_node_2_;
 
 		float rotation_;
-
-		UXWindow window_;
 		
 	};
 

@@ -65,7 +65,6 @@ using namespace s9::gl;
 
 ///\todo seems not to want to update member variables :(
 void OculusApp::update(double_t dt) {    
-  
     oculus_.update(dt);
 }
 
@@ -190,9 +189,9 @@ void OculusApp::processEvent(KeyboardEvent e){
     OculusApp b;
 
 #ifdef _SEBURO_OSX
-    GLFWApp a(b, 1280, 800, false, argc, argv, "Oculus",3,2);
+    GLFWApp a(b, 1280, 800, argc, argv, "Oculus",3,2);
 #else
-    GLFWApp a(b, 1280, 800, false, argc, argv, "Oculus");
+    GLFWApp a(b, 1280, 800, argc, argv, "Oculus");
 #endif
 
     return EXIT_SUCCESS;

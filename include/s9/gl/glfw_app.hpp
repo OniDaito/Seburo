@@ -11,17 +11,17 @@
 
 #include "../common.hpp"
 #include "common.hpp"
-#include "../visualapp.hpp"
+#include "../window_app.hpp"
 #include "utils.hpp"
 
 #include <GLFW/glfw3.h>
 #include <anttweakbar/AntTweakBar.h>
 
-//#ifdef _SEBURO_LINUX	
-//#include <gtkmm.h>
-//#endif
-
 #include <thread>
+
+#ifdef _SEBURO_LINUX	
+#include <gtkmm.h>
+#endif
 
 namespace s9 {
 
@@ -33,77 +33,109 @@ namespace s9 {
 		 * Considered a template but the static, C-Like nature of GLFW made this more annoying
 		 */
 
-		class SEBUROAPI GLFWApp : WindowSystem{
+		class SEBUROAPI GLFWApp : public WindowSystem {
 			
 		protected:
-
 			bool running_;
 			std::vector<GLFWwindow* > windows_;
 			double_t dt_;
 			size_t mx_, my_;
 			uint16_t flag_;
 
-			static void initGL(size_t w, size_t h, int major, int minor, int depthbits);
+			static void initGL();
 
-			static void _error_callback(int error, const char* description);
+			static void ErrorCallback(int error, const char* description);
 
-			static void _update();
+			static void Update();
 
-			static void _reshape(GLFWwindow* window, int w, int h);
+			static void Reshape(GLFWwindow* window, int w, int h);
 
-			static void _display(GLFWwindow* window);
+			static void Display(GLFWwindow* window);
   
-      static void _display();
+      static void Display();
 
-			static void _keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
+			static void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
 
-			static void _mouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
+			static void MouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
 
-			static void _scrollCallback(GLFWwindow* window, double xoffset, double yoffset);
+			static void ScrollCallback(GLFWwindow* window, double xoffset, double yoffset);
 
-			static void _window_close_callback(GLFWwindow* window);
+			static void WindowCloseCallback(GLFWwindow* window);
 
-			static void _mousePositionCallback(GLFWwindow* window, double x, double y);
+			static void MousePositionCallback(GLFWwindow* window, double x, double y);
 
-			static void _mouseWheelCallback(GLFWwindow* window, double xpos, double ypos);
+			static void MouseWheelCallback(GLFWwindow* window, double xpos, double ypos);
 
-			
+			bool MainLoop();
 
 		public:
 
-			GLFWApp (WindowApp &app, const size_t w = 800, const size_t h = 600, 
-				bool fullscreen = false, int argc = 0, const char * argv[] = NULL, 
-				const char * title = "SEBURO", const int major = -1, const int minor = -1, 
-				const int depthbits = 16,  bool auto_start = true);
+			/**
+			 * Constructor for the GLFW Application
+			 * \param app - an instance of a WindowApp
+			 * \param w - the initial width. Set to 0 to go fullscreen at native res.
+			 * \param h - the initial height. Set to 0 to go fullscreen at native res.
+			 * \param title - the title for the Window itself. Defaults to 'SEBURO'
+			 * \param major - the major version of OpenGL. Set to -1 if you want to go native
+			 * \param minor - the minor version of OpenGL. Set to -1 if you want to go native
+			 * \param depthbit - the size of the depth buffer
+			 * \param monitor name - if going fullscreen, provide the name of the monitor
+			 */
+			
+			GLFWApp (WindowApp &app, const size_t w, const size_t h, 
+				int argc = 0, const char * argv[] = NULL, 
+				const char * title = "SEBURO", const int major = -1, const int minor = -1,  
+				const int depthbits = 16,
+				const char* monitor_name = nullptr);
 
-			void run();
-
-			void shutdown();
-
-			void mainLoop();
+			virtual void Shutdown();
 
 			virtual void MainLoopCallback() {};
 
-
-
-
-			static GLFWwindow* createWindow(const char * title, int w, int h);
+			static GLFWwindow* CreateWindow(const char * title, int w, int h, const char * monitor_name = nullptr);
 			
 			std::vector<GLFWwindow* >& windows() { return windows_; }
 
+			virtual int Run();
 
-		private:
+		protected:
 
 			static GLFWApp *pp_;
 			static std::string title_;
 
+			std::thread *update_thread_;
+
 			int requested_major_;
 			int requested_minor_;
 			int requested_depth_bits_;
+			bool fullscreen_;
 			size_t initial_width_;
 			size_t initial_height_;
+			const char * monitor_name_;
 
 		};
+
+#ifdef _SEBURO_LINUX
+
+		/// A class for Linux that allows a second GTK Window and uses GTK as the timing mechanism
+		class SEBUROAPI GLFWGTKApp : public GLFWApp {
+		public:
+			GLFWGTKApp (WindowApp &app, const size_t w = 800, const size_t h = 600, 
+				int argc = 0, const char * argv[] = NULL, 
+				const char * title = "SEBURO", const int major = -1, const int minor = -1,  
+				const int depthbits = 16,
+				const char* monitor_name = nullptr);
+
+			virtual int Run(Gtk::Window &window);
+			virtual void Shutdown();
+
+		protected:
+
+			Glib::RefPtr<Gtk::Application> gtk_app_;
+			sigc::connection idle_connection_;
+		};
+
+#endif
 
 	}
 

@@ -24,7 +24,7 @@ void BasicApp::init(){
     addWindowListener(this);
 
     cuboid_ = Cuboid(3.0,2.0,1.0);
-
+    
     camera_= Camera( glm::vec3(0,0,10.0f));
 
     Spike s (4,1,1.0f,2.0f);
@@ -107,11 +107,11 @@ int main (int argc, const char * argv[]) {
     BasicApp b;
 
 #ifdef _SEBURO_OSX
-    GLFWApp a(b, 800, 600, false, argc, argv, "Basic",3,2);
+    GLFWApp a(b, 800, 600, argc, argv, "Basic",3,2);
 #else
-    GLFWApp a(b, 800, 600, false, argc, argv, "Basic");
+    GLFWApp a(b, 800, 600, argc, argv, "Basic");
 #endif
 
-    return EXIT_SUCCESS;
+    return a.Run();
 
 }

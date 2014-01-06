@@ -151,9 +151,9 @@ void OpenNIApp::processEvent(KeyboardEvent e){
     OpenNIApp b;
 
 #ifdef _SEBURO_OSX
-    GLFWApp a(b, 800, 600, false, argc, argv, "OpenNI",3,2);
+    GLFWApp a(b, 800, 600, argc, argv, "OpenNI",3,2);
 #else
-    GLFWApp a(b, 800, 600, false, argc, argv, "OpenNI");
+    GLFWApp a(b, 800, 600, argc, argv, "OpenNI");
 #endif
 
     return EXIT_SUCCESS;
