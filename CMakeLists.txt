@@ -388,6 +388,7 @@ if (USE_OCULUS)
   if (_SEBURO_LINUX)
     # this is untested on non-ubuntu linux :S
     SEBURO_find_pkgconfig_lib(libudev)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wl,-ludev")
   endif()
 
 
