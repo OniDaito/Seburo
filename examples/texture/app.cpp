@@ -18,10 +18,8 @@ using namespace s9::gl;
  * Called when the mainloop starts, just once
  */
 
-void TextureApp::init(){
+void TextureApp::Init(){
     shader_ = Shader( s9::File("./shaders/3/quad_texture.vert"), s9::File("./shaders/3/quad_texture.frag"));
-
-    addWindowListener(this);
 
     quad_ = Quad(1.0,1.0);
     texture_ = Texture( Image(s9::File("./data/astley.jpg")));
@@ -33,14 +31,14 @@ void TextureApp::init(){
 }
 
 
-void TextureApp::update(double_t dt) {}
+void TextureApp::Update(double_t dt) {}
 
 
 /*
  * Called as fast as possible. Not set FPS wise but dt is passed in
  */
 		
-void TextureApp::display(double_t dt){
+void TextureApp::Display(GLFWwindow* window, double_t dt){
 
     glClearBufferfv(GL_COLOR, 0, &glm::vec4(0.9f, 0.9f, 0.9f, 1.0f)[0]);
     GLfloat depth = 1.0f;
@@ -61,18 +59,20 @@ void TextureApp::display(double_t dt){
  * This is called by the wrapper function when an event is fired
  */
 
-void TextureApp::processEvent(MouseEvent e){}
+void TextureApp::ProcessEvent(MouseEvent e, GLFWwindow* window){}
 
 /*
  * Called when the window is resized. You should set cameras here
  */
 
-void TextureApp::processEvent(ResizeEvent e){
-    glViewport(0,0,e.w,e.h);
+void TextureApp::ProcessEvent(ResizeEvent e, GLFWwindow* window){
     camera_.resize(e.w,e.h);
 }
 
-void TextureApp::processEvent(KeyboardEvent e){}
+void TextureApp::ProcessEvent(KeyboardEvent e, GLFWwindow* window){
+
+}
+
 
 /*
  * Main function - uses boost to parse program arguments
@@ -83,10 +83,12 @@ int main (int argc, const char * argv[]) {
     TextureApp b;
 
 #ifdef _SEBURO_OSX
-    GLFWApp a(b, 800, 600, argc, argv, "Texture", 3, 2);
+    GLFWApp a(b, 3, 2);
 #else
-    GLFWApp a(b, 800, 600, argc, argv, "Texture");
+    GLFWApp a(b);
 #endif
+
+    a.Run();
 
     return EXIT_SUCCESS;
 

@@ -25,18 +25,21 @@ namespace s9 {
 
 	/*
  	 * An Basic App that draws a quad and provides a basic camera
+ 	 * A little multi-inheritence but one is only an interface so its cool
  	 */
 
-	class BasicApp : public WindowApp, WindowResponder{
+	class BasicApp : public WindowApp<GLFWwindow*> {
 	public:
-		void init();
-		void display(double_t dt);
-		void update(double_t dt);
+		void Init();
+		void Display(GLFWwindow*  window, double_t dt);
+		void Update(double_t dt);
+		
 
 		// Event handling - you can choose which to override
-		void processEvent(MouseEvent e);
-		void processEvent(KeyboardEvent e);
-		void processEvent(ResizeEvent e);
+		void ProcessEvent(MouseEvent e, GLFWwindow* window);
+		void ProcessEvent(KeyboardEvent e, GLFWwindow* window);
+		void ProcessEvent(ResizeEvent e, GLFWwindow* window );
+		void ProcessEvent(CloseWindowEvent e, GLFWwindow* window );
 		
 	protected:
 		Cuboid cuboid_;

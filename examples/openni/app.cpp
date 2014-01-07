@@ -19,12 +19,10 @@ using namespace s9::oni;
  * Called when the mainloop starts, just once
  */
 
-void OpenNIApp::init(){
+void OpenNIApp::Init(){
 
     shader_ = Shader( s9::File("./shaders/3/quad_texture.vert"), s9::File("./shaders/3/quad_texture.frag"));
     shader_colour_ = Shader(s9::File("./shaders/3/solid_colour.glsl"));
-
-    addWindowListener(this);
 
     CXGLERROR
 
@@ -61,7 +59,7 @@ void OpenNIApp::init(){
  * Update loop on another thread
  */
 
- void OpenNIApp::update(double_t dt) {
+ void OpenNIApp::Update(double_t dt) {
 
     if (openni_.ready()) {
         skeleton_.update();
@@ -84,7 +82,7 @@ OpenNIApp::~OpenNIApp(){
  * Called as fast as possible. Not set FPS wise but dt is passed in
  */
 
- void OpenNIApp::display(double_t dt){
+ void OpenNIApp::Display(GLFWwindow* window, double_t dt){
 
     GLfloat depth = 1.0f;
     // Now draw to the screen
@@ -122,7 +120,7 @@ OpenNIApp::~OpenNIApp(){
  * This is called by the wrapper function when an event is fired
  */
 
- void OpenNIApp::processEvent(MouseEvent e){
+ void OpenNIApp::ProcessEvent(MouseEvent e, GLFWwindow* window){
  }
 
 /*
@@ -130,15 +128,13 @@ OpenNIApp::~OpenNIApp(){
  * and reset the viewport
  */
 
- void OpenNIApp::processEvent(ResizeEvent e){
+ void OpenNIApp::ProcessEvent(ResizeEvent e, GLFWwindow* window){
     glViewport(0, 0, e.w, e.h);
     ortho_camera_.resize(e.w, e.h);
     camera_.resize(e.w, e.h);
-
-
 }
 
-void OpenNIApp::processEvent(KeyboardEvent e){
+void OpenNIApp::ProcessEvent(KeyboardEvent e, GLFWwindow* window){
     cout << "Key Pressed: " << e.key << endl;
 }
 
@@ -151,10 +147,12 @@ void OpenNIApp::processEvent(KeyboardEvent e){
     OpenNIApp b;
 
 #ifdef _SEBURO_OSX
-    GLFWApp a(b, 800, 600, argc, argv, "OpenNI",3,2);
+    GLFWApp a(b,3,2);
 #else
-    GLFWApp a(b, 800, 600, argc, argv, "OpenNI");
+    GLFWApp a(b);
 #endif
+
+    a.Run();
 
     return EXIT_SUCCESS;
 

@@ -11,7 +11,6 @@
 #define S9_NODE_HPP
 
 #include "common.hpp"
-#include "window_app.hpp"
 #include "shapes.hpp"
 #include "camera.hpp"
 #include "skeleton.hpp"

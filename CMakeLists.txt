@@ -163,7 +163,6 @@ if (_SEBURO_LINUX)
   SEBURO_find_pkgconfig_lib(xi)
   
   SEBURO_find_library(glfw)
-  SEBURO_find_library(AntTweakBar)
   SEBURO_find_library(assimp)
 
   # Glob the SOIL Sources and compile include
@@ -208,7 +207,6 @@ elseif(_SEBURO_OSX)
     CACHE STRING "Local Library search paths")
 
   SEBURO_find_library(glfw)
-  SEBURO_find_library(AntTweakBar)
   SEBURO_find_library(AssImp)
 
 
@@ -229,7 +227,6 @@ elseif(_SEBURO_WIN32)
   find_package(OpenGL REQUIRED)
 
   SEBURO_find_library(glfw) # Built from the github version 3 build
-  SEBURO_find_library(AntTweakBar)
   #SEBURO_find_library(AssImp)
   #SEBURO_find_library(glew32)
 

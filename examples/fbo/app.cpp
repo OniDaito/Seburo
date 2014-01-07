@@ -18,11 +18,9 @@ using namespace s9::gl;
  * Called when the mainloop starts, just once
  */
 
-void FBOApp::init(){
+void FBOApp::Init(){
     shader_ = Shader( s9::File("./shaders/3/quad.vert"), s9::File("./shaders/3/quad.frag"));
     shader_warp_ = Shader( s9::File("./shaders/3/quad_texture.vert"), s9::File("./shaders/3/quad_texture.frag"));
-
-    addWindowListener(this);
 
     cuboid_ = Cuboid(3.0,2.0,1.0);
     camera_= Camera( glm::vec3(0,0,10.0f));
@@ -48,7 +46,7 @@ void FBOApp::init(){
 }
 
 ///\todo seems not to want to update member variables :(
-void FBOApp::update(double_t dt) {
+void FBOApp::Update(double_t dt) {
 }
 
 
@@ -56,7 +54,7 @@ void FBOApp::update(double_t dt) {
  * Called as fast as possible. Not set FPS wise but dt is passed in
  */
 		
-void FBOApp::display(double_t dt){
+void FBOApp::Display(GLFWwindow* window, double_t dt){
     GLfloat depth = 1.0f;
 
     // Draw to the FBO
@@ -82,14 +80,14 @@ void FBOApp::display(double_t dt){
  * This is called by the wrapper function when an event is fired
  */
 
-void FBOApp::processEvent(MouseEvent e){
+void FBOApp::ProcessEvent(MouseEvent e, GLFWwindow* window){
 }
 
 /*
  * Called when the window is resized. You should set cameras here
  */
 
-void FBOApp::processEvent(ResizeEvent e){
+void FBOApp::ProcessEvent(ResizeEvent e, GLFWwindow* window){
     cout << "Window Resized:" << e.w << "," << e.h << endl;
     glViewport(0,0, e.w, e.h);
     camera_.resize(e.w, e.h);
@@ -99,7 +97,7 @@ void FBOApp::processEvent(ResizeEvent e){
     node_quad_.setMatrix(glm::translate(glm::mat4(1.0f), glm::vec3(e.w / 2.0f, e.h/2.0f, 0.0f)));
 }
 
-void FBOApp::processEvent(KeyboardEvent e){
+void FBOApp::ProcessEvent(KeyboardEvent e, GLFWwindow* window){
     cout << "Key Pressed: " << e.key << endl;
 }
 
@@ -109,15 +107,16 @@ void FBOApp::processEvent(KeyboardEvent e){
 
 int main (int argc, const char * argv[]) {
   
-    ///\todo better command line args parsing
-
     FBOApp b;
 
 #ifdef _SEBURO_OSX
-    GLFWApp a(b, 800, 600, argc, argv, "FBO",3,2);
+    GLFWApp a(b,3,2);
 #else
-    GLFWApp a(b, 800, 600, argc, argv, "FBO");
+    GLFWApp a(b);
 #endif
+
+    a.CreateWindow("FBO", 800, 600);
+    a.Run();
 
     return EXIT_SUCCESS;
 

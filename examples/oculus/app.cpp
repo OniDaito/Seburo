@@ -19,13 +19,11 @@ using namespace s9::gl;
  * 1 GL Unit = 1m
  */
 
- void OculusApp::init(){
+ void OculusApp::Init(){
     shader_ = Shader( s9::File("./shaders/3/quad.vert"),  s9::File("./shaders/3/quad.frag"));
     shader_warp_ = Shader( s9::File("./shaders/1.5/barrel.vert"), 
         s9::File("./shaders/1.5/barrel.frag"),
         s9::File("./shaders/1.5/barrel.geom"));
-
-    addWindowListener(this);
 
     cuboid_ = Cuboid(1.0,1.0,1.0);
     Cuboid v = cuboid_;
@@ -64,7 +62,7 @@ using namespace s9::gl;
 }
 
 ///\todo seems not to want to update member variables :(
-void OculusApp::update(double_t dt) {    
+void OculusApp::Update(double_t dt) {    
     oculus_.update(dt);
 }
 
@@ -73,7 +71,7 @@ void OculusApp::update(double_t dt) {
  * Called as fast as possible. Not set FPS wise but dt is passed in
  */
 
- void OculusApp::display(double_t dt){
+ void OculusApp::Display(GLFWwindow* window, double_t dt){
 
     // Create the FBO and setup the cameras
     if (!fbo_ && oculus_.connected()){
@@ -125,31 +123,32 @@ void OculusApp::update(double_t dt) {
         fbo_.unbind();
         CXGLERROR
 
+        // Draw to main screen - this cheats and uses a geometry shader
+        glClearBufferfv(GL_COLOR, 0, &glm::vec4(0.9f, 0.9f, 0.9f, 1.0f)[0]);
+        glClearBufferfv(GL_DEPTH, 0, &depth );
+
+        glBindVertexArray(null_VAO_);
+
+        glViewport(0,0, camera_ortho_.width(), camera_ortho_.height());
+
+        shader_warp_.bind();
+        fbo_.colour().bind();
+
+        shader_warp_.s("uDistortionOffset", oculus_.distortion_xcenter_offset()); // Can change with future headsets apparently
+        shader_warp_.s("uDistortionScale", 1.0f/oculus_.distortion_scale());
+        shader_warp_.s("uChromAbParam", oculus_.chromatic_abberation());
+        shader_warp_.s("uHmdWarpParam",oculus_.distortion_parameters() );
+
+        glDrawArrays(GL_POINTS, 0, 1);
+
+        fbo_.colour().unbind();
+        shader_warp_.unbind();
+
+        glBindVertexArray(0);
+
     }
    
 
-    // Draw to main screen - this cheats and uses a geometry shader
-    glClearBufferfv(GL_COLOR, 0, &glm::vec4(0.9f, 0.9f, 0.9f, 1.0f)[0]);
-    glClearBufferfv(GL_DEPTH, 0, &depth );
-
-    glBindVertexArray(null_VAO_);
-
-    glViewport(0,0, camera_ortho_.width(), camera_ortho_.height());
-
-    shader_warp_.bind();
-    fbo_.colour().bind();
-
-    shader_warp_.s("uDistortionOffset", oculus_.distortion_xcenter_offset()); // Can change with future headsets apparently
-    shader_warp_.s("uDistortionScale", 1.0f/oculus_.distortion_scale());
-    shader_warp_.s("uChromAbParam", oculus_.chromatic_abberation());
-    shader_warp_.s("uHmdWarpParam",oculus_.distortion_parameters() );
-
-    glDrawArrays(GL_POINTS, 0, 1);
-
-    fbo_.colour().unbind();
-    shader_warp_.unbind();
-
-    glBindVertexArray(0);
 
 }
 
@@ -158,14 +157,14 @@ void OculusApp::update(double_t dt) {
  * This is called by the wrapper function when an event is fired
  */
 
- void OculusApp::processEvent(MouseEvent e){
+ void OculusApp::ProcessEvent(MouseEvent e, GLFWwindow* window){
  }
 
 /*
  * Called when the window is resized. You should set cameras here
  */
 
- void OculusApp::processEvent(ResizeEvent e){
+ void OculusApp::ProcessEvent(ResizeEvent e, GLFWwindow* window){
     cout << "Window Resized:" << e.w << "," << e.h << endl;
     camera_ortho_.resize(e.w, e.h);
 
@@ -176,7 +175,7 @@ void OculusApp::update(double_t dt) {
     
 }
 
-void OculusApp::processEvent(KeyboardEvent e){
+void OculusApp::ProcessEvent(KeyboardEvent e, GLFWwindow* window){
     cout << "Key Pressed: " << e.key << endl;
 }
 
@@ -189,10 +188,15 @@ void OculusApp::processEvent(KeyboardEvent e){
     OculusApp b;
 
 #ifdef _SEBURO_OSX
-    GLFWApp a(b, 1280, 800, argc, argv, "Oculus",3,2);
+    GLFWApp a(b, 3, 2);
 #else
-    GLFWApp a(b, 1280, 800, argc, argv, "Oculus");
+    GLFWApp a(b);
 #endif
+
+    // Change HDMI-0 to whatever is listed in the output for the GLFW Monitor Screens
+    a.CreateWindowFullScreen("Oculus", 0, 0, "HDMI-0");
+
+    a.Run();
 
     return EXIT_SUCCESS;
 

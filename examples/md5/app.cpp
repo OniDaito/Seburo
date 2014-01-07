@@ -17,13 +17,11 @@ using namespace s9::gl;
  * Called when the mainloop starts, just once
  */
 
-void MD5App::init(){
+void MD5App::Init(){
     shader_ = Shader(s9::File("./shaders/3/skinning.glsl"));
     shader_colour_ = Shader(s9::File("./shaders/3/solid_colour.glsl"));
 
     show_wireframe_ = true;
-
-    addWindowListener(this);
 
     quad_ = Quad(1.0,1.0);
     rotation_ = 0;
@@ -74,7 +72,7 @@ void MD5App::init(){
 }
 
 ///\todo seems not to want to update member variables :(
-void MD5App::update(double_t dt) {
+void MD5App::Update(double_t dt) {
 
     Bone * waist = md5_.skeleton().bone("lupleg");
     waist->applyRotation( glm::angleAxis( -0.005f, glm::vec3(0.0,0.0,1.0)) );
@@ -87,7 +85,7 @@ void MD5App::update(double_t dt) {
  * Called as fast as possible. Not set FPS wise but dt is passed in
  */
 		
-void MD5App::display(double_t dt){
+void MD5App::Display(GLFWwindow *window, double_t dt){
 
     glClearBufferfv(GL_COLOR, 0, &glm::vec4(0.9f, 0.9f, 0.9f, 1.0f)[0]);
     GLfloat depth = 1.0f;
@@ -124,20 +122,19 @@ void MD5App::display(double_t dt){
  * This is called by the wrapper function when an event is fired
  */
 
-void MD5App::processEvent(MouseEvent e){}
+void MD5App::ProcessEvent(MouseEvent e, GLFWwindow *window){}
 
 /*
  * Called when the window is resized. You should set cameras here
  */
 
-void MD5App::processEvent(ResizeEvent e){
+void MD5App::ProcessEvent(ResizeEvent e, GLFWwindow *window){
     glViewport(0,0,e.w,e.h);
     camera_.resize(e.w,e.h);
 }
 
-void MD5App::processEvent(KeyboardEvent e){
+void MD5App::ProcessEvent(KeyboardEvent e, GLFWwindow *window){
     // If 'w' pressed
-
 
     if (e.key == 87) {
         if (e.action == GLFW_PRESS){
@@ -163,10 +160,12 @@ int main (int argc, const char * argv[]) {
     MD5App b;
 
 #ifdef _SEBURO_OSX
-    GLFWApp a(b, 800, 600, argc, argv, "MD5", 3, 2);
+    GLFWApp a(b, 3, 2);
 #else
-    GLFWApp a(b, 800, 600, argc, argv, "MD5");
+    GLFWApp a(b);
 #endif
+
+    a.Run();
 
     return EXIT_SUCCESS;
 

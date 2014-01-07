@@ -1,13 +1,13 @@
 /*
-* @brief GLFW Application
+* @brief GLFW Texturing Application
 * @file app.hpp
 * @author Benjamin Blundell <oni@section9.co.uk>
 * @date 21/10/2013
 *
 */
 
-#ifndef TEXTUREAPP_HPP
-#define TEXTUREAPP_HPP
+#ifndef TEXTURE_APP_HPP
+#define TEXTURE_APP_HPP
 
 #include "s9/common.hpp"
 #include "s9/file.hpp"
@@ -16,12 +16,9 @@
 #include "s9/node.hpp"
 #include "s9/gl/drawable.hpp"
 #include "s9/gl/shader.hpp"
-#include "s9/gl/glfw_app.hpp"
+#include "s9/gl/glfw.hpp"
 #include "s9/image.hpp"
 #include "s9/gl/texture.hpp"
-
-#include "anttweakbar/AntTweakBar.h"
-
  
 namespace s9 {
 
@@ -29,16 +26,16 @@ namespace s9 {
  	 * Example of texturing a basic Quad
  	 */
 
-	class TextureApp : public WindowApp, public WindowResponder {
+	class TextureApp : public WindowApp<GLFWwindow*> {
 	public:
-		void init();
-		void display(double_t dt);
-		void update(double_t dt);
+		void Init();
+		void Display(GLFWwindow* window, double_t dt);
+		void Update(double_t dt);
 
 		// Event handling - you can choose which to override
-		void processEvent(MouseEvent e);
-		void processEvent(KeyboardEvent e);
-		void processEvent(ResizeEvent e);
+		void ProcessEvent(MouseEvent e, GLFWwindow *window);
+		void ProcessEvent(KeyboardEvent e, GLFWwindow *window);
+		void ProcessEvent(ResizeEvent e, GLFWwindow *window);
 
 		
 	protected:

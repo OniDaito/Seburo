@@ -18,10 +18,8 @@ using namespace s9::gl;
  * Called when the mainloop starts, just once
  */
 
-void BasicApp::init(){
+void BasicApp::Init(){
     shader_ = Shader( s9::File("./shaders/3/quad.vert"),  s9::File("./shaders/3/quad.frag"));
-
-    addWindowListener(this);
 
     cuboid_ = Cuboid(3.0,2.0,1.0);
     
@@ -46,8 +44,7 @@ void BasicApp::init(){
     rotation_ = 0;
 }
 
-///\todo seems not to want to update member variables :(
-void BasicApp::update(double_t dt) {
+void BasicApp::Update(double_t dt) {
 
 }
 
@@ -56,7 +53,7 @@ void BasicApp::update(double_t dt) {
  * Called as fast as possible. Not set FPS wise but dt is passed in
  */
 		
-void BasicApp::display(double_t dt){
+void BasicApp::Display(GLFWwindow* window, double_t dt){
 
     glClearBufferfv(GL_COLOR, 0, &glm::vec4(0.9f, 0.9f, 0.9f, 1.0f)[0]);
     GLfloat depth = 1.0f;
@@ -75,24 +72,28 @@ void BasicApp::display(double_t dt){
 }
 
 
+void BasicApp::ProcessEvent(CloseWindowEvent e, GLFWwindow* window) {
+
+}
+
 /*
  * This is called by the wrapper function when an event is fired
  */
 
-void BasicApp::processEvent(MouseEvent e){
+void BasicApp::ProcessEvent(MouseEvent e, GLFWwindow* window){
 }
 
 /*
  * Called when the window is resized. You should set cameras here
  */
 
-void BasicApp::processEvent(ResizeEvent e){
+void BasicApp::ProcessEvent(ResizeEvent e, GLFWwindow* window){
     cout << "Window Resized:" << e.w << "," << e.h << endl;
     glViewport(0,0,e.w,e.h);
     camera_.resize(e.w,e.h);
 }
 
-void BasicApp::processEvent(KeyboardEvent e){
+void BasicApp::ProcessEvent(KeyboardEvent e, GLFWwindow* window){
     cout << "Key Pressed: " << e.key << endl;
 }
 
@@ -107,11 +108,14 @@ int main (int argc, const char * argv[]) {
     BasicApp b;
 
 #ifdef _SEBURO_OSX
-    GLFWApp a(b, 800, 600, argc, argv, "Basic",3,2);
+    GLFWApp a(b,3,2);
 #else
-    GLFWApp a(b, 800, 600, argc, argv, "Basic");
+    GLFWApp a(b);
 #endif
 
-    return a.Run();
+    // Create our initial window
+    a.CreateWindow("Basic", 800, 600);
 
+    // Now kick off the OpenGL side of things
+    a.Run();
 }

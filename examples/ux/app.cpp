@@ -17,10 +17,8 @@ using namespace s9::gl;
  * Called when the mainloop starts, just once
  */
 
-void UxApp::init(){
+void UxApp::Init(){
     shader_ = Shader( s9::File("./shaders/3/quad.vert"),  s9::File("./shaders/3/quad.frag"));
-
-    addWindowListener(this);
 
     cuboid_ = Cuboid(3.0,2.0,1.0);
 
@@ -47,7 +45,7 @@ void UxApp::init(){
 }
 
 
-void UxApp::update(double_t dt) {
+void UxApp::Update(double_t dt) {
 
 }
 
@@ -56,12 +54,7 @@ void UxApp::update(double_t dt) {
  * Called as fast as possible. Not set FPS wise but dt is passed in
  */
 		
-void UxApp::display(double_t dt){
-
-    // Place on the main thread 
-#ifdef _SEBURO_LINUX
-    gtk_main_iteration_do(false);
-#endif
+void UxApp::Display(GLFWwindow* window, double_t dt){
 
     glClearBufferfv(GL_COLOR, 0, &glm::vec4(0.9f, 0.9f, 0.9f, 1.0f)[0]);
     GLfloat depth = 1.0f;
@@ -83,20 +76,20 @@ void UxApp::display(double_t dt){
  * This is called by the wrapper function when an event is fired
  */
 
-void UxApp::processEvent(MouseEvent e){
+void UxApp::ProcessEvent(MouseEvent e, GLFWwindow* window){
 }
 
 /*
  * Called when the window is resized. You should set cameras here
  */
 
-void UxApp::processEvent(ResizeEvent e){
+void UxApp::ProcessEvent(ResizeEvent e, GLFWwindow* window){
     cout << "Window Resized:" << e.w << "," << e.h << endl;
     glViewport(0,0,e.w,e.h);
     camera_.resize(e.w,e.h);
 }
 
-void UxApp::processEvent(KeyboardEvent e){
+void UxApp::ProcessEvent(KeyboardEvent e, GLFWwindow* window){
     cout << "Key Pressed: " << e.key << endl;
 }
 
@@ -124,7 +117,7 @@ UXWindow::UXWindow(UxApp &app) : app_(app), button_ ("Hello World")  {   // crea
 }
 
 UXWindow::~UXWindow() {
-  app_.shutdown();
+  // Need to signal that we are done here
 }
 
 void UXWindow::on_button_clicked() {
@@ -142,13 +135,20 @@ int main (int argc, const char * argv[]) {
   UxApp b;
 
 #ifdef _SEBURO_OSX
-  GLFWGTKApp a(b, 800, 600, argc, argv, "UX", 3, 2);
+  WithUXApp a(b,argc,argv,3,2);
 #else
-  GLFWGTKApp a(b, 800, 600, argc, argv, "UX");
+  WithUXApp a(b,argc,argv);
 #endif
+
+  a.CreateWindow("UX", 800, 600);
 
   UXWindow ux(b);
 
-  return a.run(ux);
+#ifdef _SEBURO_LINUX
+  a.Run(ux);
+#endif
+
+  // Call shutdown once the GTK Run loop has quit. This makes GLFW quit cleanly
+  a.Shutdown();
 
 }

@@ -16,9 +16,9 @@
 #include "s9/node.hpp"
 #include "s9/gl/drawable.hpp"
 #include "s9/gl/shader.hpp"
-#include "s9/gl/glfw_app.hpp"
+#include "s9/gl/glfw.hpp"
+#include "s9/window.hpp"
 
-#include "anttweakbar/AntTweakBar.h"
 
 // Build a basic GTK2+ Second window
 
@@ -54,26 +54,26 @@ namespace s9 {
  	 * An Basic App that draws a quad and provides a basic camera
  	 */
 
-	class UxApp : public WindowApp, WindowResponder{
+	class UxApp : public WindowApp<GLFWwindow*>{
 	public:
-		void init();
-		void display(double_t dt);
-		void update(double_t dt);
+		void Init();
+		void Display(GLFWwindow* window, double_t dt);
+		void Update(double_t dt);
 
 		// Event handling - you can choose which to override
-		void processEvent(MouseEvent e);
-		void processEvent(KeyboardEvent e);
-		void processEvent(ResizeEvent e);
+		void ProcessEvent(MouseEvent e, GLFWwindow* window);
+		void ProcessEvent(KeyboardEvent e, GLFWwindow* window);
+		void ProcessEvent(ResizeEvent e, GLFWwindow* window);
 		
 	protected:
-		Cuboid cuboid_;
-		Node node_;
-		Node top_node_;
-		gl::Shader shader_;
-		Camera camera_;
-		Node top_node_2_;
+		Cuboid			cuboid_;
+		Node 				node_;
+		Node 				top_node_;
+		gl::Shader 	shader_;
+		Camera 			camera_;
+		Node 				top_node_2_;
 
-		float rotation_;
+		float 			rotation_;
 		
 	};
 

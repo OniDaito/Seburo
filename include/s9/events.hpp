@@ -20,7 +20,8 @@ namespace s9{
 		EVENT_MOUSE,
 		EVENT_KEY,
 		EVENT_RESIZE,
-		EVENT_SCROLL
+		EVENT_SCROLL,
+		EVENT_CLOSE_WINDOW
 	}EventType;
 
 	typedef enum{
@@ -90,6 +91,13 @@ namespace s9{
 		}
 
 		double_t xd,yd;
+	};
+
+	struct CloseWindowEvent : public Event {
+		CloseWindowEvent(double_t tp=0 ){
+			t = tp;
+			type = EVENT_CLOSE_WINDOW;
+		}
 	};
 }
 
