@@ -22,13 +22,13 @@
 
 // Build a basic GTK2+ Second window
 
-
+#ifdef _SEBURO_LINUX
 #include <gtk/gtk.h>
-
+#endif
 
 namespace s9 {
 
-	#ifdef _SEBURO_LINUX
+#ifdef _SEBURO_LINUX
 
 	class UxApp;
 
@@ -48,7 +48,7 @@ namespace s9 {
 
 	};
 
-	#endif
+#endif
 
 	/*
  	 * An Basic App that draws a quad and provides a basic camera

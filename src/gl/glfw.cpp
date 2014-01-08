@@ -480,6 +480,9 @@ WithUXApp::WithUXApp(WindowApp<GLFWwindow*> &app, int argc, const char * argv[],
 
 #ifdef _SEBURO_LINUX
 void WithUXApp::Run(Gtk::Window &window) {
+
+	cout << "SEBURO - Running Linux GTKMM." << endl;
+
 	// Cx to see if a window has been added. If not, create a default one
 	if (windows_.size() == 0){
 		CreateWindow("SEBURO", 800, 600);

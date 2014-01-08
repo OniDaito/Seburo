@@ -16,9 +16,7 @@
 #include "s9/node.hpp"
 #include "s9/gl/drawable.hpp"
 #include "s9/gl/shader.hpp"
-#include "s9/gl/glfw_app.hpp"
-
-#include "anttweakbar/AntTweakBar.h"
+#include "s9/gl/glfw.hpp"
 
  
 namespace s9 {

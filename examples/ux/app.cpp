@@ -151,4 +151,6 @@ int main (int argc, const char * argv[]) {
   // Call shutdown once the GTK Run loop has quit. This makes GLFW quit cleanly
   a.Shutdown();
 
+  return EXIT_SUCCESS;
+
 }
