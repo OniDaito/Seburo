@@ -4,6 +4,7 @@ project (fbo)
 
 set(SOURCE_FILES app.cpp)
 
+
 if (_SEBURO_OSX)
   add_executable(fbo MACOSX_BUNDLE app.cpp)
   
@@ -51,6 +52,7 @@ if (_SEBURO_OSX)
 else() 
   add_executable (fbo ${SOURCE_FILES} ) 
 endif()
+
 
 include_directories(${SEBURO_INCLUDES}
   ${INCLUDES_SEARCH_PATHS}
