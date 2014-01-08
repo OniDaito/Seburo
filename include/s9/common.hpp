@@ -21,6 +21,8 @@
 #include <stdexcept>
 #include <cmath>
 #include <fstream>
+#include <memory>
+#include <mutex>
 
 #include <algorithm> 
 #include <functional> 

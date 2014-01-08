@@ -49,7 +49,7 @@ elseif (UNIX AND NOT APPLE)
     add_definitions(-D_SEBURO_LINUX)
     message(STATUS "Building SEBURO Shared on a Unix-like system")
     FILE(GLOB OSSources src/linux/*)
-    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -pthread")
+    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wl,--warn-unresolved-symbols -std=c++11 -pthread -Wl,--no-as-needed")
 else()
     message(FATAL_ERROR "No supported platform was detected")
 endif()
@@ -147,7 +147,8 @@ if (_SEBURO_LINUX)
     include(FindPkgConfig)
     pkg_check_modules(${pkgname}_pkg REQUIRED ${pkgname})
     if ( DEFINED ${pkgname}_pkg_FOUND )
-      set (SEBURO_LIBRARIES ${SEBURO_LIBRARIES} ${${pkgname}_pkg_LIBRARIES} ${${pkgname}_pkg_LDFLAGS} ${${pkgname}_pkg_LDFLAGS_OTHER})
+      #set (SEBURO_LIBRARIES ${SEBURO_LIBRARIES} ${${pkgname}_pkg_LIBRARIES} ${${pkgname}_pkg_LDFLAGS} ${${pkgname}_pkg_LDFLAGS_OTHER})
+      set (SEBURO_LIBRARIES ${SEBURO_LIBRARIES} ${${pkgname}_pkg_LIBRARIES} ${${pkgname}_pkg_LDFLAGS_OTHER})
       set (SEBURO_INCLUDES ${SEBURO_INCLUDES} ${${pkgname}_pkg_INCLUDE_DIRS})
       set (SEBURO_CXX_FLAGS ${SEBURO_CXX_FLAGS} ${${pkgname}_pkg_CFLAGS})
     else()
@@ -158,12 +159,10 @@ if (_SEBURO_LINUX)
   SEBURO_find_pkgconfig_lib(gtkmm-3.0)
   SEBURO_find_pkgconfig_lib(gl)
   SEBURO_find_pkgconfig_lib(xxf86vm)
-  SEBURO_find_pkgconfig_lib(xxf86vm)
   SEBURO_find_pkgconfig_lib(xrandr)
   SEBURO_find_pkgconfig_lib(xi)
-  
+  SEBURO_find_pkgconfig_lib(libudev)
   SEBURO_find_library(glfw)
-  SEBURO_find_library(assimp)
 
   # Glob the SOIL Sources and compile include
   FILE(GLOB SOILSources src/soil/*)
@@ -226,8 +225,7 @@ elseif(_SEBURO_WIN32)
 
   find_package(OpenGL REQUIRED)
 
-  SEBURO_find_library(glfw) # Built from the github version 3 build
-  #SEBURO_find_library(AssImp)
+  SEBURO_find_library(glfw)
   #SEBURO_find_library(glew32)
 
 else()
@@ -314,7 +312,8 @@ if (USE_OPENNI)
                PATH_SUFFIXES lib
   )
 
-  find_library(NITE_LIBRARY
+ 
+find_library(NITE_LIBRARY
                NAMES XnVNite XnVNITE_1_3_1 XnVNITE_1_4_0 XnVNite_1_4_2 XnVNite_1_5_2
                HINTS /usr/lib
                PATHS "$ENV{PROGRAMFILES}/PrimeSense/NITE/Lib${OPENNI_SUFFIX}" "$ENV{PROGRAMW6432}/PrimeSense/NITE/Lib${OPENNI_SUFFIX}"
@@ -383,12 +382,6 @@ if (USE_OCULUS)
                PATHS "$ENV{PROGRAMFILES}/OpenNI/Lib${OPENNI_SUFFIX}" "$ENV{PROGRAMW6432}/OpenNI/Lib${OPENNI_SUFFIX}"
                PATH_SUFFIXES lib
   )
-
-  # We need some dependencies for Oculus it seems
-  if (_SEBURO_LINUX)
-    # this is untested on non-ubuntu linux :S
-    SEBURO_find_pkgconfig_lib(libudev)
-  endif()
 
 
   set (OCULUS_LIBRARIES ${OCULUS_LIBRARY})
