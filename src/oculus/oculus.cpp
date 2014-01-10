@@ -13,7 +13,7 @@ using namespace s9;
 using namespace s9::oculus;
 using namespace OVR;
 
-OculusBase::SharedObject::SharedObject() {
+OculusBase::SharedObject::SharedObject(float_t near, float_t far) {
   initialized = false;
   manager = *DeviceManager::Create();
   
@@ -38,6 +38,9 @@ OculusBase::SharedObject::SharedObject() {
     }
 
     profile = HMD->GetProfile();
+
+    near_plane = near;
+    far_plane = far;
 
     setupCameras();
 
@@ -93,10 +96,10 @@ OculusBase::SharedObject::SharedObject() {
 
 ///\todo - pass in a window listener as window events will affect this
 
-OculusBase::OculusBase(bool b) {
+OculusBase::OculusBase(float_t near, float_t far) {
   
   System::Init( Log::ConfigureDefaultLog (LogMask_All));  
-  obj_ = std::shared_ptr<SharedObject>(new SharedObject());
+  obj_ = std::shared_ptr<SharedObject>(new SharedObject(near,far));
 
 
 }
@@ -265,7 +268,7 @@ void OculusBase::SharedObject::update(double_t dt) {
 }
 
 
-void OculusBase::SharedObject::setupCameras( ){
+void OculusBase::SharedObject::setupCameras(){
     fbo_size = glm::vec2( hmd_info.HResolution * stereo_config.GetDistortionScale(), hmd_info.VResolution * stereo_config.GetDistortionScale());
     
     screen_size_scaled = glm::vec2(hmd_info.HScreenSize,hmd_info.VScreenSize) * stereo_config.GetDistortionScale();
@@ -282,7 +285,9 @@ void OculusBase::SharedObject::setupCameras( ){
     float projection_offset = (4.0f * eye_shift) / screen_size_scaled.x;
 
     // Concerned with the FOV. I'm halving it twice. Once for sure but twice?
-    glm::mat4 perspective = glm::perspective( radToDeg(fov) * 0.5f, aspect, 0.3f, 1000.0f);
+    // This is a bit odd because we loose the stereo but its correct for sintel :S
+
+    glm::mat4 perspective = glm::perspective( radToDeg(fov) * 0.5f , aspect, near_plane, far_plane);
 
     left_projection = glm::translate(perspective, glm::vec3(projection_offset,0.0f,0.0f));
     right_projection = glm::translate(perspective, glm::vec3(-projection_offset,0.0f,0.0f));

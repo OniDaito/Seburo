@@ -14,8 +14,8 @@ layout (location = 0) in vec3 aVertPosition;
 layout (location = 1) in vec3 aVertNormal;
 layout (location = 2) in vec2 aVertTexCoord;
 layout (location = 3) in vec3 aVertTangent;
-layout (location = 4) in uvec4 aVertBoneIndex[2];
-layout (location = 6) in vec4 aVertWeight[2];
+layout (location = 4) in uvec4 aVertBoneIndex;
+layout (location = 5) in vec4 aVertWeight;
 
 
 // Defaults set by Seburo
@@ -37,28 +37,20 @@ void main() {
 
   // Flatten out the loop
   // Unpack the values
-  float bias = aVertWeight[0].x;
-  vec4 bp = vec4(aVertPosition,1.0) * uBonePalette[aVertBoneIndex[0].x] * bias;
+  float bias = aVertWeight.x;
+  vec4 bp = vec4(aVertPosition,1.0) * uBonePalette[aVertBoneIndex.x] * bias;
   skinnedPosition += bp.xyz;
 
-  bias = aVertWeight[0].y;
-  bp = vec4(aVertPosition,1.0) * uBonePalette[aVertBoneIndex[0].y] * bias;
+  bias = aVertWeight.y;
+  bp = vec4(aVertPosition,1.0) * uBonePalette[aVertBoneIndex.y] * bias;
   skinnedPosition += bp.xyz;
 
-  bias = aVertWeight[0].z;
-  bp = vec4(aVertPosition,1.0) * uBonePalette[aVertBoneIndex[0].z] * bias;
+  bias = aVertWeight.z;
+  bp = vec4(aVertPosition,1.0) * uBonePalette[aVertBoneIndex.z] * bias;
   skinnedPosition += bp.xyz;
 
-  bias = aVertWeight[0].w;
-  bp = vec4(aVertPosition,1.0) * uBonePalette[aVertBoneIndex[0].w] * bias;
-  skinnedPosition += bp.xyz;
-
-  bias = aVertWeight[1].x;
-  bp = vec4(aVertPosition,1.0) * uBonePalette[aVertBoneIndex[1].x] * bias;
-  skinnedPosition += bp.xyz;
-
-  bias = aVertWeight[1].y;
-  bp = vec4(aVertPosition,1.0) * uBonePalette[aVertBoneIndex[1].y] * bias;
+  bias = aVertWeight.w;
+  bp = vec4(aVertPosition,1.0) * uBonePalette[aVertBoneIndex.w] * bias;
   skinnedPosition += bp.xyz;
 
   sVertexPosition = uProjectionMatrix * uViewMatrix * uModelMatrix * vec4(skinnedPosition,1.0);
@@ -78,11 +70,11 @@ out vec4 fragColor;
 
 ///\todo choose between both in the uber shader
 // At present rect works well but we are sending normalised coordinates
+//uniform sampler2DRect uTexSampler0;
 uniform sampler2D uTexSampler0;
-//uniform sampler2D uBaseTex;
 
 void main() {
   //vec2 texsize = textureSize(uTexSampler0); 
-  vec4 texcolor = texture2D(uTexSampler0, sTexCoord);
+  vec4 texcolor = texture(uTexSampler0, sTexCoord);
   fragColor = vec4(texcolor.rgb,1.0);
 }

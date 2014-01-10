@@ -56,7 +56,7 @@ void NodeSkeleton::collect(gl::ShaderVisitor &v) {
 		bone_data[idx] =  b->skinned_matrix();
 		idx++;
 		if (idx >= shader_bone_limit){
-			cerr << "SEBURO Shader Clause Error - Number of bones in model exceeds shader limit." << endl;
+			cerr << "SEBURO Shader Clause Error - Number of bones in model exceeds shader limit - " << idx << " vs " <<  shader_bone_limit << endl;
 			break;
 		}
 	}

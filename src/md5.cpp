@@ -44,6 +44,10 @@ typedef struct {
   size_t bone;
 } md5_weight;
 
+bool compareWeights(const md5_weight &a, const md5_weight &b){
+    return a.bias > b.bias;
+}
+
 /// Temporary structure for joints
 typedef struct {
   glm::vec3 position;
@@ -70,8 +74,9 @@ void MD5Model::parse(const File &file) {
 
   std::vector<File> dir_files = directory.list_files();
 
+  cout << "SEBURO MD5Model Directory Listing..." << endl;
   for (File f : dir_files){
-    cout << f.path() << endl;
+     cout << "  " << f.path() << endl;
   }
 
   skeleton_ = Skeleton(CUSTOM_SKELETON);
@@ -213,9 +218,9 @@ void MD5Model::parse(const File &file) {
           if (!(tiss >> s >> idx >> verts[vidx].s >> verts[vidx].t >> verts[vidx].index >> verts[vidx].count)) { break; }
          
 
-          if (verts[vidx].count > geometry_max_bones) {
-            cerr << "SEBURO MD5 Error - Bone attached to vertex exceed max bones count - " << verts[vidx].count  << endl;
-          }
+          //if (verts[vidx].count > geometry_max_bones) {
+          //  cerr << "SEBURO MD5 Error - Bone attached to vertex exceed max bones count - " << verts[vidx].count  << endl;
+          //}
 
           ++vidx;
 
@@ -299,24 +304,27 @@ void MD5Model::parse(const File &file) {
           shader_path = remove_char(shader_path, '"');
 
           size_t i = shader_path.rfind('/',shader_path.length());
-          if (i != std::string::npos) {
-            string mesh_name = shader_path.substr(i+1,shader_path.length() - i);
-            
+          string mesh_name;
+          if (i != std::string::npos) 
+            mesh_name = shader_path.substr(i+1,shader_path.length() - i);
+          else
+            mesh_name = shader_path;
             
 
-            for (File f : dir_files){
-              if (string_contains(f.path(), mesh_name )){
-                // Search for albedo textures - name of mesh then extension
-                string test = mesh_name + "." + f.extension();
-                if (test.compare(f.filename()) == 0){
-                  cout << "SEBURO MD5 Texture - Found: " << f.path() << endl;
+          for (File f : dir_files){
+            if (string_contains(f.path(), mesh_name )){
+              // Search for albedo textures - name of mesh then extension
+              string test = mesh_name + "." + f.extension();
+              if (test.compare(f.filename()) == 0){
+                cout << "SEBURO MD5 Texture - Found: " << f.path() << endl;
 
-                  Image img(f);
-                  gl::Texture t (img);
-                  mesh_node.add(t);
-                }
+                ///\todo we should try not to duplicate textures here I think
+                Image img(f);
+                gl::Texture t (img);
+                mesh_node.add(t);
               }
             }
+            
 
           }
 
@@ -338,13 +346,38 @@ void MD5Model::parse(const File &file) {
 
         glm::vec3 pos (0.0f,0.0f,0.0f);
 
+        vector<md5_weight> actual_weights;
+
+        // Organise weights by bias
+  
+        for (size_t j = 0; j < si.count; ++j)
+          actual_weights.push_back( weights[si.index + j]);
+
+        std::sort(actual_weights.begin(), actual_weights.end(), compareWeights);
+
+        // Keep the top few
+        actual_weights.resize(geometry_max_bones);
+
+        // Make sure all the biases add up to 1
+        float_t total = 0;
+        for (size_t j = 0; j < geometry_max_bones; ++j){
+          total += actual_weights[j].bias;
+        }
+
+        float_t remains = 1.0 - total;
+        if (remains > 0.0){
+          for (size_t j = 0; j < geometry_max_bones; ++j){
+            actual_weights[j].bias += (remains / geometry_max_bones);
+          }
+        }
+      
         for (size_t j = 0; j < geometry_max_bones; ++j){
          
-          if ( si.count > geometry_max_bones)
-            cerr << "SEBURO MD5 Error - Number of bones attached exceeds geometry_max_bones." << endl;
+          //if ( si.count > geometry_max_bones)
+          //  cerr << "SEBURO MD5 Error - Number of bones attached exceeds geometry_max_bones." << endl;
 
-          if (j < si.count ) {
-            md5_weight w = weights[si.index + j];
+          if (j < actual_weights.size() ) {
+            md5_weight w = actual_weights[j];
             geometry->vertices()[i].b[j] = w.bone;
             geometry->vertices()[i].w[j] = w.bias; 
           

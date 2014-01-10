@@ -37,7 +37,7 @@ namespace s9 {
       /// Internal object that can be shared around other instances. Watches after an oculus rift.
       struct SharedObject : public OVR::MessageHandler {
 
-        SharedObject();
+        SharedObject(float_t near, float_t far);
 
         void OnMessage(const OVR::Message& msg);
         void update(double_t dt);
@@ -105,6 +105,8 @@ namespace s9 {
         glm::mat4 left_projection;
         glm::mat4 right_projection;
 
+        float_t near_plane, far_plane;
+
       };
 
       std::shared_ptr<SharedObject> obj_ = nullptr;
@@ -112,7 +114,7 @@ namespace s9 {
     public:
   
       OculusBase() {}
-      OculusBase(bool b);
+      OculusBase(float_t near, float_t far);
       ~OculusBase() { }
 
       void update(double_t dt) { if(obj_ != nullptr) obj_->update(dt); }

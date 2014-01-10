@@ -39,6 +39,7 @@ Path::Path(std::string path){
     }
 
 #endif
+    final_path_ = string(realpath(final_path_.c_str(),NULL)); 
 
   }
   else {
@@ -57,11 +58,23 @@ std::vector<File> Directory::list_files() {
   struct dirent *ent;
   if ((dir = opendir (final_path_.c_str())) != NULL) {
     while ((ent = readdir (dir)) != NULL) {
+
+#ifndef _SEBURO_WIN32
       struct stat st;
-      lstat(ent->d_name, &st);
-      if(!S_ISDIR(st.st_mode))
-        files.push_back(File(final_path_ + "/" + string(ent->d_name)));
+      
+      string fp = final_path_ + "/" + string(ent->d_name);
+      fp = string(realpath(fp.c_str(),NULL)); 
+      if (lstat(fp.c_str(), &st) == 0) {
+        if(S_ISREG(st.st_mode))
+          files.push_back(File(fp));
+
+      } else {
+        perror("stat");
+      }
+     
     }
+#endif
+
     closedir (dir);
   } else {
     /* could not open directory */

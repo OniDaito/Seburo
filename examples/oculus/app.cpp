@@ -49,7 +49,7 @@ using namespace s9::gl;
     camera_ortho_ = Camera(glm::vec3(0.0f,0.0f,1.0f));
     camera_ortho_.set_orthographic(true);
 
-    oculus_ = oculus::OculusBase(true);
+    oculus_ = oculus::OculusBase(0.1f,1000.0f);
 
     node_.add(cuboid_).add(spike_node).add(cube_node_01).add(shader_);
 

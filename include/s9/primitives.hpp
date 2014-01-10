@@ -25,7 +25,7 @@ namespace s9 {
 
 
 	/// Global constants
-	const static uint8_t geometry_max_bones = 8; // Needs to be pretty low to stay under MAX_VERTEX_ATTRIBS - we use 2 x uvec4 for 8 bones per vertex
+	const static uint8_t geometry_max_bones = 4; // Needs to be pretty low to stay under MAX_VERTEX_ATTRIBS - we use 2 x uvec4 for 8 bones per vertex
 
 	/// Global typedefs
 	typedef uint32_t IndicesType; // Expand potentially on 64 bit systems?
