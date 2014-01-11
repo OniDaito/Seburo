@@ -76,5 +76,7 @@
 /// Type definitions
 typedef uint8_t byte_t;
 
+/// Alias for checking that Shared objects are initialised before use
+#define CXSHARED assert(*this);
 
 #endif

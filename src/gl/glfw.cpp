@@ -81,7 +81,7 @@ bool GLFWApp::MainLoop() {
 
 	for ( GLFWwindow* b : windows_) {	
 		glfwMakeContextCurrent(b);
-		glfwSwapInterval( 1 );
+		glfwSwapInterval( 1 ); // vsync basically
 		app_.Display(b, t);
 		glfwSwapBuffers(b);
 

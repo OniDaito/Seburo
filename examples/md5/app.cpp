@@ -35,11 +35,6 @@ void MD5App::Init(){
 
     node_.add(md5_).add(camera_).add(shader_);
  
-    glm::mat4 Model = glm::rotate(glm::mat4(), rotation_, glm::vec3(0.0f, 1.0f, 0.0f));
-    Model = glm::translate(Model, glm::vec3(0.0,-0.8,0.0));
-    //Model = glm::scale(Model, glm::vec3(0.1,0.1,0.1));
-    node_.setMatrix(Model);
-
     skeleton_shape_ = SkeletonShape(md5_.skeleton());
     skeleton_shape_.set_geometry_cast(WIREFRAME);
     skeleton_shape_.add(shader_colour_).add(camera_);
@@ -55,15 +50,15 @@ void MD5App::Init(){
     Bone * waist = md5_.skeleton().bone("waist");
     waist->applyRotation( glm::angleAxis( -45.0f, glm::vec3(1.0,0.0,0.0)) );
     waist->applyRotation( glm::angleAxis( -25.0f, glm::vec3(0.0,1.0,0.0)) );
- */
-    Bone * luparm = md5_.skeleton().bone("upper_arm.L");
-    luparm->applyRotation( glm::angleAxis( -45.0f, glm::vec3(1.0,0.0,0.0))  );
-    luparm->applyRotation( glm::angleAxis( 15.0f, glm::vec3(0.0,0.0,1.0))  );
+ 
+    Bone * luparm = md5_.skeleton().bone("luparm");
+    luparm->applyRotation( glm::angleAxis( -45.0f, glm::vec3(0.0,1.0,0.0))  );
+    //luparm->applyRotation( glm::angleAxis( 15.0f, glm::vec3(0.0,0.0,1.0))  );
 
-    Bone * lloarm = md5_.skeleton().bone("lower_arm.L");
-    lloarm->applyRotation( glm::angleAxis( -45.0f, glm::vec3(1.0,0.0,0.0))  );
-    lloarm->applyRotation( glm::angleAxis( 15.0f, glm::vec3(0.0,0.0,1.0))  );
-   
+    Bone * lloarm = md5_.skeleton().bone("lloarm");
+    lloarm->applyRotation( glm::angleAxis( -45.0f, glm::vec3(0.0,0.0,1.0))  );
+    //lloarm->applyRotation( glm::angleAxis( 15.0f, glm::vec3(0.0,0.0,1.0))  );
+   */
     cout << node_ << endl;
 
     CXGLERROR
@@ -74,8 +69,11 @@ void MD5App::Init(){
 ///\todo seems not to want to update member variables :(
 void MD5App::Update(double_t dt) {
 
-    //Bone * waist = md5_.skeleton().bone("lupleg");
-    //waist->applyRotation( glm::angleAxis( -0.005f, glm::vec3(0.0,0.0,1.0)) );
+    Bone * waist = md5_.skeleton().bone("upper_arm.L");
+    waist->applyRotation( glm::angleAxis( -0.005f, glm::vec3(0.0,0.0,1.0)) );
+
+    Bone * luparm = md5_.skeleton().bone("thigh.L");
+    luparm->applyRotation( glm::angleAxis( 0.005f, glm::vec3(0.0,1.0,0.0))  );
 
     md5_.skeleton().update();
 }
@@ -103,10 +101,10 @@ void MD5App::Display(GLFWwindow *window, double_t dt){
     rotation_ += 0.5;
     glm::mat4 Model = glm::rotate(glm::mat4(), rotation_, glm::vec3(0.0f, 1.0f, 0.0f));
     Model = glm::translate(Model, glm::vec3(0.0,-0.8,0.0));
-    //Model = glm::scale(Model, glm::vec3(0.1,0.1,0.1));
+    //Model = glm::scale(Model, glm::vec3(0.01,0.01,0.01));
     Model = glm::rotate(Model, -90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
-    node_.setMatrix(Model);
-    node_full_.setMatrix(Model);
+    node_.set_matrix(Model);
+    node_full_.set_matrix(Model);
 
     if (show_wireframe_)
         node_.draw();

@@ -63,7 +63,7 @@ SkeletonShape::SkeletonShape(const Skeleton &s) : Node() {
     ny.add(gl::ShaderClause<glm::vec4,1>("uColour", ss->orient_colour_y));
 
     glm::mat4 mm = glm::toMat4(glm::angleAxis(-90.0f, glm::vec3(0.0f,0.0f,1.0f)));
-    nx.setMatrix(mm);
+    nx.set_matrix(mm);
 
     Node n;
     n.add(nx);
@@ -121,7 +121,7 @@ void SkeletonShape::SharedObject::update() {
       mm = glm::translate( glm::mat4(1.0f), b->position_global());
     }
 
-    bones[idx].setMatrix(mm);
+    bones[idx].set_matrix(mm);
 
     idx++;
   }
@@ -148,7 +148,7 @@ void SkeletonShape::SharedObject::update() {
     mm = glm::translate( glm::mat4(1.0f), b->position_global()) * align_mat * scale_mat;
 
   
-    orients[idx].setMatrix(mm);
+    orients[idx].set_matrix(mm);
 
     idx++;
   }

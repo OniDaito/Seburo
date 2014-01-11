@@ -359,7 +359,7 @@ namespace s9 {
 		}
 
 		glm::mat4 matrix();
-		void setMatrix(const glm::mat4 &m);
+		void set_matrix(const glm::mat4 &m);
 
 
 		Node& removeChild(Node p);

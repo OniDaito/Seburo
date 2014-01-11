@@ -32,7 +32,7 @@ void FBOApp::Init(){
     node_.add(cuboid_).add(camera_).add(shader_);
    
     Node spike_node(s);
-    spike_node.setMatrix(glm::translate(glm::mat4(1.0f), glm::vec3(0.0f,0.0f,2.0f)));
+    spike_node.set_matrix(glm::translate(glm::mat4(1.0f), glm::vec3(0.0f,0.0f,2.0f)));
 
     node_.add(spike_node);
 
@@ -63,7 +63,7 @@ void FBOApp::Display(GLFWwindow* window, double_t dt){
     glClearBufferfv(GL_DEPTH, 0, &depth );
     rotation_ += 1.0;
     glm::mat4 Model = glm::rotate(glm::mat4(1.0f), rotation_, glm::vec3(0.0f, 1.0f, 0.0f));
-    node_.setMatrix(Model);
+    node_.set_matrix(Model);
     node_.draw();
     fbo_.unbind();
 
@@ -94,7 +94,7 @@ void FBOApp::ProcessEvent(ResizeEvent e, GLFWwindow* window){
     camera_ortho_.resize(e.w, e.h);
     fbo_.resize(e.w, e.h);
 
-    node_quad_.setMatrix(glm::translate(glm::mat4(1.0f), glm::vec3(e.w / 2.0f, e.h/2.0f, 0.0f)));
+    node_quad_.set_matrix(glm::translate(glm::mat4(1.0f), glm::vec3(e.w / 2.0f, e.h/2.0f, 0.0f)));
 }
 
 void FBOApp::ProcessEvent(KeyboardEvent e, GLFWwindow* window){

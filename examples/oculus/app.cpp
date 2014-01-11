@@ -25,18 +25,18 @@ using namespace s9::gl;
         s9::File("./shaders/1.5/barrel.frag"),
         s9::File("./shaders/1.5/barrel.geom"));
 
-    cuboid_ = Cuboid(1.0,1.0,1.0);
+    cuboid_ = Cuboid(0.3,0.3,0.1);
     Cuboid v = cuboid_;
     quad_ = Quad(1.0,1.0);
 
     Spike s (4,1,1.0f,2.0f);
     Node spike_node(s);
-    spike_node.setMatrix(glm::translate(glm::mat4(1.0f), glm::vec3(2.0f,0.0f,2.0f)));
+    spike_node.set_matrix(glm::translate(glm::mat4(1.0f), glm::vec3(1.5f,0.0f,1.0f)));
 
     Node cube_node_01(cuboid_);
-    cube_node_01.setMatrix(glm::translate(glm::mat4(1.0f), glm::vec3(-2.0f,0.0f,5.0f)));
+    cube_node_01.set_matrix(glm::translate(glm::mat4(1.0f), glm::vec3(-3.0f,0.0f,2.0f)));
     
-    camera_main_ = Camera(glm::vec3(0.0f,0.0f,5.0f));
+    camera_main_ = Camera(glm::vec3(0.0f,0.0f,0.9f));
     camera_left_ = Camera(glm::vec3(0.0f,0.0f,0.0f));
     camera_right_ = Camera(glm::vec3(0.0f,0.0f,0.0f));
 
@@ -46,10 +46,7 @@ using namespace s9::gl;
     camera_main_.set_update_on_node_draw(false);
     camera_main_.resize(1280,800);
 
-    camera_ortho_ = Camera(glm::vec3(0.0f,0.0f,1.0f));
-    camera_ortho_.set_orthographic(true);
-
-    oculus_ = oculus::OculusBase(0.1f,1000.0f);
+    oculus_ = oculus::OculusBase(0.01f,100.0f);
 
     node_.add(cuboid_).add(spike_node).add(cube_node_01).add(shader_);
 
@@ -87,8 +84,6 @@ void OculusApp::Update(double_t dt) {
 
         camera_left_.set_projection_matrix(oculus_.left_projection());
         camera_right_.set_projection_matrix(oculus_.right_projection());
-
-        camera_ortho_.resize(oculus_.screen_resolution().x, oculus_.screen_resolution().y);
 
         glGenVertexArrays(1, &(null_VAO_));
         
@@ -129,15 +124,15 @@ void OculusApp::Update(double_t dt) {
 
         glBindVertexArray(null_VAO_);
 
-        glViewport(0,0, camera_ortho_.width(), camera_ortho_.height());
+        glViewport(0,0, oculus_.screen_resolution().x, oculus_.screen_resolution().y);
 
         shader_warp_.bind();
         fbo_.colour().bind();
 
-        shader_warp_.s("uDistortionOffset", oculus_.distortion_xcenter_offset()); // Can change with future headsets apparently
+        shader_warp_.s("uDistortionOffset", oculus_.distortion_xcenter_offset() ); // Can change with future headsets apparently
         shader_warp_.s("uDistortionScale", 1.0f/oculus_.distortion_scale());
         shader_warp_.s("uChromAbParam", oculus_.chromatic_abberation());
-        shader_warp_.s("uHmdWarpParam",oculus_.distortion_parameters() );
+        shader_warp_.s("uHmdWarpParam",oculus_.distortion_parameters());
 
         glDrawArrays(GL_POINTS, 0, 1);
 
@@ -166,11 +161,10 @@ void OculusApp::Update(double_t dt) {
 
  void OculusApp::ProcessEvent(ResizeEvent e, GLFWwindow* window){
     cout << "Window Resized:" << e.w << "," << e.h << endl;
-    camera_ortho_.resize(e.w, e.h);
 
     glm::mat4 quad_matrix = glm::translate(glm::mat4(1.0f),glm::vec3(e.w/2.0f, e.h/2.0f, 0.0f)) ;
     quad_matrix =  glm::scale(quad_matrix, glm::vec3(e.w, e.h, 1.0f));        
-    node_quad_.setMatrix(quad_matrix);
+    node_quad_.set_matrix(quad_matrix);
 
     
 }
@@ -194,8 +188,9 @@ void OculusApp::ProcessEvent(KeyboardEvent e, GLFWwindow* window){
 #endif
 
     // Change HDMI-0 to whatever is listed in the output for the GLFW Monitor Screens
-    a.CreateWindowFullScreen("Oculus", 0, 0, "HDMI-0");
+    a.CreateWindowFullScreen("Oculus", 1280, 800, "HDMI-0");
 
+    //a.CreateWindow("Oculus",1280,800);
     a.Run();
 
     return EXIT_SUCCESS;

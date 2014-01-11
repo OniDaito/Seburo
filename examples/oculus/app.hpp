@@ -49,7 +49,6 @@ namespace s9 {
 		Camera 				camera_main_;
 		Camera 				camera_left_;
 		Camera 				camera_right_;
-		Camera 				camera_ortho_;
 		
 
 		Node 					node_;

@@ -12,6 +12,7 @@
 #include "../common.hpp"
 
 #include "../math_utils.hpp"
+#include "../string_utils.hpp"
 
 #include <OVR.h>
 #include <OVRVersion.h>
@@ -20,6 +21,13 @@ namespace s9 {
 
 
   namespace oculus {
+
+    glm::mat4 ToGLMmatrix(OVR::Matrix4f m) {
+      return glm::mat4(m.M[0][0], m.M[1][0], m.M[2][0], m.M[3][0],
+        m.M[0][1], m.M[1][1], m.M[2][1], m.M[3][1],
+        m.M[0][2], m.M[1][2], m.M[2][2], m.M[3][2],
+        m.M[0][3], m.M[1][3], m.M[2][3], m.M[3][3]);
+    }
 
     /**
      * Basic Oculus Entry class that deals with config
@@ -37,14 +45,13 @@ namespace s9 {
       /// Internal object that can be shared around other instances. Watches after an oculus rift.
       struct SharedObject : public OVR::MessageHandler {
 
+        ///\todo we need better parameters to pass in I think since we dont use the planes anymore :(
         SharedObject(float_t near, float_t far);
 
         void OnMessage(const OVR::Message& msg);
         void update(double_t dt);
         bool connected() { return IsHandlerInstalled(); }
 
-        /// Internal function to setup parameters for S9 Cameras
-        void setupCameras();
 
         ~SharedObject() {
           RemoveHandlerFromDevices();
@@ -99,12 +106,6 @@ namespace s9 {
 
         // Cameras and matrices for our final output
 
-        glm::mat4 left_inter;
-        glm::mat4 right_inter;
-
-        glm::mat4 left_projection;
-        glm::mat4 right_projection;
-
         float_t near_plane, far_plane;
 
       };
@@ -117,89 +118,117 @@ namespace s9 {
       OculusBase(float_t near, float_t far);
       ~OculusBase() { }
 
-      void update(double_t dt) { if(obj_ != nullptr) obj_->update(dt); }
+      bool operator == (const OculusBase &ref) const { return this->obj_ == ref.obj_; }
+      typedef std::shared_ptr<SharedObject> OculusBase::*unspecified_bool_type;
+      operator unspecified_bool_type() const { return ( obj_.get() == 0 ) ? 0 : &OculusBase::obj_; }
+      void reset() { obj_.reset(); }
 
-      bool connected() { if (obj_ != nullptr) return (obj_->connected() && obj_->initialized); return false; }
+      void update(double_t dt) { CXSHARED obj_->update(dt); }
 
-      glm::quat orientation() { if(obj_ != nullptr) return obj_->orientation; else return glm::quat(); } 
+      bool connected() { CXSHARED return (obj_->connected() && obj_->initialized);  }
+
+      glm::quat orientation() {CXSHARED return obj_->orientation;  } 
      
-      glm::ivec4 left_eye_viewport() { if(obj_ != nullptr) return obj_->left_eye_viewport; else return glm::ivec4(1.0f); }
-      glm::ivec4 right_eye_viewport() { if(obj_ != nullptr) return obj_->right_eye_viewport; else return glm::ivec4(1.0f); }
+      glm::ivec4 left_eye_viewport() { CXSHARED return obj_->left_eye_viewport; }
+      glm::ivec4 right_eye_viewport() { CXSHARED return obj_->right_eye_viewport;  }
 
-      std::string monitor_name()  { if(obj_ != nullptr) return obj_->monitor_name; else return ""; }
+      std::string monitor_name()  { CXSHARED return obj_->monitor_name;  }
 
 
-      glm::vec4 distortion_parameters() { if(obj_ != nullptr) 
-          return glm::vec4(obj_->hmd_info.DistortionK[0], obj_->hmd_info.DistortionK[1],
-            obj_->hmd_info.DistortionK[2],obj_->hmd_info.DistortionK[3]);
-        else
-          return glm::vec4(1.0f);
+      glm::vec4 distortion_parameters() {
+        CXSHARED
+        return glm::vec4(obj_->hmd_info.DistortionK[0], obj_->hmd_info.DistortionK[1],
+          obj_->hmd_info.DistortionK[2],obj_->hmd_info.DistortionK[3]);
+    
       }
 
       glm::vec4 chromatic_abberation() { 
-        if(obj_ != nullptr) {
-          OVR::Util::Render::DistortionConfig dc = obj_->stereo_config.GetDistortionConfig();
-          return glm::vec4(dc.ChromaticAberration[0], dc.ChromaticAberration[1],
+       CXSHARED
+        OVR::Util::Render::DistortionConfig dc = obj_->stereo_config.GetDistortionConfig();
+        return glm::vec4(dc.ChromaticAberration[0], dc.ChromaticAberration[1],
             dc.ChromaticAberration[2],dc.ChromaticAberration[3]);
-        }
-        else
-          return glm::vec4(1.0f);
+        
+        
       }
 
-      float distortion_xcenter_offset() { {if(obj_ != nullptr) return obj_->stereo_config.GetDistortionConfig().XCenterOffset; else return 1.0f; }}
+      float distortion_xcenter_offset() { 
+        CXSHARED 
+        return obj_->stereo_config.GetDistortionConfig().XCenterOffset;
+      }
 
-      float distortion_scale() { if(obj_ != nullptr) return obj_->stereo_config.GetDistortionScale(); else return 1.0f; }
+      float distortion_scale() { 
+        CXSHARED
+        return obj_->stereo_config.GetDistortionScale();
+      }
 
-      /// Return the interpupillary distance if the device exists, else 1.0f
+      /// Return the interpupillary distance if the device exists
       float interpupillary_distance() {
-         if(obj_ != nullptr) return obj_->hmd_info.InterpupillaryDistance; else return 1.0f;
+        CXSHARED
+        return obj_->hmd_info.InterpupillaryDistance;
       }
 
-      /// Return the lens separation distance if the device exists, else 1.0f
+      /// Return the lens separation distance if the device exists
       float lens_separation_distance() {
-        if(obj_ != nullptr) return obj_->hmd_info.LensSeparationDistance; else return 1.0f;
+        CXSHARED
+        return obj_->hmd_info.LensSeparationDistance;
       }
 
-      /// Return the eye to screen distance if the device exists, else 1.0f
+      /// Return the eye to screen distance if the device exists
       float eye_to_screen_distance() {
-        if(obj_ != nullptr) return obj_->hmd_info.EyeToScreenDistance; else return 1.0f;
+        CXSHARED
+        return obj_->hmd_info.EyeToScreenDistance;
       }
 
-      /// Return the screen center if the device exists, else 1.0f
+      /// Return the screen center if the device exists
       glm::vec2 screen_center() {
-        if(obj_ != nullptr) return glm::vec2(obj_->hmd_info.HScreenSize / 2.0, obj_->hmd_info.VScreenCenter ); else return glm::vec2(1.0f);
+        CXSHARED
+        return glm::vec2(obj_->hmd_info.HScreenSize / 2.0, obj_->hmd_info.VScreenCenter );
       }
 
-      /// Return the resoultion in pixels or zero
+      /// Return the resoultion in pixels
       glm::ivec2 screen_resolution() {
-        if(obj_ != nullptr) return glm::ivec2(obj_->hmd_info.HResolution, obj_->hmd_info.VResolution); else return glm::ivec2(0.0f);
-
+        CXSHARED
+        return glm::ivec2(obj_->hmd_info.HResolution, obj_->hmd_info.VResolution);
       }
 
-      /// Return the screen size in metres (I think) if the device exists, else 1.0f
+      /// Return the screen size in metres (I think)
       glm::vec2 screen_size() {
-        if(obj_ != nullptr) return glm::vec2(obj_->hmd_info.HScreenSize, obj_->hmd_info.VScreenSize); else return glm::vec2(1.0f);
+        CXSHARED
+        return glm::vec2(obj_->hmd_info.HScreenSize, obj_->hmd_info.VScreenSize);
       }
 
      
       /// Return the final FBO rendering size. This is scaled up
-      glm::vec2 fbo_size(){ if(obj_ != nullptr) return obj_->fbo_size; else return glm::vec2(1.0f);}
+      glm::vec2 fbo_size(){ CXSHARED return obj_->fbo_size; }
       
       /// Return the screen size, scaled by rendering scale
-      glm::vec2 screen_size_scaled(){ if(obj_ != nullptr) return obj_->screen_size_scaled; else return glm::vec2(1.0f); }
+      glm::vec2 screen_size_scaled(){ CXSHARED return obj_->screen_size_scaled; }
 
-      /// Return the left interval view matrix
-      glm::mat4 left_inter(){ if(obj_ != nullptr) return obj_->left_inter; else return glm::mat4(1.0f); }
+ 
+      glm::mat4 left_inter() {  
+        CXSHARED
+        OVR::Util::Render::StereoEyeParams leftEye = obj_->stereo_config.GetEyeRenderParams (OVR::Util::Render::StereoEye_Left); 
+        return ToGLMmatrix(leftEye.ViewAdjust);  
+      }
 
-      /// Return the right interval view matrix
-      glm::mat4 right_inter(){ if(obj_ != nullptr) return obj_->right_inter; else return glm::mat4(1.0f); }
+      glm::mat4 right_inter() {   
+        CXSHARED
+        OVR::Util::Render::StereoEyeParams rightEye = obj_->stereo_config.GetEyeRenderParams (OVR::Util::Render::StereoEye_Right); 
+        return ToGLMmatrix(rightEye.ViewAdjust);  
+      }
 
-      /// Return the left projection matrix
-      glm::mat4 left_projection() { if(obj_ != nullptr) return obj_->left_projection; else return glm::mat4(1.0f); }
-      
-      /// Return the right projection matrix
-      glm::mat4 right_projection() { if(obj_ != nullptr) return obj_->right_projection; else return glm::mat4(1.0f); }
 
+      glm::mat4 left_projection() {  
+        CXSHARED
+        OVR::Util::Render::StereoEyeParams leftEye = obj_->stereo_config.GetEyeRenderParams (OVR::Util::Render::StereoEye_Left); 
+        return ToGLMmatrix(leftEye.Projection);  
+      }
+
+      glm::mat4 right_projection() {   
+        CXSHARED
+        OVR::Util::Render::StereoEyeParams rightEye = obj_->stereo_config.GetEyeRenderParams (OVR::Util::Render::StereoEye_Right); 
+        return ToGLMmatrix(rightEye.Projection);  
+      }
     };
   }
 

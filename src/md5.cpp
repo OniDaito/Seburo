@@ -315,13 +315,24 @@ void MD5Model::parse(const File &file) {
             if (string_contains(f.path(), mesh_name )){
               // Search for albedo textures - name of mesh then extension
               string test = mesh_name + "." + f.extension();
-              if (test.compare(f.filename()) == 0){
-                cout << "SEBURO MD5 Texture - Found: " << f.path() << endl;
 
-                ///\todo we should try not to duplicate textures here I think
-                Image img(f);
-                gl::Texture t (img);
-                mesh_node.add(t);
+              ///\todo need a test for images here I think
+
+              string ext = f.extension();
+              std::transform(ext.begin(), ext.end(), ext.begin(), ::tolower);
+
+              if (string_contains(f.extension(), "tga" ) || string_contains(f.extension(), "jpg" ) ||
+                string_contains(f.extension(), "png" ) || string_contains(f.extension(), "gif" ) || 
+                string_contains(f.extension(), "bmp" )){
+
+                if (test.compare(f.filename()) == 0){
+                  cout << "SEBURO MD5 Texture - Found: " << f.path() << endl;
+
+                  ///\todo we should try not to duplicate textures here I think
+                  Image img(f);
+                  gl::Texture t (img);
+                  mesh_node.add(t);
+                }
               }
             }
             

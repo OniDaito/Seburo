@@ -21,27 +21,27 @@ using namespace s9::gl;
 void BasicApp::Init(){
     shader_ = Shader( s9::File("./shaders/3/quad.vert"),  s9::File("./shaders/3/quad.frag"));
 
-    cuboid_ = Cuboid(3.0,2.0,1.0);
-    
-    camera_= Camera( glm::vec3(0,0,10.0f));
+    camera_= Camera( glm::vec3(0,0,0.0f), glm::vec3(0,0,-1.0f));
+    top_node_.add(shader_).add(camera_);
+    camera_.set_field(55.0f);
 
-    Spike s (4,1,1.0f,2.0f);
+    cuboid_ = Cuboid(0.1f,0.1f,0.1f);
+    Node cuboid_node(cuboid_);
+    cuboid_node.set_matrix(glm::translate(glm::mat4(1.0f), glm::vec3(0.0f,0.0f,-1.0f)));
+    top_node_.add(cuboid_node);
 
-    node_.add(cuboid_).add(shader_).add(camera_);
+  
 
-    top_node_2_.add(s);
-    top_node_2_.add(camera_).add(shader_);
-
+    Spike s (4,1,0.1f,0.2f);
     Node spike_node(s);
+    spike_node.set_matrix(glm::translate(glm::mat4(1.0f), glm::vec3(1.0f,0.0f,0.0f)));
+    top_node_.add(spike_node);
 
-    spike_node.setMatrix(glm::translate(glm::mat4(1.0f), glm::vec3(0.0f,2.5f,0.0f)));
+    Node spike_node2(s);
+    spike_node2.set_matrix(glm::translate(glm::mat4(1.0f), glm::vec3(-1.0f,0.0f,0.0f)));
+    top_node_.add(spike_node2);
 
-    node_.add(spike_node);
-
-    top_node_.add(node_);
-    top_node_.setMatrix(glm::translate(glm::mat4(1.0f), glm::vec3(-1.0f,0.0f,0.0f)));
-
-    rotation_ = 0;
+    rotation_ = 0.1f;
 }
 
 void BasicApp::Update(double_t dt) {
@@ -59,14 +59,17 @@ void BasicApp::Display(GLFWwindow* window, double_t dt){
     GLfloat depth = 1.0f;
     glClearBufferfv(GL_DEPTH, 0, &depth );
 
-    rotation_ += 1.0;
+    //rotation_ += 0.1f;
    
     glm::mat4 Model = glm::rotate(glm::mat4(1.0f), rotation_, glm::vec3(0.0f, 1.0f, 0.0f));
-    node_.setMatrix(Model);
+    
+    glm::vec4 look = Model * glm::vec4( camera_.look().x,  camera_.look().y,  camera_.look().z, 1.0f);
+    camera_.set_look(glm::vec3( look.x,look.y,look.z ));
+
+
+    //node_.set_matrix(Model);
 
     top_node_.draw();
-
-    top_node_2_.draw();
    
     CXGLERROR
 }

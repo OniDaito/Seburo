@@ -164,7 +164,7 @@ glm::mat4 Node::matrix() {
 }
 
 /// set the matrix for this node
-void Node::setMatrix(const glm::mat4 &m) { 
+void Node::set_matrix(const glm::mat4 &m) { 
 	if (obj_ != nullptr)
 		obj_->matrix_node->set_matrix(m);
 }

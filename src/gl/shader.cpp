@@ -35,38 +35,38 @@ template<size_t N>
 void ShaderVisitor::sign( ShaderClause<float, N> &c) {
 	GLuint l = location(c.name.c_str());
   glUniform1fv( l, c.size, &c.data); ///\todo test this!
-  	CXGLERROR
+  CXGLERROR
 }
 
 void ShaderVisitor::sign( ShaderClause<float, 1> &c) {
 	GLuint l = location(c.name.c_str());
   glUniform1f( l, c.data);
-  	CXGLERROR
+  CXGLERROR
 }
 
 void ShaderVisitor::sign( ShaderClause<glm::vec4, 1> &c) {
 	GLuint l = location(c.name.c_str());
   glUniform4f( l, c.data.x, c.data.y, c.data.z, c.data.w );
-  	CXGLERROR
+  CXGLERROR
 }
 
 void ShaderVisitor::sign( ShaderClause<glm::vec2, 1> &c) {
 	GLuint l = location(c.name.c_str());
   glUniform2f( l, c.data.x, c.data.y );
-  	CXGLERROR
+  CXGLERROR
 }
 
 
 void ShaderVisitor::sign( ShaderClause<uint, 1> &c) {
 	GLuint l = location(c.name.c_str());
   glUniform1ui( l, c.data );
-  	CXGLERROR
+  CXGLERROR
 }
 
 void ShaderVisitor::sign( ShaderClause<int, 1> &c) {
 	GLuint l = location(c.name.c_str());
   glUniform1i( l, c.data );
-  	CXGLERROR
+  CXGLERROR
 }
 
 
