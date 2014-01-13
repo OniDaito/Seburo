@@ -14,6 +14,7 @@ MD5 Issues
 * Blend Modes and similar for nodes?
 * SharedObject Pointer needs to check itself and assert (preferably at compile time!)
 * Init method - seperate thread? that way we can load resources and display at the same time?
+* More than on geometry per node?
 
 * Issue with adding shared objects to nodes is that they can be un-initialised (shapes often are) and then we loose the binding to the name. Consider adding a camera before the Camera(pos) constructor is called - COMPILER should check the Node.add method for un-initialised objects and warn the user
 

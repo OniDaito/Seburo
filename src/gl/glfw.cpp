@@ -510,11 +510,13 @@ void WithUXApp::Run(Gtk::Window &window) {
 
 void WithUXApp::Shutdown() {
 	running_ = false;
-	
+
+#ifdef _SEBURO_LINUX	
 	// Disconnect signals
 	idle_connection_.disconnect();
 
 	glfwTerminate();	
 	gtk_app_->quit();
+#endif
 
 }

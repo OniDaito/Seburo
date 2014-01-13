@@ -33,12 +33,12 @@ void UxApp::Init(){
 
     Node spike_node(s);
 
-    spike_node.setMatrix(glm::translate(glm::mat4(1.0f), glm::vec3(0.0f,2.5f,0.0f)));
+    spike_node.set_matrix(glm::translate(glm::mat4(1.0f), glm::vec3(0.0f,2.5f,0.0f)));
 
     node_.add(spike_node);
 
     top_node_.add(node_);
-    top_node_.setMatrix(glm::translate(glm::mat4(1.0f), glm::vec3(-1.0f,0.0f,0.0f)));
+    top_node_.set_matrix(glm::translate(glm::mat4(1.0f), glm::vec3(-1.0f,0.0f,0.0f)));
 
     rotation_ = 0;
 
@@ -63,7 +63,7 @@ void UxApp::Display(GLFWwindow* window, double_t dt){
     rotation_ += 1.0;
    
     glm::mat4 Model = glm::rotate(glm::mat4(1.0f), rotation_, glm::vec3(0.0f, 1.0f, 0.0f));
-    node_.setMatrix(Model);
+    node_.set_matrix(Model);
 
     top_node_.draw();
     top_node_2_.draw();
@@ -142,9 +142,8 @@ int main (int argc, const char * argv[]) {
 
   a.CreateWindow("UX", 800, 600);
 
-  UXWindow ux(b);
-
 #ifdef _SEBURO_LINUX
+  UXWindow ux(b);
   a.Run(ux);
 #endif
 

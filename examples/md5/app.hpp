@@ -54,12 +54,14 @@ namespace s9 {
 		Node node2_;
 		Node node_full_;
 		Node cylinder_node_;
+		Node sphere_node_;
 		MD5Model md5_;
 		glm::vec4 bone_colour_, orient_colour_;
 		SkeletonShape skeleton_shape_;
 
 		bool show_wireframe_;
 
+		glm::vec4 sphere_colour_;
 		float rotation_;
 		
 	};

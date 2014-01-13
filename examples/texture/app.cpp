@@ -49,7 +49,7 @@ void TextureApp::Display(GLFWwindow* window, double_t dt){
 
     glm::mat4 mat = glm::rotate(glm::mat4(1.0f), rotation_, glm::vec3(0.0f, 1.0f, 0.0f));
 
-    node_.setMatrix(mat);
+    node_.set_matrix(mat);
     node_.draw();
 }
 

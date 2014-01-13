@@ -39,10 +39,14 @@ void MD5App::Init(){
     skeleton_shape_.set_geometry_cast(WIREFRAME);
     skeleton_shape_.add(shader_colour_).add(camera_);
   
-    node_.add(skeleton_shape_);
+    node_.add(skeleton_shape_).add(sphere_node_);
+
+    Sphere s(0.08f, 10);
+    sphere_colour_ = glm::vec4(0.0f,1.0f,0.0f,1.0f);
+    sphere_node_.add(s).add(shader_colour_).add(gl::ShaderClause<glm::vec4,1>("uColour", sphere_colour_));
 
 
-    node_full_.add(md5_).add(camera_).add(shader_);
+    node_full_.add(md5_).add(camera_).add(shader_).add(sphere_node_);
 
     /*Bone * neck = md5_.skeleton().bone("neck");
     neck->applyRotation ( glm::angleAxis( 20.0f, glm::vec3(0.0,1.0,0.0)) );
@@ -76,6 +80,15 @@ void MD5App::Update(double_t dt) {
     luparm->applyRotation( glm::angleAxis( 0.005f, glm::vec3(0.0,1.0,0.0))  );
 
     md5_.skeleton().update();
+
+    Bone * lloarm = md5_.skeleton().bone("lower_arm.L");
+
+    glm::vec4 sp (0.58f, 0.0f, 1.35f, 1.0f);
+    sp = lloarm->skinned_matrix() * sp;
+
+    glm::mat4 tm = glm::translate(glm::mat4(1.0f), glm::vec3(sp.x, sp.y, sp.z));
+    sphere_node_.set_matrix(tm);
+    
 }
 
 
@@ -97,6 +110,8 @@ void MD5App::Display(GLFWwindow *window, double_t dt){
         glCullFace(GL_BACK);
         glEnable(GL_DEPTH_TEST);
     }
+
+ 
 
     rotation_ += 0.5;
     glm::mat4 Model = glm::rotate(glm::mat4(), rotation_, glm::vec3(0.0f, 1.0f, 0.0f));
