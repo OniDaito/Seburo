@@ -126,6 +126,34 @@ namespace s9 {
 	
 	};
 
+
+  /**
+   * A basic Sphere, made up of triangles with the underlying Vec4 type
+   */ 
+
+  struct ShapeObjSphere: public ShapeObj {
+    ShapeObjSphere(size_t num_verts, size_t num_indices) {
+      geometry = GeometryT<Vertex4, Face4, AllocationPolicyNew>(num_verts,num_indices,TRIANGLES);
+    }
+
+    void brew (gl::BrewFlags b) { gl_drawable.brew(geometry, b); }
+    void draw (GeometryPrimitive g = TRIANGLES) { gl_drawable.draw(geometry, g); }
+
+    GeometryT<Vertex4, Face4, AllocationPolicyNew> geometry;
+      
+  };
+
+
+  class SEBUROAPI Sphere : public Shape {
+  public:
+
+    Sphere() {};
+    Sphere(float_t radius, size_t segments);
+
+    const GeometryT<Vertex4, Face4, AllocationPolicyNew>* geometry();
+  
+  };
+
 	/**
    * A Triangle Mesh made up of Vec3 types
    */ 

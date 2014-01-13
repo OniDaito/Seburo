@@ -104,6 +104,97 @@ const GeometryT<Vertex4, Face4, AllocationPolicyNew>* Cuboid::geometry() {
 }
 
 
+
+/**
+ * Build a Sphere with triangles, give radius and segements
+ */
+
+Sphere::Sphere (float_t radius, size_t segments)  : Shape() {
+
+	size_t vidx = 0;
+	size_t num_vertices = segments / 2 * ((segments+2) * 2);
+	size_t num_indices = (num_vertices - 3) * 3;
+
+	IndicesType indices[num_indices];
+
+	std::shared_ptr<ShapeObjSphere> sphere;
+	sphere = std::make_shared<ShapeObjSphere>(num_vertices, num_indices );
+
+	glm::vec4 colour(1.0f);
+
+	for (size_t j = 0; j < segments / 2; ++j){
+		float_t theta1 = j * 2  * PI / segments - (PI / 2);
+    float_t theta2 = (j + 1) * 2 * PI / segments - (PI / 2);
+
+    // Vertices
+
+    for (size_t i=0; i < segments + 2; ++i){
+    	float_t theta3 = i * 2 * PI / segments;
+    	
+    	glm::vec4 normal (static_cast<float_t>(cos(theta1) * cos(theta3)),
+    		static_cast<float_t>(sin(theta1)),
+    		static_cast<float_t>(cos(theta1) * sin(theta3)),
+    		0.0f);
+
+    	normal = glm::normalize(normal);
+
+    	glm::vec4 position = normal * radius;
+    	glm::vec2 texture = glm::vec2( 0.999f - i / segments, 0.999f - 2 * j / segments);
+    	position.w = 1.0f;
+    	normal.w = 1.0f;
+
+    	Vertex4 aa (position, normal, colour, texture);
+
+    	sphere->geometry[vidx] = aa;
+    	vidx++;
+
+    	glm::vec4 normal1 (static_cast<float_t>(cos(theta2) * cos(theta3)),
+    		static_cast<float_t>(sin(theta2)),
+    		static_cast<float_t>(cos(theta2) * sin(theta3)),
+    		0.0f);
+
+    	normal1 = glm::normalize(normal1);
+
+    	glm::vec4 position1 = normal1 * radius;
+    	position1.w = 1.0f;
+    	normal1.w = 1.0f;
+
+    	glm::vec2 texture1 = glm::vec2( 0.999f - i / segments, 0.999f - 2 * j / segments);
+
+    	Vertex4 bb (position1, normal1, colour, texture1);
+
+    	sphere->geometry[vidx] = bb;
+    	vidx++;
+
+   
+    }
+  }
+
+  // Indices
+
+  for (size_t i = 2; i < num_vertices; ++i ){
+  	if ( i % 2 ==0){
+  		indices[i*3] = i;
+  		indices[i*3+1] = i-1;
+  		indices[i*3+2] = i-2;
+  	} else {
+  		indices[i*3] = i;
+  		indices[i*3+1] = i-2;
+  		indices[i*3+2] = i-1;
+  	}
+ 
+ 	}
+	
+	sphere->geometry.setIndices(indices);
+	obj_ = std::static_pointer_cast<ShapeObj>(sphere);
+
+}
+
+const GeometryT<Vertex4, Face4, AllocationPolicyNew>* Sphere::geometry() {
+	std::shared_ptr<ShapeObjSphere> t = std::static_pointer_cast<ShapeObjSphere>(obj_) ;
+	return &(t->geometry);
+}
+
 /**
  * Build a basic TriMesh with a set number of verts and indices
  */

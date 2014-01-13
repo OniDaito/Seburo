@@ -97,19 +97,19 @@ OpenNIApp::~OpenNIApp(){
     camera_.update(dt);
 
     model_ = glm::translate(glm::mat4(1.0f), glm::vec3(160,120,0));
-    node_depth_.setMatrix(model_);
+    node_depth_.set_matrix(model_);
     openni_.texture_depth().bind();
     node_depth_.draw();
     openni_.texture_depth().unbind();
 
     model_ = glm::translate(glm::mat4(1.0f), glm::vec3(480,120,0));
-    node_colour_.setMatrix(model_);
+    node_colour_.set_matrix(model_);
     openni_.texture_colour().bind();
     node_colour_.draw();
     openni_.texture_colour().unbind();
 
     //glm::mat4 skel_mat = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f,0.1f,0.1f));
-    //skeleton_node_.setMatrix(skel_mat);
+    //skeleton_node_.set_matrix(skel_mat);
     skeleton_node_.draw();
 
     CXGLERROR
