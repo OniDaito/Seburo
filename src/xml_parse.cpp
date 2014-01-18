@@ -6,7 +6,7 @@
 *
 */
 
-#include "s9/s9xml.hpp"
+#include "s9/xml_parse.hpp"
 
 using namespace std;
 using namespace s9; 
@@ -22,7 +22,7 @@ TiXmlElement* _find(TiXmlElement *p, std::vector<std::string> s){
 }
 
 
-std::string find(std::vector<std::string> strs, TiXmlElement *pRoot){
+std::string Find(std::vector<std::string> strs, TiXmlElement *pRoot){
 	
 	string s = accumulate( strs.begin(), strs.end(), string("") );
 	if (pRoot && strs.size() > 1){
@@ -57,30 +57,34 @@ std::string find(std::vector<std::string> strs, TiXmlElement *pRoot){
 	}
 }
 
+
+/// return a std string from the iterator
 std::string XMLIterator::operator* () {
 	return string(pElement->GetText());
 }
 
 
-bool XMLIterator::next() {
+/// Move the iterator onwards
+bool XMLIterator::Next() {
 	if (pElement != NULL)
 		pElement = pElement->NextSiblingElement();
 	return pElement != NULL;
 }
 
 
-
+/// Return an iterator at a position of the element passed in
 std::string XMLIterator::operator[](const char *s) {
 	//split_string string via '/' into levels
 	string ss(s);
 	std::vector<std::string> strs;
-	strs = split_string_chars(s, "/: ");
+	strs = SplitStringChars(s, "/: ");
 	TiXmlElement *pRoot = pElement->FirstChildElement(strs[0].c_str());
-	return find(strs,pRoot);
+	return Find(strs,pRoot);
 	
 }
 
-/*
+
+/**
  * Find the first (as we can have duplicates) of the path given
  */
 
@@ -90,26 +94,27 @@ std::string XMLSettings::operator[](std::string s) {
 	// as the cache will need to keep the FULL path
 
 	map< string,string>::iterator it;
-	it = mObj->mCache.find(s);
-	if (it == mObj->mCache.end()){
+	it = obj_->cache.find(s);
+	if (it == obj_->cache.end()){
 		//split_string string via '/' into levels
 		std::vector<std::string> strs;
-		strs = split_string_chars(s, "/: ");
-		TiXmlElement *pRoot = mObj->mDoc->FirstChildElement(strs[0].c_str());
-		string result = find(strs,pRoot);
-		mObj->mCache[s] = result;
+		strs = SplitStringChars(s, "/: ");
+		TiXmlElement *pRoot = obj_->doc->FirstChildElement(strs[0].c_str());
+		string result = Find(strs,pRoot);
+		obj_->cache[s] = result;
 		return result;
 	}
 	return it->second;
 }
 
-bool XMLSettings::loadFile(std::string filename){
+/// Load an xml file from an absolute/relative path
+bool XMLSettings::LoadFile(std::string filename){
 	
-	mObj.reset(new SharedObj());
-	mObj->mFilename = filename;
+	obj_.reset(new SharedObject());
+	obj_->path = filename;
 
-	mObj->mDoc.reset(new TiXmlDocument(filename.c_str()));
-	if (!mObj->mDoc->LoadFile()){
+	obj_->doc.reset(new TiXmlDocument(filename.c_str()));
+	if (!obj_->doc->LoadFile()){
 		cerr << "SEBURO - XML Failed to load " << filename << endl;
 		return false;
 	}
@@ -117,22 +122,38 @@ bool XMLSettings::loadFile(std::string filename){
 
 }
 
+/// Load an xml file from an s9 file object
+bool XMLSettings::LoadFile(s9::File file){
+	
+	obj_.reset(new SharedObject());
+	obj_->path = file.final_path();
 
-XMLIterator XMLSettings::iterator(std::string s){
+	obj_->doc.reset(new TiXmlDocument(obj_->path.c_str()));
+	if (!obj_->doc->LoadFile()){
+		cerr << "SEBURO - XML Failed to load " << obj_->path << endl;
+		return false;
+	}
+	return true;
+
+}
+
+
+// Create an iterator from an XML path
+XMLIterator XMLSettings::Iterator(std::string s){
 	std::vector<std::string> strs;
-	strs = split_string_chars(s, "/: ");
+	strs = SplitStringChars(s, "/: ");
 	
 	XMLIterator it;
 	
-	TiXmlElement *pRoot = mObj->mDoc->FirstChildElement(strs[0].c_str());
+	TiXmlElement *pRoot = obj_->doc->FirstChildElement(strs[0].c_str());
 		
 	if (pRoot && strs.size() > 1){
 		strs.erase(strs.begin());
 		TiXmlElement* pp = _find(pRoot,strs);
-		it.set(pp);
+		it.Set(pp);
 	}
 	else if (pRoot && strs.size() == 1) {
-		it.set(pRoot);
+		it.Set(pRoot);
 	}
 	else {
 		cerr << "SEBURO - XML Not found: " << s << endl; 

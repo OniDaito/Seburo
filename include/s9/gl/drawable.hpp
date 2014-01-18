@@ -63,13 +63,13 @@ namespace s9{
       /// \todo unbrew method for cleaning data off the card
       /// Options for brewing that may need to be specified
       template< typename VertexType, typename FaceType, typename AllocationPolicy> 
-      void draw(GeometryT<VertexType, FaceType, AllocationPolicy> &g, GeometryPrimitive gp) {
+      void Draw(GeometryT<VertexType, FaceType, AllocationPolicy> &g, GeometryPrimitive gp) {
         if (vao_ == 0){
           std::cerr << "SEBURO DRAWABLE ERROR - attempting to draw a shape that is not brewed." << std::endl;
           return; 
         }
 
-        bind();
+        Bind();
 
         ///\todo do we really want to mess with state here? Probably
 
@@ -110,14 +110,14 @@ namespace s9{
           glDrawArrays(type, 0, g.size_vertices());
         }
 
-        unbind();
+        Unbind();
       };
       
       /// Template functions for the brewing of Geometry
       ///\todo allow rebrewing with the same size 
 
       template< typename VertexType, typename FaceType, typename AllocationPolicy> 
-      void brew( GeometryT<VertexType, FaceType, AllocationPolicy> &g, BrewFlags b=BrewFlagsDefault) {
+      void Brew( GeometryT<VertexType, FaceType, AllocationPolicy> &g, BrewFlags b=BrewFlagsDefault) {
         
         glGenVertexArrays(1, &(vao_));
 
@@ -136,8 +136,8 @@ namespace s9{
         }
 
         glGenBuffers(handles_.size(), &(handles_[0]));
-        allocate(g,b);
-        setPointers(g,b);
+        Allocate(g,b);
+        SetPointers(g,b);
 
         brewed_ = true;
 
@@ -149,8 +149,8 @@ namespace s9{
           glDeleteBuffers(handles_.size(), &(handles_[0]));
       } 
 
-      void bind() { glBindVertexArray(vao_); }
-      void unbind() { glBindVertexArray(0); }
+      void Bind() { glBindVertexArray(vao_); }
+      void Unbind() { glBindVertexArray(0); }
       
     protected:
 
@@ -160,15 +160,15 @@ namespace s9{
 
       /// default template function should never be called.
       template< typename VertexType, typename FaceType, typename AllocationPolicy> 
-      void allocate (GeometryT<VertexType,FaceType,AllocationPolicy> &g, BrewFlags b){
+      void Allocate (GeometryT<VertexType,FaceType,AllocationPolicy> &g, BrewFlags b){
         STATIC_CHECK(false, Allocate_must_be_specialized_with_geometry);
       }
 
       template< typename AllocationPolicy> 
-      void allocate(GeometryT<Vertex2, Face3, AllocationPolicy> &g, BrewFlags b) { }
+      void Allocate(GeometryT<Vertex2, Face3, AllocationPolicy> &g, BrewFlags b) { }
 
       template< typename AllocationPolicy> 
-      void allocate(GeometryT<Vertex3, Face3, AllocationPolicy> &g, BrewFlags b) {
+      void Allocate(GeometryT<Vertex3, Face3, AllocationPolicy> &g, BrewFlags b) {
         glBindBuffer(GL_ARRAY_BUFFER, handles_[0]);
         glBufferData(GL_ARRAY_BUFFER, g.size_vertices() * sizeof(Vertex3), &(g.vertices()[0]), b.access);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -181,17 +181,17 @@ namespace s9{
       }
 
       template< typename AllocationPolicy> 
-      void allocate(GeometryT<Vertex4, Face3, AllocationPolicy> &g, BrewFlags b) {
+      void Allocate(GeometryT<Vertex4, Face3, AllocationPolicy> &g, BrewFlags b) {
 
       }
 
       template< typename AllocationPolicy> 
-      void allocate(GeometryT<Vertex2, Face4, AllocationPolicy> &g, BrewFlags b) {
+      void Allocate(GeometryT<Vertex2, Face4, AllocationPolicy> &g, BrewFlags b) {
 
       }
 
       template< typename AllocationPolicy> 
-      void allocate(GeometryT<Vertex3, Face4, AllocationPolicy> &g, BrewFlags b) {
+      void Allocate(GeometryT<Vertex3, Face4, AllocationPolicy> &g, BrewFlags b) {
 
         glBindBuffer(GL_ARRAY_BUFFER, handles_[0]);
         glBufferData(GL_ARRAY_BUFFER, g.size_vertices() * sizeof(Vertex3), &(g.vertices()[0]), b.access);
@@ -206,7 +206,7 @@ namespace s9{
       }
 
       template< typename AllocationPolicy> 
-      void allocate(GeometryT<Vertex4, Face4, AllocationPolicy> &g, BrewFlags b) {
+      void Allocate(GeometryT<Vertex4, Face4, AllocationPolicy> &g, BrewFlags b) {
 
         glBindBuffer(GL_ARRAY_BUFFER, handles_[0]);
         glBufferData(GL_ARRAY_BUFFER, g.size_vertices() * sizeof(Vertex4), &(g.vertices()[0]), b.access);
@@ -221,7 +221,7 @@ namespace s9{
 
 
       template< typename AllocationPolicy> 
-      void allocate(GeometryT<Vertex3Skin, Face3, AllocationPolicy> &g, BrewFlags b) {
+      void Allocate(GeometryT<Vertex3Skin, Face3, AllocationPolicy> &g, BrewFlags b) {
 
         glBindBuffer(GL_ARRAY_BUFFER, handles_[0]);
         glBufferData(GL_ARRAY_BUFFER, g.size_vertices() * sizeof(Vertex3Skin), &(g.vertices()[0]), b.access);
@@ -240,14 +240,14 @@ namespace s9{
        */
 
       template< typename VertexType, typename FaceType, typename AllocationPolicy> 
-      void setPointers(GeometryT<VertexType,FaceType,AllocationPolicy> &g, BrewFlags b) {
+      void SetPointers(GeometryT<VertexType,FaceType,AllocationPolicy> &g, BrewFlags b) {
         assert(false);
       }
 
       template<typename AllocationPolicy> 
-      void setPointers(GeometryT<Vertex4, Face4, AllocationPolicy> &g, BrewFlags b) {
+      void SetPointers(GeometryT<Vertex4, Face4, AllocationPolicy> &g, BrewFlags b) {
 
-        bind();
+        Bind();
 
         if (b.interleaved) {
 
@@ -275,14 +275,14 @@ namespace s9{
           } 
         }
 
-        unbind();
+        Unbind();
 
       }
 
       template<typename AllocationPolicy>
-      void setPointers(GeometryT<Vertex3, Face3, AllocationPolicy> &g, BrewFlags b) {
+      void SetPointers(GeometryT<Vertex3, Face3, AllocationPolicy> &g, BrewFlags b) {
 
-        bind();
+        Bind();
 
         if (b.interleaved) {
 
@@ -310,16 +310,16 @@ namespace s9{
           } 
         }
 
-        unbind();
+        Unbind();
 
     
       }
 
       ///\todo we should, eventually, match these layout numbers up so we can just add bits to our uber shader easily
       template<typename AllocationPolicy>
-      void setPointers(GeometryT<Vertex3Skin, Face3, AllocationPolicy> &g, BrewFlags b) {
+      void SetPointers(GeometryT<Vertex3Skin, Face3, AllocationPolicy> &g, BrewFlags b) {
 
-        bind();
+        Bind();
 
         if (b.interleaved) {
           
@@ -358,7 +358,7 @@ namespace s9{
           } 
         }
 
-        unbind();
+        Unbind();
 
       }
 

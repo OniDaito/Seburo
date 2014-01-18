@@ -26,14 +26,14 @@ vector<glm::mat4> NodeCamera::view_matrix_stack_;
  */
 
 
-void NodeShape::draw(GeometryPrimitive overide){
+void NodeShape::Draw(GeometryPrimitive overide){
 
 	if (shape_.brewed()) {
-		shape_.draw(overide);
+		shape_.Draw(overide);
 			CXGLERROR
 	}
 	else{
-		shape_.brew(); ///\todo allow passing of flags
+		shape_.Brew(); ///\todo allow passing of flags
 			CXGLERROR
 	}
 }
@@ -45,9 +45,9 @@ void NodeShape::draw(GeometryPrimitive overide){
  * into a matrix4x2
  */
 
-void NodeSkeleton::collect(gl::ShaderVisitor &v) {
+void NodeSkeleton::Collect(gl::ShaderVisitor &v) {
 
-	size_t bsize = skeleton_.size();
+	size_t bsize = skeleton_.Size();
 	glm::mat4 bone_data[shader_bone_limit];
 
 	int idx = 0;
@@ -62,10 +62,10 @@ void NodeSkeleton::collect(gl::ShaderVisitor &v) {
 	}
 
 	gl::ShaderClause<glm::mat4, shader_bone_limit> clause_bones("uBonePalette", bone_data ); 
-	v.sign(clause_bones);
+	v.Sign(clause_bones);
 
 	gl::ShaderClause<float,1> clause_num_bones("uNumBones", bsize ); 
-	v.sign(clause_num_bones);
+	v.Sign(clause_num_bones);
 }
 
 
@@ -77,7 +77,7 @@ Node::Node() {}
 
 Node::Node(Shape s) {
 	_init();
-	add(s);
+	Add(s);
 }
 
 /// _init - This is internal.  Creates a shared object, adding a NodeMinimal for the matrix and a camera
@@ -95,7 +95,7 @@ void Node::_init() {
 
 /// Remove a NodeBasePtr explicitly
 
-Node& Node::remove(NodeBasePtr p){
+Node& Node::Remove(NodeBasePtr p){
 	if (obj_ != nullptr) {
 		for (auto it = obj_->bases.begin(); it != obj_->bases.end();) {
 	    if (*it == p)  {
@@ -110,7 +110,7 @@ Node& Node::remove(NodeBasePtr p){
 
 
 /// Remove a childnode from this node \todo test this function
-Node& Node::removeChild(Node p) {
+Node& Node::RemoveChild(Node p) {
 	if (obj_ != nullptr){
 		for (std::vector<Node>::iterator it = obj_->children.begin(); it != obj_->children.end(); ){
 			if  ( (*it).obj_ == p.obj_ ){
@@ -124,7 +124,7 @@ Node& Node::removeChild(Node p) {
 }
 
 /// Add a child node to this node. If the node being added is not initialised, make it so
-Node& Node::add(Node &n) {
+Node& Node::Add(Node &n) {
 	if (obj_ == nullptr) _init();
 	if (n.obj_ == nullptr) n._init();
 
@@ -133,11 +133,11 @@ Node& Node::add(Node &n) {
 }
 
 /// Add a skin to this node
-Node& Node::add(Skin s) {
+Node& Node::Add(Skin s) {
 	if (obj_ == nullptr) _init();
-	if ( getBase(SKIN_WEIGHTS) == nullptr ){
+	if ( GetBase(SKIN_WEIGHTS) == nullptr ){
 		obj_->bases.push_front( NodeBasePtr(new NodeSkin(s)));
-		obj_->bases.sort(compareNodeBasePtr);
+		obj_->bases.sort(CompareNodeBasePtr);
 	} else {
 		cerr << "SEBURO Node - Trying to add a skin to a node when one already exists." << endl;
 	}
@@ -145,12 +145,12 @@ Node& Node::add(Skin s) {
 }
 
 /// Remove a skin from this node. Annoying because we are casting to check a pointer! Messy! ><
-Node& Node::remove(Skin s) {
-	NodeBasePtr t =  getBase(SKIN_WEIGHTS);
+Node& Node::Remove(Skin s) {
+	NodeBasePtr t =  GetBase(SKIN_WEIGHTS);
 	if (t != nullptr){
 		shared_ptr<NodeSkin> p =  std::static_pointer_cast<NodeSkin> (t);
 		if (p->skin_ == s){
-			remove(t);
+			Remove(t);
 		}
 	}
 	return *this;
@@ -170,12 +170,12 @@ void Node::set_matrix(const glm::mat4 &m) {
 }
 
 /// Add a shader to this node
-Node& Node::add(gl::Shader s) {
+Node& Node::Add(gl::Shader s) {
 	if (obj_ == nullptr) _init();
-	if ( getBase(SHADER) == nullptr ){
+	if ( GetBase(SHADER) == nullptr ){
 		obj_->shader_node = std::shared_ptr<NodeShader>(new NodeShader(s));
 		obj_->bases.push_front(obj_->shader_node);
-		obj_->bases.sort(compareNodeBasePtr);
+		obj_->bases.sort(CompareNodeBasePtr);
 	} else {
 		cerr << "SEBURO Node - Trying to add a shader to a node when one already exists." << endl;
 	}
@@ -183,12 +183,12 @@ Node& Node::add(gl::Shader s) {
 	return *this;
 }
 
-Node& Node::remove(Shader s) {
-	NodeBasePtr t = getBase(SHADER);
+Node& Node::Remove(Shader s) {
+	NodeBasePtr t = GetBase(SHADER);
 	if (t != nullptr){
 		shared_ptr<NodeShader> p =  std::static_pointer_cast<NodeShader> (t);
 		if (p->shader_ == s){
-			remove(t);
+			Remove(t);
 		}
 	}
 	return *this;
@@ -196,11 +196,11 @@ Node& Node::remove(Shader s) {
 
 
 /// Add a camera to this node. We always have a basic camera node so we can swap the camera in
-Node& Node::add(Camera c) {
+Node& Node::Add(Camera c) {
 	if (obj_ == nullptr) _init();
 
 	// Nasty line
-	shared_ptr<NodeCamera> p =  std::static_pointer_cast<NodeCamera> (getBase(CAMERA));	
+	shared_ptr<NodeCamera> p =  std::static_pointer_cast<NodeCamera> (GetBase(CAMERA));	
 	p->camera_ = c;
 
 	return *this;
@@ -208,8 +208,8 @@ Node& Node::add(Camera c) {
 
 
 /// Remove a camera from this node, reverting back to the blank camera node
-Node& Node::remove(Camera s) {
-	NodeBasePtr t =  getBase(CAMERA);
+Node& Node::Remove(Camera s) {
+	NodeBasePtr t =  GetBase(CAMERA);
 	if (t != nullptr){
 		shared_ptr<NodeCamera> p =  std::static_pointer_cast<NodeCamera> (t);
 		if (p->camera_ == s){
@@ -222,11 +222,11 @@ Node& Node::remove(Camera s) {
 
 
 /// Add the drawable for this node 
-Node& Node::add(Shape s) {
+Node& Node::Add(Shape s) {
 	if (obj_ == nullptr) _init();
-	if ( getBase(GEOMETRY) == nullptr ){
+	if ( GetBase(GEOMETRY) == nullptr ){
 		obj_->bases.push_front( NodeBasePtr(new NodeShape(s)));
-		obj_->bases.sort(compareNodeBasePtr);
+		obj_->bases.sort(CompareNodeBasePtr);
 	} else {
 		cerr << "SEBURO Node - Trying to add a Shape to a node when one already exists." << endl;
 	}
@@ -234,12 +234,12 @@ Node& Node::add(Shape s) {
 }
 
 
-Node& Node::remove(Shape s) {
-	NodeBasePtr t =  getBase(GEOMETRY);
+Node& Node::Remove(Shape s) {
+	NodeBasePtr t =  GetBase(GEOMETRY);
 	if (t != nullptr){
 		shared_ptr<NodeShape> p =  std::static_pointer_cast<NodeShape> (t);
 		if (p->shape_ == s){
-			remove(t);
+			Remove(t);
 		}
 	}
 	return *this;
@@ -247,30 +247,30 @@ Node& Node::remove(Shape s) {
 
 
 /// Add a skeleton to this node 
-Node& Node::add(Skeleton s) {
+Node& Node::Add(Skeleton s) {
 	if (obj_ == nullptr) _init();
-	if ( getBase(SKELETON) == nullptr ){
+	if ( GetBase(SKELETON) == nullptr ){
 		obj_->bases.push_front( NodeBasePtr(new NodeSkeleton(s)));
-		obj_->bases.sort(compareNodeBasePtr);
+		obj_->bases.sort(CompareNodeBasePtr);
 	} else {
 		cerr << "SEBURO Node - Trying to add a Skeleton to a node when one already exists." << endl;
 	}
 	return *this;
 }
 
-Node& Node::remove(Skeleton s) {
-	NodeBasePtr t =  getBase(SKELETON);
+Node& Node::Remove(Skeleton s) {
+	NodeBasePtr t =  GetBase(SKELETON);
 	if (t != nullptr){
 		shared_ptr<NodeSkeleton> p =  std::static_pointer_cast<NodeSkeleton> (t);
 		if (p->skeleton_ == s){
-			remove(t);
+			Remove(t);
 		}
 	}
 	return *this;
 }
 
 /// Add a texture to this node - we can have multiple ones but one per unit only
-Node& Node::add(Texture t) {
+Node& Node::Add(Texture t) {
 	if (obj_ == nullptr) _init();
 
 	// Replace existing texture with unit
@@ -284,13 +284,13 @@ Node& Node::add(Texture t) {
 	}
 	
 	obj_->bases.push_front( NodeBasePtr(new NodeTexture(t)));
-	obj_->bases.sort(compareNodeBasePtr);
+	obj_->bases.sort(CompareNodeBasePtr);
 	
 	return *this;
 }
 
 
-Node& Node::remove(gl::Texture t) {
+Node& Node::Remove(gl::Texture t) {
 	if (obj_ != nullptr) {
 		for (auto it = obj_->bases.begin(); it != obj_->bases.end();) {
 	    if ((*it)->responsible() == TEXTURE)  {
@@ -314,7 +314,7 @@ Node& Node::remove(gl::Texture t) {
  * Remove all nodebases from this node
  */
 
-Node& Node::clear() {
+Node& Node::Clear() {
 	obj_->bases.clear();
 	obj_->matrix_node.reset();
 	obj_->shader_node.reset();
@@ -325,7 +325,7 @@ Node& Node::clear() {
  * Internal function to grab a pointer to a base with a responsibility
  */
 
-NodeBasePtr Node::getBase(NodeResponsibility r) {
+NodeBasePtr Node::GetBase(NodeResponsibility r) {
 	for (NodeBasePtr p : obj_->bases){
 		if (p->responsible() == r)
 			return p;
@@ -338,9 +338,9 @@ NodeBasePtr Node::getBase(NodeResponsibility r) {
  * \todo where we are passing GP, we should have user overrides or similar?
  */
 
-Node& Node::draw(GeometryPrimitive gp) {
+Node& Node::Draw(GeometryPrimitive gp) {
 	// Call the shared object update - allows Node subclasses polymorphism
-	obj_->update();
+	obj_->Update();
 
 	// Allow parental overriding if there is something to overide
 	GeometryPrimitive fp = gp;
@@ -348,19 +348,19 @@ Node& Node::draw(GeometryPrimitive gp) {
 		fp = obj_->geometry_cast;
 
 	for (NodeBasePtr p : obj_->bases){
-		p->preDraw();
+		p->PreDraw();
 		if (NodeShader::bind_count_ > 0)
-			p->collect(global_visitor);
-		p->draw(fp);
+			p->Collect(global_visitor);
+		p->Draw(fp);
 
 	}
 
 	for (Node p : obj_->children){
-		p.draw(fp);
+		p.Draw(fp);
 	}
 
 	for (NodeBasePtr p : obj_->bases){
-		p->postDraw();
+		p->PostDraw();
 	}
 
 

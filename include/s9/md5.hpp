@@ -51,7 +51,7 @@ namespace s9 {
     
     friend std::ostream& operator<<(std::ostream& out, const MD5Model& o);
 
-    std::string print() { return " - MD5Model"; }
+    std::string Print() { return " - MD5Model"; }
 
     int version() const {return version_; }
     size_t num_joints() const {return num_joints_; }
@@ -61,7 +61,7 @@ namespace s9 {
 
   protected:
 
-    void parse(const s9::File &file);
+    void Parse(const s9::File &file);
 
     // All these are shared objects so can be copied 
     // Note, this class extends a shared object so the obj_ pointer is set to that

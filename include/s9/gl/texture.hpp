@@ -46,12 +46,12 @@ namespace s9 {
       GLenum gl_type() {return obj_->gl_type; }
       GLenum basic_type() {return obj_->basic_type; }
 
-      void bind();
-      void unbind();
+      void Bind();
+      void Unbind();
 
-      void resize(size_t w, size_t h);
+      void Resize(size_t w, size_t h);
 
-      void update(byte_t * data);
+      void Update(byte_t * data);
 
     protected: 
     
@@ -100,7 +100,7 @@ namespace s9 {
       TextureStream() {};
       TextureStream(size_t w, size_t h, ColourComponent f=RGB, ColourType t = UNSIGNED_BYTE, int u = 0, const byte_t* d = nullptr);
 
-      void update(byte_t *data);
+      void Update(byte_t *data);
     
     protected:
       struct SharedObject : public Texture::SharedObject {

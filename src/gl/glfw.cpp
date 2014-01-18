@@ -64,7 +64,10 @@ void GLFWApp::Run() {
 
 	// Fire up the thread to keep update happy
 	// Use a thread for the updates
+
+	thread_start_= std::chrono::high_resolution_clock::now();
 	update_thread_ = new std::thread(&GLFWApp::UpdateThread);
+	
 	running_ = true;
 	dt_ = 0.0;
 
@@ -240,12 +243,16 @@ void GLFWApp::CloseWindow(GLFWwindow* window) {
 
 /**
  * Threaded update function. NO GL calls can be made from it
- * \todo which dt should we send here? We need to be careful with clocks
  */
 
 void GLFWApp::UpdateThread(){
-  while(pp_->running_)
-  	pp_->app_.Update(pp_->dt_);
+
+  while(pp_->running_){
+  	auto now = std::chrono::high_resolution_clock::now();
+  	double_t ms = std::chrono::duration_cast<std::chrono::milliseconds>(now - pp_->thread_start_).count();
+  	pp_->app_.Update(ms);
+  	pp_->thread_start_ = now;
+  }
 }
 
 
@@ -503,6 +510,7 @@ void WithUXApp::Run(Gtk::Window &window) {
 
 	update_thread_ = new std::thread(&GLFWApp::UpdateThread);
 	running_ = true;
+	Gio::Application::set_default(gtk_app_);
 	gtk_app_->run(window);
 
 }

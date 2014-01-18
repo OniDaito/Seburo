@@ -16,11 +16,11 @@
 
 static const double PI = M_PI;
 
-inline static double radToDeg(const double &x) { return x * 180.0 / PI; }
-inline static double degToRad(const double &x) { return x * PI / 180.0; }
+inline static double RadToDeg(const double &x) { return x * 180.0 / PI; }
+inline static double DegToRad(const double &x) { return x * PI / 180.0; }
 
-inline static float radToDeg(const float &x) { return x * 180.0 / PI; }
-inline static float degToRad(const float &x) { return x * PI / 180.0; }
+inline static float RadToDeg(const float &x) { return x * 180.0 / PI; }
+inline static float DegToRad(const float &x) { return x * PI / 180.0; }
 
 
 #endif

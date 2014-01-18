@@ -37,7 +37,7 @@ namespace s9 {
 
       SharedObject(const Skeleton &s) : Node::SharedObject(), skeleton(s) {}
 
-      void update();
+      void Update();
 
       Spike spike;
       const Skeleton &skeleton;

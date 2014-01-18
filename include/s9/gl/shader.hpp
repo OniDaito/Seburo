@@ -68,7 +68,7 @@ namespace s9 {
 		class SEBUROAPI ShaderVisitor {
 		public:
 
-			GLuint location(const char * name ){ 
+			GLuint Location(const char * name ){ 
       	GLint p;
         glGetIntegerv(GL_CURRENT_PROGRAM, &p);
         CXGLERROR
@@ -77,32 +77,32 @@ namespace s9 {
         return 0;
       }
 
-      bool bound() {
+      bool Bound() {
       	GLint p;
         glGetIntegerv(GL_CURRENT_PROGRAM, &p);
         return p > -1;
       }
 
 			template<typename T, size_t N>
-			void sign( ShaderClause<T, N> &c);
+			void Sign( ShaderClause<T, N> &c);
 
 			/// Vector4 single signing
-			void sign(ShaderClause<glm::vec4,1> &c);
+			void Sign(ShaderClause<glm::vec4,1> &c);
 
 			/// Vector2 single signing
-			void sign(ShaderClause<glm::vec2,1> &c);
+			void Sign(ShaderClause<glm::vec2,1> &c);
 
 
 			/// Matrix4 single signing
 
-			void sign( ShaderClause<glm::mat4, 1> &c);
+			void Sign( ShaderClause<glm::mat4, 1> &c);
 
 			/// Matrix 4 multiple signing - flattens all the matrices into one array - potentially slow :S
 			///\todo - speed up?
 			template<size_t N>
-			void sign( ShaderClause<glm::mat4, N> &c) {
+			void Sign( ShaderClause<glm::mat4, N> &c) {
 			
-				GLuint l = location(c.name.c_str());
+				GLuint l = Location(c.name.c_str());
 				GLfloat tp [N * 16];
 				for (int i = 0; i < N; ++i){
 					tp[i*16] = c.data[i][0][0];
@@ -128,8 +128,8 @@ namespace s9 {
 			}
 
 			template<size_t N>
-			void sign( ShaderClause<glm::mat4x2, N> &c) {
-				GLuint l = location(c.name.c_str());
+			void Sign( ShaderClause<glm::mat4x2, N> &c) {
+				GLuint l = Location(c.name.c_str());
 				GLfloat tp [N * 8];
 				for (int i = 0; i < N; ++i){
 					tp[i*8] = c.data[i][0][0];
@@ -147,8 +147,8 @@ namespace s9 {
 			}
 
 			template<size_t N>
-			void sign( ShaderClause<glm::mat2x4, N> &c) {
-				GLuint l = location(c.name.c_str());
+			void Sign( ShaderClause<glm::mat2x4, N> &c) {
+				GLuint l = Location(c.name.c_str());
 				GLfloat tp [N * 8];
 				for (int i = 0; i < N; ++i){
 					tp[i*8] = c.data[i][0][0];
@@ -166,11 +166,10 @@ namespace s9 {
 			}
 
 			template<size_t N>
-			void sign( ShaderClause<float, N> &c);
-
-			void sign(ShaderClause<float, 1> &c);
-			void sign(ShaderClause<uint, 1> &c);
-			void sign(ShaderClause<int, 1> &c);
+			void Sign( ShaderClause<float, N> &c);
+			void Sign(ShaderClause<float, 1> &c);
+			void Sign(ShaderClause<uint, 1> &c);
+			void Sign(ShaderClause<int, 1> &c);
 
 		};
 
@@ -189,8 +188,8 @@ namespace s9 {
 			Shader(std::string vert_string, std::string frag_string);
 			Shader(std::string vert_string, std::string frag_string, std::string geom_string);
 
-			GLuint getProgram() { return obj_->program; };
-			GLint location(const char * name) {return glGetUniformLocation(obj_->program, name); }
+			GLuint program() { return obj_->program; };
+			GLint Location(const char * name) {return glGetUniformLocation(obj_->program, name); }
 			
 			// Fluent interface for quick setting
 
@@ -201,19 +200,19 @@ namespace s9 {
 			Shader& s(const char * name, int i);
 
 			/// Bind this shader to the current context, saving the current shader
-			void bind() 	{ 
+			void Bind() 	{ 
 				glGetIntegerv(GL_CURRENT_PROGRAM, &(obj_->prev));  
 				glUseProgram(obj_->program); 
 			}
 			
 			/// Restore the previous shader
-			void unbind() {	glUseProgram(obj_->prev); }
+			void Unbind() {	glUseProgram(obj_->prev); }
 			
 		protected:
 		  
-			bool parse(std::string &glsl, std::string &vs, std::string &fs, std::string &gs);
-			bool createShader(GLenum type, GLuint &handle, std::string &data);
-			bool createAndLink();
+			bool Parse(std::string &glsl, std::string &vs, std::string &fs, std::string &gs);
+			bool CreateShader(GLenum type, GLuint &handle, std::string &data);
+			bool CreateAndLink();
 
 			struct SharedObject {
 				~SharedObject();

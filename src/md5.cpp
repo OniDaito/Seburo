@@ -14,13 +14,13 @@ using namespace s9;
 
 MD5Model::MD5Model(const File &file) : Node() {
   _init(); // Init this node - we want a nice matrix
-  parse(file);
+  Parse(file);
 
 }
 
 
 /// small function to discern W for our Quaternions
-glm::quat computeW (glm::quat &q) {
+glm::quat ComputeW (glm::quat &q) {
   float t = 1.0f - (q.x * q.x) - (q.y * q.y) - (q.z * q.z);
   if (t < 0.0f)
     q.w = 0.0f;
@@ -44,7 +44,7 @@ typedef struct {
   size_t bone;
 } md5_weight;
 
-bool compareWeights(const md5_weight &a, const md5_weight &b){
+bool CompareWeights(const md5_weight &a, const md5_weight &b){
     return a.bias > b.bias;
 }
 
@@ -58,35 +58,30 @@ typedef struct {
 
 
 
-void MD5Model::parse(const File &file) {
-  if (!file.exists()){
-    cerr << "SEBURO MD5Model - File " << file.path() << " does not exist or cannot be read." << endl;
+void MD5Model::Parse(const File &file) {
+  if (!file.Exists()){
+    cerr << "SEBURO MD5Model - File " << file.final_path() << " does not exist or cannot be read." << endl;
     return;
   }
 
-  filename_ = file.filename();
+  filename_ = file.Filename();
 
   std::ifstream ifs;
 
-  ifs.open (file.path(), std::ifstream::in);
+  ifs.open (file.final_path(), std::ifstream::in);
 
-  Directory directory (file.directory_name());
+  Directory directory (file.DirectoryName());
 
-  std::vector<File> dir_files = directory.list_files();
+  std::vector<File> dir_files = directory.ListFiles();
 
   cout << "SEBURO MD5Model Directory Listing..." << endl;
   for (File f : dir_files){
-     cout << "  " << f.path() << endl;
+     cout << "  " << f.final_path() << endl;
   }
 
   skeleton_ = Skeleton(CUSTOM_SKELETON);
 
-  add(skeleton_);
-
-  // Conversion into the right and proper British Co-ordinate system! :D
-  glm::quat british_quat = glm::angleAxis(-90.0f, glm::vec3(1.0f,0.0f,0.0f));
-  glm::quat british_quat2 = glm::angleAxis(180.0f, glm::vec3(0.0f,1.0f,0.0f));
-  glm::quat british_mat = glm::angleAxis(90.0f, glm::vec3(1.0f,0.0f,0.0f));
+  Add(skeleton_);
 
   md5_joint *joints;
 
@@ -95,25 +90,25 @@ void MD5Model::parse(const File &file) {
   while (std::getline(ifs, line)){
     std::istringstream iss(line);
 
-    if (string_contains(line, "MD5Version") ){
+    if (StringContains(line, "MD5Version") ){
       int a;
       string s;
       if (!(iss >> s >> a)) { break; }
       version_ = a;
     } 
 
-    else if (string_contains(line, "numJoints") ){
+    else if (StringContains(line, "numJoints") ){
       string s;
       if (!(iss >> s >> num_joints_)) { break; }
       joints = new md5_joint[num_joints_];
     } 
 
-    else if (string_contains(line, "numMeshes") ){
+    else if (StringContains(line, "numMeshes") ){
       string s;
       if (!(iss >> s >> num_meshes_)) { break; }
     } 
 
-    else if (string_contains(line, "joints {") ){
+    else if (StringContains(line, "joints {") ){
 
       std::string tline;
       std::getline(ifs, tline);
@@ -124,16 +119,16 @@ void MD5Model::parse(const File &file) {
         string name;
 
         
-        tline = remove_char(tline, '(');
-        tline = remove_char(tline, ')');
+        tline = RemoveChar(tline, '(');
+        tline = RemoveChar(tline, ')');
         std::istringstream tiss(tline);
 
         if (!(tiss >> name >> parent >> p0 >> p1 >> p2 >> r0 >> r1 >> r2)) { break; }
 
-        name = remove_char(name, '"');
+        name = RemoveChar(name, '"');
 
         glm::quat q = glm::quat();
-        q.x = r0; q.y = r1; q.z = r2; computeW(q);
+        q.x = r0; q.y = r1; q.z = r2; ComputeW(q);
       
         q = glm::normalize(q);
 
@@ -157,10 +152,10 @@ void MD5Model::parse(const File &file) {
         
           Bone * parent = nullptr;
           if (joints[i].parent != -1){
-            parent = skeleton_.bone(joints[i].parent);
+            parent = skeleton_.GetBone(joints[i].parent);
           }
 
-          skeleton_.addBone(new Bone(joints[i].name, i, parent,  joints[i].rotation , joints[i].position ));
+          skeleton_.AddBone(new Bone(joints[i].name, i, parent,  joints[i].rotation , joints[i].position ));
 
       }
 
@@ -169,7 +164,7 @@ void MD5Model::parse(const File &file) {
     /** We use a full trimesh here because we will precompute tangent and normal before
     sending it off to the shader */
 
-    else if (string_contains(line, "mesh {" )){
+    else if (StringContains(line, "mesh {" )){
       std::string tline;
 
       Node mesh_node;
@@ -179,7 +174,7 @@ void MD5Model::parse(const File &file) {
 
       size_t num_verts;
 
-      add(mesh_node);
+      Add(mesh_node);
 
       ///\todo we are using trimeshskinned here and using per vertex attributes but eventually use textures
       TriMeshSkinned trimesh;
@@ -189,11 +184,11 @@ void MD5Model::parse(const File &file) {
 
       size_t vidx = 0;
 
-      while(std::getline(ifs, tline) && !(string_contains(tline, "}"))) {
+      while(std::getline(ifs, tline) && !(StringContains(tline, "}"))) {
         
         // Vertices read
 
-        if (string_contains(tline, "numverts")){
+        if (StringContains(tline, "numverts")){
           std::istringstream tiss(tline);
           string s;
           if (!(tiss >> s >> num_verts)) { break; }
@@ -203,12 +198,12 @@ void MD5Model::parse(const File &file) {
         
         } 
 
-        else if (string_contains(tline, "vert")) { // careful here are numverts contains vert! :O
+        else if (StringContains(tline, "vert")) { // careful here are numverts contains vert! :O
 
           // We make the assumption all MD5 vertices arrive in order in the mesh
 
-          tline = remove_char(tline, '(');
-          tline = remove_char(tline, ')');
+          tline = RemoveChar(tline, '(');
+          tline = RemoveChar(tline, ')');
 
           std::istringstream tiss(tline);
 
@@ -228,7 +223,7 @@ void MD5Model::parse(const File &file) {
 
         // Triangles read
 
-        else if (string_contains(tline, "numtris")) {
+        else if (StringContains(tline, "numtris")) {
           std::istringstream tiss(tline);
           string s;
           size_t num_tris;
@@ -238,11 +233,11 @@ void MD5Model::parse(const File &file) {
           // We make our geometry and add it as a node
           trimesh = TriMeshSkinned(num_verts, num_tris * 3);
           geometry = trimesh.geometry();
-          mesh_node.add(trimesh);
+          mesh_node.Add(trimesh);
 
         }
 
-        else if (string_contains(tline, "tri")) {
+        else if (StringContains(tline, "tri")) {
           std::istringstream tiss(tline);
           size_t idx, a, b, c;
           string s;
@@ -256,22 +251,22 @@ void MD5Model::parse(const File &file) {
 
         // Weights read
 
-        else if (string_contains(tline, "numweights")) {
+        else if (StringContains(tline, "numweights")) {
           std::istringstream tiss(tline);
           string s;
           size_t num_weights;
           if (!(tiss >> s >> num_weights)) { break; }
           skin = Skin(num_weights);
-          mesh_node.add(skin);
+          mesh_node.Add(skin);
 
           // MD5Mesh 
           weights = new md5_weight[num_weights];
 
         }
 
-        else if (string_contains(tline, "weight")){
-          tline = remove_char(tline, '(');
-          tline = remove_char(tline, ')');
+        else if (StringContains(tline, "weight")){
+          tline = RemoveChar(tline, '(');
+          tline = RemoveChar(tline, ')');
           std::istringstream tiss(tline);
 
           size_t idx,bone_id;
@@ -284,15 +279,15 @@ void MD5Model::parse(const File &file) {
           w.bias = bias;
 
           // Assuming the skeleton_ / joints appear first
-          w.bone = skeleton_.bone(bone_id);
-          skin.addWeight(w);
+          w.bone = skeleton_.GetBone(bone_id);
+          skin.AddWeight(w);
 
           // Annoyingly we need to double up so we can provide a GPU friendly skinning
           weights[idx].position = glm::vec3(p0,p1,p2);
           weights[idx].bias = bias;
           weights[idx].bone = bone_id;
 
-        } else if (string_contains(tline, "shader")) {
+        } else if (StringContains(tline, "shader")) {
           // Here is where we read in the textures. Take the shader and take the last bit of the the
           // path. Look for a filename with the 
           std::istringstream tiss(tline);
@@ -301,7 +296,7 @@ void MD5Model::parse(const File &file) {
 
           if (!(tiss >> s >> shader_path)) { cerr << "SEBURO MD5 Error - Failed to read shader mesh." << endl; break; }
 
-          shader_path = remove_char(shader_path, '"');
+          shader_path = RemoveChar(shader_path, '"');
 
           size_t i = shader_path.rfind('/',shader_path.length());
           string mesh_name;
@@ -312,26 +307,26 @@ void MD5Model::parse(const File &file) {
             
 
           for (File f : dir_files){
-            if (string_contains(f.path(), mesh_name )){
+            if (StringContains(f.final_path(), mesh_name )){
               // Search for albedo textures - name of mesh then extension
-              string test = mesh_name + "." + f.extension();
+              string test = mesh_name + "." + f.Extension();
 
               ///\todo need a test for images here I think
 
-              string ext = f.extension();
+              string ext = f.Extension();
               std::transform(ext.begin(), ext.end(), ext.begin(), ::tolower);
 
-              if (string_contains(f.extension(), "tga" ) || string_contains(f.extension(), "jpg" ) ||
-                string_contains(f.extension(), "png" ) || string_contains(f.extension(), "gif" ) || 
-                string_contains(f.extension(), "bmp" )){
+              if (StringContains(ext, "tga" ) || StringContains(ext, "jpg" ) ||
+                StringContains(ext, "png" ) || StringContains(ext, "gif" ) || 
+                StringContains(ext, "bmp" )){
 
-                if (test.compare(f.filename()) == 0){
-                  cout << "SEBURO MD5 Texture - Found: " << f.path() << endl;
+                if (test.compare(f.Filename()) == 0){
+                  cout << "SEBURO MD5 Texture - Found: " << f.final_path() << endl;
 
                   ///\todo we should try not to duplicate textures here I think
                   Image img(f);
                   gl::Texture t (img);
-                  mesh_node.add(t);
+                  mesh_node.Add(t);
                 }
               }
             }
@@ -364,23 +359,23 @@ void MD5Model::parse(const File &file) {
         for (size_t j = 0; j < si.count; ++j)
           actual_weights.push_back( weights[si.index + j]);
 
-        std::sort(actual_weights.begin(), actual_weights.end(), compareWeights);
+        std::sort(actual_weights.begin(), actual_weights.end(), CompareWeights);
 
         // Keep the top few
-        actual_weights.resize(geometry_max_bones);
+        if (actual_weights.size() > geometry_max_bones)
+          actual_weights.resize(geometry_max_bones);
 
         // Make sure all the biases add up to 1
         float_t total = 0;
-        for (size_t j = 0; j < geometry_max_bones; ++j){
+        for (size_t j = 0; j < actual_weights.size(); ++j){
           total += actual_weights[j].bias;
         }
 
-        float_t remains = 1.0 - total;
-        if (remains > 0.0){
-          for (size_t j = 0; j < geometry_max_bones; ++j){
-            actual_weights[j].bias += (remains / geometry_max_bones);
-          }
+    
+        for (size_t j = 0; j <  actual_weights.size(); ++j){
+          actual_weights[j].bias = actual_weights[j].bias / total; 
         }
+        
       
         for (size_t j = 0; j < geometry_max_bones; ++j){
          
@@ -407,7 +402,7 @@ void MD5Model::parse(const File &file) {
         ///\todo precompute normals and tangents
 
       }
-      skeleton_.update();
+      skeleton_.Update();
       delete[] verts;
       delete[] weights;
     }
@@ -415,7 +410,6 @@ void MD5Model::parse(const File &file) {
 
   delete[] joints;
   ifs.close();
-
   
 }
 

@@ -33,16 +33,19 @@ Camera::Camera(glm::vec3 pos, glm::vec3 look, glm::vec3 up) : obj_ (shared_ptr<S
 	obj_->up = up;
 }
 
-void Camera::init() {
+
+/// Create a new shared object and set the defaults
+void Camera::Init() {
 	if (obj_ == nullptr){
 		obj_ = shared_ptr<SharedObject>(new SharedObject());
-		defaults();
+		Defaults();
 	}
 }
 
 
+/// Resize the view port, given width, height, left and bottom
 	
-void Camera::resize(size_t w, size_t h, size_t l, size_t b){ 	
+void Camera::Resize(size_t w, size_t h, size_t l, size_t b){ 	
 	set_ratio( static_cast<float>(w) / h);
 
 	// Viewport values
@@ -51,10 +54,12 @@ void Camera::resize(size_t w, size_t h, size_t l, size_t b){
 	obj_->width = w;
 	obj_->height = h;
 
-
 }
 
-void Camera::update() {	
+
+/// Called by Node when a node is called with an attached camera
+
+void Camera::Update() {	
  	if (obj_ == nullptr) { assert(false); } ///\todo this sort of thing should be caught at compile time if poss?
  	///\todo the above could potentially be moved into a general shared object pointer class?
  	obj_->view_matrix = glm::lookAt(obj_->pos, obj_->look, obj_->up);
@@ -67,7 +72,9 @@ void Camera::update() {
 
 }
 
-void Camera::defaults() {
+/// Set the default camera values that are generally useful
+
+void Camera::Defaults() {
 	obj_->up = glm::vec3(0,1,0);
 	obj_->pos = glm::vec3(0,0,1.0);
 	obj_->look = glm::vec3(0,0,0);
@@ -88,7 +95,9 @@ void Camera::set_ratio(float r) {
 }
 
 
-void Camera::zoom(float z) {
+/// Zoom the camera in/out with a given value
+
+void Camera::Zoom(float z) {
 	glm::vec3 dir = obj_->pos - obj_->look;
 	dir = glm::normalize(dir);
 	dir *= z;
@@ -96,7 +105,10 @@ void Camera::zoom(float z) {
 
 }
 
-void Camera::shift(glm::vec2 s) {
+
+/// Move the camera along a plane - i.e move the eye and look point at the same time
+
+void Camera::Shift(glm::vec2 s) {
 	glm::vec3 dir = obj_->pos - obj_->look;
 	dir = glm::normalize(dir);
 	glm::vec3 shiftx = glm::cross(dir,obj_->up);
@@ -107,14 +119,18 @@ void Camera::shift(glm::vec2 s) {
 	obj_->look += shiftx + shifty;
 }
 
-void Camera::yaw(float a){
+/// Yaw by an angle in degrees
+
+void Camera::Yaw(float a){
 	glm::quat q_rotate;
 	q_rotate = glm::rotate( q_rotate, a, obj_->up );
 	obj_->up = q_rotate * obj_->up;
 	obj_->pos = q_rotate * obj_->pos;
 }
 
-void Camera::pitch(float a){
+/// Pitch the camera by an angle in degrees
+
+void Camera::Pitch(float a){
 	glm::quat q_rotate;
 	
 	glm::vec3 right = glm::normalize(glm::cross(obj_->up, glm::normalize(obj_->look - obj_->pos)));
@@ -124,15 +140,19 @@ void Camera::pitch(float a){
 	obj_->pos = q_rotate * obj_->pos;
 }
 
-void Camera::roll(float a){
+
+/// Roll the camera by an angle in degrees
+
+void Camera::Roll(float a){
 	glm::quat q_rotate;
 	q_rotate = glm::rotate( q_rotate, a,  glm::normalize(obj_->look - obj_->pos));
 	obj_->up = q_rotate * obj_->up;	
 }
 
 
-/// Rotate the camera, basically moving the look point
-void Camera::rotate(const glm::quat &q) {
+/// Rotate the camera, basically moving the look point with a given quaternion
+
+void Camera::Rotate(const glm::quat &q) {
 	glm::vec3 dt = obj_->look - obj_->pos;
 	dt = dt * glm::toMat3(q);
 	obj_->look = obj_->pos + dt;

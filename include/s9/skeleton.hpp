@@ -88,7 +88,7 @@ namespace s9{
 
     Bone* parent() const {return parent_; }
  
-    void applyRotation(const glm::quat &q);
+    void ApplyRotation(const glm::quat &q);
 
     glm::mat4 skinned_matrix() const { return skinned_matrix_; }
 
@@ -171,8 +171,8 @@ namespace s9{
     std::shared_ptr<SharedObject> obj_ = nullptr;
 
   public:
-    void addIndex (SkinIndex s) { obj_->indices.push_back(s); }
-    void addWeight (SkinWeight w) { obj_->weights.push_back(w); }
+    void AddIndex (SkinIndex s) { obj_->indices.push_back(s); }
+    void AddWeight (SkinWeight w) { obj_->weights.push_back(w); }
 
     std::vector<SkinIndex>& indices() { return obj_->indices; }
     std::vector<SkinWeight>& weights() { return obj_->weights; }
@@ -201,15 +201,15 @@ namespace s9{
     Skeleton() {};
     Skeleton(SkeletonType type);
 
-    Bone* bone(std::string tag) const;
-    Bone* bone(uint id) const;
+    Bone* GetBone(std::string tag) const;
+    Bone* GetBone(uint id) const;
 
-    Skeleton& addBone(Bone* b);
+    Skeleton& AddBone(Bone* b);
 
-    int getBoneIndex(Bone* b) const;
+    int GetBoneIndex(Bone* b) const;
 
-    void copyBoneValues( const Skeleton &skeleton);
-    void copyBoneRotations( const Skeleton &skeleton);
+    void CopyBoneValues( const Skeleton &skeleton);
+    void CopyBoneRotations( const Skeleton &skeleton);
 
     /// Get the matrix that corresponds to the skeleton transform.
     glm::mat4 matrix() const {return obj_->matrix; }
@@ -217,17 +217,17 @@ namespace s9{
     /// Set the world to skeleton transform here
     void set_matrix (const glm::mat4 &m) const {obj_->matrix = m; }
 
-    void update();
-
-    size_t size() {
+    void Update();
+    
+    size_t Size() {
       std::forward_list<Bone*>::iterator first = obj_->bones.begin();
       std::forward_list<Bone*>::iterator last = obj_->bones.end();
       return std::distance(first,last);
     }
 
-    void resetGlobals();
+    void ResetGlobals();
 
-    std::string toString();
+    std::string ToString();
 
     const std::forward_list<Bone*>& bones() const { return obj_->bones; }
    
@@ -235,7 +235,7 @@ namespace s9{
 
   protected:
 
-    void createOpenNISkeleton();
+    void CreateOpenNISkeleton();
 
     struct SharedObject {
       ~SharedObject();
@@ -262,9 +262,7 @@ namespace s9{
       os << "  " << *b << std::endl;
     }
     return os;
-  }
-
-
+  };
 
 }
 

@@ -31,7 +31,6 @@ Texture::SharedObject::SharedObject(size_t w, size_t h, ColourComponent f, Colou
 
   assert (w > 0);
   assert (h > 0);
-
   width = w;
   height = h;
   format = f;
@@ -169,9 +168,9 @@ Texture::SharedObject::~SharedObject() {
 }
 
 
-void Texture::update(byte_t * data) {
+void Texture::Update(byte_t * data) {
  
-  bind();
+  Bind();
 
   GLenum tc  = GL_UNSIGNED_BYTE;
   switch (obj_->colour_type) {
@@ -209,7 +208,7 @@ void Texture::update(byte_t * data) {
     }
   }
   
-  unbind();
+  Unbind();
 }
 
 
@@ -217,27 +216,27 @@ void Texture::update(byte_t * data) {
  * Bind to texture unit.
  */
 
-void Texture::bind() { glActiveTexture(GL_TEXTURE0 + obj_->unit); glBindTexture(obj_->gl_type, obj_->id);}
+void Texture::Bind() { glActiveTexture(GL_TEXTURE0 + obj_->unit); glBindTexture(obj_->gl_type, obj_->id);}
 
 
 /*
  * Unbind
  */
 
-void Texture::unbind(){ glActiveTexture(GL_TEXTURE0 + obj_->unit); glBindTexture(obj_->gl_type, 0); }
+void Texture::Unbind(){ glActiveTexture(GL_TEXTURE0 + obj_->unit); glBindTexture(obj_->gl_type, 0); }
 
 /// Resize a texture in memory - used mostly with FBOs. Clears all data
 
-void Texture::resize(size_t w, size_t h) {
+void Texture::Resize(size_t w, size_t h) {
   if (obj_ == nullptr) return;
 
   obj_->width = w;
   obj_->height = h;
 
-  bind();
+  Bind();
   glTexImage2D(obj_->gl_type, 0, obj_->storage_type, obj_->width, obj_->height, 0, obj_->colour_type_b, obj_->basic_type, NULL);
 
-  unbind();
+  Unbind();
 
   CXGLERROR
 }
@@ -262,7 +261,7 @@ TextureStream::TextureStream(size_t width, size_t height, ColourComponent format
 
   shared_ptr<TextureStream::SharedObject> tsobj = std::static_pointer_cast<TextureStream::SharedObject>(obj_);
 
-  bind();
+  Bind();
 
   glGenBuffers(1, &(tsobj->tex_buffer));
   glBindBuffer(GL_PIXEL_UNPACK_BUFFER, tsobj->tex_buffer);
@@ -294,14 +293,14 @@ TextureStream::TextureStream(size_t width, size_t height, ColourComponent format
 
   glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0);
 
-  unbind();
+  Unbind();
 
   CXGLERROR
 
 }
 
 
-void TextureStream::update(byte_t *data){
+void TextureStream::Update(byte_t *data){
 
   if (data == nullptr)
     return;
@@ -309,7 +308,7 @@ void TextureStream::update(byte_t *data){
   shared_ptr<TextureStream::SharedObject> tsobj = std::static_pointer_cast<TextureStream::SharedObject>(obj_);
   int texsize = obj_->width * obj_->height;
   
-  bind();
+  Bind();
 
   glBindBuffer(GL_PIXEL_UNPACK_BUFFER, tsobj->tex_buffer);
 
@@ -367,7 +366,7 @@ void TextureStream::update(byte_t *data){
   }
 
   glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0);
-  unbind();
+  Unbind();
   CXGLERROR
 }
 

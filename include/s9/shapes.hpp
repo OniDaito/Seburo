@@ -25,8 +25,8 @@ namespace s9 {
 
 	struct ShapeObj {
 
-		virtual void brew(gl::BrewFlags b) = 0;
-		virtual void draw(GeometryPrimitive g) = 0;
+		virtual void Brew(gl::BrewFlags b) = 0;
+		virtual void Draw(GeometryPrimitive g) = 0;
 
 		bool brewed() { return gl_drawable.brewed(); }
 
@@ -45,10 +45,10 @@ namespace s9 {
 	public:
 		Shape () {};
 		
-		virtual void draw(GeometryPrimitive g = TRIANGLES) { if (obj_ != nullptr) obj_->draw(g); };
-		virtual void brew(gl::BrewFlags b=gl::BrewFlagsDefault) { if (obj_ != nullptr)  { obj_->brew(b); } };
+		virtual void Draw(GeometryPrimitive g = TRIANGLES) { CXSHARED obj_->Draw(g); };
+		virtual void Brew(gl::BrewFlags b=gl::BrewFlagsDefault) { CXSHARED  obj_->Brew(b);  };
 		virtual bool brewed() { if(obj_ != nullptr) return obj_->brewed(); return false;}
-		virtual void init() {};
+		virtual void Init() {};
 
 		const Shape& operator= (const Shape &s ) { 
 			obj_ = s.obj_; 
@@ -83,8 +83,8 @@ namespace s9 {
 			geometry = GeometryT<Vertex4, Face4, AllocationPolicyNew> (6,0,TRIANGLES);	
 		}
 
-		void brew (gl::BrewFlags b) { gl_drawable.brew(geometry, b);}
-		void draw (GeometryPrimitive g = TRIANGLES) { gl_drawable.draw(geometry, g); }
+		void Brew (gl::BrewFlags b) { gl_drawable.Brew(geometry, b);}
+		void Draw (GeometryPrimitive g = TRIANGLES) { gl_drawable.Draw(geometry, g); }
 
 		GeometryT<Vertex4, Face4, AllocationPolicyNew> geometry;
 			
@@ -109,8 +109,8 @@ namespace s9 {
 			geometry = GeometryT<Vertex4, Face4, AllocationPolicyNew>(8,36,TRIANGLES);
 		}
 
-		void brew (gl::BrewFlags b) { gl_drawable.brew(geometry, b); }
-		void draw (GeometryPrimitive g = TRIANGLES) { gl_drawable.draw(geometry, g); }
+		void Brew (gl::BrewFlags b) { gl_drawable.Brew(geometry, b); }
+		void Draw (GeometryPrimitive g = TRIANGLES) { gl_drawable.Draw(geometry, g); }
 
 		GeometryT<Vertex4, Face4, AllocationPolicyNew> geometry;
 			
@@ -136,8 +136,8 @@ namespace s9 {
       geometry = GeometryT<Vertex4, Face4, AllocationPolicyNew>(num_verts,num_indices,TRIANGLES);
     }
 
-    void brew (gl::BrewFlags b) { gl_drawable.brew(geometry, b); }
-    void draw (GeometryPrimitive g = TRIANGLES) { gl_drawable.draw(geometry, g); }
+    void Brew (gl::BrewFlags b) { gl_drawable.Brew(geometry, b); }
+    void Draw (GeometryPrimitive g = TRIANGLES) { gl_drawable.Draw(geometry, g); }
 
     GeometryT<Vertex4, Face4, AllocationPolicyNew> geometry;
       
@@ -165,8 +165,8 @@ namespace s9 {
       geometry = GeometryT<Vertex3, Face3, AllocationPolicyNew>(num_verts, num_indices, TRIANGLES);
     }
 
-  	void brew (gl::BrewFlags b) { gl_drawable.brew(geometry, b); }
-  	void draw (GeometryPrimitive g = TRIANGLES) { gl_drawable.draw(geometry, g); }
+  	void Brew (gl::BrewFlags b) { gl_drawable.Brew(geometry, b); }
+  	void Draw (GeometryPrimitive g = TRIANGLES) { gl_drawable.Draw(geometry, g); }
 
     GeometryT<Vertex3, Face3, AllocationPolicyNew> geometry;
       
@@ -197,8 +197,8 @@ namespace s9 {
       geometry = GeometryT<Vertex3Skin, Face3, AllocationPolicyNew>(num_verts, num_indices, TRIANGLES);
     }
 
-  	void brew (gl::BrewFlags b) { gl_drawable.brew(geometry, b); }
-  	void draw (GeometryPrimitive g = TRIANGLES) { gl_drawable.draw(geometry, g); }
+  	void Brew (gl::BrewFlags b) { gl_drawable.Brew(geometry, b); }
+  	void Draw (GeometryPrimitive g = TRIANGLES) { gl_drawable.Draw(geometry, g); }
 
     GeometryT<Vertex3Skin, Face3, AllocationPolicyNew> geometry;
       
@@ -229,8 +229,8 @@ namespace s9 {
       geometry = GeometryT<Vertex3, Face3, AllocationPolicyNew>(s,f,TRIANGLES);
     }
 
-    void brew (gl::BrewFlags b) { gl_drawable.brew(geometry, b); }
-    void draw (GeometryPrimitive g = TRIANGLES) { gl_drawable.draw(geometry, g); }
+    void Brew (gl::BrewFlags b) { gl_drawable.Brew(geometry, b); }
+    void Draw (GeometryPrimitive g = TRIANGLES) { gl_drawable.Draw(geometry, g); }
 
     GeometryT<Vertex3, Face3, AllocationPolicyNew> geometry;
       
@@ -255,8 +255,8 @@ namespace s9 {
       geometry = GeometryT<Vertex3, Face3, AllocationPolicyNew>(s,f,TRIANGLES);
     }
 
-    void brew (gl::BrewFlags b) { gl_drawable.brew(geometry, b); }
-    void draw (GeometryPrimitive g = TRIANGLES) { gl_drawable.draw(geometry, g); }
+    void Brew (gl::BrewFlags b) { gl_drawable.Brew(geometry, b); }
+    void Draw (GeometryPrimitive g = TRIANGLES) { gl_drawable.Draw(geometry, g); }
 
     GeometryT<Vertex3, Face3, AllocationPolicyNew> geometry;
       

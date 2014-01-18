@@ -47,11 +47,11 @@ namespace s9 {
 			FBO() {};
 			FBO(size_t w, size_t h);
 
-			void bind() { glBindFramebuffer(GL_DRAW_FRAMEBUFFER, obj_->id);};
-			void unbind() { glBindFramebuffer(GL_FRAMEBUFFER, 0); } ;
-			bool checkStatus();
-			void printFramebufferInfo();
-			void resize(size_t w, size_t h);
+			void Bind() { glBindFramebuffer(GL_DRAW_FRAMEBUFFER, obj_->id);};
+			void Unbind() { glBindFramebuffer(GL_FRAMEBUFFER, 0); } ;
+			bool CheckStatus();
+			void PrintFramebufferInfo();
+			void Resize(size_t w, size_t h);
 			
 			Texture colour() { return obj_->colour; }
 
@@ -67,9 +67,9 @@ namespace s9 {
 	
 		};
 
-		std::string getTextureParameters(GLuint id);
-		std::string getRenderbufferParameters(GLuint id);
-		std::string convertInternalFormatToString(GLenum format);
+		std::string GetTextureParameters(GLuint id);
+		std::string GetRenderbufferParameters(GLuint id);
+		std::string ConvertInternalFormatToString(GLenum format);
 	}
 }
 

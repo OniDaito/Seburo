@@ -29,19 +29,19 @@ void FBOApp::Init(){
 
     Spike s (4,1,1.0f,2.0f);
 
-    node_.add(cuboid_).add(camera_).add(shader_);
+    node_.Add(cuboid_).Add(camera_).Add(shader_);
    
     Node spike_node(s);
     spike_node.set_matrix(glm::translate(glm::mat4(1.0f), glm::vec3(0.0f,0.0f,2.0f)));
 
-    node_.add(spike_node);
+    node_.Add(spike_node);
 
     rotation_ = 0;
 
     fbo_ = FBO(800,600);
     quad_ = Quad(640,480);
     
-    node_quad_.add ( quad_ ).add(shader_warp_).add(camera_ortho_).add(fbo_.colour());
+    node_quad_.Add(quad_).Add(shader_warp_).Add(camera_ortho_).Add(fbo_.colour());
 
 }
 
@@ -58,20 +58,20 @@ void FBOApp::Display(GLFWwindow* window, double_t dt){
     GLfloat depth = 1.0f;
 
     // Draw to the FBO
-    fbo_.bind();
+    fbo_.Bind();
     glClearBufferfv(GL_COLOR, 0, &glm::vec4(0.9f, 0.2f, 0.5f, 1.0f)[0]);
     glClearBufferfv(GL_DEPTH, 0, &depth );
     rotation_ += 1.0;
     glm::mat4 Model = glm::rotate(glm::mat4(1.0f), rotation_, glm::vec3(0.0f, 1.0f, 0.0f));
     node_.set_matrix(Model);
-    node_.draw();
-    fbo_.unbind();
+    node_.Draw();
+    fbo_.Unbind();
 
     // Draw to main screen
     glClearBufferfv(GL_COLOR, 0, &glm::vec4(0.9f, 0.9f, 0.9f, 1.0f)[0]);
     glClearBufferfv(GL_DEPTH, 0, &depth );
 
-    node_quad_.draw();
+    node_quad_.Draw();
    
 }
 
@@ -89,10 +89,9 @@ void FBOApp::ProcessEvent(MouseEvent e, GLFWwindow* window){
 
 void FBOApp::ProcessEvent(ResizeEvent e, GLFWwindow* window){
     cout << "Window Resized:" << e.w << "," << e.h << endl;
-    glViewport(0,0, e.w, e.h);
-    camera_.resize(e.w, e.h);
-    camera_ortho_.resize(e.w, e.h);
-    fbo_.resize(e.w, e.h);
+    camera_.Resize(e.w, e.h);
+    camera_ortho_.Resize(e.w, e.h);
+    fbo_.Resize(e.w, e.h);
 
     node_quad_.set_matrix(glm::translate(glm::mat4(1.0f), glm::vec3(e.w / 2.0f, e.h/2.0f, 0.0f)));
 }

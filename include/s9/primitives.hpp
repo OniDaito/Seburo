@@ -28,7 +28,7 @@ namespace s9 {
 	const static uint8_t geometry_max_bones = 4; // Needs to be pretty low to stay under MAX_VERTEX_ATTRIBS - we use 2 x uvec4 for 8 bones per vertex
 
 	/// Global typedefs
-	typedef uint32_t IndicesType; // Expand potentially on 64 bit systems?
+	typedef uint32_t IndicesType; // size_t apparently expands to the maximum size, but that wont match the GL types. Can we expand to 64?
 
 
 /// \todo using padding globally but that may interfere with GLM and not always be great

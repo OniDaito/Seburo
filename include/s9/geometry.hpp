@@ -47,12 +47,12 @@ namespace s9 {
 	class AllocationPolicyNew {
 	protected:
 		template<typename VertexType>
-   	bool allocateVertices(std::unique_ptr<VertexType[]> &vp, IndicesType size) const {
+   	bool AllocateVertices(std::unique_ptr<VertexType[]> &vp, IndicesType size) const {
 		  vp = std::unique_ptr<VertexType[]>(new VertexType[size]);
       return true;
   	}
 
-  	bool allocateIndices(std::unique_ptr<IndicesType[]> &ip, IndicesType size) const {
+  	bool AllocateIndices(std::unique_ptr<IndicesType[]> &ip, IndicesType size) const {
   		ip = std::unique_ptr<IndicesType[]>(new IndicesType[size]); 
       for (IndicesType i =0; i < size; ++i)
         ip[i] = 0;
@@ -60,7 +60,7 @@ namespace s9 {
   	}
 
   	template<typename FaceType>
-  	bool allocateFaces(std::unique_ptr<FaceType[]> &fp, IndicesType size_faces, GeometryPrimitive type ) const {
+  	bool AllocateFaces(std::unique_ptr<FaceType[]> &fp, IndicesType size_faces, GeometryPrimitive type ) const {
   		
   		switch(type){
         case LINE_LOOP:
@@ -124,7 +124,7 @@ namespace s9 {
 
 		GeometryT(IndicesType num_verts, IndicesType num_indices, GeometryPrimitive prim_type ) {
       indexed_ = false;
-			allocate(num_verts, num_indices, prim_type );
+			Allocate(num_verts, num_indices, prim_type );
 			prim_type_ = prim_type;
 		};
 
@@ -165,17 +165,17 @@ namespace s9 {
       return vertices_[idx];
     }
 
-    void setVertex(IndicesType idx, VertexType v) {
+    void SetVertex(IndicesType idx, VertexType v) {
       assert(idx >= 0 && idx < size_vertices_);
       vertices_[idx] = v;
     }
 
-    void setIndex(IndicesType idx, IndicesType v) {
+    void SetIndex(IndicesType idx, IndicesType v) {
       assert(idx >= 0 && idx < size_indices_);
       indices_[idx] = v;
     }
 
-    void setIndices( IndicesType *a) {
+    const void SetIndices( IndicesType *a) const {
       for (int i =0; i < size_indices_; ++i){
         indices_[i] = a[i];
       }
@@ -197,26 +197,26 @@ namespace s9 {
 	
 	protected:
 
-		using AllocationPolicy::allocateVertices;
-		using AllocationPolicy::allocateIndices;
-		using AllocationPolicy::allocateFaces;
+		using AllocationPolicy::AllocateVertices;
+		using AllocationPolicy::AllocateIndices;
+		using AllocationPolicy::AllocateFaces;
 
-		void allocate(IndicesType num_verts, IndicesType num_indices, GeometryPrimitive prim_type) {
+		void Allocate(IndicesType num_verts, IndicesType num_indices, GeometryPrimitive prim_type) {
 			size_indices_= num_indices;
 			size_vertices_ = num_verts;
 
 			if (num_verts > 0){
-				allocateVertices(vertices_, num_verts);
+				AllocateVertices(vertices_, num_verts);
 			}
 
 			if (num_indices > 0) {
-				allocateIndices(indices_, num_indices);
+				AllocateIndices(indices_, num_indices);
         indexed_ = true;
 			} 
 
       size_faces_ = indexed_ ? size_indices_ : size_vertices_;
 
-			allocateFaces(faces_, size_faces_, prim_type);
+			AllocateFaces(faces_, size_faces_, prim_type);
 
 		}
 

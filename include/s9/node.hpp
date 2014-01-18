@@ -65,22 +65,22 @@ namespace s9 {
 		NodeBase(NodeResponsibility r) { responsible_ = r; }
 	
 		/// Called by the Node's draw method and sets up the shader / geometry
-		virtual void 					draw(GeometryPrimitive overide) { }
+		virtual void 					Draw(GeometryPrimitive overide) { }
 
 		/// Called before draw and collect
-		virtual void 					preDraw() {}
+		virtual void 					PreDraw() {}
 
 		/// Operation called after this node has been drawn and we move up the tree
-		virtual void 					postDraw() { }
+		virtual void 					PostDraw() { }
 
 		/// A std::string representation of this nodebase
-		virtual std::string 	tag() { return ""; }
+		virtual std::string 	Tag() { return ""; }
 		
 		/// What is this node responsible for?
 		NodeResponsibility 		responsible() {return responsible_; }
 	
 		/// Allow a shader to come in and collect data
-		virtual void collect (gl::ShaderVisitor &v ) {};
+		virtual void Collect (gl::ShaderVisitor &v ) {};
 	
 
 		bool operator < (const NodeBase& rhs) const {
@@ -98,7 +98,7 @@ namespace s9 {
 
 	};
 
-	static bool compareNodeBasePtr( NodeBasePtr l, NodeBasePtr r){
+	static bool CompareNodeBasePtr( NodeBasePtr l, NodeBasePtr r){
  		return (*l) < (*r);
  	} 
 
@@ -115,10 +115,10 @@ namespace s9 {
 		
 		glm::mat4 		matrix() { return matrix_; } ;
 		void 					set_matrix( const glm::mat4 &matrix) { matrix_ = matrix;  } ;
-		std::string 	tag() { return "Matrix"; }
+		std::string 	Tag() { return "Matrix"; }
 
 		// Careful not to call this without calling the pop as well
-		void preDraw() {
+		void PreDraw() {
 			if (matrix_stack_.size() > 0){
 				matrix_global_ =  matrix_stack_.back() * matrix_;
 			}
@@ -128,11 +128,11 @@ namespace s9 {
 			matrix_stack_.push_back(matrix_global_);
 		}
 
-		void collect(gl::ShaderVisitor &v ) {
-			v.sign(clause_matrix_); 
+		void Collect(gl::ShaderVisitor &v ) {
+			v.Sign(clause_matrix_); 
 		}
 
-		void					postDraw() {
+		void PostDraw() {
 			matrix_stack_.pop_back();
 		}
 
@@ -152,12 +152,11 @@ namespace s9 {
 	public:
 		NodeClause( gl::ShaderClause<T,U> c ) : NodeBase(CLAUSE), clause_(c) {}		
 
-		void collect(gl::ShaderVisitor &v ) {
-			v.sign(clause_);
-				
+		void Collect(gl::ShaderVisitor &v ) {
+			v.Sign(clause_);
 		}
 
-		std::string 	tag() { return "Clause"; }
+		std::string Tag() { return "Clause"; }
 
 		gl::ShaderClause<T,U> clause_; 
 
@@ -188,12 +187,12 @@ namespace s9 {
 				view_matrix_global_ = glm::mat4(1.0f);
 			} 
 
-		void preDraw() {
+		void PreDraw() {
 
 			if (camera_){
 				// Would call here but we override these matrices with the oculus 
 				// Not sure what to do here - could set the camera completely with existing options?
-				if (camera_.update_on_node_draw()) camera_.update();
+				if (camera_.update_on_node_draw()) camera_.Update();
 				glViewport(camera_.left(), camera_.bottom(), camera_.width(), camera_.height());
 
 				projection_matrix_global_ = camera_.projection_matrix();
@@ -213,7 +212,7 @@ namespace s9 {
 			
 		}
 
-		void	postDraw() {
+		void	PostDraw() {
 			// Pop if we've hit our camera node again
 			if (camera_){
 				projection_matrix_stack_.pop_back();
@@ -221,11 +220,11 @@ namespace s9 {
 			}
 		}
 
-	
-		std::string 	tag() { return "Camera"; }
-		void					collect(gl::ShaderVisitor &v ) { 
-			v.sign(clause_camera_projection_); 
-			v.sign(clause_camera_view_); 
+		std::string  Tag() { return "Camera"; }
+
+		void Collect(gl::ShaderVisitor &v ) { 
+			v.Sign(clause_camera_projection_); 
+			v.Sign(clause_camera_view_); 
 
 		}
 
@@ -248,8 +247,8 @@ namespace s9 {
 	class NodeShape : public NodeBase {
 	public:
 		NodeShape (Shape s) : NodeBase(GEOMETRY), shape_(s) { };
-		void draw(GeometryPrimitive overide);
-		std::string tag() { return "Shape"; }
+		void Draw(GeometryPrimitive overide);
+		std::string Tag() { return "Shape"; }
 		Shape shape_;
 	};
 
@@ -260,7 +259,7 @@ namespace s9 {
 	class NodeSkin : public NodeBase {
 	public:
 		NodeSkin(Skin s) : NodeBase(SKIN_WEIGHTS), skin_(s) { };
-		std::string 	tag() { return "Skin Weights"; }
+		std::string 	Tag() { return "Skin Weights"; }
 		Skin skin_;
 	};
 
@@ -272,8 +271,8 @@ namespace s9 {
 	class NodeSkeleton : public NodeBase {
 	public:
 		NodeSkeleton (Skeleton s) : NodeBase(SKELETON), skeleton_(s){}
-		std::string 	tag() { return "Skeleton"; }
-		void					collect(gl::ShaderVisitor &v );
+		std::string 	Tag() { return "Skeleton"; }
+		void					Collect(gl::ShaderVisitor &v );
 
 		Skeleton skeleton_;
 
@@ -286,10 +285,10 @@ namespace s9 {
 	class NodeShader : public NodeBase {
 	public:
 		NodeShader(gl::Shader s) : NodeBase(SHADER), shader_(s) {  };
-		std::string tag() { return "Shader"; }
-		void preDraw(){ bind_count_++; }
-		void draw(GeometryPrimitive overide) { shader_.bind(); 	}
-		void postDraw() {shader_.unbind(); bind_count_--; }
+		std::string Tag() { return "Shader"; }
+		void PreDraw(){ bind_count_++; }
+		void Draw(GeometryPrimitive overide) { shader_.Bind(); 	}
+		void PostDraw() {shader_.Unbind(); bind_count_--; }
 		gl::Shader shader_;
 		static size_t bind_count_;
 	};
@@ -303,9 +302,9 @@ namespace s9 {
 	class NodeTexture : public NodeBase {
 	public:
 		NodeTexture(gl::Texture t) : NodeBase(TEXTURE), texture_(t) {  };
-		std::string tag() { return "Texture"; }
-		void draw(GeometryPrimitive overide) { texture_.bind(); }
-		void postDraw() {texture_.unbind(); }
+		std::string Tag() { return "Texture"; }
+		void Draw(GeometryPrimitive overide) { texture_.Bind(); }
+		void PostDraw() {texture_.Unbind(); }
 
 		gl::Texture texture_;
 	};
@@ -325,24 +324,24 @@ namespace s9 {
 		///\todo template these? We could do! :)
 		///\todo normally we'd pass by reference. Should we do that?
 
-		Node& add(Shape s);
-		Node& add(Node &n);
-		Node& add(Skin s);
-		Node& add(gl::Shader s);
-		Node& add(Camera c);
-		Node& add(Skeleton s);
-		Node& add(gl::Texture t);
+		Node& Add(Shape s);
+		Node& Add(Node &n);
+		Node& Add(Skin s);
+		Node& Add(gl::Shader s);
+		Node& Add(Camera c);
+		Node& Add(Skeleton s);
+		Node& Add(gl::Texture t);
 
 		// Removals
-		Node& remove(Shape s);
-		Node& remove(Node &n) { removeChild(n); return *this; };
-		Node& remove(Skin s);
-		Node& remove(gl::Shader s);
-		Node& remove(Camera c);
-		Node& remove(Skeleton s);
-		Node& remove(gl::Texture s);
+		Node& Remove(Shape s);
+		Node& Remove(Node &n) { RemoveChild(n); return *this; };
+		Node& Remove(Skin s);
+		Node& Remove(gl::Shader s);
+		Node& Remove(Camera c);
+		Node& Remove(Skeleton s);
+		Node& Remove(gl::Texture s);
 
-		bool hasResponsibility(NodeResponsibility r) {
+		bool HasResponsibility(NodeResponsibility r) {
 			for (NodeBasePtr b : obj_->bases){
 				if (b->responsible() == r)
 					return false;
@@ -351,10 +350,10 @@ namespace s9 {
 		}
 
 		template<typename T, size_t U>
-		Node& add(gl::ShaderClause<T,U> c) {
+		Node& Add(gl::ShaderClause<T,U> c) {
 			if (obj_ == nullptr) _init();
 			obj_->bases.push_front( std::shared_ptr<NodeClause<T,U> >(new NodeClause<T,U>(c)) );
-			obj_->bases.sort(compareNodeBasePtr);
+			obj_->bases.sort(CompareNodeBasePtr);
 			return *this;
 		}
 
@@ -362,11 +361,11 @@ namespace s9 {
 		void set_matrix(const glm::mat4 &m);
 
 
-		Node& removeChild(Node p);
-		Node& draw(GeometryPrimitive gp = NONE);
-		Node& clear();
+		Node& RemoveChild(Node p);
+		Node& Draw(GeometryPrimitive gp = NONE);
+		Node&	Clear();
 
-		std::vector<Node> & children() { if (obj_ == nullptr) assert(false); return obj_->children; }
+		std::vector<Node> & Children() { if (obj_ == nullptr) assert(false); return obj_->children; }
 
 		void set_geometry_cast(GeometryPrimitive gc) {obj_->geometry_cast = gc; }
 
@@ -376,12 +375,12 @@ namespace s9 {
 	protected:
 
 		void _init();
-		NodeBasePtr getBase(NodeResponsibility r);
-		Node& remove(NodeBasePtr p);
+		NodeBasePtr GetBase(NodeResponsibility r);
+		Node& Remove(NodeBasePtr p);
 
 
 		struct SharedObject {
-			virtual void update() {} // A Cheeky function that allows overriding in subclasses 
+			virtual void Update() {} // A Cheeky function that allows overriding in subclasses 
 			
 			std::vector< Node > 						children;
   		std::shared_ptr<NodeMinimal>  	matrix_node; 			// We keep this so we can always get to the matrix
@@ -407,7 +406,7 @@ namespace s9 {
     if (obj.obj_ != nullptr){
     	os << "SEBURO Node with";
   		for (NodeBasePtr p : obj.obj_->bases)
-  			os << " - " << p->tag();
+  			os << " - " << p->Tag();
   	} else {
   		os << "SEBURO Node UN-INITIALISED!";
   	}

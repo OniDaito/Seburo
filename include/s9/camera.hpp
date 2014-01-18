@@ -16,7 +16,7 @@
 
 /** 
  * Camera Class
- * A perspective camera that provides the usual functions a camera model may want
+ * A perspective or orthographic camera that provides the usual functions a camera model may want
  * such as pitch, pan, zoom, resize etc.
  * SharedObject as it is passed around between nodes often
  */
@@ -34,9 +34,9 @@ namespace s9{
 		Camera(glm::vec3 pos, glm::vec3 look);
 		Camera(glm::vec3 pos, glm::vec3 look, glm::vec3 up);
 
-		void init(); // Called to init this class with default params
+		void Init(); // Called to init this class with default params
 			
-		void resize(size_t w, size_t h, size_t l=0, size_t b=0);
+		void Resize(size_t w, size_t h, size_t l=0, size_t b=0);
 
 		void set_near(float n) {obj_->near = n;};
 		void set_far(float n) {obj_->far = n;};
@@ -53,17 +53,17 @@ namespace s9{
 		inline size_t width() {return obj_->width; };
 		inline size_t height() {return obj_->height; };
 
-		void zoom(float z);
-		void shift(glm::vec2 s);
-		void yaw(float a);
-		void pitch(float a);
-		void roll(float a);
-		void rotate(const glm::quat &q);
+		void Zoom(float z);
+		void Shift(glm::vec2 s);
+		void Yaw(float a);
+		void Pitch(float a);
+		void Roll(float a);
+		void Rotate(const glm::quat &q);
 
 		void set_orthographic(bool b) {obj_->orthographic = b;}
 		bool orthographic() {return obj_->orthographic;}
 
-		void defaults();
+		void Defaults();
 
 		void set_pos(const glm::vec3 &p) { obj_->pos = p;}
 		void set_look(const glm::vec3 &p) { obj_->look = p;}
@@ -84,8 +84,8 @@ namespace s9{
 		void set_view_matrix(const glm::mat4  &m) { obj_->view_matrix = m; };
 		void set_projection_matrix(const glm::mat4  &m) { obj_->projection_matrix = m; }; 
 
-		virtual void update();
-		virtual void update(double_t dt) { update(); };
+		virtual void Update();
+		virtual void Update(double_t dt) { Update(); };
 
 	protected:
 

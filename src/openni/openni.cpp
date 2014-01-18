@@ -23,19 +23,19 @@ inline void USER_MESSAGE (const OpenNISkeleton::User& user, std::string msg) {
   cout << "SEBURO Nite - User: " << user.id() << ", " << msg << endl;
 }
 
-OpenNIBase::SharedObj::~SharedObj() {
+OpenNIBase::SharedObject::~SharedObject() {
 
-  depth_stream_.destroy();
-  colour_stream_.destroy();
+  depth_stream.destroy();
+  colour_stream.destroy();
 
   // this line seems to cause problems with the extended nite shared object :S
   // Also, this seems to be called twice
 
   openni::OpenNI::shutdown(); // Assuming there is only one base ;)
   
-  if (ready_){ // we allocated so we must un-allocate
-    delete[] tex_buffer_depth_;
-    delete[] tex_buffer_colour_;
+  if (ready){ // we allocated so we must un-allocate
+    delete[] tex_buffer_depth;
+    delete[] tex_buffer_colour;
   }
  
 }
@@ -43,7 +43,7 @@ OpenNIBase::SharedObj::~SharedObj() {
 
 // Taken from the OpenNI Libraries
 
-void OpenNIBase::calculateHistogram(float* pHistogram, int histogramSize, const openni::VideoFrameRef& frame) {
+void OpenNIBase::CalculateHistogram(float* pHistogram, int histogramSize, const openni::VideoFrameRef& frame) {
   const openni::DepthPixel* pDepth = (const openni::DepthPixel*)frame.getData();
   // Calculate the accumulative histogram (the yellow display...)
   memset(pHistogram, 0, histogramSize*sizeof(float));
@@ -74,25 +74,25 @@ void OpenNIBase::calculateHistogram(float* pHistogram, int histogramSize, const 
 
 ///\todo dont always assume both streams
 
-OpenNIBase::OpenNIBase( const char* deviceURI) : obj_( shared_ptr<SharedObj> (new SharedObj())) {
+OpenNIBase::OpenNIBase( const char* deviceURI) : obj_( shared_ptr<SharedObject> (new SharedObject())) {
   openni::Status rc = openni::STATUS_OK;
 
   rc = openni::OpenNI::initialize();
 
   cout << "SEBURO OpenNI: After initialization: " << openni::OpenNI::getExtendedError() << endl;
 
-  rc = obj_->device_.open(deviceURI);
+  rc = obj_->device.open(deviceURI);
   if (rc != openni::STATUS_OK) {
     cerr << "SEBURO OpenNI: Device open failed: " <<  openni::OpenNI::getExtendedError() << endl;
     openni::OpenNI::shutdown();
   }
 
-  rc = obj_->depth_stream_.create(obj_->device_, openni::SENSOR_DEPTH);
+  rc = obj_->depth_stream.create(obj_->device, openni::SENSOR_DEPTH);
   if (rc == openni::STATUS_OK) {
-    rc = obj_->depth_stream_.start();
+    rc = obj_->depth_stream.start();
     if (rc != openni::STATUS_OK) {
       cerr << "SEBURO OpenNI: Couldn't start depth stream: " << openni::OpenNI::getExtendedError() << endl;
-      obj_->depth_stream_.destroy();
+      obj_->depth_stream.destroy();
     }
   }
   else {
@@ -100,19 +100,19 @@ OpenNIBase::OpenNIBase( const char* deviceURI) : obj_( shared_ptr<SharedObj> (ne
   }
 
 
-  rc = obj_->colour_stream_.create(obj_->device_, openni::SENSOR_COLOR);
+  rc = obj_->colour_stream.create(obj_->device, openni::SENSOR_COLOR);
   if (rc == openni::STATUS_OK) {
-    rc = obj_->colour_stream_.start();
+    rc = obj_->colour_stream.start();
     if (rc != openni::STATUS_OK) {
       cerr <<  "SEBURO OpenNI: Couldn't start color stream: " << openni::OpenNI::getExtendedError() << endl;
-      obj_->colour_stream_.destroy();
+      obj_->colour_stream.destroy();
     }
   }
   else {
     cerr << "SEBURO OpenNI: Couldn't find color stream: " << openni::OpenNI::getExtendedError() << endl;
   }
 
-  if (!(obj_->depth_stream_.isValid()) || !(obj_->colour_stream_.isValid())) {
+  if (!(obj_->depth_stream.isValid()) || !(obj_->colour_stream.isValid())) {
     cerr << "SEBURO OpenNI: No valid streams. Exiting." << endl;
     openni::OpenNI::shutdown();
   }
@@ -122,9 +122,9 @@ OpenNIBase::OpenNIBase( const char* deviceURI) : obj_( shared_ptr<SharedObj> (ne
   openni::VideoMode colorVideoMode;
 
 
-  if (obj_->depth_stream_.isValid() && obj_->colour_stream_.isValid()) {
-    depthVideoMode = obj_->depth_stream_.getVideoMode();
-    colorVideoMode = obj_->colour_stream_.getVideoMode();
+  if (obj_->depth_stream.isValid() && obj_->colour_stream.isValid()) {
+    depthVideoMode = obj_->depth_stream.getVideoMode();
+    colorVideoMode = obj_->colour_stream.getVideoMode();
 
     int depthWidth = depthVideoMode.getResolutionX();
     int depthHeight = depthVideoMode.getResolutionY();
@@ -132,97 +132,97 @@ OpenNIBase::OpenNIBase( const char* deviceURI) : obj_( shared_ptr<SharedObj> (ne
     int colorHeight = colorVideoMode.getResolutionY();
 
     if (depthWidth == colorWidth && depthHeight == colorHeight) {
-      obj_->width_ = depthWidth;
-      obj_->height_ = depthHeight;
+      obj_->width = depthWidth;
+      obj_->height = depthHeight;
     } else {
       cout << "SEBURO OpenNI Error: expect color and depth to be in same resolution: D:" << depthWidth 
         << "x" << depthHeight << " C: " << colorWidth << "x" << depthWidth << endl;
       return;
     }
-  } else if (obj_->depth_stream_.isValid()) {
-    depthVideoMode = obj_->depth_stream_.getVideoMode();
-    obj_->width_ = depthVideoMode.getResolutionX();
-    obj_->height_ = depthVideoMode.getResolutionY();
+  } else if (obj_->depth_stream.isValid()) {
+    depthVideoMode = obj_->depth_stream.getVideoMode();
+    obj_->width = depthVideoMode.getResolutionX();
+    obj_->height = depthVideoMode.getResolutionY();
   }
-  else if (obj_->colour_stream_.isValid()) {
-    colorVideoMode = obj_->colour_stream_.getVideoMode();
-    obj_->width_ = colorVideoMode.getResolutionX();
-    obj_->height_ = colorVideoMode.getResolutionY();
+  else if (obj_->colour_stream.isValid()) {
+    colorVideoMode = obj_->colour_stream.getVideoMode();
+    obj_->width = colorVideoMode.getResolutionX();
+    obj_->height = colorVideoMode.getResolutionY();
   }
   else {
     cout <<  "SEBURO OpenNI Error: expects at least one of the streams to be valid." << endl;
     return;
   }
 
-  obj_->streams_ = new openni::VideoStream*[2];
-  obj_->streams_[0] = &(obj_->depth_stream_);
-  obj_->streams_[1] = &(obj_->colour_stream_);
+  obj_->streams = new openni::VideoStream*[2];
+  obj_->streams[0] = &(obj_->depth_stream);
+  obj_->streams[1] = &(obj_->colour_stream);
 
-  obj_->tex_buffer_depth_ = new byte_t[obj_->width_ * obj_->height_];
-  obj_->tex_buffer_colour_ = new byte_t[obj_->width_ * obj_->height_ * 3];
+  obj_->tex_buffer_depth = new byte_t[obj_->width * obj_->height];
+  obj_->tex_buffer_colour = new byte_t[obj_->width * obj_->height * 3];
 
   // Allocate GL Texture
-  obj_->texture_depth_ = gl::TextureStream(obj_->width_, obj_->height_, GREY);
-  obj_->texture_colour_ = gl::TextureStream(obj_->width_, obj_->height_);
+  obj_->texture_depth = gl::TextureStream(obj_->width, obj_->height, GREY);
+  obj_->texture_colour = gl::TextureStream(obj_->width, obj_->height);
 
-  obj_->ready_ = true;
+  obj_->ready = true;
 
-  cout << "SEBURO OpenNI - Allocated Depth / Colour streams of " << obj_->width_ << "x" << obj_->height_ << "." << endl;
+  cout << "SEBURO OpenNI - Allocated Depth / Colour streams of " << obj_->width << "x" << obj_->height << "." << endl;
  
 }
 
 
  
-void OpenNIBase::update() {
+void OpenNIBase::Update() {
   int changedIndex;
 
-  if(!obj_->ready_)
+  if(!obj_->ready)
     return;
 
-  openni::Status rc = openni::OpenNI::waitForAnyStream(obj_->streams_, 2, &changedIndex);
+  openni::Status rc = openni::OpenNI::waitForAnyStream(obj_->streams, 2, &changedIndex);
   if (rc != openni::STATUS_OK) {
     cout << "SEBURO OpenNI Error: Wait failed" << endl;
     return;
   }
   switch (changedIndex){
     case 0:
-      obj_->depth_stream_.readFrame(& (obj_->depth_frame_)); break;
+      obj_->depth_stream.readFrame(& (obj_->depth_frame)); break;
     case 1:
-      obj_->colour_stream_.readFrame(&(obj_->colour_frame_)); break;
+      obj_->colour_stream.readFrame(&(obj_->colour_frame)); break;
     default:
       cout << "SEBURO OpenNI Error: Wait error" << endl;
   }
 
-  if (obj_->depth_frame_.isValid()) {
-    calculateHistogram(obj_->depth_hist_, S9_OPENNI_MAX_DEPTH, obj_->depth_frame_);
+  if (obj_->depth_frame.isValid()) {
+    CalculateHistogram(obj_->depth_hist, S9_OPENNI_MAX_DEPTH, obj_->depth_frame);
   }
 
-  int buffer_size = obj_->width_ * obj_->height_ * sizeof(byte_t) * 3;
+  int buffer_size = obj_->width * obj_->height * sizeof(byte_t) * 3;
 
  
   // check if we need to draw image frame to texture
   // We dont bother with cropping and all that crap OpenNI likes to put in.
-  if (obj_->colour_frame_.isValid()) {
+  if (obj_->colour_frame.isValid()) {
 
-    memset(obj_->tex_buffer_colour_, 0, buffer_size);
-    memcpy(obj_->tex_buffer_colour_, obj_->colour_frame_.getData(), buffer_size);
+    memset(obj_->tex_buffer_colour, 0, buffer_size);
+    memcpy(obj_->tex_buffer_colour, obj_->colour_frame.getData(), buffer_size);
 
   }
 
   // Buffer is now set to colour
 
-  buffer_size = obj_->width_ * obj_->height_ * sizeof(byte_t);
+  buffer_size = obj_->width * obj_->height * sizeof(byte_t);
 
   // check if we need to draw depth frame to texture
-  if (obj_->depth_frame_.isValid()) {
-   
-    memset(obj_->tex_buffer_depth_, 0, buffer_size);
+  if (obj_->depth_frame.isValid()) {
+  
+    memset(obj_->tex_buffer_depth, 0, buffer_size);
 
-    byte_t *td = obj_->tex_buffer_depth_;
-    uint16_t *ts = (uint16_t*) obj_->depth_frame_.getData(); // This is a 16bit integer for depth data
+    byte_t *td = obj_->tex_buffer_depth;
+    uint16_t *ts = (uint16_t*) obj_->depth_frame.getData(); // This is a 16bit integer for depth data
 
-    for (int i=0; i < obj_->width_ * obj_->height_; ++i){
-      *td = obj_->depth_hist_[*ts];
+    for (int i=0; i < obj_->width * obj_->height; ++i){
+      *td = obj_->depth_hist[*ts];
       ++td;
       ++ts;
     }
@@ -234,10 +234,10 @@ void OpenNIBase::update() {
 
 }
 
-void OpenNIBase::update_textures() {
-  if (obj_->ready_){
-    obj_->texture_colour_.update(obj_->tex_buffer_colour_);
-    obj_->texture_depth_.update(obj_->tex_buffer_depth_);
+void OpenNIBase::UpdateTextures() {
+  if (obj_->ready){
+    obj_->texture_colour.Update(obj_->tex_buffer_colour);
+    obj_->texture_depth.Update(obj_->tex_buffer_depth);
   }
 }
 
@@ -260,9 +260,15 @@ OpenNISkeleton::OpenNISkeleton(const OpenNIBase &base) : obj_( shared_ptr<Shared
     return;
   }
 
-  // Perform initialisation if device is ready for it
+  Init();
+  
+}
 
-  rc = (nite::Status) niteInitializeUserTrackerByDevice( (void*)&(base.device()), &(obj_->user_tracker_handle_));
+
+void OpenNISkeleton::Init() {
+  // Perform initialisation if device is ready for it
+  nite::Status rc;
+  rc = (nite::Status) niteInitializeUserTrackerByDevice( (void*)&(obj_->base.device()), &(obj_->user_tracker_handle));
   if (rc != nite::STATUS_OK) {
     cerr << "SEBURO NITE Error - Could not initialize tracker: " << rc << endl;
     obj_->ready = false;
@@ -270,33 +276,32 @@ OpenNISkeleton::OpenNISkeleton(const OpenNIBase &base) : obj_( shared_ptr<Shared
   } 
 
   obj_->ready = true;
-  
 }
 
 /**
  * Read a frame from NiTE and read the C data into our C++ Vector
  */
 
-nite::Status OpenNISkeleton::readFrame() {
+nite::Status OpenNISkeleton::ReadFrame() {
 
   nite::Status rc;
 
   if (obj_->pNiteFrame != nullptr){
-    niteUserTrackerFrameRelease(obj_->user_tracker_handle_, obj_->pNiteFrame);
+    niteUserTrackerFrameRelease(obj_->user_tracker_handle, obj_->pNiteFrame);
     obj_->pNiteFrame = nullptr;
   
   }
 
-  rc = (nite::Status)niteReadUserTrackerFrame(obj_->user_tracker_handle_, &(obj_->pNiteFrame));
+  rc = (nite::Status)niteReadUserTrackerFrame(obj_->user_tracker_handle, &(obj_->pNiteFrame));
   
   if (rc !=  nite::STATUS_OK){
     cerr << "SEBURO NITE Error - Could not read frame: " << rc << endl;
   }
 
-  obj_->mFloor = obj_->pNiteFrame->floor;
-  obj_->mUserMap = obj_->pNiteFrame->userMap;
-  obj_->mFloorConfidence = obj_->pNiteFrame->floorConfidence;
-  obj_->mTimeStamp = obj_->pNiteFrame->timestamp;
+  obj_->floor = obj_->pNiteFrame->floor;
+  obj_->user_map = obj_->pNiteFrame->userMap;
+  obj_->floor_confidence = obj_->pNiteFrame->floorConfidence;
+  obj_->timestamp = obj_->pNiteFrame->timestamp;
 
   set<NiteUserId> userAround;
 
@@ -307,7 +312,7 @@ nite::Status OpenNISkeleton::readFrame() {
     User ud (pv[i]);
 
     bool found = false;
-    for (User &dd : obj_->vUsers){
+    for (User &dd : obj_->users){
       if (ud.id() == dd.id()){
         found = true;
         dd = ud;
@@ -317,16 +322,16 @@ nite::Status OpenNISkeleton::readFrame() {
     }
 
     if (!found){
-      obj_->vUsers.push_back(ud);
+      obj_->users.push_back(ud);
       userAround.insert(ud.id());
     }
   }
 
   // Remove users not around any more - stale data
 
-  for (vector<User>::iterator it = obj_->vUsers.begin(); it != obj_->vUsers.end();) {
+  for (vector<User>::iterator it = obj_->users.begin(); it != obj_->users.end();) {
     if (userAround.find(it->id()) == userAround.end()){
-      it = obj_->vUsers.erase(it);
+      it = obj_->users.erase(it);
     } else {
       it++;
     }
@@ -358,65 +363,66 @@ void removeNewFrameListener(NewFrameListener* pListener){
   pListener->setUserTracker(NULL);
 }*/
 
-nite::Status OpenNISkeleton::convertJointCoordinatesToDepth(float x, float y, float z, float* pOutX, float* pOutY) const {
-  return (nite::Status)niteConvertJointCoordinatesToDepth(obj_->user_tracker_handle_, x, y, z, pOutX, pOutY);
+nite::Status OpenNISkeleton::ConvertJointCoordinatesToDepth(float x, float y, float z, float* pOutX, float* pOutY) const {
+  return (nite::Status)niteConvertJointCoordinatesToDepth(obj_->user_tracker_handle, x, y, z, pOutX, pOutY);
 }
 
-nite::Status OpenNISkeleton::convertDepthCoordinatesToJoint(int x, int y, int z, float* pOutX, float* pOutY) const {
-  return (nite::Status)niteConvertDepthCoordinatesToJoint(obj_->user_tracker_handle_, x, y, z, pOutX, pOutY);
+nite::Status OpenNISkeleton::ConvertDepthCoordinatesToJoint(int x, int y, int z, float* pOutX, float* pOutY) const {
+  return (nite::Status)niteConvertDepthCoordinatesToJoint(obj_->user_tracker_handle, x, y, z, pOutX, pOutY);
 }
 
-float OpenNISkeleton::getSkeletonSmoothingFactor() const {
+float OpenNISkeleton::GetSkeletonSmoothingFactor() const {
   float factor;
-  nite::Status rc = (nite::Status)niteGetSkeletonSmoothing(obj_->user_tracker_handle_, &factor);
+  nite::Status rc = (nite::Status)niteGetSkeletonSmoothing(obj_->user_tracker_handle, &factor);
   if (rc != nite::STATUS_OK) {
     factor = 0;
   }
   return factor;
 }
 
-nite::Status OpenNISkeleton::setSkeletonSmoothingFactor(float factor) {
-  return (nite::Status)niteSetSkeletonSmoothing(obj_->user_tracker_handle_, factor);
+nite::Status OpenNISkeleton::SetSkeletonSmoothingFactor(float factor) {
+  return (nite::Status)niteSetSkeletonSmoothing(obj_->user_tracker_handle, factor);
 }
+
 
 /**
  * Copy the values from the NiTE Skeleton to the S9 Skeleton on this user
  */
 
 
-void setBone(int &idx, s9::Skeleton &skel, nite::Skeleton &nskel, nite::JointType joint) {
+void SetBone(int &idx, s9::Skeleton &skel, nite::Skeleton &nskel, nite::JointType joint) {
 
   nite::SkeletonJoint njoint = nskel.getJoint(joint);
   NiteQuaternion orientation = njoint.getOrientation();
-  Bone * parent = skel.bone(idx)->parent();
+  Bone * parent = skel.GetBone(idx)->parent();
   NitePoint3f npoint = njoint.getPosition();
 
   glm::quat global_rot = glm::quat(orientation.w, orientation.x, orientation.y, orientation.z );
   glm::vec3 global_pos = glm::vec3(npoint.x, npoint.y, npoint.z);
 
   if (parent != nullptr){
-    skel.bone(idx)->set_rotation_relative(glm::normalize(glm::inverse(parent->rotation_relative()) * global_rot));
+    skel.GetBone(idx)->set_rotation_relative(glm::normalize(glm::inverse(parent->rotation_relative()) * global_rot));
     glm::vec3 tp = global_pos - parent->position_relative();
     tp = tp * glm::toMat3(parent->rotation_relative());
-    skel.bone(idx)->set_position_relative( tp );
+    skel.GetBone(idx)->set_position_relative( tp );
 
-     skel.bone(idx)->set_rotation_global(global_rot);
+     skel.GetBone(idx)->set_rotation_global(global_rot);
 
   } else {
-    skel.bone(idx)->set_rotation_relative(global_rot );
-    skel.bone(idx)->set_position_relative(global_pos );
+    skel.GetBone(idx)->set_rotation_relative(global_rot );
+    skel.GetBone(idx)->set_position_relative(global_pos );
   }
 
-  skel.bone(idx)->set_rotation_global(global_rot);
-  skel.bone(idx)->set_position_global(global_pos);
+  skel.GetBone(idx)->set_rotation_global(global_rot);
+  skel.GetBone(idx)->set_position_global(global_pos);
   
   idx++;
 }
 
-void OpenNISkeleton::User::copySkeleton(){
+void OpenNISkeleton::User::CopySkeleton(){
   
   s9::Skeleton skel = skeleton();
-  nite::Skeleton nskel = getSkeletonNiTE();
+  nite::Skeleton nskel = skeleton_nite();
 
   nite::SkeletonJoint njoint;
   NiteQuaternion orientation;
@@ -428,21 +434,21 @@ void OpenNISkeleton::User::copySkeleton(){
 
   // We do this in order, creating local transformations from OpenNI's global ones
 
-  setBone(idx,skel,nskel,nite::JOINT_TORSO);
-  setBone(idx,skel,nskel,nite::JOINT_NECK);
-  setBone(idx,skel,nskel,nite::JOINT_HEAD);
-  setBone(idx,skel,nskel,nite::JOINT_LEFT_SHOULDER);
-  setBone(idx,skel,nskel,nite::JOINT_LEFT_ELBOW);
-  setBone(idx,skel,nskel,nite::JOINT_LEFT_HAND);
-  setBone(idx,skel,nskel,nite::JOINT_RIGHT_SHOULDER);
-  setBone(idx,skel,nskel,nite::JOINT_RIGHT_ELBOW);
-  setBone(idx,skel,nskel,nite::JOINT_RIGHT_HAND);
-  setBone(idx,skel,nskel,nite::JOINT_LEFT_HIP);
-  setBone(idx,skel,nskel,nite::JOINT_LEFT_KNEE);
-  setBone(idx,skel,nskel,nite::JOINT_LEFT_FOOT);
-  setBone(idx,skel,nskel,nite::JOINT_RIGHT_HIP);
-  setBone(idx,skel,nskel,nite::JOINT_RIGHT_KNEE);
-  setBone(idx,skel,nskel,nite::JOINT_RIGHT_FOOT);
+  SetBone(idx,skel,nskel,nite::JOINT_TORSO);
+  SetBone(idx,skel,nskel,nite::JOINT_NECK);
+  SetBone(idx,skel,nskel,nite::JOINT_HEAD);
+  SetBone(idx,skel,nskel,nite::JOINT_LEFT_SHOULDER);
+  SetBone(idx,skel,nskel,nite::JOINT_LEFT_ELBOW);
+  SetBone(idx,skel,nskel,nite::JOINT_LEFT_HAND);
+  SetBone(idx,skel,nskel,nite::JOINT_RIGHT_SHOULDER);
+  SetBone(idx,skel,nskel,nite::JOINT_RIGHT_ELBOW);
+  SetBone(idx,skel,nskel,nite::JOINT_RIGHT_HAND);
+  SetBone(idx,skel,nskel,nite::JOINT_LEFT_HIP);
+  SetBone(idx,skel,nskel,nite::JOINT_LEFT_KNEE);
+  SetBone(idx,skel,nskel,nite::JOINT_LEFT_FOOT);
+  SetBone(idx,skel,nskel,nite::JOINT_RIGHT_HIP);
+  SetBone(idx,skel,nskel,nite::JOINT_RIGHT_KNEE);
+  SetBone(idx,skel,nskel,nite::JOINT_RIGHT_FOOT);
 
   /*
    const nite::SkeletonJoint& head = user.getSkeleton().getJoint(nite::JOINT_HEAD);
@@ -456,20 +462,20 @@ void OpenNISkeleton::User::copySkeleton(){
  * Keep a static set of bools and states for the all users here
  */
 
-void OpenNISkeleton::updateUsersState(const User& user, unsigned long long ts) {
-  if (user.isNew())
+void OpenNISkeleton::UpdateUsersState(const User& user, unsigned long long ts) {
+  if (user.IsNew())
     USER_MESSAGE(user, "New");
-  else if (user.isVisible() && !sVisibleUsers[user.id()])
+  else if (user.IsVisible() && !sVisibleUsers[user.id()])
     USER_MESSAGE(user,"Visible");
-  else if (!user.isVisible() && sVisibleUsers[user.id()])
+  else if (!user.IsVisible() && sVisibleUsers[user.id()])
     USER_MESSAGE(user,"Out of Scene");
-  else if (user.isLost())
+  else if (user.IsLost())
     USER_MESSAGE(user,"Lost");
 
-  sVisibleUsers[user.id()] = user.isVisible();
+  sVisibleUsers[user.id()] = user.IsVisible();
 
-  if(sSkeletonStates[user.id()] != user.getSkeletonNiTE().getState())  {
-    switch(sSkeletonStates[user.id()] = user.getSkeletonNiTE().getState()) {
+  if(sSkeletonStates[user.id()] != user.skeleton_nite().getState())  {
+    switch(sSkeletonStates[user.id()] = user.skeleton_nite().getState()) {
     case nite::SKELETON_NONE:
       USER_MESSAGE(user,"Stopped tracking.");
       break;
@@ -494,8 +500,8 @@ void OpenNISkeleton::updateUsersState(const User& user, unsigned long long ts) {
  * Given a User ID, return a copy of that user, if they exist.
  */
 
-OpenNISkeleton::User OpenNISkeleton::user(int id){
-  for (User user : obj_->vUsers) {
+OpenNISkeleton::User OpenNISkeleton::GetUserByID(int id){
+  for (User user : obj_->users) {
     if (user.id() == id){
       return user;
     }
@@ -503,34 +509,58 @@ OpenNISkeleton::User OpenNISkeleton::user(int id){
   return User(); // A blank user
 }
 
+void OpenNISkeleton::RestartTracking() {
+
+  nite::Status rc;
+  obj_->ready = false;
+
+  for (User &user : obj_->users) {
+    if(sSkeletonStates[user.id()] == nite::SKELETON_TRACKED)  {  
+      niteStopSkeletonTracking(obj_->user_tracker_handle, user.id());
+      cout << "SEBUTO NITE - Stopped tracking user " << user.id() << endl;
+
+    }
+  }
+
+  for (size_t i =0; i < S9_NITE_MAX_USERS; ++i) {
+    sVisibleUsers[i] = false;
+    sSkeletonStates[i] = nite::SKELETON_NONE;
+  }
+
+
+  Init();
+
+}
+
+
 /**
  * Called as often as possible to grab a new frame and update the user data
  */
 
-void OpenNISkeleton::update() {
+void OpenNISkeleton::Update() {
 
   nite::Status rc;
 
   if (obj_ == nullptr || !obj_->ready)
     return;
 
-  rc = readFrame();
+  rc = ReadFrame();
   if (rc != nite::STATUS_OK) {
     cerr << "SEBURO NITE Error - Get next frame failed" << endl;
     return;
   }
 
   // If we have users, check if they are new and start tracking or continue tracking
-  for (User &user : obj_->vUsers) {
+  for (User &user : obj_->users) {
 
-    updateUsersState(user, obj_->mTimeStamp);
-    if (user.isNew()) {
-      rc = (nite::Status)niteStartSkeletonTracking(obj_->user_tracker_handle_, user.id());
+    UpdateUsersState(user, obj_->timestamp);
+    if (user.IsNew()) {
+      rc = (nite::Status)niteStartSkeletonTracking(obj_->user_tracker_handle, user.id());
       if (rc != nite::STATUS_OK) {
         cerr << "SEBURO NITE Error - Cannot start skeleton tracking for userid: " << user.id() << ", Error - " << rc << endl;
       }
-    } else if (user.getSkeletonNiTE().getState() == nite::SKELETON_TRACKED) {
-      user.copySkeleton();   
+    } else if (user.skeleton_nite().getState() == nite::SKELETON_TRACKED) {
+      user.CopySkeleton();   
     }
   }
 }
@@ -541,7 +571,7 @@ OpenNISkeleton::SharedObject::~SharedObject () {
     delete pNiteFrame;
 
   if (ready)
-    niteShutdownUserTracker(user_tracker_handle_);
+    niteShutdownUserTracker(user_tracker_handle);
   
   nite::NiTE::shutdown();
 }

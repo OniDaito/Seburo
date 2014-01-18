@@ -35,7 +35,7 @@ FBO::FBO (size_t w, size_t h) : obj_( shared_ptr<SharedObject> (new SharedObject
 	glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, obj_->colour.gl_type(), obj_->colour.id(), 0);
   glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, obj_->depth);
 
-	if (checkStatus() )  {
+	if (CheckStatus() )  {
 		obj_->ok = true;
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	}
@@ -43,7 +43,7 @@ FBO::FBO (size_t w, size_t h) : obj_( shared_ptr<SharedObject> (new SharedObject
 }
 
 
-bool FBO::checkStatus() {
+bool FBO::CheckStatus() {
  GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
     switch(status)
     {
@@ -85,7 +85,7 @@ bool FBO::checkStatus() {
     }
 }
 
-void FBO::printFramebufferInfo() {
+void FBO::PrintFramebufferInfo() {
     std::cout << "\n===== FBO STATUS =====\n";
 
     // print max # of colorbuffers supported by FBO
@@ -115,11 +115,11 @@ void FBO::printFramebufferInfo() {
             std::cout << "SEBURO Colour Attachment " << i << ": ";
             if(objectType == GL_TEXTURE)
             {
-                std::cout << "SEBURO GL_TEXTURE, " << getTextureParameters(objectId) << std::endl;
+                std::cout << "SEBURO GL_TEXTURE, " << GetTextureParameters(objectId) << std::endl;
             }
             else if(objectType == GL_RENDERBUFFER)
             {
-                std::cout << "SEBURO GL_RENDERBUFFER, " << getRenderbufferParameters(objectId) << std::endl;
+                std::cout << "SEBURO GL_RENDERBUFFER, " << GetRenderbufferParameters(objectId) << std::endl;
             }
         }
     }
@@ -139,10 +139,10 @@ void FBO::printFramebufferInfo() {
         std::cout << "SEBURO Depth Attachment: ";
         switch(objectType) {
         case GL_TEXTURE:
-            std::cout << "SEBURO GL_TEXTURE, " << getTextureParameters(objectId) << std::endl;
+            std::cout << "SEBURO GL_TEXTURE, " << GetTextureParameters(objectId) << std::endl;
             break;
         case GL_RENDERBUFFER:
-            std::cout << "SEBURO GL_RENDERBUFFER, " << getRenderbufferParameters(objectId) << std::endl;
+            std::cout << "SEBURO GL_RENDERBUFFER, " << GetRenderbufferParameters(objectId) << std::endl;
             break;
         }
     }
@@ -162,10 +162,10 @@ void FBO::printFramebufferInfo() {
         std::cout << "SEBURO Stencil Attachment: ";
         switch(objectType) {
         case GL_TEXTURE:
-            std::cout << "SEBURO GL_TEXTURE, " << getTextureParameters(objectId) << std::endl;
+            std::cout << "SEBURO GL_TEXTURE, " << GetTextureParameters(objectId) << std::endl;
             break;
         case GL_RENDERBUFFER:
-            std::cout << "SEBURO GL_RENDERBUFFER, " << getRenderbufferParameters(objectId) << std::endl;
+            std::cout << "SEBURO GL_RENDERBUFFER, " << GetRenderbufferParameters(objectId) << std::endl;
             break;
         }
     }
@@ -174,20 +174,20 @@ void FBO::printFramebufferInfo() {
 }
 
 
-void FBO::resize(size_t w, size_t h){
+void FBO::Resize(size_t w, size_t h){
   if(obj_ == nullptr) return;
 	if(!obj_->ok) return;
 	
 	obj_->width = w;
 	obj_->height = h;
 	
-  obj_->colour.bind();
-  obj_->colour.resize(w,h);
+  obj_->colour.Bind();
+  obj_->colour.Resize(w,h);
 	
 	glBindRenderbuffer(GL_RENDERBUFFER, obj_->depth);
 	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, w, h);
 
-  obj_->colour.unbind();
+  obj_->colour.Unbind();
 
   CXGLERROR
 	
@@ -341,7 +341,7 @@ namespace s9{
 			return formatName;
 		}
 
-		std::string getTextureParameters(GLuint id)
+		std::string GetTextureParameters(GLuint id)
 		{
 			if(glIsTexture(id) == GL_FALSE)
 				return "SEBURO Not texture object";
@@ -362,7 +362,7 @@ namespace s9{
 		}
 
 
-		std::string getRenderbufferParameters(GLuint id)
+		std::string GetRenderbufferParameters(GLuint id)
 		{
 			if(glIsRenderbuffer(id) == GL_FALSE)
 				return "SEBURO Not Renderbuffer object";

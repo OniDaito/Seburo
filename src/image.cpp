@@ -18,7 +18,7 @@ using namespace s9;
 ///\todo not sure how to sort out errors in this context - Actually the data will be zero :P
 // https://developer.apple.com/library/mac/documentation/graphicsimaging/conceptual/opengl-macprogguide/opengl_texturedata/opengl_texturedata.html
 
-byte_t * Image::imageReference (const char* imageName) {
+byte_t * Image::ImageReference (const char* imageName) {
     CGImageRef image;
     CGDataProviderRef provider;
     CFURLRef url;
@@ -74,7 +74,7 @@ free(myData);*/
 
 #ifdef _SEBURO_LINUX
 
-byte_t * Image::imageReference(const char*  imageName){
+byte_t * Image::ImageReference(const char*  imageName){
 
     int channels, w ,h;
 

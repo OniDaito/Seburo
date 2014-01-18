@@ -10,15 +10,15 @@
 
 using namespace s9;
 
-bool QuicktimeCamera::startCapture(std::string devname, unsigned int width, unsigned int height, unsigned int fps) {
+bool QuicktimeCamera::StartCapture(std::string devname, unsigned int width, unsigned int height, unsigned int fps) {
 
 }
 
-void QuicktimeCamera::stop() {
+void QuicktimeCamera::Stop() {
 
 }
-
-unsigned char* QuicktimeCamera::getBuffer() {
+ 
+unsigned char* QuicktimeCamera::GetBuffer() {
 
 }
 

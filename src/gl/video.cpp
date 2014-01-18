@@ -20,13 +20,13 @@ using namespace s9::gl;
 using namespace s9::gl::compvis;
 #endif
 
-VidCam::VidCam(std::string dev, size_t w, size_t h, size_t fps) : obj_( shared_ptr<SharedObj> (new SharedObj())) {
+VidCam::VidCam(std::string dev, size_t w, size_t h, size_t fps) : obj_( shared_ptr<SharedObject> (new SharedObject())) {
 
-	obj_->texture_ = TextureStream(w,h,RGB);
+	obj_->texture = TextureStream(w,h,RGB);
 
 #ifdef _SEBURO_LINUX
-	obj_->cam_.reset(new UVCVideo());
-	obj_->cam_->startCapture(dev,w,h,fps);
+	obj_->cam.reset(new UVCVideo());
+	obj_->cam->startCapture(dev,w,h,fps);
 #endif
 
 	obj_->_fps = fps; 
@@ -34,20 +34,20 @@ VidCam::VidCam(std::string dev, size_t w, size_t h, size_t fps) : obj_( shared_p
 	CXGLERROR
 }
 
-void VidCam::update() {
-	obj_->texture_.update(obj_->cam_->getBuffer());
-	//obj_->texture_.update(obj_->cam_->getBuffer());
+void VidCam::Update() {
+	obj_->texture.Update(obj_->cam->getBuffer());
+	//obj_->texture.update(obj_->cam->getBuffer());
 }
 
-void VidCam::stop(){
+void VidCam::Stop(){
 #ifdef _SEBURO_LINUX
-	obj_->cam_->stop();
+	obj_->cam->stop();
 #endif	
 }
 
-void VidCam::setControl(unsigned int id, int value) {
+void VidCam::SetControl(unsigned int id, int value) {
 #ifdef _SEBURO_LINUX
-	obj_->cam_->set_control(id,value);
+	obj_->cam->set_control(id,value);
 #endif	
 }
 
@@ -61,7 +61,7 @@ void VidCam::setControl(unsigned int id, int value) {
 
 CVVidCam::CVVidCam(){}
 
-CVVidCam::CVVidCam(VidCam &cam) : obj_( shared_ptr<SharedObj> (new SharedObj(cam))){
+CVVidCam::CVVidCam(VidCam &cam) : obj_( shared_ptr<SharedObject> (new SharedObject(cam))){
 	
 	cv::Size size (obj_->mCam.getSize().x,  obj_->mCam.getSize().y);
 	obj_->mImage = Mat(size, CV_8UC3);

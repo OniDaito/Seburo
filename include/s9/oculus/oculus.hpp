@@ -49,8 +49,8 @@ namespace s9 {
         SharedObject(float_t near, float_t far);
 
         void OnMessage(const OVR::Message& msg);
-        void update(double_t dt);
-        bool connected() { return IsHandlerInstalled(); }
+        void Update(double_t dt);
+        bool Connected() { return IsHandlerInstalled(); }
 
 
         ~SharedObject() {
@@ -83,7 +83,6 @@ namespace s9 {
         OVR::Util::Render::StereoConfig     stereo_config;
         OVR::Util::LatencyTest              latency_util;
         OVR::Ptr<OVR::LatencyTestDevice>    latency_tester;
-        OVR::Util::MagCalibration           mag_cal;
 
         OVR::Array<DeviceStatusNotificationDesc> device_status_notifications_queue; 
 
@@ -123,9 +122,11 @@ namespace s9 {
       operator unspecified_bool_type() const { return ( obj_.get() == 0 ) ? 0 : &OculusBase::obj_; }
       void reset() { obj_.reset(); }
 
-      void update(double_t dt) { CXSHARED obj_->update(dt); }
+      void Update(double_t dt) { CXSHARED obj_->Update(dt); }
 
-      bool connected() { CXSHARED return (obj_->connected() && obj_->initialized);  }
+      void ResetView() { CXSHARED obj_->fusion.Reset();}
+
+      bool Connected() { CXSHARED return (obj_->Connected() && obj_->initialized);  }
 
       glm::quat orientation() {CXSHARED return obj_->orientation;  } 
      

@@ -43,17 +43,15 @@ namespace s9 {
 		public:
 			VidCam() {};
 			VidCam (std::string dev, size_t w, size_t h, size_t fps);
-			void stop();		
-			void setControl(unsigned int id, int value);
-			void update();
-			unsigned char* getBuffer() {return obj_->cam_->getBuffer(); };
+			void Stop();		
+			void SetControl(unsigned int id, int value);
+			void Update();
+			unsigned char* GetBuffer() {return obj_->cam->getBuffer(); };
 
-			void bind() {obj_->texture_.bind(); };
-			void unbind() {obj_->texture_.unbind(); };
+			void Bind() {obj_->texture.Bind(); };
+			void Unbind() {obj_->texture.Unbind(); };
 
-			TextureStream getTexture() {return obj_->texture_; };
-
-
+			TextureStream texture() {return obj_->texture; };
 
 			virtual operator int() const { return obj_.use_count() > 0; };
 			
@@ -62,29 +60,31 @@ namespace s9 {
 			// Previously, I extended the texture shared obj
 			// but not now.
 
-			struct SharedObj {
+			struct SharedObject {
 			public:
 
 #ifdef _SEBURO_LINUX
-				std::shared_ptr<UVCVideo> cam_;
+				std::shared_ptr<UVCVideo> cam;
 #endif
 
 #ifdef _SEBURO_OSX
-				std::shared_ptr<QuicktimeCamera> cam_;
+				std::shared_ptr<QuicktimeCamera> cam;
 #endif
 
 #ifdef _SEBURO_WIN32
-				std::shared_ptr<WindowsCamera> cam_;
+				std::shared_ptr<WindowsCamera> cam;
 #endif
 
 				size_t _fps;
-				TextureStream texture_;
+				TextureStream texture;
 			};
 			
-			std::shared_ptr<SharedObj> obj_;
+			std::shared_ptr<SharedObject> obj_;
 			
 		};
 
+
+///\todo need to rethink the OpenCV stuff
 
 #ifdef _SEBURO_OPENCV
 		namespace compvis{

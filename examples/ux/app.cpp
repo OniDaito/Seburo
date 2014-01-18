@@ -26,18 +26,18 @@ void UxApp::Init(){
 
     Spike s (4,1,1.0f,2.0f);
 
-    node_.add(cuboid_).add(shader_).add(camera_);
+    node_.Add(cuboid_).Add(shader_).Add(camera_);
 
-    top_node_2_.add(s);
-    top_node_2_.add(camera_).add(shader_);
+    top_node_2_.Add(s);
+    top_node_2_.Add(camera_).Add(shader_);
 
     Node spike_node(s);
 
     spike_node.set_matrix(glm::translate(glm::mat4(1.0f), glm::vec3(0.0f,2.5f,0.0f)));
 
-    node_.add(spike_node);
+    node_.Add(spike_node);
 
-    top_node_.add(node_);
+    top_node_.Add(node_);
     top_node_.set_matrix(glm::translate(glm::mat4(1.0f), glm::vec3(-1.0f,0.0f,0.0f)));
 
     rotation_ = 0;
@@ -65,8 +65,8 @@ void UxApp::Display(GLFWwindow* window, double_t dt){
     glm::mat4 Model = glm::rotate(glm::mat4(1.0f), rotation_, glm::vec3(0.0f, 1.0f, 0.0f));
     node_.set_matrix(Model);
 
-    top_node_.draw();
-    top_node_2_.draw();
+    top_node_.Draw();
+    top_node_2_.Draw();
    
     CXGLERROR
 }
@@ -85,8 +85,7 @@ void UxApp::ProcessEvent(MouseEvent e, GLFWwindow* window){
 
 void UxApp::ProcessEvent(ResizeEvent e, GLFWwindow* window){
     cout << "Window Resized:" << e.w << "," << e.h << endl;
-    glViewport(0,0,e.w,e.h);
-    camera_.resize(e.w,e.h);
+    camera_.Resize(e.w,e.h);
 }
 
 void UxApp::ProcessEvent(KeyboardEvent e, GLFWwindow* window){

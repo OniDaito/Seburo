@@ -44,23 +44,23 @@ using namespace s9::gl;
     camera_right_.set_update_on_node_draw(false);
 
     camera_main_.set_update_on_node_draw(false);
-    camera_main_.resize(1280,800);
+    camera_main_.Resize(1280,800);
 
     oculus_ = oculus::OculusBase(0.01f,100.0f);
 
-    node_.add(cuboid_).add(spike_node).add(cube_node_01).add(shader_);
+    node_.Add(cuboid_).Add(spike_node).Add(cube_node_01).Add(shader_);
 
-    node_main_.add(node_).add(camera_main_);
+    node_main_.Add(node_).Add(camera_main_);
    
-    node_left_.add(camera_left_).add(node_);
-    node_right_.add(camera_right_).add(node_);
+    node_left_.Add(camera_left_).Add(node_);
+    node_right_.Add(camera_right_).Add(node_);
 
 
 }
 
 ///\todo seems not to want to update member variables :(
 void OculusApp::Update(double_t dt) {    
-    oculus_.update(dt);
+    oculus_.Update(dt);
 }
 
 
@@ -71,16 +71,16 @@ void OculusApp::Update(double_t dt) {
  void OculusApp::Display(GLFWwindow* window, double_t dt){
 
     // Create the FBO and setup the cameras
-    if (!fbo_ && oculus_.connected()){
+    if (!fbo_ && oculus_.Connected()){
       
         glm::vec2 s = oculus_.fbo_size();
         fbo_ = FBO(static_cast<size_t>(s.x), static_cast<size_t>(s.y)); 
-        node_quad_.add(fbo_.colour());
+        node_quad_.Add(fbo_.colour());
 
-        camera_left_.resize(static_cast<size_t>(s.x / 2.0f), static_cast<size_t>(s.y ));
-        camera_right_.resize(static_cast<size_t>(s.x / 2.0f), static_cast<size_t>(s.y ),static_cast<size_t>(s.x / 2.0f) );
+        camera_left_.Resize(static_cast<size_t>(s.x / 2.0f), static_cast<size_t>(s.y ));
+        camera_right_.Resize(static_cast<size_t>(s.x / 2.0f), static_cast<size_t>(s.y ),static_cast<size_t>(s.x / 2.0f) );
 
-        camera_main_.resize(static_cast<size_t>(s.x ), static_cast<size_t>(s.y ));
+        camera_main_.Resize(static_cast<size_t>(s.x ), static_cast<size_t>(s.y ));
 
         camera_left_.set_projection_matrix(oculus_.left_projection());
         camera_right_.set_projection_matrix(oculus_.right_projection());
@@ -94,7 +94,7 @@ void OculusApp::Update(double_t dt) {
 
     // Draw to the FBO
     if (fbo_){
-        fbo_.bind();
+        fbo_.Bind();
         glClearBufferfv(GL_COLOR, 0, &glm::vec4(0.5f, 0.9f, 0.95f, 1.0f)[0]);
         glClearBufferfv(GL_DEPTH, 0, &depth );
 
@@ -102,8 +102,8 @@ void OculusApp::Update(double_t dt) {
 
         // Update main camera
         oculus_dt_ = glm::inverse(oculus_prev_) * q;
-        camera_main_.rotate(oculus_dt_);
-        camera_main_.update();
+        camera_main_.Rotate(oculus_dt_);
+        camera_main_.Update();
 
         // Now set the view matrices given the oculus values
         camera_left_.set_view_matrix( camera_main_.view_matrix() * oculus_.left_inter() );
@@ -112,10 +112,10 @@ void OculusApp::Update(double_t dt) {
         oculus_prev_ = q;
 
         // Draw twice (sadly)
-        node_left_.draw();
-        node_right_.draw();
+        node_left_.Draw();
+        node_right_.Draw();
 
-        fbo_.unbind();
+        fbo_.Unbind();
         CXGLERROR
 
         // Draw to main screen - this cheats and uses a geometry shader
@@ -126,8 +126,8 @@ void OculusApp::Update(double_t dt) {
 
         glViewport(0,0, oculus_.screen_resolution().x, oculus_.screen_resolution().y);
 
-        shader_warp_.bind();
-        fbo_.colour().bind();
+        shader_warp_.Bind();
+        fbo_.colour().Bind();
 
         shader_warp_.s("uDistortionOffset", oculus_.distortion_xcenter_offset() ); // Can change with future headsets apparently
         shader_warp_.s("uDistortionScale", 1.0f/oculus_.distortion_scale());
@@ -136,8 +136,8 @@ void OculusApp::Update(double_t dt) {
 
         glDrawArrays(GL_POINTS, 0, 1);
 
-        fbo_.colour().unbind();
-        shader_warp_.unbind();
+        fbo_.colour().Unbind();
+        shader_warp_.Unbind();
 
         glBindVertexArray(0);
 
@@ -156,7 +156,7 @@ void OculusApp::Update(double_t dt) {
  }
 
 /*
- * Called when the window is resized. You should set cameras here
+ * Called when the window is Resized. You should set cameras here
  */
 
  void OculusApp::ProcessEvent(ResizeEvent e, GLFWwindow* window){

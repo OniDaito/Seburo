@@ -1,0 +1,18 @@
+{
+	"Oculus Profile Version":	1,
+	"CurrentProfile":	"",
+	"ProfileCount":	1,
+	"Profile":	{
+		"Name":	"oni",
+		"Gender":	"Unspecified",
+		"PlayerHeight":	1.778000,
+		"IPD":	0.064000,
+		"RiftDK1":	{
+			"EyeCup":	"A",
+			"LL":	0,
+			"LR":	0,
+			"RL":	0,
+			"RR":	0
+		}
+	}
+}

@@ -30,9 +30,9 @@ Path::Path(std::string path){
 
 #ifdef _SEBURO_LINUX
     // This exists path is a bit naughty and only here for examples but hey
-    if (exists("../../../" + path) ) {
+    if (Exists("../../../" + path) ) {
       final_path_ = "../../../" + path;
-    } else if (exists(path)){
+    } else if (Exists(path)){
       final_path_ = path;
     } else {
       cerr << "SEBURO FILE Error - Path does not exist: " << path << endl;
@@ -50,7 +50,7 @@ Path::Path(std::string path){
 }
 
 /// list all the files inside this directory
-std::vector<File> Directory::list_files() {
+std::vector<File> Directory::ListFiles() {
 
   std::vector<File> files;
 

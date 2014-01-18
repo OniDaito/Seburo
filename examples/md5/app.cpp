@@ -33,20 +33,20 @@ void MD5App::Init(){
     md5_ = MD5Model( s9::File("./data/sintel_lite/sintel_lite.md5mesh") ); 
     md5_.set_geometry_cast(WIREFRAME);
 
-    node_.add(md5_).add(camera_).add(shader_);
+    node_.Add(md5_).Add(camera_).Add(shader_);
  
     skeleton_shape_ = SkeletonShape(md5_.skeleton());
     skeleton_shape_.set_geometry_cast(WIREFRAME);
-    skeleton_shape_.add(shader_colour_).add(camera_);
+    skeleton_shape_.Add(shader_colour_).Add(camera_);
   
-    node_.add(skeleton_shape_).add(sphere_node_);
+    node_.Add(skeleton_shape_).Add(sphere_node_);
 
     Sphere s(0.08f, 10);
     sphere_colour_ = glm::vec4(0.0f,1.0f,0.0f,1.0f);
-    sphere_node_.add(s).add(shader_colour_).add(gl::ShaderClause<glm::vec4,1>("uColour", sphere_colour_));
+    sphere_node_.Add(s).Add(shader_colour_).Add(gl::ShaderClause<glm::vec4,1>("uColour", sphere_colour_));
 
 
-    node_full_.add(md5_).add(camera_).add(shader_).add(sphere_node_);
+    node_full_.Add(md5_).Add(camera_).Add(shader_).Add(sphere_node_);
 
     /*Bone * neck = md5_.skeleton().bone("neck");
     neck->applyRotation ( glm::angleAxis( 20.0f, glm::vec3(0.0,1.0,0.0)) );
@@ -73,21 +73,21 @@ void MD5App::Init(){
 ///\todo seems not to want to update member variables :(
 void MD5App::Update(double_t dt) {
 
-    Bone * waist = md5_.skeleton().bone("upper_arm.L");
-    waist->applyRotation( glm::angleAxis( -0.005f, glm::vec3(0.0,0.0,1.0)) );
+    Bone * upper_arm_l = md5_.skeleton().GetBone("upper_arm.L");
+    upper_arm_l->ApplyRotation( glm::angleAxis( -0.005f, glm::vec3(0.0,0.0,1.0)) );
 
-    Bone * luparm = md5_.skeleton().bone("thigh.L");
-    luparm->applyRotation( glm::angleAxis( 0.005f, glm::vec3(0.0,1.0,0.0))  );
+    Bone * thigh_l = md5_.skeleton().GetBone("thigh.L");
+    thigh_l->ApplyRotation( glm::angleAxis( 0.005f, glm::vec3(0.0,1.0,0.0))  );
 
-    md5_.skeleton().update();
+    md5_.skeleton().Update();
 
-    Bone * lloarm = md5_.skeleton().bone("lower_arm.L");
+    //Bone * lloarm = md5_.skeleton().bone("lower_arm.L");
 
-    glm::vec4 sp (0.58f, 0.0f, 1.35f, 1.0f);
-    sp = lloarm->skinned_matrix() * sp;
+    //glm::vec4 sp (0.58f, 0.0f, 1.35f, 1.0f);
+    //sp = lloarm->skinned_matrix() * sp;
 
-    glm::mat4 tm = glm::translate(glm::mat4(1.0f), glm::vec3(sp.x, sp.y, sp.z));
-    sphere_node_.set_matrix(tm);
+    //glm::mat4 tm = glm::translate(glm::mat4(1.0f), glm::vec3(sp.x, sp.y, sp.z));
+    //sphere_node_.set_matrix(tm);
     
 }
 
@@ -122,9 +122,9 @@ void MD5App::Display(GLFWwindow *window, double_t dt){
     node_full_.set_matrix(Model);
 
     if (show_wireframe_)
-        node_.draw();
+        node_.Draw();
     else
-        node_full_.draw();
+        node_full_.Draw();
 
     CXGLERROR
 }
@@ -142,8 +142,7 @@ void MD5App::ProcessEvent(MouseEvent e, GLFWwindow *window){}
  */
 
 void MD5App::ProcessEvent(ResizeEvent e, GLFWwindow *window){
-    glViewport(0,0,e.w,e.h);
-    camera_.resize(e.w,e.h);
+    camera_.Resize(e.w,e.h);
 }
 
 void MD5App::ProcessEvent(KeyboardEvent e, GLFWwindow *window){

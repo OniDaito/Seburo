@@ -77,6 +77,7 @@ OculusBase::SharedObject::SharedObject(float_t near, float_t far) {
     fusion.SetDelegateMessageHandler(this);
     fusion.SetPredictionEnabled(true);
     fusion.SetYawCorrectionEnabled(true);
+    fusion.SetGravityEnabled(true);
 
   }
 
@@ -107,7 +108,7 @@ OculusBase::OculusBase(float_t near, float_t far) {
 
 }
 
-void OculusBase::SharedObject::update(double_t dt) {
+void OculusBase::SharedObject::Update(double_t dt) {
    // Check if any new devices were connected.
 
   bool queueIsEmpty = false;
@@ -142,6 +143,10 @@ void OculusBase::SharedObject::update(double_t dt) {
             if (!sensor){
               sensor = *desc.Handle.CreateDeviceTyped<SensorDevice>();
               fusion.AttachToSensor(sensor);
+              fusion.SetDelegateMessageHandler(this);
+              fusion.SetPredictionEnabled(true);
+              fusion.SetYawCorrectionEnabled(true);
+              fusion.SetGravityEnabled(true);
               cout << "SEBURO OCULUS - Sensor Connected" << endl;
             } else if (!wasAlreadyCreated) {
                cout << "SEBURO OCULUS - A new SENSOR has been detected, but it is not currently used." << endl;

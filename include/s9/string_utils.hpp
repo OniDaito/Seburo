@@ -15,14 +15,14 @@
 namespace s9 {
 
 
-	template<class T> inline std::string toStringS9(const T& t) {
+	template<class T> inline std::string ToStringS9(const T& t) {
 		std::ostringstream stream;
 		stream << t;
 		return stream.str();
 	}
 
 
-	template<class T> inline T fromStringS9(const std::string& s) {
+	template<class T> inline T FromStringS9(const std::string& s) {
 		std::istringstream stream (s);
 		T t;
 		stream >> t;
@@ -36,7 +36,7 @@ namespace s9 {
 	 * \todo test split
 	 */
 
-	static inline std::vector<std::string> split_string_chars(const std::string& input, const std::string& delimiters) {
+	static inline std::vector<std::string> SplitStringChars(const std::string& input, const std::string& delimiters) {
 		size_t current;
 		size_t next = -1;
 		std::vector<std::string> tokens;
@@ -49,7 +49,7 @@ namespace s9 {
 	 	return tokens;
 	}
 
-	static inline std::vector<std::string> split_string_string(const std::string& input, const std::string& delimiter) {
+	static inline std::vector<std::string> SplitStringString(const std::string& input, const std::string& delimiter) {
 		size_t current;
 		size_t next = -1;
 		std::vector<std::string> tokens;
@@ -63,7 +63,7 @@ namespace s9 {
 	}
 
 
-	static inline bool string_contains (const std::string& input, const std::string& contains){
+	static inline bool StringContains (const std::string& input, const std::string& contains){
 		size_t found = input.find(contains);
   	return found != std::string::npos;
 	}
@@ -73,7 +73,7 @@ namespace s9 {
 	 * Remove a char from a string - returns a copy
 	 */
 
-	static inline std::string remove_char (const std::string s, const char c) {
+	static inline std::string RemoveChar (const std::string s, const char c) {
 		std::string str (s);
 		str.erase (std::remove(str.begin(), str.end(), c), str.end());
 		return str;
@@ -84,7 +84,7 @@ namespace s9 {
 	 * Basic text file reading
 	 */
 
-	std::string inline textFileRead(std::string filename) {
+	std::string inline TextFileRead(std::string filename) {
 		std::string line;
 		std::string rval;
 		std::ifstream myfile (filename.c_str());
@@ -147,7 +147,7 @@ namespace s9 {
 	 * Print out a GLM Matrix
 	 */
 
-	static inline std::string matrixToString(const glm::mat4 &mat){
+	static inline std::string MatrixToString(const glm::mat4 &mat){
 	  std::stringstream s;
 	  int i,j;
 	  for (j=0; j<4; ++j){
@@ -159,10 +159,17 @@ namespace s9 {
 		return s.str();
 	}
 
-
-	static inline std::string vecToString (const glm::vec3 &vec) {
+	/// return a string from a GLM Vector 3
+	static inline std::string VecToString (const glm::vec3 &vec) {
 		std::stringstream s;
 		s << vec.x << ", " << vec.y << ", " << vec.z;
+		return s.str();
+	} 
+
+	/// return a string from a GLM Vector 4
+	static inline std::string VecToString (const glm::vec4 &vec) {
+		std::stringstream s;
+		s << vec.x << ", " << vec.y << ", " << vec.z << ", " << vec.w;
 		return s.str();
 	} 
 

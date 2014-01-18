@@ -92,7 +92,7 @@ Cuboid::Cuboid (float w, float h, float d)  : Shape() {
 
 	IndicesType indices[36] = {0,3,1,0,2,3,0,1,5,0,5,4,1,3,7,1,7,5,6,7,5,6,4,5,4,2,6,4,0,2,2,7,3,2,6,7};
 
-	cuboid->geometry.setIndices(indices);
+	cuboid->geometry.SetIndices(indices);
 
 	obj_ = std::static_pointer_cast<ShapeObj>(cuboid);
 
@@ -185,7 +185,7 @@ Sphere::Sphere (float_t radius, size_t segments)  : Shape() {
  
  	}
 	
-	sphere->geometry.setIndices(indices);
+	sphere->geometry.SetIndices(indices);
 	obj_ = std::static_pointer_cast<ShapeObj>(sphere);
 
 }
@@ -257,7 +257,7 @@ Cylinder::Cylinder (size_t segments, size_t stacks, float radius, float height){
 	idx++;
 
 	for (size_t i = 0; i < segments; ++i){
-		float step = static_cast<float>( degToRad( (360.0f / segments) * i));
+		float step = static_cast<float>( DegToRad( (360.0f / segments) * i));
 		Vertex3 aa ( glm::vec3( sin(step) * radius, top, cos(step) * radius ));
 		cylinder->geometry[idx + i] = aa;
 	}
@@ -266,7 +266,7 @@ Cylinder::Cylinder (size_t segments, size_t stacks, float radius, float height){
 
 	for (size_t j = 1; j < stacks; ++j){
 		for (size_t i = 0; i < segments; ++i){
-			float step = static_cast<float>( degToRad( (360.0f / segments) * i));
+			float step = static_cast<float>( DegToRad( (360.0f / segments) * i));
 			Vertex3 aa ( glm::vec3( sin(step) * radius, height / stacks * j,  cos(step) * radius));
 			cylinder->geometry[idx + i] = aa;
 		}
@@ -276,7 +276,7 @@ Cylinder::Cylinder (size_t segments, size_t stacks, float radius, float height){
 	// Bottom Cap
 	
 	for (size_t i = 0; i < segments; ++i){
-		float step = static_cast<float>( degToRad( (360.0f / segments) * i));
+		float step = static_cast<float>( DegToRad( (360.0f / segments) * i));
 		Vertex3 aa ( glm::vec3( sin(step) * radius, bottom,  cos(step) * radius));
 		cylinder->geometry[idx + i] = aa;
 	}
@@ -348,7 +348,7 @@ Cylinder::Cylinder (size_t segments, size_t stacks, float radius, float height){
 	}
 
 
-	cylinder->geometry.setIndices(indices);
+	cylinder->geometry.SetIndices(indices);
 	obj_ = std::static_pointer_cast<ShapeObj>(cylinder);
 
 }
@@ -389,7 +389,7 @@ Spike::Spike (size_t segments, size_t stacks, float radius, float height){
 	idx++;
 
 	for (size_t i = 0; i < segments; ++i){
-		float step = static_cast<float>( degToRad( (360.0f / segments) * i));
+		float step = static_cast<float>( DegToRad( (360.0f / segments) * i));
 		Vertex3 aa ( glm::vec3( sin(step) * radius, bottom, cos(step) * radius ));
 		spike->geometry[idx + i] = aa;
 	}
@@ -403,7 +403,7 @@ Spike::Spike (size_t segments, size_t stacks, float radius, float height){
 
 
 		for (size_t i = 0; i < segments; ++i){
-			float step = static_cast<float>( degToRad( (360.0f / segments) * i));
+			float step = static_cast<float>( DegToRad( (360.0f / segments) * i));
 			Vertex3 aa ( glm::vec3( sin(step) * tr, th,  cos(step) * tr));
 			spike->geometry[idx + i] = aa;
 		}
@@ -481,7 +481,7 @@ Spike::Spike (size_t segments, size_t stacks, float radius, float height){
 	}
 
 
-	spike->geometry.setIndices(indices);
+	spike->geometry.SetIndices(indices);
 	obj_ = std::static_pointer_cast<ShapeObj>(spike);
 
 }

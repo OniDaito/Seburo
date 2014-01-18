@@ -24,9 +24,12 @@
 
 
 namespace s9{
-
-  // http://www.opengl.org/sdk/docs/man/xhtml/glTexImage2D.xml
-  // Lots of types :)
+  
+  /**
+   * The format of the colour component like RGB, RGBA etc 
+   * http://www.opengl.org/sdk/docs/man/xhtml/glTexImage2D.xml
+   * Lots of types :)
+   */
 
   typedef enum {
     RED,
@@ -38,6 +41,7 @@ namespace s9{
     // DEPTH ///\todo GL_DEPTH_COMPONENT and GL_DEPTH_STENCIL?
   }ColourComponent;
 
+  // The data-type for the image like float or byte
   typedef enum {
     UNSIGNED_BYTE,
     FLOAT
@@ -49,8 +53,8 @@ namespace s9{
     Image() {}
 
 
-    Image(const File &f) : obj_( std::shared_ptr<SharedObj> (new SharedObj())){
-      obj_->image_data = imageReference( f.path().c_str() );
+    Image(const File &f) : obj_( std::shared_ptr<SharedObject> (new SharedObject())){
+      obj_->image_data = ImageReference( f.final_path().c_str() );
     }
 
     byte_t * image_data() const { return obj_->image_data;}
@@ -65,21 +69,21 @@ namespace s9{
 
   protected:
 
-    byte_t * imageReference (const char *imageName);
+    byte_t * ImageReference (const char *imageName);
 
-    struct SharedObj{
-      SharedObj() {
+    struct SharedObject{
+      SharedObject() {
         image_data = nullptr;
       }
 
-      ~SharedObj() {
+      ~SharedObject() {
         delete[] image_data;
       }
 
       byte_t * image_data;
     };
 
-    std::shared_ptr<SharedObj> obj_;
+    std::shared_ptr<SharedObject> obj_;
 
     // Outside of the shared pointer as they are easy copy. Good idea?
     size_t width_, height_;

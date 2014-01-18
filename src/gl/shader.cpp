@@ -20,51 +20,51 @@ const static string vertex_delimiter = "##>VERTEX";
 const static string geometry_delimiter = "##>GEOMETRY";
 
 template<typename T, size_t N>
-void ShaderVisitor::sign( ShaderClause<T, N> &c) {
+void ShaderVisitor::Sign( ShaderClause<T, N> &c) {
 	assert(false);
 }
 
-void ShaderVisitor::sign( ShaderClause<glm::mat4, 1> &c) {
-	GLuint l = location(c.name.c_str());
+void ShaderVisitor::Sign( ShaderClause<glm::mat4, 1> &c) {
+	GLuint l = Location(c.name.c_str());
   glUniformMatrix4fv( l, 1, GL_FALSE, glm::value_ptr(c.data));
   CXGLERROR
 }
 
 
 template<size_t N>
-void ShaderVisitor::sign( ShaderClause<float, N> &c) {
-	GLuint l = location(c.name.c_str());
+void ShaderVisitor::Sign( ShaderClause<float, N> &c) {
+	GLuint l = Location(c.name.c_str());
   glUniform1fv( l, c.size, &c.data); ///\todo test this!
   CXGLERROR
 }
 
-void ShaderVisitor::sign( ShaderClause<float, 1> &c) {
-	GLuint l = location(c.name.c_str());
+void ShaderVisitor::Sign( ShaderClause<float, 1> &c) {
+	GLuint l = Location(c.name.c_str());
   glUniform1f( l, c.data);
   CXGLERROR
 }
 
-void ShaderVisitor::sign( ShaderClause<glm::vec4, 1> &c) {
-	GLuint l = location(c.name.c_str());
+void ShaderVisitor::Sign( ShaderClause<glm::vec4, 1> &c) {
+	GLuint l = Location(c.name.c_str());
   glUniform4f( l, c.data.x, c.data.y, c.data.z, c.data.w );
   CXGLERROR
 }
 
-void ShaderVisitor::sign( ShaderClause<glm::vec2, 1> &c) {
-	GLuint l = location(c.name.c_str());
+void ShaderVisitor::Sign( ShaderClause<glm::vec2, 1> &c) {
+	GLuint l = Location(c.name.c_str());
   glUniform2f( l, c.data.x, c.data.y );
   CXGLERROR
 }
 
 
-void ShaderVisitor::sign( ShaderClause<uint, 1> &c) {
-	GLuint l = location(c.name.c_str());
+void ShaderVisitor::Sign( ShaderClause<uint, 1> &c) {
+	GLuint l = Location(c.name.c_str());
   glUniform1ui( l, c.data );
   CXGLERROR
 }
 
-void ShaderVisitor::sign( ShaderClause<int, 1> &c) {
-	GLuint l = location(c.name.c_str());
+void ShaderVisitor::Sign( ShaderClause<int, 1> &c) {
+	GLuint l = Location(c.name.c_str());
   glUniform1i( l, c.data );
   CXGLERROR
 }
@@ -85,43 +85,43 @@ Shader::SharedObject::~SharedObject() {
 
 Shader::Shader(s9::File glsl) : obj_(shared_ptr<SharedObject>(new SharedObject())) {
 	string vs,fs,gs;
-	string raw = textFileRead(glsl.path());
+	string raw = TextFileRead(glsl.final_path());
 	bool error = false;
 
-	if (!parse(raw,vs,fs,gs)) return;
+	if (!Parse(raw,vs,fs,gs)) return;
 
-	if(!createShader(GL_VERTEX_SHADER, obj_->vs, vs)) return;
-	if(!createShader(GL_FRAGMENT_SHADER, obj_->fs, fs)) return;
+	if(!CreateShader(GL_VERTEX_SHADER, obj_->vs, vs)) return;
+	if(!CreateShader(GL_FRAGMENT_SHADER, obj_->fs, fs)) return;
 
 	if (gs.length() != 0){
-		if(!createShader(GL_GEOMETRY_SHADER, obj_->gs, gs)) return;
+		if(!CreateShader(GL_GEOMETRY_SHADER, obj_->gs, gs)) return;
 	}
 
-	createAndLink();
+	CreateAndLink();
 
 }
 Shader::Shader(s9::File vert, s9::File frag) : obj_(shared_ptr<SharedObject>(new SharedObject())){
 
-	string vs = textFileRead(vert.path());
-	string fs = textFileRead(frag.path());
+	string vs = TextFileRead(vert.final_path());
+	string fs = TextFileRead(frag.final_path());
 
-	if(!createShader(GL_VERTEX_SHADER, obj_->vs, vs)) return;
-	if(!createShader(GL_FRAGMENT_SHADER, obj_->fs, fs)) return;
+	if(!CreateShader(GL_VERTEX_SHADER, obj_->vs, vs)) return;
+	if(!CreateShader(GL_FRAGMENT_SHADER, obj_->fs, fs)) return;
 
-	createAndLink();
+	CreateAndLink();
 }
 
 
 Shader::Shader(s9::File vert, s9::File frag, s9::File geom) : obj_(shared_ptr<SharedObject>(new SharedObject())) {
-	string vs = textFileRead(vert.path());
-	string fs = textFileRead(frag.path());
-	string gs = textFileRead(geom.path());
+	string vs = TextFileRead(vert.final_path());
+	string fs = TextFileRead(frag.final_path());
+	string gs = TextFileRead(geom.final_path());
 
-	if(!createShader(GL_VERTEX_SHADER, obj_->vs, vs)) return;
-	if(!createShader(GL_FRAGMENT_SHADER, obj_->fs, fs)) return;
-	if(!createShader(GL_GEOMETRY_SHADER, obj_->gs, gs)) return;
+	if(!CreateShader(GL_VERTEX_SHADER, obj_->vs, vs)) return;
+	if(!CreateShader(GL_FRAGMENT_SHADER, obj_->fs, fs)) return;
+	if(!CreateShader(GL_GEOMETRY_SHADER, obj_->gs, gs)) return;
 
-	createAndLink();
+	CreateAndLink();
 }
 
 
@@ -129,28 +129,28 @@ Shader::Shader(std::string glsl_string)  : obj_(shared_ptr<SharedObject>(new Sha
 	string vs,fs,gs;
 	bool error = false;
 
-	if (!parse(glsl_string,vs,fs,gs)) return;
+	if (!Parse(glsl_string,vs,fs,gs)) return;
 
-	if(!createShader(GL_VERTEX_SHADER, obj_->vs, vs)) return;
-	if(!createShader(GL_FRAGMENT_SHADER, obj_->fs, fs)) return;
+	if(!CreateShader(GL_VERTEX_SHADER, obj_->vs, vs)) return;
+	if(!CreateShader(GL_FRAGMENT_SHADER, obj_->fs, fs)) return;
 
 	if (gs.length() != 0){
-		if(!createShader(GL_GEOMETRY_SHADER, obj_->gs, gs)) return;
+		if(!CreateShader(GL_GEOMETRY_SHADER, obj_->gs, gs)) return;
 	}
 
-	createAndLink();
+	CreateAndLink();
 }
 
 Shader::Shader(std::string vert_string, std::string frag_string)  : obj_(shared_ptr<SharedObject>(new SharedObject())) {
-	if(!createShader(GL_VERTEX_SHADER, obj_->vs, vert_string)) return;
-	if(!createShader(GL_FRAGMENT_SHADER, obj_->fs, frag_string)) return;
+	if(!CreateShader(GL_VERTEX_SHADER, obj_->vs, vert_string)) return;
+	if(!CreateShader(GL_FRAGMENT_SHADER, obj_->fs, frag_string)) return;
 }
 
 
 Shader::Shader(std::string vert_string, std::string frag_string, std::string geom_string)  : obj_(shared_ptr<SharedObject>(new SharedObject())) {
-	if(!createShader(GL_VERTEX_SHADER, obj_->vs, vert_string)) return;
-	if(!createShader(GL_FRAGMENT_SHADER, obj_->fs, frag_string)) return;
-	if(!createShader(GL_GEOMETRY_SHADER, obj_->gs, geom_string)) return;
+	if(!CreateShader(GL_VERTEX_SHADER, obj_->vs, vert_string)) return;
+	if(!CreateShader(GL_FRAGMENT_SHADER, obj_->fs, frag_string)) return;
+	if(!CreateShader(GL_GEOMETRY_SHADER, obj_->gs, geom_string)) return;
 }
 
 
@@ -159,7 +159,7 @@ Shader::Shader(std::string vert_string, std::string frag_string, std::string geo
  * or three shader components
  */
 
-bool Shader::parse(string &glsl, string &vs, string &fs, string &gs){
+bool Shader::Parse(string &glsl, string &vs, string &fs, string &gs){
 
 	size_t fpos = glsl.find(fragment_delimiter);
 	size_t vpos = glsl.find(vertex_delimiter);
@@ -238,7 +238,7 @@ bool Shader::parse(string &glsl, string &vs, string &fs, string &gs){
 }
 
 
-bool Shader::createShader(GLenum type, GLuint &handle, string &data){
+bool Shader::CreateShader(GLenum type, GLuint &handle, string &data){
 	handle = glCreateShader(type);
 	const char * tdata = data.c_str();
 	glShaderSource(handle, 1, &tdata, NULL);
@@ -282,7 +282,7 @@ bool Shader::createShader(GLenum type, GLuint &handle, string &data){
 
 }
 
-bool Shader::createAndLink() {
+bool Shader::CreateAndLink() {
 	obj_->program = glCreateProgram();
 
 	glAttachShader(obj_->program,obj_->vs);
@@ -317,33 +317,33 @@ bool Shader::createAndLink() {
  */
 
 Shader& Shader::s(const char * name, glm::vec3 v) {
-	GLuint l = location(name);
+	GLuint l = Location(name);
 	glUniform3f(l,v.x,v.y,v.z);
 	return *this;
 }
 
 Shader& Shader::s(const char * name, glm::vec4 v) {
-	GLuint l = location(name);
+	GLuint l = Location(name);
 	glUniform4f(l,v.x,v.y,v.z,v.w);
 	return *this;
 
 }
 
 Shader& Shader::s(const char * name, glm::mat4 v) {
-	GLuint l = location(name);
+	GLuint l = Location(name);
 	glUniformMatrix4fv(	l, 1, GL_FALSE, glm::value_ptr(v)); 
 	return *this;
 }
 
 
 Shader& Shader::s(const char * name, float f) {
-	GLuint l = location(name);
+	GLuint l = Location(name);
 	glUniform1f(l,f);
 	return *this;
 }
 
 Shader& Shader::s(const char * name, int i){
-	GLuint l = location(name);
+	GLuint l = Location(name);
 	glUniform1i(l,i);
 	return *this;
 }

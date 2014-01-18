@@ -41,17 +41,17 @@ void OpenNIApp::Init(){
     camera_.set_orthographic(false);
 
     quad_ = Quad(320,240);
-    node_depth_.add(quad_).add(shader_).add(ortho_camera_);
-    node_colour_.add(quad_).add(shader_).add(ortho_camera_);
+    node_depth_.Add(quad_).Add(shader_).Add(ortho_camera_);
+    node_colour_.Add(quad_).Add(shader_).Add(ortho_camera_);
 
 
     skeleton_base_ = Skeleton(OPENNI_SKELETON);
     skeleton_shape_ = SkeletonShape(skeleton_base_);
     skeleton_shape_.set_geometry_cast(WIREFRAME);
 
-    skeleton_base_.update();
+    skeleton_base_.Update();
 
-    skeleton_node_.add(shader_colour_).add(camera_).add(skeleton_shape_);
+    skeleton_node_.Add(shader_colour_).Add(camera_).Add(skeleton_shape_);
 
 }
 
@@ -62,16 +62,16 @@ void OpenNIApp::Init(){
  void OpenNIApp::Update(double_t dt) {
 
     if (openni_.ready()) {
-        skeleton_.update();
-        OpenNISkeleton::User user = skeleton_.user(1);
-        if (user.isTracked()){
+        skeleton_.Update();
+        OpenNISkeleton::User user = skeleton_.GetUserByID(1);
+        if (user.IsTracked()){
             
-            skeleton_base_.copyBoneRotations(user.skeleton());
+            skeleton_base_.CopyBoneRotations(user.skeleton());
             
             cout << skeleton_base_ << endl;
         } 
     }
-    skeleton_base_.update();
+    skeleton_base_.Update();
 }
 
 OpenNIApp::~OpenNIApp(){
@@ -90,27 +90,27 @@ OpenNIApp::~OpenNIApp(){
     glClearBufferfv(GL_COLOR, 0, &glm::vec4(0.5f, 0.6f, 0.6f, 1.0f)[0]);
     glClearBufferfv(GL_DEPTH, 0, &depth );
 
-    openni_.update(); // While thread safe, its best to put this immediately before the update_textures
-    openni_.update_textures();
+    openni_.Update(); // While thread safe, its best to put this immediately before the update_textures
+    openni_.UpdateTextures();
 
-    ortho_camera_.update(dt);
-    camera_.update(dt);
+    ortho_camera_.Update(dt);
+    camera_.Update(dt);
 
     model_ = glm::translate(glm::mat4(1.0f), glm::vec3(160,120,0));
     node_depth_.set_matrix(model_);
-    openni_.texture_depth().bind();
-    node_depth_.draw();
-    openni_.texture_depth().unbind();
+    openni_.texture_depth().Bind();
+    node_depth_.Draw();
+    openni_.texture_depth().Unbind();
 
     model_ = glm::translate(glm::mat4(1.0f), glm::vec3(480,120,0));
     node_colour_.set_matrix(model_);
-    openni_.texture_colour().bind();
-    node_colour_.draw();
-    openni_.texture_colour().unbind();
+    openni_.texture_colour().Bind();
+    node_colour_.Draw();
+    openni_.texture_colour().Unbind();
 
     //glm::mat4 skel_mat = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f,0.1f,0.1f));
     //skeleton_node_.set_matrix(skel_mat);
-    skeleton_node_.draw();
+    skeleton_node_.Draw();
 
     CXGLERROR
 }
@@ -129,9 +129,8 @@ OpenNIApp::~OpenNIApp(){
  */
 
  void OpenNIApp::ProcessEvent(ResizeEvent e, GLFWwindow* window){
-    glViewport(0, 0, e.w, e.h);
-    ortho_camera_.resize(e.w, e.h);
-    camera_.resize(e.w, e.h);
+    ortho_camera_.Resize(e.w, e.h);
+    camera_.Resize(e.w, e.h);
 }
 
 void OpenNIApp::ProcessEvent(KeyboardEvent e, GLFWwindow* window){

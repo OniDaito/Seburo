@@ -27,7 +27,7 @@ void TextureApp::Init(){
     camera_ = Camera(glm::vec3(0,0,-6.0f));
     unit_ = 0;
 
-    node_.add(quad_).add(shader_).add(texture_).add(camera_).add( gl::ShaderClause<int,1>("uTexSampler0", unit_) );
+    node_.Add(quad_).Add(shader_).Add(texture_).Add(camera_).Add( gl::ShaderClause<int,1>("uTexSampler0", unit_) );
 }
 
 
@@ -45,12 +45,12 @@ void TextureApp::Display(GLFWwindow* window, double_t dt){
     glClearBufferfv(GL_DEPTH, 0, &depth );
 
     rotation_ += 1.0;
-    camera_.update(dt);
+    camera_.Update(dt);
 
     glm::mat4 mat = glm::rotate(glm::mat4(1.0f), rotation_, glm::vec3(0.0f, 1.0f, 0.0f));
 
     node_.set_matrix(mat);
-    node_.draw();
+    node_.Draw();
 }
 
 
@@ -66,7 +66,7 @@ void TextureApp::ProcessEvent(MouseEvent e, GLFWwindow* window){}
  */
 
 void TextureApp::ProcessEvent(ResizeEvent e, GLFWwindow* window){
-    camera_.resize(e.w,e.h);
+    camera_.Resize(e.w,e.h);
 }
 
 void TextureApp::ProcessEvent(KeyboardEvent e, GLFWwindow* window){

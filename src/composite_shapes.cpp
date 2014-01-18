@@ -41,15 +41,15 @@ SkeletonShape::SkeletonShape(const Skeleton &s) : Node() {
   Node node_bones;
   Node node_orients;
 
-  node_bones.add(gl::ShaderClause<glm::vec4,1>("uColour", ss->bone_colour));
+  node_bones.Add(gl::ShaderClause<glm::vec4,1>("uColour", ss->bone_colour));
 
-  add(node_bones);
-  add(node_orients);
+  Add(node_bones);
+  Add(node_orients);
 
   // One Spike per bone
   for (Bone *b : ss->skeleton.bones() ){
     Node n (ss->spike);
-    node_bones.add(n);
+    node_bones.Add(n);
     ss->bones.push_back(n);
   }
 
@@ -57,29 +57,29 @@ SkeletonShape::SkeletonShape(const Skeleton &s) : Node() {
   for (Bone *b : ss->skeleton.bones() ){
     
     Node nx (ss->spike);
-    nx.add(gl::ShaderClause<glm::vec4,1>("uColour", ss->orient_colour_x));
+    nx.Add(gl::ShaderClause<glm::vec4,1>("uColour", ss->orient_colour_x));
 
     Node ny (ss->spike);
-    ny.add(gl::ShaderClause<glm::vec4,1>("uColour", ss->orient_colour_y));
+    ny.Add(gl::ShaderClause<glm::vec4,1>("uColour", ss->orient_colour_y));
 
     glm::mat4 mm = glm::toMat4(glm::angleAxis(-90.0f, glm::vec3(0.0f,0.0f,1.0f)));
     nx.set_matrix(mm);
 
     Node n;
-    n.add(nx);
-    n.add(ny);
+    n.Add(nx);
+    n.Add(ny);
 
-    node_orients.add(n);
+    node_orients.Add(n);
     ss->orients.push_back(n);
   }
  
-  ss->update();
+  ss->Update();
 
 }
 
 // Annoyingly we can't override directly so we go through the SharedObject 
 
-void SkeletonShape::SharedObject::update() {
+void SkeletonShape::SharedObject::Update() {
 
   // Assuming that bones stay in the same order as their spikes - not that it matters too much
   size_t idx = 0;
@@ -106,7 +106,7 @@ void SkeletonShape::SharedObject::update() {
         if (dp != -1 && dp != 1) {
           float angle = acos(dp);
           glm::vec3 cross = glm::normalize(glm::cross( axis3, dir));
-          glm::quat align_quat = glm::angleAxis(static_cast<float>(radToDeg(angle)),cross);
+          glm::quat align_quat = glm::angleAxis(static_cast<float>(RadToDeg(angle)),cross);
           glm::mat4 align_mat = glm::toMat4( align_quat);
           // translate, scale, rotate then move to final
           mm = glm::translate( glm::mat4(1.0f), mid_point) * align_mat * scale_mat;
@@ -155,5 +155,5 @@ void SkeletonShape::SharedObject::update() {
 
 
 
-  Node::SharedObject::update();
+  Node::SharedObject::Update();
 }

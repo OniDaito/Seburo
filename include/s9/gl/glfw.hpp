@@ -17,6 +17,8 @@
 #include <GLFW/glfw3.h>
 
 #include <thread>
+#include <ctime>
+#include <chrono>
 
 #ifdef _SEBURO_LINUX	
 #include <gtkmm.h>
@@ -90,6 +92,8 @@ namespace s9 {
 
 			static GLFWApp 						*pp_;
 			std::thread 							*update_thread_;
+			std::chrono::time_point< std::chrono::high_resolution_clock> 	thread_start_;
+
 			WindowEventor<GLFWwindow*> eventor_;
 			WindowApp<GLFWwindow*> 		&app_;
 

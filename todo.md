@@ -10,7 +10,8 @@ MD5 Issues
 4) Cx other peoples code (MD5 JS for example)
 5) Plot positions of the bones
 
-
+* Is CXSHARED the best thing? What does Cinder do?
+* XML Settings for now but json too would be good :)
 * Blend Modes and similar for nodes?
 * SharedObject Pointer needs to check itself and assert (preferably at compile time!)
 * Init method - seperate thread? that way we can load resources and display at the same time?
