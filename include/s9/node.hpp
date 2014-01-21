@@ -14,6 +14,7 @@
 #include "shapes.hpp"
 #include "camera.hpp"
 #include "skeleton.hpp"
+#include "material.hpp"
 #include "gl/texture.hpp"
 #include "gl/shader.hpp"
 #include "gl/utils.hpp"
@@ -49,6 +50,7 @@ namespace s9 {
 		SKIN_WEIGHTS,
 		SKELETON,
 		CAMERA,
+		MATERIAL,
 		TEXTURE,
 		MATRIX,
 		CLAUSE,
@@ -101,6 +103,9 @@ namespace s9 {
 	static bool CompareNodeBasePtr( NodeBasePtr l, NodeBasePtr r){
  		return (*l) < (*r);
  	} 
+
+
+ 	///\todo all these nodes are public so they could just be structs?
 
 	/**
 	 * NodeMinimal. All nodes have at least this level of decoration. This does not call
@@ -225,7 +230,6 @@ namespace s9 {
 		void Collect(gl::ShaderVisitor &v ) { 
 			v.Sign(clause_camera_projection_); 
 			v.Sign(clause_camera_view_); 
-
 		}
 
 		Camera			camera_;	
@@ -290,7 +294,7 @@ namespace s9 {
 		void Draw(GeometryPrimitive overide) { shader_.Bind(); 	}
 		void PostDraw() {shader_.Unbind(); bind_count_--; }
 		gl::Shader shader_;
-		static size_t bind_count_;
+		static size_t bind_count_; ///\todo can this really be static? there is only one but its per GL Context! ><
 	};
 
 	/**
@@ -307,6 +311,44 @@ namespace s9 {
 		void PostDraw() {texture_.Unbind(); }
 
 		gl::Texture texture_;
+	};
+
+
+	/**
+	 * Add a material to this node. We can have one per node at present 
+	 * As material is just a struct, we copy it locally and leave it as its,
+	 * unlikely to chage once set. This might change
+	 */
+
+	class NodeMaterial : public NodeBase {
+	public:
+		NodeMaterial(Material m) : NodeBase(MATERIAL), material_(m),
+		clause_ambient_("uMatAmbient", material_.ambient),
+		clause_diffuse_("uMatDiffuse", material_.diffuse),
+		clause_specular_("uMatSpecular", material_.specular),
+		clause_emissive_("uMatEmissive", material_.emissive),
+		clause_shine_("uMatShine",material_.shine) {  
+
+		};
+
+		void Collect(gl::ShaderVisitor &v ) { 
+			v.Sign(clause_ambient_); 
+			v.Sign(clause_diffuse_); 
+			v.Sign(clause_specular_);
+			v.Sign(clause_emissive_);
+			v.Sign(clause_shine_);
+		}
+		
+		std::string Tag() { return "Material"; }
+		Material material_;
+
+		gl::ShaderClause<glm::vec4,1> clause_ambient_; 
+		gl::ShaderClause<glm::vec4,1> clause_diffuse_; 
+		gl::ShaderClause<glm::vec4,1> clause_specular_; 
+		gl::ShaderClause<glm::vec4,1> clause_emissive_; 
+		
+		gl::ShaderClause<float_t,1> clause_shine_; 
+	
 	};
 	
   /**
@@ -331,6 +373,7 @@ namespace s9 {
 		Node& Add(Camera c);
 		Node& Add(Skeleton s);
 		Node& Add(gl::Texture t);
+		Node& Add(Material m); // Material is not a shared object, but a struct so we copy
 
 		// Removals
 		Node& Remove(Shape s);
@@ -340,6 +383,7 @@ namespace s9 {
 		Node& Remove(Camera c);
 		Node& Remove(Skeleton s);
 		Node& Remove(gl::Texture s);
+		Node& RemoveMaterial(); 
 
 		bool HasResponsibility(NodeResponsibility r) {
 			for (NodeBasePtr b : obj_->bases){

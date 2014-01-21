@@ -60,6 +60,7 @@ namespace s9 {
 			GLuint width() {return obj_->width; };
 			GLuint height() {return obj_->height; }
 
+			bool operator == (const FBO &ref) const { return this->obj_ == ref.obj_; }
 			typedef std::shared_ptr<SharedObject> FBO::*unspecified_bool_type;
     	operator unspecified_bool_type() const { return ( obj_.get() == 0 ) ? 0 : &FBO::obj_; }
     	void reset() { obj_.reset(); }

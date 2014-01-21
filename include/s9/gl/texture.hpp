@@ -23,8 +23,8 @@ namespace s9 {
   namespace gl {
 
     /*
-     * Represents a texture in OpenGL. Use GL_TEXTURE_RECTANGLE
-     *
+     * Represents a texture in OpenGL. Use GL_TEXTURE_RECTANGLE or GL_TEXTURE depending on power of 2
+     * \todo we need to think about this power of two stuff as it affects the shader
      */
 
     class SEBUROAPI Texture{
@@ -75,8 +75,10 @@ namespace s9 {
 
     
     public:
-
       bool operator == (const Texture &ref) const { return this->obj_ == ref.obj_; }
+      typedef std::shared_ptr<SharedObject> Texture::*unspecified_bool_type;
+      operator unspecified_bool_type() const { return ( obj_.get() == 0 ) ? 0 : &Texture::obj_; }
+      void reset() { obj_.reset(); }
 
     };
 
@@ -116,10 +118,11 @@ namespace s9 {
         GLvoid *pbo_memory;
         GLuint tex_buffer;
       
-
       };
 
 
+    public:
+      typedef std::shared_ptr<SharedObject> TextureStream::*unspecified_bool_type;
 
     };
 

@@ -19,16 +19,17 @@ using namespace s9::gl;
  */
 
 void ObjApp::Init(){
-    shader_ = Shader( s9::File("./shaders/3/basic_mesh.vert"),  s9::File("./shaders/3/quad.frag"));
+    shader_ = Shader( s9::File("./shaders/3/basic_mesh.vert"),  s9::File("./shaders/3/textured_mesh.frag"));
 
     camera_= Camera( glm::vec3(0,0,10.0f), glm::vec3(0,0,0.0f));
     node_.Add(shader_).Add(camera_);
     camera_.set_field(55.0f);
 
-    obj_mesh_ = ObjMesh(s9::File("./data/suzanne.obj")); 
+    obj_mesh_ = ObjMesh(s9::File("./data/test.obj")); 
     node_.Add(obj_mesh_);
 
     rotation_ = 0.1f;
+
 }
 
 void ObjApp::Update(double_t dt) {
@@ -48,7 +49,10 @@ void ObjApp::Display(GLFWwindow* window, double_t dt){
 
     rotation_ += 1.0f;
    
-    glm::mat4 Model = glm::rotate(glm::mat4(1.0f), rotation_, glm::vec3(0.0f, 1.0f, 0.0f));
+    glm::mat4 Model = glm::rotate(glm::mat4(1.0f), rotation_, glm::vec3(1.0f, 0.0f, 0.0f));
+    Model = glm::rotate(Model, rotation_, glm::vec3(0.0f, 1.0f, 0.0f));
+    Model = glm::rotate(Model, rotation_, glm::vec3(0.0f, 0.0f, 1.0f));
+
     node_.set_matrix(Model);
 
     node_.Draw();

@@ -18,20 +18,28 @@
 
 namespace s9 {
 
-    class ObjMesh  : public s9::Node {
-    public:
-      ObjMesh(){}
-      ObjMesh (const s9::File &file);
+  class ObjMesh  : public s9::Node {
+  public:
+    ObjMesh(){}
+    ObjMesh (const s9::File &file);
 
-    protected:
+  protected:
 
-      void Parse(const s9::File &file);
+    void Parse(const s9::File &file);
 
-      // All these can be copied easily so work as shared objects
-      // Note, this class extends a shared object so the obj_ pointer is set to that
-
-    };
-
+    void AddObjMesh( std::vector<glm::vec3> &vertices,
+      std::vector<glm::vec3> &normals,
+      std::vector<glm::vec2> &texcoords,
+      std::vector<IndicesType> &indices,
+      std::vector<IndicesType> &texindices,
+      std::vector<IndicesType> &normalindices,
+      std::vector<Material> &materials,
+      std::vector<gl::Texture> &textures,
+      int mesh_material,
+      int mesh_texture,
+      size_t &vstart,
+      size_t &tstart);
+  };
 }
 
 

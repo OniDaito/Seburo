@@ -3,6 +3,7 @@ precision highp float;
 
 out vec4 vVertexPosition;
 out vec4 vColour;
+out vec2 vTexCoord;
 
 layout (location = 0) in vec3 aVertPosition; 
 layout (location = 1) in vec3 aVertNormal;
@@ -19,4 +20,5 @@ void main() {
   vVertexPosition = uProjectionMatrix * uViewMatrix * uModelMatrix * vec4(aVertPosition,1.0f);
   gl_Position = vVertexPosition;
   vColour = vec4(aVertColour,1.0f);
+  vTexCoord = aVertTexCoord;
 } 

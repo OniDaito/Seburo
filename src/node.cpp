@@ -221,6 +221,30 @@ Node& Node::Remove(Camera s) {
 
 
 
+/// Add a material to this node. This is by reference as Material is just a struct
+Node& Node::Add(Material m) {
+	if (obj_ == nullptr) _init();
+	if ( GetBase(MATERIAL) == nullptr ){
+		obj_->bases.push_front( NodeBasePtr(new NodeMaterial(m)));
+		obj_->bases.sort(CompareNodeBasePtr);
+	} else {
+		cerr << "SEBURO Node - Trying to add a Material to a node when one already exists." << endl;
+	}
+	return *this;
+}
+
+
+/// Remove the material from this node. sa there is only one, passed by value, we dont need a parameter
+Node& Node::RemoveMaterial() {
+	NodeBasePtr t =  GetBase(MATERIAL);
+	if (t != nullptr){
+		Remove(t);
+	}
+	return *this;
+}
+
+
+
 /// Add the drawable for this node 
 Node& Node::Add(Shape s) {
 	if (obj_ == nullptr) _init();
