@@ -16,6 +16,6 @@ void main() {
   //vec2 texsize = textureSize(uTexSampler0); 
 	//vec4 texcolour = texture(uTexSampler0,vTexCoord * texsize);
 
-  vec4 texcolour = texture(uTexSampler0,vTexCoord );
+  vec4 texcolour = texture(uTexSampler0, vTexCoord);
 	fragColour = vec4(texcolour.rgb,1.0);
 }

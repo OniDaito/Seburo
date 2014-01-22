@@ -91,13 +91,15 @@ namespace s9{
 
           case POINTS:
             type = GL_POINTS;
-            glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
+        //    glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
             break;
 
-          case WIREFRAME:
+         /* case WIREFRAME:
             type = GL_TRIANGLES;
             glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-            break;
+            break;*/
+
+            ///\todo GL_POLYGON_MODE should not be set here. Should be set by user
 
           default:
             assert(false);
@@ -116,8 +118,8 @@ namespace s9{
       /// Template functions for the brewing of Geometry
       ///\todo allow rebrewing with the same size 
 
-      template< typename VertexType, typename FaceType, typename AllocationPolicy> 
-      void Brew( GeometryT<VertexType, FaceType, AllocationPolicy> &g, BrewFlags b=BrewFlagsDefault) {
+      template< typename VertexType, typename FaceType> 
+      void Brew( GeometryT<VertexType, FaceType, AllocationPolicyNew> &g, BrewFlags b=BrewFlagsDefault) {
         
         glGenVertexArrays(1, &(vao_));
 
@@ -142,6 +144,36 @@ namespace s9{
         brewed_ = true;
 
       }
+
+      /// Partial specialization for Shared Geometry
+      template< typename VertexType, typename FaceType> 
+      void Brew( GeometryT<VertexType, FaceType, AllocationPolicyShared> &g, Drawable &shared, BrewFlags b=BrewFlagsDefault) {
+        
+        glGenVertexArrays(1, &(vao_));
+
+        if (b.interleaved || true){
+          handles_.push_back(0);
+        } else {
+          assert(false);
+        }
+        
+        /// This is shared so it has to have indices
+        handles_.push_back(0);
+        
+        glGenBuffers(handles_.size(), &(handles_[0]));
+
+        // Set handles_[0] to the same number as out shared Drawable
+        assert(shared.handles_[0] != 0); // Must already be brewed!
+        handles_[0] = shared.handles_[0];
+
+        AllocateIndices(g,b);
+        SetPointers(g,b);
+
+        brewed_ = true;
+
+      }
+      
+
       
       /// Basic destruction of the buffers created
       ~Drawable() {
@@ -205,6 +237,17 @@ namespace s9{
 
       }
 
+      template< typename VertexType, typename FaceType> 
+      void AllocateIndices(GeometryT<VertexType, FaceType, AllocationPolicyShared> &g, BrewFlags b) {
+
+        // Shared Geometry so just add the indices which are on handles_[1]
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, handles_[1]);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, g.size_indices() * sizeof(IndicesType), &(g.indices()[0]), b.access);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+        
+      }
+
+
       template< typename AllocationPolicy> 
       void Allocate(GeometryT<Vertex4, Face4, AllocationPolicy> &g, BrewFlags b) {
 
@@ -244,7 +287,7 @@ namespace s9{
         assert(false);
       }
 
-      template<typename AllocationPolicy> 
+      template< typename AllocationPolicy> 
       void SetPointers(GeometryT<Vertex4, Face4, AllocationPolicy> &g, BrewFlags b) {
 
         Bind();
@@ -311,9 +354,48 @@ namespace s9{
         }
 
         Unbind();
+      }
+
+      // Template function that fires an error if shared geometry type is not supported
+      template<typename VertexType, typename FaceType>
+      void SetPointers(GeometryT<VertexType, FaceType, AllocationPolicyShared> &g, BrewFlags b) {
+        std::cerr << "SEBURO Drawable - Only Vertex3 Face3 shared geometry is supported." << std::endl;
+        assert(false);
+      }
+
+
+      // Shared Geometry Set Pointers
+      void SetPointers(GeometryT<Vertex3, Face3, AllocationPolicyShared> &g, BrewFlags b) {
+
+        Bind();
+
+        if (b.interleaved) {
+
+          glBindBuffer(GL_ARRAY_BUFFER, handles_[0]);
+          glEnableVertexAttribArray(0); // Pos
+          glEnableVertexAttribArray(1); // Normal
+          glEnableVertexAttribArray(2); // colour
+          glEnableVertexAttribArray(3); // texture
+          glEnableVertexAttribArray(4); // tangent
+
+          IndicesType idx = 0;
+
+          glVertexAttribPointer(idx++,3, GL_FLOAT, GL_FALSE, sizeof(Vertex3), reinterpret_cast<void*>(offsetof( Vertex3, p)) );
+          glVertexAttribPointer(idx++,3, GL_FLOAT, GL_FALSE, sizeof(Vertex3), reinterpret_cast<void*>(offsetof( Vertex3, n)) );
+          glVertexAttribPointer(idx++,3, GL_FLOAT, GL_FALSE, sizeof(Vertex3), reinterpret_cast<void*>(offsetof( Vertex3, c)) );
+          glVertexAttribPointer(idx++,2, GL_FLOAT, GL_FALSE, sizeof(Vertex3), reinterpret_cast<void*>(offsetof( Vertex3, u)) );
+          glVertexAttribPointer(idx++,3, GL_FLOAT, GL_FALSE, sizeof(Vertex3), reinterpret_cast<void*>(offsetof( Vertex3, t)) );
+
+          // There are always indices in shared mode
+          glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, handles_[1]);
+
+        }
+
+        Unbind();
 
     
       }
+
 
       ///\todo we should, eventually, match these layout numbers up so we can just add bits to our uber shader easily
       template<typename AllocationPolicy>

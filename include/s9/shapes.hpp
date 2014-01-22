@@ -47,7 +47,7 @@ namespace s9 {
 		
 		virtual void Draw(GeometryPrimitive g = TRIANGLES) { CXSHARED obj_->Draw(g); };
 		virtual void Brew(gl::BrewFlags b=gl::BrewFlagsDefault) { CXSHARED  obj_->Brew(b);  };
-		virtual bool brewed() { if(obj_ != nullptr) return obj_->brewed(); return false;}
+		virtual bool brewed() { if(obj_ != nullptr) return obj_->brewed(); return false;} //\todo should be IsBrewed()
 		virtual void Init() {};
 
 		const Shape& operator= (const Shape &s ) { 
@@ -58,6 +58,7 @@ namespace s9 {
 		inline bool operator==(const Shape& lhs){ return lhs.obj_ == obj_;  }
 		inline bool operator!=(const Shape& lhs){return lhs.obj_ != obj_;}
 
+    const ShapeObj& obj() const {return *obj_; }
 
 
 	protected:
@@ -96,7 +97,7 @@ namespace s9 {
 		Quad() {};
 		Quad(float w, float h);
 
-		const GeometryT<Vertex4, Face4, AllocationPolicyNew>* geometry();
+		GeometryT<Vertex4, Face4, AllocationPolicyNew>* geometry();
 
 	};
 
@@ -122,7 +123,7 @@ namespace s9 {
 		Cuboid() {};
 		Cuboid(float w, float h, float d);
 
-		const GeometryT<Vertex4, Face4, AllocationPolicyNew>* geometry();
+		GeometryT<Vertex4, Face4, AllocationPolicyNew>* geometry();
 	
 	};
 
@@ -132,7 +133,7 @@ namespace s9 {
    */ 
 
   struct ShapeObjSphere: public ShapeObj {
-    ShapeObjSphere(size_t num_verts, size_t num_indices) {
+    ShapeObjSphere(IndicesType num_verts, size_t num_indices) {
       geometry = GeometryT<Vertex4, Face4, AllocationPolicyNew>(num_verts,num_indices,TRIANGLES);
     }
 
@@ -150,7 +151,7 @@ namespace s9 {
     Sphere() {};
     Sphere(float_t radius, size_t segments);
 
-    const GeometryT<Vertex4, Face4, AllocationPolicyNew>* geometry();
+    GeometryT<Vertex4, Face4, AllocationPolicyNew>* geometry();
   
   };
 
@@ -161,7 +162,7 @@ namespace s9 {
 
   struct ShapeObjTriMesh : public ShapeObj {
 
-    ShapeObjTriMesh(size_t num_verts, size_t num_indices) {
+    ShapeObjTriMesh(IndicesType num_verts, size_t num_indices) {
       geometry = GeometryT<Vertex3, Face3, AllocationPolicyNew>(num_verts, num_indices, TRIANGLES);
     }
 
@@ -181,9 +182,9 @@ namespace s9 {
   public:
 
     TriMesh() {};
-    TriMesh(size_t num_verts, size_t num_indices);
+    TriMesh(IndicesType num_verts, size_t num_indices);
 
-    const GeometryT<Vertex3, Face3, AllocationPolicyNew>* geometry();
+    GeometryT<Vertex3, Face3, AllocationPolicyNew>* geometry();
 
   };
 
@@ -193,7 +194,7 @@ namespace s9 {
 
   struct ShapeObjTriMeshSkinned : public ShapeObj {
 
-    ShapeObjTriMeshSkinned(size_t num_verts, size_t num_indices) {
+    ShapeObjTriMeshSkinned(IndicesType num_verts, size_t num_indices) {
       geometry = GeometryT<Vertex3Skin, Face3, AllocationPolicyNew>(num_verts, num_indices, TRIANGLES);
     }
 
@@ -213,11 +214,85 @@ namespace s9 {
   public:
 
     TriMeshSkinned() {};
-    TriMeshSkinned(size_t num_verts, size_t num_indices);
+    TriMeshSkinned(IndicesType num_verts, size_t num_indices);
 
-    const GeometryT<Vertex3Skin, Face3, AllocationPolicyNew>* geometry();
+    GeometryT<Vertex3Skin, Face3, AllocationPolicyNew>* geometry();
 
   };
+
+
+  /**
+   * A Soup of non-indexed vertices. Basically just a place-holder for flat geometry. No Faces, just a
+   * vertex list
+   */
+
+
+   struct ShapeObjVertexSoup : public ShapeObj {
+
+    ShapeObjVertexSoup(IndicesType num_verts ) {
+      geometry = GeometryT<Vertex3, Face3, AllocationPolicyNew>(num_verts, 0, NONE);
+    }
+
+    void Brew (gl::BrewFlags b) { gl_drawable.Brew(geometry, b); }
+    void Draw (GeometryPrimitive g = TRIANGLES) { gl_drawable.Draw(geometry, g); }
+
+    GeometryT<Vertex3, Face3, AllocationPolicyNew> geometry;
+      
+  };
+
+  class SEBUROAPI VertexSoup : public Shape {
+
+  public:
+
+    VertexSoup() {};
+    VertexSoup(IndicesType num_verts);
+
+    GeometryT<Vertex3, Face3, AllocationPolicyNew>* geometry();
+
+  };
+
+
+  /**
+   * Shared Triangle Mesh. This is basically a set of indices, grouped as triangles, that can "look" 
+   * at another array of vertices on the graphics card to get their data. At present, just VertexSoups are 
+   * allowed.
+   */
+
+    struct ShapeObjSharedTriMesh : public ShapeObj {
+
+    ShapeObjSharedTriMesh( const ShapeObj &sp, size_t num_indices ) : 
+      geometry(sp.geometry.GetSharableVertices(), num_indices, TRIANGLES ), shared(sp) {
+
+    }
+
+    void Brew (gl::BrewFlags b) {
+      // Shared Drawable must be brewed before we brew the objects that depend on it. 
+      if (!shared.brewed())
+        shared.Brew(b);
+
+      gl_drawable.Brew(geometry, shared.gl_drawable, b); 
+    }
+
+    void Draw (GeometryPrimitive g = TRIANGLES) { gl_drawable.Draw(geometry, g); }
+
+    GeometryT<Vertex3, Face3, AllocationPolicyShared> geometry;
+    ShapeObj &shared;
+      
+  };
+
+  /// So far, the only shape that shares data is a set of Triangles, SharedTriMesh
+
+  class SEBUROAPI SharedTriMesh : public Shape {
+
+  public:
+    SharedTriMesh() {};
+    SharedTriMesh(VertexSoup &shared, IndicesType num_indices);
+
+    GeometryT<Vertex3, Face3, AllocationPolicyShared>* geometry();
+
+  };
+
+
 
 
   /**
@@ -242,7 +317,7 @@ namespace s9 {
     Cylinder() {};
     Cylinder(size_t segments, size_t stacks, float diameter, float height);
 
-    const GeometryT<Vertex3, Face3, AllocationPolicyNew>* geometry();
+    GeometryT<Vertex3, Face3, AllocationPolicyNew>* geometry();
   
   };
 
@@ -268,7 +343,7 @@ namespace s9 {
     Spike() {};
     Spike(size_t segments, size_t stacks, float radius, float height);
 
-    const GeometryT<Vertex3, Face3, AllocationPolicyNew>* geometry();
+    GeometryT<Vertex3, Face3, AllocationPolicyNew>* geometry();
   
   };
 

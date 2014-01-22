@@ -28,8 +28,6 @@ namespace s9 {
 		POINTS,
     LINES,
     LINE_LOOP,
-    INVISIBLE,
-    WIREFRAME,
     NONE
 	}GeometryPrimitive;
 
@@ -47,8 +45,8 @@ namespace s9 {
 	class AllocationPolicyNew {
 	protected:
 		template<typename VertexType>
-   	bool AllocateVertices(std::unique_ptr<VertexType[]> &vp, IndicesType size) const {
-		  vp = std::unique_ptr<VertexType[]>(new VertexType[size]);
+   	bool AllocateVertices(std::shared_ptr< std::vector<VertexType> >  &vp, IndicesType size) const {
+		  vp =std::shared_ptr<std::vector<VertexType> > (new std::vector<VertexType>(size));
       return true;
   	}
 
@@ -63,6 +61,13 @@ namespace s9 {
   	bool AllocateFaces(std::unique_ptr<FaceType[]> &fp, IndicesType size_faces, GeometryPrimitive type ) const {
   		
   		switch(type){
+        case NONE:
+        case POINTS:
+          assert(size_faces == 0);
+          fp = nullptr;
+          return true;
+        break;
+
         case LINE_LOOP:
   			case TRIANGLES: 
   				assert(size_faces % 3 == 0);
@@ -85,11 +90,6 @@ namespace s9 {
         }
   			break;
 
-  			case POINTS: {
-  				fp = nullptr;
-  				return false;
-        }
-  			break;
 
   			default: {
   				assert(false && "SEBURO ASSERT - Must provide a type for geometry indexing.");
@@ -99,10 +99,23 @@ namespace s9 {
   		};
 
       return false;
-
   	}
 
 	};
+
+  /**
+   * The Shared Allocation Policy allows the vertices to be shared between geometries with their
+   * own unique indices. We simply pass in the shared pointer from another geometry.
+   */
+
+  class AllocationPolicyShared : public AllocationPolicyNew {
+  protected:
+    template<typename VertexType>
+    bool AllocateVertices(std::shared_ptr< std::vector<VertexType> >  &vp, std::shared_ptr< std::vector<VertexType> >  &np ) const {
+      vp = np;
+      return true;
+    }
+  };
 
 
 	/**
@@ -128,27 +141,11 @@ namespace s9 {
 			prim_type_ = prim_type;
 		};
 
-
-   /* GeometryT (const GeometryT& g ){
-      
-      size_indices_ = g.size_indices_;
-      size_vertices_ = g.size_vertices_;
-      size_faces_ = g.size_faces_;
-      vertices_ = g.vertices_;
-      faces_ = g.faces_;
-      indexed_ = g.indexed_;
-
-    }
-
-    GeometryT & operator= ( const GeometryT & g ){
-      size_indices_ = g.size_indices_;
-      size_vertices_ = g.size_vertices_;
-      size_faces_ = g.size_faces_;
-      vertices_ =  std::unique_ptr<VertexType[]> ( g.vertices() );
-      faces_ = std::move(g.faces_);
-      indexed_ = std::move(g.indexed_);
-      return *this;
-    }*/
+    GeometryT<VertexType, FaceType, AllocationPolicyNew>(std::shared_ptr< std::vector<VertexType> >  &sp, IndicesType num_indices, GeometryPrimitive prim_type ) {
+      indexed_ = false;
+      Allocate(sp, num_indices, prim_type );
+      prim_type_ = prim_type;
+    };
 
     /**
      * operator[] will return the vertex at the position given, ignoring indices
@@ -156,7 +153,7 @@ namespace s9 {
 
     VertexType& operator[](IndicesType idx) {
       assert(idx >= 0 && idx < size_vertices_);
-      return vertices_[idx];
+      return (*vertices_)[idx];
   
     }
     
@@ -184,9 +181,11 @@ namespace s9 {
     ///\todo one day, lets not use basic pointers? - How does using pointers affect allocation policy?
 
     const std::unique_ptr<IndicesType[]>&  indices() const { return indices_; }
-    const std::unique_ptr<VertexType[]>&  vertices() const { return vertices_; }
+    std::vector<VertexType> &  vertices() const { return *vertices_; } ///\todo potentially cheeky?
     const std::unique_ptr<FaceType[]>&    faces() const { return faces_; }
 
+    /// Return the shared pointer to the vertices so we can share them with other geometry
+    std::shared_ptr<std::vector<VertexType> >&  GetSharableVertices() { return vertices_; }
 
     bool indexed() {return indexed_; }
 
@@ -201,6 +200,7 @@ namespace s9 {
 		using AllocationPolicy::AllocateIndices;
 		using AllocationPolicy::AllocateFaces;
 
+    // Allocation without shared
 		void Allocate(IndicesType num_verts, IndicesType num_indices, GeometryPrimitive prim_type) {
 			size_indices_= num_indices;
 			size_vertices_ = num_verts;
@@ -220,6 +220,14 @@ namespace s9 {
 
 		}
 
+    // Allocation with the Shared Policy
+
+    void Allocate(std::shared_ptr<std::vector<VertexType> > &sp, IndicesType num_indices, GeometryPrimitive prim_type) {
+
+    }
+
+
+
 		// Plain-old-data - no need to be shared_obj
 		// Allocated using the allocation policy
     // Defaults are set here too!
@@ -234,7 +242,7 @@ namespace s9 {
 		IndicesType 		size_indices_   = 0;
 		IndicesType			size_vertices_  = 0;
 		IndicesType			size_faces_     = 0;
-		std::unique_ptr<VertexType[]>	  vertices_       = nullptr;
+		std::shared_ptr<std::vector<VertexType> >	  vertices_  = nullptr;
 		std::unique_ptr<IndicesType[]>	indices_        = nullptr;
 
 		bool indexed_ = false;
@@ -244,6 +252,9 @@ namespace s9 {
 		std::unique_ptr<FaceType[]> faces_              = nullptr;
 
 	};
+
+
+ 
 
 }
 

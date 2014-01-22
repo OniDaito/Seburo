@@ -27,19 +27,50 @@ namespace s9 {
 
     void Parse(const s9::File &file);
 
-    void AddObjMesh( std::vector<glm::vec3> &vertices,
-      std::vector<glm::vec3> &normals,
-      std::vector<glm::vec2> &texcoords,
-      std::vector<IndicesType> &indices,
-      std::vector<IndicesType> &texindices,
-      std::vector<IndicesType> &normalindices,
-      std::vector<Material> &materials,
-      std::vector<gl::Texture> &textures,
-      int mesh_material,
-      int mesh_texture,
-      size_t &vstart,
-      size_t &tstart);
+    void CreateNodes();
+  
+    /**
+     * A Struct that holds all the information on a mesh-in-potentia, split by material. 
+     * It also holds any additional vertices, normals etc that we need to create
+     */
+
+
+    struct TempMesh {
+
+      TempMesh() {  }
+      
+      // Extra data, created when we need to duplicate. Added on at the end
+      std::vector<glm::vec3> vertices;
+      std::vector<glm::vec3> normals;
+      std::vector<glm::vec2> texcoords;
+
+      // Sizes of the data we would be storing if we werent storing it globally
+      IndicesType vertices_size, texcoords_size, normals_size;
+
+
+      std::vector<IndicesType> indices; // assume triangles for now
+      std::vector<IndicesType> texindices;
+      std::vector<IndicesType> normalindices;
+
+      Material material;
+      gl::Texture texture;
+
+      std::string tag;
+
+  
+      
+    };
+
+    std::vector<glm::vec3> vertices;
+    std::vector<glm::vec3> normals;
+    std::vector<glm::vec2> texcoords;
+
+    std::vector<TempMesh> temp_;
+    bool using_materials_;
+
   };
+
+
 }
 
 
