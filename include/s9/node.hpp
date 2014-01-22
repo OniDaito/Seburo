@@ -67,7 +67,7 @@ namespace s9 {
 		NodeBase(NodeResponsibility r) { responsible_ = r; }
 	
 		/// Called by the Node's draw method and sets up the shader / geometry
-		virtual void 					Draw(GeometryPrimitive overide) { }
+		virtual void 					Draw() { }
 
 		/// Called before draw and collect
 		virtual void 					PreDraw() {}
@@ -252,10 +252,10 @@ namespace s9 {
 	public:
 		NodeShape (Shape<VertexType,FaceType,AllocatonType> s) : NodeBase(GEOMETRY), shape_(s) { };
 
-		void Draw(GeometryPrimitive overide){
+		void Draw(){
 
 			if (shape_.brewed()) {
-				shape_.Draw(overide);
+				shape_.Draw();
 			}
 			else{
 				shape_.Brew(); ///\todo allow passing of flags
@@ -302,7 +302,7 @@ namespace s9 {
 		NodeShader(gl::Shader s) : NodeBase(SHADER), shader_(s) {  };
 		std::string Tag() { return "Shader"; }
 		void PreDraw(){ bind_count_++; }
-		void Draw(GeometryPrimitive overide) { shader_.Bind(); 	}
+		void Draw() { shader_.Bind(); 	}
 		void PostDraw() {shader_.Unbind(); bind_count_--; }
 		gl::Shader shader_;
 		static size_t bind_count_; ///\todo can this really be static? there is only one but its per GL Context! ><
@@ -318,7 +318,7 @@ namespace s9 {
 	public:
 		NodeTexture(gl::Texture t) : NodeBase(TEXTURE), texture_(t) {  };
 		std::string Tag() { return "Texture"; }
-		void Draw(GeometryPrimitive overide) { texture_.Bind(); }
+		void Draw() { texture_.Bind(); }
 		void PostDraw() {texture_.Unbind(); }
 
 		gl::Texture texture_;
@@ -452,7 +452,7 @@ namespace s9 {
 
 
 		Node& RemoveChild(Node p);
-		Node& Draw(GeometryPrimitive gp = NONE);
+		Node& Draw();
 		Node&	Clear();
 
 		std::vector<Node> & Children() { if (obj_ == nullptr) assert(false); return obj_->children; }

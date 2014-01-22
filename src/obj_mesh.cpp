@@ -16,55 +16,18 @@ ObjMesh::ObjMesh(const s9::File &file) : Node() {
   Parse(file);
 }
 
-void ObjMesh::CreateNodes() {
-
-  // We should have a set of TempMesh at this point - one for each material
-/*
-
-  TriMesh trimesh = TriMesh(temp_.vertices.size(), temp_.indices.size());
-  const GeometryT<Vertex3, Face3, AllocationPolicyNew> *geometry = trimesh.geometry();
-
-  for (size_t i = 0; i < temp_.vertices.size(); ++i){
-    geometry->vertices()[i].p = temp_.vertices[i];
-    
-    if (temp_.texindices.size() > 0){
-      if (temp_.texindices[i] < temp_.texcoords.size() )
-        geometry->vertices()[i].u = temp_.texcoords[ temp_.texindices[i] ];
-    }
-
-    if (temp_.normalindices.size() > 0) {
-      if (temp_.normalindices[i] < temp_.normals.size() )
-        geometry->vertices()[i].n = temp_.normals[ temp_.normalindices[i] ];
-    }
-  }
-
-  geometry->SetIndices(temp_.indices.data());
-
-  Node mesh_node;
-  mesh_node.Add(trimesh);
-
-
-  Add(mesh_node);
-
-  vstart = temp_.vertices.size();
-  tstart = temp_.texcoords.size();
-
-  // Clear out temp mesh structure
-  temp_.vertices.clear();
-  temp_.texcoords.clear();
-  temp_.normals.clear();
-  temp_.indices.clear();
-  temp_.texindices.clear();
-  temp_.normalindices.clear();*/
-
-}
-
-
-
-
 
 /// Parse the Obj File. At the moment, only accept triangulated mesh files
 void ObjMesh::Parse(const s9::File &file) {
+
+  // Temporary locations for the various information
+  std::set<ObjVert> uniques;
+  std::vector<IndicesType> positions;
+  std::vector<ObjFace> faces;
+
+  std::vector<glm::vec3> vertices;
+  std::vector<glm::vec3> normals;
+  std::vector<glm::vec2> texcoords;
 
   std::ifstream ifs;
   ifs.open (file.final_path(), std::ifstream::in);
@@ -78,6 +41,8 @@ void ObjMesh::Parse(const s9::File &file) {
   }
 
  
+  // Create our Shared Geometry
+
   ///\todo can we make some guess as to how big our global vertices vectors and such need to be?
 
   // read the lines
@@ -251,84 +216,134 @@ void ObjMesh::Parse(const s9::File &file) {
       vector<string> verts{istream_iterator<string>{v},
          istream_iterator<string>{}};
 
+    
+
       if (verts.size() == 3) {
+
+        ObjFace new_face;
+
         // This is a triangle so do the normal thing
         for (size_t i = 0; i < verts.size(); ++i){
 
           // Split on / if there is any
           vector<string> tokens = SplitStringChars(verts[i],"/");
-          
-          // We subtract the offsets of the current mesh as OBJ files index into one master array
-          // whereas we want to index into seperate arrays per temp mesh 
-        /*  IndicesType tx = FromStringS9<IndicesType>(tokens[0]);
-
-          // We have a vertex shared between two faces in different meshes so we must duplicate and add a new one
-          if (tx < current_mesh->offset_vert){ ///\todo < or <= ?
-            current_mesh->vertices.push_back(vertices[tx]);
-            current_mesh->indices.push_back(current_mesh->vertices.size() + current_mesh->vertices.size() - 2 );
-          } else 
-            current_mesh->indices.push_back( tx - 1 - current_mesh->offset_vert);
-            
+          // Create a new vertex...
+          ObjVert new_vertex;
+          new_vertex.p = FromStringS9<IndicesType>(tokens[0]) - 1;
+        
           if (tokens.size() > 1){
             if (tokens[1].length() > 0)
-              current_mesh->texindices.push_back( FromStringS9<IndicesType>(tokens[1]) - 1 - current_mesh->offset_tex);
+              new_vertex.t =  FromStringS9<IndicesType>(tokens[1]) - 1;
             if (tokens.size() > 2)
-              current_mesh->normalindices.push_back(FromStringS9<IndicesType>(tokens[2]) - 1 - current_mesh->offset_norm);
-          } */
+              new_vertex.n = FromStringS9<IndicesType>(tokens[2]) - 1;
+          } 
+
+          
+          set<ObjVert>::iterator it = (uniques.insert(new_vertex)).first;
+          
+
+          // it now points to where we need so lets add it to a face
+          new_face.vertices[i] = it;
         }
+
+        faces.push_back(new_face);
+
       } else if (verts.size() == 4){
         // We need to triangulate as this is a silly quad that we dont like ><
 
-        vector<IndicesType> tempi;
-        vector<IndicesType> tempn;
-        vector<IndicesType> tempt;
+        ObjFace new_face_0;
+        ObjFace new_face_1;
 
-        for (size_t i = 0; i < verts.size(); ++i){
+        ObjVert new_vertex[4];
+
+        for (size_t i = 0; i < 4; ++i){
 
           // Split on / if there is any
           vector<string> tokens = SplitStringChars(verts[i],"/");
-          tempi.push_back( FromStringS9<IndicesType>(tokens[0]) - 1);
+          new_vertex[i].p = FromStringS9<IndicesType>(tokens[0]) - 1;
             
           if (tokens.size() > 1){
             if (tokens[1].length() > 0)
-              tempt.push_back( FromStringS9<IndicesType>(tokens[1]) - 1);
+              new_vertex[i].t = FromStringS9<IndicesType>(tokens[1]) - 1;
             if (tokens.size() > 2)
-              tempn.push_back(FromStringS9<IndicesType>(tokens[2]) - 1 );
+              new_vertex[i].n = FromStringS9<IndicesType>(tokens[2]) - 1;
+          }
+
+          set<ObjVert>::iterator it = (uniques.insert(new_vertex[i])).first;
+
+          // Triangulate this quad
+          switch (i){
+            case 0:
+              new_face_0.vertices[0] = it;
+              new_face_1.vertices[0] = it;
+            break;
+
+            case 1:
+              new_face_0.vertices[1] = it;
+            break;
+
+             case 2:
+              new_face_0.vertices[2] = it;
+              new_face_1.vertices[1] = it;
+            break;
+
+            case 3:
+              new_face_1.vertices[2] = it;
+            break;
           }
         }
-
-        // Triangulate the quad 
-        current_mesh->indices.push_back( tempi[0] );
-        current_mesh->indices.push_back( tempi[1] );
-        current_mesh->indices.push_back( tempi[2] );
-        current_mesh->indices.push_back( tempi[0] );
-        current_mesh->indices.push_back( tempi[2] );
-        current_mesh->indices.push_back( tempi[3] );
-
-        if (tempn.size() == 4 ){
-          current_mesh->normalindices.push_back( tempn[0] );
-          current_mesh->normalindices.push_back( tempn[1] );
-          current_mesh->normalindices.push_back( tempn[2] );
-          current_mesh->normalindices.push_back( tempn[0] );
-          current_mesh->normalindices.push_back( tempn[2] );
-          current_mesh->normalindices.push_back( tempn[3] );
-        }
-        
-        if (tempt.size() == 4){
-          current_mesh->texindices.push_back( tempt[0] );
-          current_mesh->texindices.push_back( tempt[1] );
-          current_mesh->texindices.push_back( tempt[2] );
-          current_mesh->texindices.push_back( tempt[0] );
-          current_mesh->texindices.push_back( tempt[2] );
-          current_mesh->texindices.push_back( tempt[3] );
-        }
+        faces.push_back(new_face_0);
+        faces.push_back(new_face_1);
       }
+    
     }
   }
+
+  // Now Generate the meshes proper
+  // We should have the unique vertices and a stack of faces
+
+  soup_ = VertexSoup(uniques.size());
+
+  // Copy the unique vertices into our vertex soup.
+  IndicesType idx = 0;
+  for (set<ObjVert>::iterator it = uniques.begin(); it != uniques.end(); it++){
+  
+    ObjVert vert = *it;
+
+    soup_.geometry()[idx].p =  vertices[it->p];
+    soup_.geometry()[idx].n =  normals[it->n];
+    soup_.geometry()[idx].u =  texcoords[it->t];
+
+    uniques.erase(it);
+    vert.idx = idx;
+    uniques.insert(vert);
+
+    idx++;
+  }
+
+ 
+  soup_.Brew();
+
+  mesh_ =  SharedTriMesh(soup_, faces.size() * 3 );
+
+  idx = 0;
+  for (ObjFace face : faces) {
+    mesh_.geometry().SetIndex( idx++, face.vertices[0]->idx);
+    mesh_.geometry().SetIndex( idx++, face.vertices[1]->idx);
+    mesh_.geometry().SetIndex( idx++, face.vertices[2]->idx);
+  }
+
+
+
+  Add(mesh_);
+
+  // Clear all the temp data
 
   vertices.clear();
   normals.clear();
   texcoords.clear();
+  uniques.clear();
+  faces.clear();
   
   ifs.close();
 }

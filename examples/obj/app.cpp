@@ -28,6 +28,8 @@ void ObjApp::Init(){
     obj_mesh_ = ObjMesh(s9::File("./data/room/Design_room.obj")); 
     node_.Add(obj_mesh_);
 
+    cout << obj_mesh_.mesh_.geometry().size_indices() << endl;
+
     rotation_ = 0.1f;
 
     glEnable(GL_DEPTH_TEST);

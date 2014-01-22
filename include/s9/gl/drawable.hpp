@@ -63,7 +63,7 @@ namespace s9{
       /// \todo unbrew method for cleaning data off the card
       /// Options for brewing that may need to be specified
       template< typename VertexType, typename FaceType, typename AllocationPolicy> 
-      void Draw(GeometryT<VertexType, FaceType, AllocationPolicy> &g, GeometryPrimitive gp) {
+      void Draw(GeometryT<VertexType, FaceType, AllocationPolicy> &g) {
         if (vao_ == 0){
           std::cerr << "SEBURO DRAWABLE ERROR - attempting to draw a shape that is not brewed." << std::endl;
           return; 
@@ -73,8 +73,8 @@ namespace s9{
 
         // Choose type based on the geometry with option of an override
         GLint type;
-        if (gp == NONE)
-          gp = g.prim_type();
+
+        GeometryPrimitive gp = g.prim_type();
 
         switch (gp){
           case TRIANGLES:
@@ -135,7 +135,7 @@ namespace s9{
 
       /// Partial specialization for Shared Geometry
       template< typename VertexType, typename FaceType> 
-      void Brew( GeometryT<VertexType, FaceType, AllocationPolicyShared> &g, const Drawable &shared, BrewFlags b=BrewFlagsDefault) {
+      void Brew( GeometryT<VertexType, FaceType, AllocationPolicyShared> &g, Drawable &shared, BrewFlags b=BrewFlagsDefault) {
         
         glGenVertexArrays(1, &(vao_));
 

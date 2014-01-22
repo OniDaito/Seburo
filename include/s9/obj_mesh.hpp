@@ -16,6 +16,8 @@
 #include "string_utils.hpp"
 #include "node.hpp"
 
+#include <set>
+
 namespace s9 {
 
   class ObjMesh  : public s9::Node {
@@ -23,12 +25,34 @@ namespace s9 {
     ObjMesh(){}
     ObjMesh (const s9::File &file);
 
+    SharedTriMesh mesh_;
+
   protected:
 
     void Parse(const s9::File &file);
+ 
 
-    void CreateNodes();
+    /// A struct that represents a unique vertex
+
+    struct ObjVert{
+      IndicesType p,t,n,idx;
+
+      const bool operator<(const ObjVert& b) const {
+        return (p < b.p || (p == b.p &&  t < b.t) || ( p == b.p && t == b.t && n < b.n));
+      }
+
+    };
+
   
+    bool CompareObjVert(const ObjVert &a, const ObjVert &b) {
+      return (a.p < b.p || (a.p == b.p &&  a.t < b.t) || ( a.p == b.p && a.t == b.t && a.n < b.n));
+    }
+
+    // A struct that represents a triangle
+    struct ObjFace {
+      std::set<ObjVert>::iterator vertices[3];
+    };
+
     /**
      * A Struct that holds all the information on a mesh-in-potentia, split by material. 
      * It also holds any additional vertices, normals etc that we need to create
@@ -39,34 +63,23 @@ namespace s9 {
 
       TempMesh() {  }
       
-      // Extra data, created when we need to duplicate. Added on at the end
-      std::vector<glm::vec3> vertices;
-      std::vector<glm::vec3> normals;
-      std::vector<glm::vec2> texcoords;
-
-      // Sizes of the data we would be storing if we werent storing it globally
-      IndicesType vertices_size, texcoords_size, normals_size;
-
-
-      std::vector<IndicesType> indices; // assume triangles for now
-      std::vector<IndicesType> texindices;
-      std::vector<IndicesType> normalindices;
-
       Material material;
       gl::Texture texture;
 
       std::string tag;
 
-  
-      
     };
 
-    std::vector<glm::vec3> vertices;
-    std::vector<glm::vec3> normals;
-    std::vector<glm::vec2> texcoords;
+    // This should still obey the shared object principles more or less as these
+    // can all be copied easily and are mostly blank anyway with the exception of
+    // soup_ which must remain and is shared (I hope!)
+
+  
 
     std::vector<TempMesh> temp_;
     bool using_materials_;
+
+    VertexSoup soup_;
 
   };
 

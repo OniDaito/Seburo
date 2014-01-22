@@ -315,25 +315,20 @@ NodeBasePtr Node::GetBase(NodeResponsibility r) {
  * \todo where we are passing GP, we should have user overrides or similar?
  */
 
-Node& Node::Draw(GeometryPrimitive gp) {
+Node& Node::Draw() {
 	// Call the shared object update - allows Node subclasses polymorphism
 	obj_->Update();
-
-	// Allow parental overriding if there is something to overide
-	GeometryPrimitive fp = gp;
-	if (gp == NONE)
-		fp = obj_->geometry_cast;
 
 	for (NodeBasePtr p : obj_->bases){
 		p->PreDraw();
 		if (NodeShader::bind_count_ > 0)
 			p->Collect(global_visitor);
-		p->Draw(fp);
+		p->Draw();
 
 	}
 
 	for (Node p : obj_->children){
-		p.Draw(fp);
+		p.Draw();
 	}
 
 	for (NodeBasePtr p : obj_->bases){

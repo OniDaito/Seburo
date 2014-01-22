@@ -137,13 +137,41 @@ namespace s9 {
 
 		GeometryT(IndicesType num_verts, IndicesType num_indices, GeometryPrimitive prim_type ) {
       indexed_ = false;
-			Allocate(num_verts, num_indices, prim_type );
+			
+      size_indices_= num_indices;
+      size_vertices_ = num_verts;
+
+      if (num_verts > 0){
+        AllocateVertices(vertices_, num_verts);
+      }
+
+      if (num_indices > 0) {
+        AllocateIndices(indices_, num_indices);
+        indexed_ = true;
+      } 
+
+      size_faces_ = indexed_ ? size_indices_ : 0;
+
+      AllocateFaces(faces_, size_faces_, prim_type);
+
+
 			prim_type_ = prim_type;
 		};
 
+    // Constructor for shared geometries
+
     GeometryT<VertexType, FaceType, AllocationPolicyNew>(std::shared_ptr< std::vector<VertexType> >  &sp, IndicesType num_indices, GeometryPrimitive prim_type ) {
+    
       indexed_ = false;
-      Allocate(sp, num_indices, prim_type );
+      size_indices_= num_indices;
+  
+      AllocateVertices(vertices_, sp);
+      
+      AllocateIndices(indices_, num_indices);
+      indexed_ = true;
+     
+      AllocateFaces(faces_, num_indices, prim_type);
+
       prim_type_ = prim_type;
     };
 
@@ -200,31 +228,7 @@ namespace s9 {
 		using AllocationPolicy::AllocateIndices;
 		using AllocationPolicy::AllocateFaces;
 
-    // Allocation without shared
-		void Allocate(IndicesType num_verts, IndicesType num_indices, GeometryPrimitive prim_type) {
-			size_indices_= num_indices;
-			size_vertices_ = num_verts;
 
-			if (num_verts > 0){
-				AllocateVertices(vertices_, num_verts);
-			}
-
-			if (num_indices > 0) {
-				AllocateIndices(indices_, num_indices);
-        indexed_ = true;
-			} 
-
-      size_faces_ = indexed_ ? size_indices_ : size_vertices_;
-
-			AllocateFaces(faces_, size_faces_, prim_type);
-
-		}
-
-    // Allocation with the Shared Policy
-
-    void Allocate(std::shared_ptr<std::vector<VertexType> > &sp, IndicesType num_indices, GeometryPrimitive prim_type) {
-
-    }
 
 
 

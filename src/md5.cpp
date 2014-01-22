@@ -180,7 +180,7 @@ void MD5Model::Parse(const File &file) {
       TriMeshSkinned trimesh;
       Skin    skin;
       
-      std::shared_ptr< GeometryT<Vertex3Skin, Face3, AllocationPolicyNew> > geometry; // Really not happy about this :S
+   
 
       size_t vidx = 0;
 
@@ -232,7 +232,7 @@ void MD5Model::Parse(const File &file) {
           // Making the assumption (perhaps incorrectly) that numverts always comes before numtris so we have both here
           // We make our geometry and add it as a node
           trimesh = TriMeshSkinned(num_verts, num_tris * 3);
-          geometry = trimesh.geometry();
+        
           mesh_node.Add(trimesh);
 
         }
@@ -243,9 +243,11 @@ void MD5Model::Parse(const File &file) {
           string s;
           if (!(tiss >> s >> idx >> a >> b >> c)) { cerr << "SEBURO MD5 Error - Failed to read triangle." << endl; break; }
 
-          geometry->indices()[idx * 3] = c;
-          geometry->indices()[idx * 3 + 1] = b;
-          geometry->indices()[idx * 3 + 2] = a;
+          GeometryT<Vertex3Skin, Face3, AllocationPolicyNew>& geometry = trimesh.geometry();
+
+          geometry.indices()[idx * 3] = c;
+          geometry.indices()[idx * 3 + 1] = b;
+          geometry.indices()[idx * 3 + 2] = a;
 
         }
 
@@ -342,6 +344,8 @@ void MD5Model::Parse(const File &file) {
       // This is our friendly bind pose      
       vector<Skin::SkinIndex> indices = skin.indices();
 
+      GeometryT<Vertex3Skin, Face3, AllocationPolicyNew>& geometry = trimesh.geometry();
+
       for (size_t i =0; i < num_verts; ++i){
         
         // Setup the skin indices at this point
@@ -384,20 +388,20 @@ void MD5Model::Parse(const File &file) {
 
           if (j < actual_weights.size() ) {
             md5_weight w = actual_weights[j];
-            geometry->vertices()[i].b[j] = w.bone;
-            geometry->vertices()[i].w[j] = w.bias; 
+            geometry.vertices()[i].b[j] = w.bone;
+            geometry.vertices()[i].w[j] = w.bias; 
           
             glm::vec3 bp = joints[w.bone].rotation * w.position;
             pos += ( (joints[w.bone].position + bp) * w.bias); // assuming all biases add up to 1
                      
           } else {
-            geometry->vertices()[i].b[j] = 0;
-            geometry->vertices()[i].w[j] = 0; 
+            geometry.vertices()[i].b[j] = 0;
+            geometry.vertices()[i].w[j] = 0; 
           }
         }
 
-        geometry->vertices()[i].p = pos;
-        geometry->vertices()[i].u = glm::vec2(verts[i].s, verts[i].t);
+        geometry.vertices()[i].p = pos;
+        geometry.vertices()[i].u = glm::vec2(verts[i].s, verts[i].t);
 
         ///\todo precompute normals and tangents
 
