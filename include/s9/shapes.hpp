@@ -18,86 +18,80 @@ namespace s9 {
 	
   ///\todo still not happy with this structure! ><
 
-	/**
-	 * Shared Object container for basic shape geometries - OpenGL at present
-   * \todo can we template this class and ergo, have a base pointer we can always get to?
-	 */
-
-	struct ShapeObj {
-
-		virtual void Brew(gl::BrewFlags b) = 0;
-		virtual void Draw(GeometryPrimitive g) = 0;
-
-		bool brewed() { return gl_drawable.brewed(); }
-
-		gl::Drawable gl_drawable;
-
-	};
-
 
 	/**
 	 * Basic interface to shapes
 	 * \todo brew and draw go through a lot of calls - worrying :S
 	 */
 
+  template<typename VertexType, typename FaceType, typename AllocationType>
 	class SEBUROAPI Shape {
 
 	public:
 		Shape () {};
-		
-		virtual void Draw(GeometryPrimitive g = TRIANGLES) { CXSHARED obj_->Draw(g); };
-		virtual void Brew(gl::BrewFlags b=gl::BrewFlagsDefault) { CXSHARED  obj_->Brew(b);  };
-		virtual bool brewed() { if(obj_ != nullptr) return obj_->brewed(); return false;} //\todo should be IsBrewed()
-		virtual void Init() {};
+    ///\todo we may be able to move brew/draw somwhere else or inherit?
+		void Brew(gl::BrewFlags b=gl::BrewFlagsDefault) { gl_drawable_.Brew(*geometry_, b); }
+		void Draw(GeometryPrimitive g = TRIANGLES) { gl_drawable_.Draw(*geometry_, g); };		
+    bool brewed() { if(geometry_ != nullptr) return gl_drawable_.brewed(); return false;} //\todo should be IsBrewed()
 
-		const Shape& operator= (const Shape &s ) { 
-			obj_ = s.obj_; 
-			return *this;
-		}
-
-		inline bool operator==(const Shape& lhs){ return lhs.obj_ == obj_;  }
-		inline bool operator!=(const Shape& lhs){return lhs.obj_ != obj_;}
-
-    const ShapeObj& obj() const {return *obj_; }
-
-
+    const gl::Drawable & gl_drawable() const { return gl_drawable_; }
+    
 	protected:
 	
-		std::shared_ptr<ShapeObj> obj_ = nullptr;
+		std::shared_ptr< GeometryT<VertexType, FaceType, AllocationType> > geometry_;
+    gl::Drawable gl_drawable_;
 
   public:
     
-    typedef std::shared_ptr<ShapeObj> Shape::*unspecified_bool_type;
-    operator unspecified_bool_type() const { return ( obj_.get() == 0 ) ? 0 : &Shape::obj_; }
-    void reset() { obj_.reset(); }
+    typedef std::shared_ptr<  GeometryT<VertexType, FaceType, AllocationType> > Shape::*unspecified_bool_type;
+    operator unspecified_bool_type() const { return ( geometry_.get() == 0 ) ? 0 : &Shape::geometry_; }
+    void reset() { geometry_.reset(); }
 
 	};
+
+  /**
+   * Partial specialization of shape that deals with Shared Shape Geometries
+   */
+
+  template<typename VertexType, typename FaceType>
+  class SEBUROAPI Shape<VertexType, FaceType, AllocationPolicyShared> {
+
+  public:
+    Shape (Shape<VertexType,FaceType,AllocationPolicyNew> & shared) : shared_(shared) {};
+    void Brew(gl::BrewFlags b=gl::BrewFlagsDefault) { gl_drawable_.Brew(*geometry_, shared_.gl_drawable(), b); }
+    void Draw(GeometryPrimitive g = TRIANGLES) { gl_drawable_.Draw(*geometry_, g); };   
+    bool brewed() { if(geometry_ != nullptr) return gl_drawable_.brewed(); return false;} //\todo should be IsBrewed()
+
+    const gl::Drawable & gl_drawable() const { return gl_drawable_; }
+    
+  protected:
+  
+    std::shared_ptr< GeometryT<VertexType, FaceType, AllocationPolicyShared> > geometry_;
+    gl::Drawable gl_drawable_;
+    Shape<VertexType,FaceType,AllocationPolicyNew>  & shared_;
+
+  public:
+    
+    typedef std::shared_ptr<  GeometryT<VertexType, FaceType, AllocationPolicyShared> > Shape::*unspecified_bool_type;
+    operator unspecified_bool_type() const { return ( geometry_.get() == 0 ) ? 0 : &Shape::geometry_; }
+    void reset() { geometry_.reset(); }
+
+  };
+
+
 
 	/**
 	 * A basic Quad with no indexing.
 	 * Quad provides a basic contructor that does little more than build the ShapeObjectQuad
 	 */ 
 
-	struct ShapeObjQuad : public ShapeObj {
-
-		ShapeObjQuad() {
-			geometry = GeometryT<Vertex4, Face4, AllocationPolicyNew> (6,0,TRIANGLES);	
-		}
-
-		void Brew (gl::BrewFlags b) { gl_drawable.Brew(geometry, b);}
-		void Draw (GeometryPrimitive g = TRIANGLES) { gl_drawable.Draw(geometry, g); }
-
-		GeometryT<Vertex4, Face4, AllocationPolicyNew> geometry;
-			
-	};
-
-	class SEBUROAPI Quad : public Shape {
+	class SEBUROAPI Quad : public Shape<Vertex4, Face4, AllocationPolicyNew> {
 	public:
 
 		Quad() {};
 		Quad(float w, float h);
 
-		GeometryT<Vertex4, Face4, AllocationPolicyNew>* geometry();
+		std::shared_ptr< GeometryT<Vertex4, Face4, AllocationPolicyNew> > geometry() { return geometry_; };
 
 	};
 
@@ -105,25 +99,14 @@ namespace s9 {
 	 * A basic Cuboid, made up of Quads with the underlying Vec4 type
 	 */ 
 
-	struct ShapeObjCuboid : public ShapeObj {
-		ShapeObjCuboid() {
-			geometry = GeometryT<Vertex4, Face4, AllocationPolicyNew>(8,36,TRIANGLES);
-		}
 
-		void Brew (gl::BrewFlags b) { gl_drawable.Brew(geometry, b); }
-		void Draw (GeometryPrimitive g = TRIANGLES) { gl_drawable.Draw(geometry, g); }
-
-		GeometryT<Vertex4, Face4, AllocationPolicyNew> geometry;
-			
-	};
-
-	class SEBUROAPI Cuboid : public Shape {
+	class SEBUROAPI Cuboid : public Shape<Vertex4, Face4, AllocationPolicyNew> {
 	public:
 
 		Cuboid() {};
 		Cuboid(float w, float h, float d);
 
-		GeometryT<Vertex4, Face4, AllocationPolicyNew>* geometry();
+		std::shared_ptr< GeometryT<Vertex4, Face4, AllocationPolicyNew> > geometry() { return geometry_; };
 	
 	};
 
@@ -132,59 +115,29 @@ namespace s9 {
    * A basic Sphere, made up of triangles with the underlying Vec4 type
    */ 
 
-  struct ShapeObjSphere: public ShapeObj {
-    ShapeObjSphere(IndicesType num_verts, size_t num_indices) {
-      geometry = GeometryT<Vertex4, Face4, AllocationPolicyNew>(num_verts,num_indices,TRIANGLES);
-    }
-
-    void Brew (gl::BrewFlags b) { gl_drawable.Brew(geometry, b); }
-    void Draw (GeometryPrimitive g = TRIANGLES) { gl_drawable.Draw(geometry, g); }
-
-    GeometryT<Vertex4, Face4, AllocationPolicyNew> geometry;
-      
-  };
-
-
-  class SEBUROAPI Sphere : public Shape {
+  class SEBUROAPI Sphere : public Shape<Vertex4, Face4, AllocationPolicyNew> {
   public:
 
     Sphere() {};
     Sphere(float_t radius, size_t segments);
 
-    GeometryT<Vertex4, Face4, AllocationPolicyNew>* geometry();
+    std::shared_ptr< GeometryT<Vertex4, Face4, AllocationPolicyNew> > geometry(){ return geometry_; };
   
   };
 
-	/**
-   * A Triangle Mesh made up of Vec3 types
-   */ 
-
-
-  struct ShapeObjTriMesh : public ShapeObj {
-
-    ShapeObjTriMesh(IndicesType num_verts, size_t num_indices) {
-      geometry = GeometryT<Vertex3, Face3, AllocationPolicyNew>(num_verts, num_indices, TRIANGLES);
-    }
-
-  	void Brew (gl::BrewFlags b) { gl_drawable.Brew(geometry, b); }
-  	void Draw (GeometryPrimitive g = TRIANGLES) { gl_drawable.Draw(geometry, g); }
-
-    GeometryT<Vertex3, Face3, AllocationPolicyNew> geometry;
-      
-  };
-
+	
   /**
    * A mesh made up of triangles
    */
 
-  class SEBUROAPI TriMesh : public Shape {
+  class SEBUROAPI TriMesh : public Shape<Vertex3, Face3, AllocationPolicyNew> {
 
   public:
 
     TriMesh() {};
     TriMesh(IndicesType num_verts, size_t num_indices);
 
-    GeometryT<Vertex3, Face3, AllocationPolicyNew>* geometry();
+    std::shared_ptr< GeometryT<Vertex3, Face3, AllocationPolicyNew> > geometry(){ return geometry_; };
 
   };
 
@@ -192,31 +145,19 @@ namespace s9 {
    * A Triangle Mesh for skinning - using per vertex data for its weights
    */ 
 
-  struct ShapeObjTriMeshSkinned : public ShapeObj {
-
-    ShapeObjTriMeshSkinned(IndicesType num_verts, size_t num_indices) {
-      geometry = GeometryT<Vertex3Skin, Face3, AllocationPolicyNew>(num_verts, num_indices, TRIANGLES);
-    }
-
-  	void Brew (gl::BrewFlags b) { gl_drawable.Brew(geometry, b); }
-  	void Draw (GeometryPrimitive g = TRIANGLES) { gl_drawable.Draw(geometry, g); }
-
-    GeometryT<Vertex3Skin, Face3, AllocationPolicyNew> geometry;
-      
-  };
 
   /**
    * A mesh made up of triangles and skinned
    */
 
-  class SEBUROAPI TriMeshSkinned : public Shape {
+  class SEBUROAPI TriMeshSkinned : public Shape<Vertex3Skin, Face3, AllocationPolicyNew> {
 
   public:
 
     TriMeshSkinned() {};
     TriMeshSkinned(IndicesType num_verts, size_t num_indices);
 
-    GeometryT<Vertex3Skin, Face3, AllocationPolicyNew>* geometry();
+    std::shared_ptr< GeometryT<Vertex3Skin, Face3, AllocationPolicyNew> > geometry(){ return geometry_; };
 
   };
 
@@ -227,27 +168,15 @@ namespace s9 {
    */
 
 
-   struct ShapeObjVertexSoup : public ShapeObj {
 
-    ShapeObjVertexSoup(IndicesType num_verts ) {
-      geometry = GeometryT<Vertex3, Face3, AllocationPolicyNew>(num_verts, 0, NONE);
-    }
-
-    void Brew (gl::BrewFlags b) { gl_drawable.Brew(geometry, b); }
-    void Draw (GeometryPrimitive g = TRIANGLES) { gl_drawable.Draw(geometry, g); }
-
-    GeometryT<Vertex3, Face3, AllocationPolicyNew> geometry;
-      
-  };
-
-  class SEBUROAPI VertexSoup : public Shape {
+  class SEBUROAPI VertexSoup : public Shape<Vertex3, Face3, AllocationPolicyNew> {
 
   public:
 
     VertexSoup() {};
     VertexSoup(IndicesType num_verts);
 
-    GeometryT<Vertex3, Face3, AllocationPolicyNew>* geometry();
+    std::shared_ptr< GeometryT<Vertex3, Face3, AllocationPolicyNew> > geometry(){ return geometry_; };
 
   };
 
@@ -258,7 +187,7 @@ namespace s9 {
    * allowed.
    */
 
-    struct ShapeObjSharedTriMesh : public ShapeObj {
+ /*   struct ShapeObjSharedTriMesh : public ShapeObj {
 
     ShapeObjSharedTriMesh( const ShapeObj &sp, size_t num_indices ) : 
       geometry(sp.geometry.GetSharableVertices(), num_indices, TRIANGLES ), shared(sp) {
@@ -278,17 +207,16 @@ namespace s9 {
     GeometryT<Vertex3, Face3, AllocationPolicyShared> geometry;
     ShapeObj &shared;
       
-  };
+  };*/
 
   /// So far, the only shape that shares data is a set of Triangles, SharedTriMesh
 
-  class SEBUROAPI SharedTriMesh : public Shape {
+  class SEBUROAPI SharedTriMesh : public Shape<Vertex3, Face3, AllocationPolicyShared> {
 
   public:
-    SharedTriMesh() {};
-    SharedTriMesh(VertexSoup &shared, IndicesType num_indices);
+    SharedTriMesh(VertexSoup &shared, IndicesType num_indices) : Shape(shared) {}
 
-    GeometryT<Vertex3, Face3, AllocationPolicyShared>* geometry();
+    std::shared_ptr< GeometryT<Vertex3, Face3, AllocationPolicyShared> > geometry(){ return geometry_; };
 
   };
 
@@ -299,25 +227,15 @@ namespace s9 {
    * A basic Cylinder
    */ 
 
-  struct ShapeObjCylinder : public ShapeObj {
-    ShapeObjCylinder(size_t s, size_t f) {
-      geometry = GeometryT<Vertex3, Face3, AllocationPolicyNew>(s,f,TRIANGLES);
-    }
 
-    void Brew (gl::BrewFlags b) { gl_drawable.Brew(geometry, b); }
-    void Draw (GeometryPrimitive g = TRIANGLES) { gl_drawable.Draw(geometry, g); }
 
-    GeometryT<Vertex3, Face3, AllocationPolicyNew> geometry;
-      
-  };
-
-  class SEBUROAPI Cylinder : public Shape {
+  class SEBUROAPI Cylinder : public Shape<Vertex3, Face3, AllocationPolicyNew> {
   public:
 
     Cylinder() {};
     Cylinder(size_t segments, size_t stacks, float diameter, float height);
 
-    GeometryT<Vertex3, Face3, AllocationPolicyNew>* geometry();
+    std::shared_ptr< GeometryT<Vertex3, Face3, AllocationPolicyNew> > geometry(){ return geometry_; };
   
   };
 
@@ -325,25 +243,14 @@ namespace s9 {
    * A pointed Cyclinder - spike thing :S
    */ 
 
-  struct ShapeObjSpike : public ShapeObj {
-    ShapeObjSpike(size_t s, size_t f) {
-      geometry = GeometryT<Vertex3, Face3, AllocationPolicyNew>(s,f,TRIANGLES);
-    }
-
-    void Brew (gl::BrewFlags b) { gl_drawable.Brew(geometry, b); }
-    void Draw (GeometryPrimitive g = TRIANGLES) { gl_drawable.Draw(geometry, g); }
-
-    GeometryT<Vertex3, Face3, AllocationPolicyNew> geometry;
-      
-  };
-
-  class SEBUROAPI Spike : public Shape {
+ 
+  class SEBUROAPI Spike : public Shape<Vertex3, Face3, AllocationPolicyNew> {
   public:
 
     Spike() {};
     Spike(size_t segments, size_t stacks, float radius, float height);
 
-    GeometryT<Vertex3, Face3, AllocationPolicyNew>* geometry();
+    std::shared_ptr< GeometryT<Vertex3, Face3, AllocationPolicyNew> > geometry(){ return geometry_; };
   
   };
 

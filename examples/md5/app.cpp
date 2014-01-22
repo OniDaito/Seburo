@@ -21,7 +21,7 @@ void MD5App::Init(){
     shader_ = Shader(s9::File("./shaders/3/skinning.glsl"));
     shader_colour_ = Shader(s9::File("./shaders/3/solid_colour.glsl"));
 
-    show_wireframe_ = true;
+    show_wireframe_ = false;
 
     quad_ = Quad(1.0,1.0);
     rotation_ = 0;
@@ -31,12 +31,10 @@ void MD5App::Init(){
    
     camera_ = Camera( glm::vec3(0,0,2.0f));
     md5_ = MD5Model( s9::File("./data/sintel_lite/sintel_lite.md5mesh") ); 
-    md5_.set_geometry_cast(WIREFRAME);
 
     node_.Add(md5_).Add(camera_).Add(shader_);
  
     skeleton_shape_ = SkeletonShape(md5_.skeleton());
-    skeleton_shape_.set_geometry_cast(WIREFRAME);
     skeleton_shape_.Add(shader_colour_).Add(camera_);
   
     node_.Add(skeleton_shape_).Add(sphere_node_);
@@ -153,9 +151,9 @@ void MD5App::ProcessEvent(KeyboardEvent e, GLFWwindow *window){
           
             show_wireframe_ = !show_wireframe_;
             if (show_wireframe_){
-                md5_.set_geometry_cast(WIREFRAME);
+                glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
             } else {
-                md5_.set_geometry_cast(NONE);
+                glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
             }
         }
         

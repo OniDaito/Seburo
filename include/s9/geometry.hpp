@@ -185,7 +185,7 @@ namespace s9 {
     const std::unique_ptr<FaceType[]>&    faces() const { return faces_; }
 
     /// Return the shared pointer to the vertices so we can share them with other geometry
-    std::shared_ptr<std::vector<VertexType> >&  GetSharableVertices() { return vertices_; }
+    std::shared_ptr<std::vector<VertexType> >&  GetSharedVertices() { return vertices_; }
 
     bool indexed() {return indexed_; }
 

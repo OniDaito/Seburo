@@ -17,10 +17,9 @@ using namespace s9;
  */
 
 
-Quad::Quad (float w, float h) : Shape()  {
+Quad::Quad (float w, float h)  {
 
-  std::shared_ptr<ShapeObjQuad> quad;
-	quad = std::make_shared<ShapeObjQuad>();
+	geometry_ = std::make_shared< GeometryT<Vertex4, Face4, AllocationPolicyNew> >(6,0,TRIANGLES);
 
 	float w2 = w/2;
 	float h2 = h/2;
@@ -30,25 +29,18 @@ Quad::Quad (float w, float h) : Shape()  {
 	Vertex4 ac ( glm::vec4(w2, 	 h2, 0.0f, 1.0f), glm::vec4(.0f, .0f, 1.0f, 1.0f), glm::vec4(1.0f), glm::vec2(1.0f,0.0f));
 	Vertex4 ad ( glm::vec4(-w2,  h2, 0.0f, 1.0f), glm::vec4(.0f, .0f, 1.0f, 1.0f), glm::vec4(1.0f), glm::vec2(0.0f,0.0f));
 
-	quad->geometry[0] = aa;
-	quad->geometry[1] = ab;
-	quad->geometry[2] = ac;
-	quad->geometry[3] = aa;
-	quad->geometry[4] = ac;
-	quad->geometry[5] = ad;
-
-	// Now set the shared pointer member
-	obj_ = std::static_pointer_cast<ShapeObj>(quad);
-
+	(*geometry_)[0] = aa;
+	(*geometry_)[1] = ab;
+	(*geometry_)[2] = ac;
+	(*geometry_)[3] = aa;
+	(*geometry_)[4] = ac;
+	(*geometry_)[5] = ad;
 
 	// No indices here - no real need
 
 }
 
-GeometryT<Vertex4, Face4, AllocationPolicyNew>* Quad::geometry() {
-	std::shared_ptr<ShapeObjQuad> t = std::static_pointer_cast<ShapeObjQuad>(obj_) ;
-	return &(t->geometry);
-}
+
 
 /*
 shared_ptr< GeometryT<Vertex4, Face4, AllocationPolicyNew> > Quad::geometry() {
@@ -61,10 +53,10 @@ shared_ptr< GeometryT<Vertex4, Face4, AllocationPolicyNew> > Quad::geometry() {
  * Build a Cuboid with w,h,d centred at the origin
  */
 
-Cuboid::Cuboid (float w, float h, float d)  : Shape() {
+Cuboid::Cuboid (float w, float h, float d)   {
 
-	std::shared_ptr<ShapeObjCuboid> cuboid;
-	cuboid = std::make_shared<ShapeObjCuboid>();
+	geometry_ = std::make_shared< GeometryT<Vertex4, Face4, AllocationPolicyNew> >(8,36,TRIANGLES);
+
 
 	float w2 = w/2.0;
 	float h2 = h/2.0;
@@ -80,27 +72,19 @@ Cuboid::Cuboid (float w, float h, float d)  : Shape() {
 	Vertex4 bc ( glm::vec4( w2, -h2, -d2, 1.0f));
 	Vertex4 bd ( glm::vec4( w2, -h2,  d2, 1.0f));
 
-	cuboid->geometry[0] = aa;
-	cuboid->geometry[1] = ab;
-	cuboid->geometry[2] = ac;
-	cuboid->geometry[3] = ad;
+	(*geometry_)[0] = aa;
+	(*geometry_)[1] = ab;
+	(*geometry_)[2] = ac;
+	(*geometry_)[3] = ad;
 
-	cuboid->geometry[4] = ba;
-	cuboid->geometry[5] = bb;
-	cuboid->geometry[6] = bc;
-	cuboid->geometry[7] = bd;
+	(*geometry_)[4] = ba;
+	(*geometry_)[5] = bb;
+	(*geometry_)[6] = bc;
+	(*geometry_)[7] = bd;
 
 	IndicesType indices[36] = {0,3,1,0,2,3,0,1,5,0,5,4,1,3,7,1,7,5,6,7,5,6,4,5,4,2,6,4,0,2,2,7,3,2,6,7};
 
-	cuboid->geometry.SetIndices(indices);
-
-	obj_ = std::static_pointer_cast<ShapeObj>(cuboid);
-
-}
-
-GeometryT<Vertex4, Face4, AllocationPolicyNew>* Cuboid::geometry() {
-	std::shared_ptr<ShapeObjCuboid> t = std::static_pointer_cast<ShapeObjCuboid>(obj_) ;
-	return &(t->geometry);
+	geometry_->SetIndices(indices);
 }
 
 
@@ -109,7 +93,7 @@ GeometryT<Vertex4, Face4, AllocationPolicyNew>* Cuboid::geometry() {
  * Build a Sphere with triangles, give radius and segements
  */
 
-Sphere::Sphere (float_t radius, size_t segments)  : Shape() {
+Sphere::Sphere (float_t radius, size_t segments)  {
 
 	size_t vidx = 0;
 	size_t num_vertices = segments / 2 * ((segments+2) * 2);
@@ -117,8 +101,8 @@ Sphere::Sphere (float_t radius, size_t segments)  : Shape() {
 
 	IndicesType indices[num_indices];
 
-	std::shared_ptr<ShapeObjSphere> sphere;
-	sphere = std::make_shared<ShapeObjSphere>(num_vertices, num_indices );
+
+	geometry_ =  std::make_shared< GeometryT<Vertex4, Face4, AllocationPolicyNew> >(num_vertices, num_indices, TRIANGLES );
 
 	glm::vec4 colour(1.0f);
 
@@ -145,7 +129,7 @@ Sphere::Sphere (float_t radius, size_t segments)  : Shape() {
 
     	Vertex4 aa (position, normal, colour, texture);
 
-    	sphere->geometry[vidx] = aa;
+    	(*geometry_)[vidx] = aa;
     	vidx++;
 
     	glm::vec4 normal1 (static_cast<float_t>(cos(theta2) * cos(theta3)),
@@ -163,10 +147,8 @@ Sphere::Sphere (float_t radius, size_t segments)  : Shape() {
 
     	Vertex4 bb (position1, normal1, colour, texture1);
 
-    	sphere->geometry[vidx] = bb;
-    	vidx++;
-
-   
+    	(*geometry_)[vidx] = bb;
+    	vidx++;   
     }
   }
 
@@ -185,45 +167,29 @@ Sphere::Sphere (float_t radius, size_t segments)  : Shape() {
  
  	}
 	
-	sphere->geometry.SetIndices(indices);
-	obj_ = std::static_pointer_cast<ShapeObj>(sphere);
+	geometry_->SetIndices(indices);
 
 }
 
-GeometryT<Vertex4, Face4, AllocationPolicyNew>* Sphere::geometry() {
-	std::shared_ptr<ShapeObjSphere> t = std::static_pointer_cast<ShapeObjSphere>(obj_) ;
-	return &(t->geometry);
-}
 
 /**
  * Build a basic TriMesh with a set number of verts and indices
  */
 
-TriMesh::TriMesh(IndicesType num_verts, size_t num_indices) : Shape() {
-	std::shared_ptr<ShapeObjTriMesh> trimesh;
-	trimesh = std::make_shared<ShapeObjTriMesh>(num_verts, num_indices);
-	obj_ = std::static_pointer_cast<ShapeObj>(trimesh);
+TriMesh::TriMesh(IndicesType num_verts, size_t num_indices)  {
+	geometry_ = std::make_shared<GeometryT<Vertex3, Face3, AllocationPolicyNew> >(num_verts, num_indices, TRIANGLES);
 }
 
-GeometryT<Vertex3, Face3, AllocationPolicyNew>* TriMesh::geometry() {
-	std::shared_ptr<ShapeObjTriMesh> t = std::static_pointer_cast<ShapeObjTriMesh>(obj_) ;
-	return &(t->geometry);
-}
 
 /**
  * Build a basic TriMeshSkinned with a set number of verts and indices
  */
 
-TriMeshSkinned::TriMeshSkinned(IndicesType num_verts, size_t num_indices) : Shape() {
-	std::shared_ptr<ShapeObjTriMeshSkinned> trimesh;
-	trimesh = std::make_shared<ShapeObjTriMeshSkinned>(num_verts, num_indices);
-	obj_ = std::static_pointer_cast<ShapeObj>(trimesh);
+TriMeshSkinned::TriMeshSkinned(IndicesType num_verts, size_t num_indices) {
+	geometry_ = std::make_shared<GeometryT<Vertex3Skin, Face3, AllocationPolicyNew> >(num_verts, num_indices, TRIANGLES);
 }
 
-GeometryT<Vertex3Skin, Face3, AllocationPolicyNew>* TriMeshSkinned::geometry() {
-	std::shared_ptr<ShapeObjTriMeshSkinned> t = std::static_pointer_cast<ShapeObjTriMeshSkinned>(obj_) ;
-	return &(t->geometry);
-}
+
 
 
 
@@ -241,9 +207,8 @@ Cylinder::Cylinder (size_t segments, size_t stacks, float radius, float height){
   IndicesType num_verts = (segments * 2 + 2) + ((stacks -1) * segments);
   size_t num_indices = ((segments * 2) + (stacks * segments * 2) ) * 3;
 
+	geometry_ = std::make_shared<GeometryT<Vertex3, Face3, AllocationPolicyNew> >(num_verts, num_indices, TRIANGLES);
 
-	std::shared_ptr<ShapeObjCylinder> cylinder;
-	cylinder = std::make_shared<ShapeObjCylinder>(num_verts, num_indices);
 
 	float top = height/2.0f;
 	float bottom = -top;
@@ -253,13 +218,13 @@ Cylinder::Cylinder (size_t segments, size_t stacks, float radius, float height){
 	// Top cap
 	size_t idx = 0;
 	Vertex3 top_center ( glm::vec3( 0, top, 0));
-	cylinder->geometry[idx] = top_center;
+	(*geometry_)[idx] = top_center;
 	idx++;
 
 	for (size_t i = 0; i < segments; ++i){
 		float step = static_cast<float>( DegToRad( (360.0f / segments) * i));
 		Vertex3 aa ( glm::vec3( sin(step) * radius, top, cos(step) * radius ));
-		cylinder->geometry[idx + i] = aa;
+		(*geometry_)[idx + i] = aa;
 	}
 
 	idx += segments;
@@ -268,7 +233,7 @@ Cylinder::Cylinder (size_t segments, size_t stacks, float radius, float height){
 		for (size_t i = 0; i < segments; ++i){
 			float step = static_cast<float>( DegToRad( (360.0f / segments) * i));
 			Vertex3 aa ( glm::vec3( sin(step) * radius, height / stacks * j,  cos(step) * radius));
-			cylinder->geometry[idx + i] = aa;
+			(*geometry_)[idx + i] = aa;
 		}
 		idx += segments;
 	}
@@ -278,13 +243,13 @@ Cylinder::Cylinder (size_t segments, size_t stacks, float radius, float height){
 	for (size_t i = 0; i < segments; ++i){
 		float step = static_cast<float>( DegToRad( (360.0f / segments) * i));
 		Vertex3 aa ( glm::vec3( sin(step) * radius, bottom,  cos(step) * radius));
-		cylinder->geometry[idx + i] = aa;
+		(*geometry_)[idx + i] = aa;
 	}
 
 	idx += segments;
 
 	Vertex3 bottom_center ( glm::vec3( 0, bottom, 0));
-	cylinder->geometry[idx] = bottom_center;
+	(*geometry_)[idx] = bottom_center;
 	idx++;
 
 	// Indices
@@ -348,16 +313,9 @@ Cylinder::Cylinder (size_t segments, size_t stacks, float radius, float height){
 	}
 
 
-	cylinder->geometry.SetIndices(indices);
-	obj_ = std::static_pointer_cast<ShapeObj>(cylinder);
+	geometry_->SetIndices(indices);
 
 }
-
-GeometryT<Vertex3, Face3, AllocationPolicyNew>* Cylinder::geometry() {
-	std::shared_ptr<ShapeObjCylinder> t = std::static_pointer_cast<ShapeObjCylinder>(obj_) ;
-	return &(t->geometry);
-}
-
 
 
 /**
@@ -374,8 +332,7 @@ Spike::Spike (size_t segments, size_t stacks, float radius, float height){
   size_t num_indices = ((segments * 2) + ((stacks-1) * segments * 2) ) * 3;
 
 
-	std::shared_ptr<ShapeObjSpike> spike;
-	spike = std::make_shared<ShapeObjSpike>(num_verts, num_indices);
+	geometry_ = std::make_shared<GeometryT<Vertex3, Face3, AllocationPolicyNew> >(num_verts, num_indices, TRIANGLES);
 
 	float top = height/2.0f;
 	float bottom = -top;
@@ -385,13 +342,13 @@ Spike::Spike (size_t segments, size_t stacks, float radius, float height){
 	// Bottom cap
 	size_t idx = 0;
 	Vertex3 bottom_center ( glm::vec3( 0, top, 0));
-	spike->geometry[idx] = bottom_center;
+	(*geometry_)[idx] = bottom_center;
 	idx++;
 
 	for (size_t i = 0; i < segments; ++i){
 		float step = static_cast<float>( DegToRad( (360.0f / segments) * i));
 		Vertex3 aa ( glm::vec3( sin(step) * radius, bottom, cos(step) * radius ));
-		spike->geometry[idx + i] = aa;
+		(*geometry_)[idx + i] = aa;
 	}
 
 	idx += segments;
@@ -405,7 +362,7 @@ Spike::Spike (size_t segments, size_t stacks, float radius, float height){
 		for (size_t i = 0; i < segments; ++i){
 			float step = static_cast<float>( DegToRad( (360.0f / segments) * i));
 			Vertex3 aa ( glm::vec3( sin(step) * tr, th,  cos(step) * tr));
-			spike->geometry[idx + i] = aa;
+			(*geometry_)[idx + i] = aa;
 		}
 		idx += segments;
 	}
@@ -413,7 +370,7 @@ Spike::Spike (size_t segments, size_t stacks, float radius, float height){
 	// Top point
 
 	Vertex3 top_centre ( glm::vec3( 0, top, 0));
-	spike->geometry[idx] = top_centre;
+	(*geometry_)[idx] = top_centre;
 	idx++;
 
 	// Indices
@@ -480,17 +437,9 @@ Spike::Spike (size_t segments, size_t stacks, float radius, float height){
 		
 	}
 
-
-	spike->geometry.SetIndices(indices);
-	obj_ = std::static_pointer_cast<ShapeObj>(spike);
+	geometry_->SetIndices(indices);
 
 }
-
-GeometryT<Vertex3, Face3, AllocationPolicyNew>* Spike::geometry() {
-	std::shared_ptr<ShapeObjSpike> t = std::static_pointer_cast<ShapeObjSpike>(obj_) ;
-	return &(t->geometry);
-}
-
 
 
 
@@ -500,16 +449,9 @@ GeometryT<Vertex3, Face3, AllocationPolicyNew>* Spike::geometry() {
  */
 
 VertexSoup::VertexSoup(IndicesType num_verts) {
-	std::shared_ptr<ShapeObjVertexSoup> soup;
-	soup = std::make_shared<ShapeObjVertexSoup>(num_verts);
-	obj_ = std::static_pointer_cast<ShapeObj>(soup);
+	geometry_ = std::make_shared< GeometryT<Vertex3, Face3, AllocationPolicyNew> >(num_verts,0,NONE);
 }
 
-
-GeometryT<Vertex3, Face3, AllocationPolicyNew>* VertexSoup::geometry() {
-	std::shared_ptr<ShapeObjVertexSoup> t = std::static_pointer_cast<ShapeObjVertexSoup>(obj_) ;
-	return &(t->geometry);
-}
 
 
 
@@ -517,10 +459,10 @@ GeometryT<Vertex3, Face3, AllocationPolicyNew>* VertexSoup::geometry() {
  * Shared Triangle Mesh Indices
  */
 
-SharedTriMesh::SharedTriMesh(VertexSoup &shared, IndicesType num_indices){
+ /*
 
-	std::shared_ptr<ShapeObjSharedTriMesh> soup;
-	soup = std::make_shared<ShapeObjSharedTriMesh>(shared.obj(), num_indices);
-	obj_ = std::static_pointer_cast<ShapeObj>(soup);
+SharedTriMesh::SharedTriMesh(VertexSoup &shared, IndicesType num_indices) : shared_(shared){
 
-}
+	geometry_ = std::make_shared< GeometryT<Vertex3, Face3, AllocationPolicyShared> >(shared_.geometry()->GetSharedVertices(), num_indices, TRIANGLES);
+
+}*/

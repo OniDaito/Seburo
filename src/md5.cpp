@@ -180,7 +180,7 @@ void MD5Model::Parse(const File &file) {
       TriMeshSkinned trimesh;
       Skin    skin;
       
-      const GeometryT<Vertex3Skin, Face3, AllocationPolicyNew> *geometry; // Really not happy about this :S
+      std::shared_ptr< GeometryT<Vertex3Skin, Face3, AllocationPolicyNew> > geometry; // Really not happy about this :S
 
       size_t vidx = 0;
 

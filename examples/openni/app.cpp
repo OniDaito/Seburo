@@ -47,11 +47,11 @@ void OpenNIApp::Init(){
 
     skeleton_base_ = Skeleton(OPENNI_SKELETON);
     skeleton_shape_ = SkeletonShape(skeleton_base_);
-    skeleton_shape_.set_geometry_cast(WIREFRAME);
 
     skeleton_base_.Update();
 
     skeleton_node_.Add(shader_colour_).Add(camera_).Add(skeleton_shape_);
+
 
 }
 
@@ -96,6 +96,8 @@ OpenNIApp::~OpenNIApp(){
     ortho_camera_.Update(dt);
     camera_.Update(dt);
 
+    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
     model_ = glm::translate(glm::mat4(1.0f), glm::vec3(160,120,0));
     node_depth_.set_matrix(model_);
     openni_.texture_depth().Bind();
@@ -110,6 +112,7 @@ OpenNIApp::~OpenNIApp(){
 
     //glm::mat4 skel_mat = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f,0.1f,0.1f));
     //skeleton_node_.set_matrix(skel_mat);
+    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     skeleton_node_.Draw();
 
     CXGLERROR

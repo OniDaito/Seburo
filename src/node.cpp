@@ -20,23 +20,6 @@ size_t NodeShader::bind_count_ = 0;
 vector<glm::mat4> NodeCamera::projection_matrix_stack_;
 vector<glm::mat4> NodeCamera::view_matrix_stack_;
 
-/**
- * Draw function - recursively draws all the children of this node creating a contract
- * as it goes down with whatever shader is bound.
- */
-
-
-void NodeShape::Draw(GeometryPrimitive overide){
-
-	if (shape_.brewed()) {
-		shape_.Draw(overide);
-			CXGLERROR
-	}
-	else{
-		shape_.Brew(); ///\todo allow passing of flags
-			CXGLERROR
-	}
-}
 
 
 /**
@@ -74,11 +57,6 @@ void NodeSkeleton::Collect(gl::ShaderVisitor &v) {
 Node::Node() {}
 
 /// Node Constructor with a shape (for convinience)
-
-Node::Node(Shape s) {
-	_init();
-	Add(s);
-}
 
 /// _init - This is internal.  Creates a shared object, adding a NodeMinimal for the matrix and a camera
 /// \todo by using init here we have to call it when we make any add call or similar. Is this verbose or even nice?
@@ -243,31 +221,6 @@ Node& Node::RemoveMaterial() {
 	return *this;
 }
 
-
-
-/// Add the drawable for this node 
-Node& Node::Add(Shape s) {
-	if (obj_ == nullptr) _init();
-	if ( GetBase(GEOMETRY) == nullptr ){
-		obj_->bases.push_front( NodeBasePtr(new NodeShape(s)));
-		obj_->bases.sort(CompareNodeBasePtr);
-	} else {
-		cerr << "SEBURO Node - Trying to add a Shape to a node when one already exists." << endl;
-	}
-	return *this;
-}
-
-
-Node& Node::Remove(Shape s) {
-	NodeBasePtr t =  GetBase(GEOMETRY);
-	if (t != nullptr){
-		shared_ptr<NodeShape> p =  std::static_pointer_cast<NodeShape> (t);
-		if (p->shape_ == s){
-			Remove(t);
-		}
-	}
-	return *this;
-}
 
 
 /// Add a skeleton to this node 

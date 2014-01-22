@@ -247,13 +247,24 @@ namespace s9 {
 	/**
 	 * A Shape Decorator for node. Shapes are shared objects so can be implicitly copied
 	 */
-
+	template<typename VertexType, typename FaceType, typename AllocatonType>
 	class NodeShape : public NodeBase {
 	public:
-		NodeShape (Shape s) : NodeBase(GEOMETRY), shape_(s) { };
-		void Draw(GeometryPrimitive overide);
+		NodeShape (Shape<VertexType,FaceType,AllocatonType> s) : NodeBase(GEOMETRY), shape_(s) { };
+
+		void Draw(GeometryPrimitive overide){
+
+			if (shape_.brewed()) {
+				shape_.Draw(overide);
+			}
+			else{
+				shape_.Brew(); ///\todo allow passing of flags
+			}
+		}
+
+
 		std::string Tag() { return "Shape"; }
-		Shape shape_;
+		Shape<VertexType,FaceType,AllocatonType> shape_;
 	};
 
 	/**
@@ -360,13 +371,36 @@ namespace s9 {
   class SEBUROAPI Node {
 	public:
 		Node(); 
-		Node(Shape s);
+
+		template<typename VertexType, typename FaceType, typename AllocatonType>
+		Node(Shape<VertexType, FaceType, AllocatonType>  s) {
+			_init();
+			Add(s);
+		}
+
 
 		// Overridden add methods for attaching things to this node.
 		///\todo template these? We could do! :)
 		///\todo normally we'd pass by reference. Should we do that?
 
-		Node& Add(Shape s);
+
+
+		/// Add the drawable for this node 
+		template<typename VertexType, typename FaceType, typename AllocationType>
+		Node& Add(Shape<VertexType,FaceType,AllocationType> s) {
+			if (obj_ == nullptr) _init();
+			if ( GetBase(GEOMETRY) == nullptr ){
+				obj_->bases.push_front( NodeBasePtr(new NodeShape<VertexType,FaceType,AllocationType>(s)));
+				obj_->bases.sort(CompareNodeBasePtr);
+			} else {
+				std::cerr << "SEBURO Node - Trying to add a Shape to a node when one already exists." << std::endl;
+			}
+			return *this;
+		}
+
+
+
+		
 		Node& Add(Node &n);
 		Node& Add(Skin s);
 		Node& Add(gl::Shader s);
@@ -376,7 +410,19 @@ namespace s9 {
 		Node& Add(Material m); // Material is not a shared object, but a struct so we copy
 
 		// Removals
-		Node& Remove(Shape s);
+		template<typename VertexType, typename FaceType, typename AllocationType>
+		Node& Remove(Shape<VertexType,FaceType,AllocationType> s) {
+			NodeBasePtr t =  GetBase(GEOMETRY);
+			if (t != nullptr){
+				std::shared_ptr<NodeShape<VertexType,FaceType,AllocationType> > p =  std::static_pointer_cast<NodeShape <VertexType,FaceType,AllocationType> > (t);
+				if (p->shape_ == s){
+					Remove(t);
+				}
+			}
+			return *this;
+		}
+
+
 		Node& Remove(Node &n) { RemoveChild(n); return *this; };
 		Node& Remove(Skin s);
 		Node& Remove(gl::Shader s);

@@ -71,10 +71,6 @@ namespace s9{
 
         Bind();
 
-        ///\todo do we really want to mess with state here? Probably
-
-        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-        
         // Choose type based on the geometry with option of an override
         GLint type;
         if (gp == NONE)
@@ -91,15 +87,7 @@ namespace s9{
 
           case POINTS:
             type = GL_POINTS;
-        //    glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
             break;
-
-         /* case WIREFRAME:
-            type = GL_TRIANGLES;
-            glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-            break;*/
-
-            ///\todo GL_POLYGON_MODE should not be set here. Should be set by user
 
           default:
             assert(false);
@@ -147,7 +135,7 @@ namespace s9{
 
       /// Partial specialization for Shared Geometry
       template< typename VertexType, typename FaceType> 
-      void Brew( GeometryT<VertexType, FaceType, AllocationPolicyShared> &g, Drawable &shared, BrewFlags b=BrewFlagsDefault) {
+      void Brew( GeometryT<VertexType, FaceType, AllocationPolicyShared> &g, const Drawable &shared, BrewFlags b=BrewFlagsDefault) {
         
         glGenVertexArrays(1, &(vao_));
 
