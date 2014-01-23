@@ -77,6 +77,7 @@ void GLFWApp::Run() {
 
  	Shutdown();
  	///\todo potentially give a return value?
+	glfwTerminate();
 }
 
 bool GLFWApp::MainLoop() {
@@ -118,8 +119,8 @@ void GLFWApp::Reshape(GLFWwindow* window, int w, int h) {
 
 void GLFWApp::Shutdown() {
 	running_ = false;
-	glfwTerminate();
-	exit(EXIT_SUCCESS);
+	//glfwTerminate(); - causes issues with X11 and GCC - this can be called from other places
+	///\todo call a shutdown method in pp_
 }
 
 /*
@@ -527,10 +528,8 @@ void WithUXApp::Shutdown() {
 #ifdef _SEBURO_LINUX	
 	// Disconnect signals
 	idle_connection_.disconnect();
-
-	glfwTerminate();	
+	
 	gtk_app_->quit();
-	exit(EXIT_SUCCESS);
 #endif
 
 }

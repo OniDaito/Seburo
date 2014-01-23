@@ -59,7 +59,21 @@ void OpenNIApp::Init(){
  * Update loop on another thread
  */
 
- void OpenNIApp::Update(double_t dt) {
+  void OpenNIApp::Update(double_t dt) {
+	
+  }
+
+  OpenNIApp::~OpenNIApp(){
+  }
+
+
+/*
+ * Called as fast as possible. Not set FPS wise but dt is passed in
+ */
+
+ void OpenNIApp::Display(GLFWwindow* window, double_t dt){
+
+    // Moved here as GC Seems to be upset
 
     if (openni_.ready()) {
         skeleton_.Update();
@@ -72,17 +86,8 @@ void OpenNIApp::Init(){
         } 
     }
     skeleton_base_.Update();
-}
-
-OpenNIApp::~OpenNIApp(){
-}
 
 
-/*
- * Called as fast as possible. Not set FPS wise but dt is passed in
- */
-
- void OpenNIApp::Display(GLFWwindow* window, double_t dt){
 
     GLfloat depth = 1.0f;
     // Now draw to the screen
