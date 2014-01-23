@@ -96,6 +96,7 @@ bool GLFWApp::MainLoop() {
 
 	dt_ = glfwGetTime() - t;
 
+
 	glfwPollEvents();
 
 	return true;
@@ -112,12 +113,13 @@ void GLFWApp::Reshape(GLFWwindow* window, int w, int h) {
 
 
 /*
- * GLFW Shutdown
+ * GLFW Shutdow
  */
 
 void GLFWApp::Shutdown() {
 	running_ = false;
 	glfwTerminate();
+	exit(EXIT_SUCCESS);
 }
 
 /*
@@ -217,6 +219,8 @@ void GLFWApp::MousePositionCallback(GLFWwindow* window, double x, double y){
 }
 
 void GLFWApp::WindowCloseCallback(GLFWwindow* window) {
+	
+	glfwDestroyWindow(window);
 	CloseWindowEvent e (glfwGetTime());
 	pp_->eventor_.FireEvent(e,window);
 
@@ -231,6 +235,7 @@ void GLFWApp::WindowCloseCallback(GLFWwindow* window) {
 
 	// Default behavior - if there are no GLFW windows - quit
 	if (pp_->windows_.size() == 0) {
+		pp_->running_ = false;
 		pp_->Shutdown();
 	}
 
@@ -525,6 +530,7 @@ void WithUXApp::Shutdown() {
 
 	glfwTerminate();	
 	gtk_app_->quit();
+	exit(EXIT_SUCCESS);
 #endif
 
 }

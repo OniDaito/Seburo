@@ -127,53 +127,53 @@ namespace s9 {
 	template< typename VertexType, typename FaceType, typename AllocationPolicy> 
 	class SEBUROAPI GeometryT : private AllocationPolicy {
 	public:
-		GeometryT() { size_indices_= size_vertices_ = size_faces_ = 0; 
-      vertices_ = nullptr; 
-			indices_ = nullptr;
-			faces_= nullptr;
-			indexed_ = false; 
+		GeometryT() { 
+		size_indices_= size_vertices_ = size_faces_ = 0; 
+      		vertices_ = nullptr; 
+		indices_ = nullptr;
+		faces_= nullptr;
+		indexed_ = false; 
 
-    };
+    	}
 
-		GeometryT(IndicesType num_verts, IndicesType num_indices, GeometryPrimitive prim_type ) {
-      indexed_ = false;
-			
-      size_indices_= num_indices;
-      size_vertices_ = num_verts;
+	GeometryT(IndicesType num_verts, IndicesType num_indices, GeometryPrimitive prim_type ) {
+      		indexed_ = false;		
+      		size_indices_= num_indices;
+     		size_vertices_ = num_verts;
 
-      if (num_verts > 0){
-        AllocateVertices(vertices_, num_verts);
-      }
+      		if (num_verts > 0){
+        		AllocateVertices(vertices_, num_verts);
+      		}
 
-      if (num_indices > 0) {
-        AllocateIndices(indices_, num_indices);
-        indexed_ = true;
-      } 
+      		if (num_indices > 0) {
+        		AllocateIndices(indices_, num_indices);
+        		indexed_ = true;
+      		}	 
 
-      size_faces_ = indexed_ ? size_indices_ : 0;
+      		size_faces_ = indexed_ ? size_indices_ : 0;
 
-      AllocateFaces(faces_, size_faces_, prim_type);
+      		AllocateFaces(faces_, size_faces_, prim_type);
 
+		prim_type_ = prim_type;
+	}
 
-			prim_type_ = prim_type;
-		};
-
-    // Constructor for shared geometries
-
-    GeometryT<VertexType, FaceType, AllocationPolicyNew>(std::shared_ptr< std::vector<VertexType> >  &sp, IndicesType num_indices, GeometryPrimitive prim_type ) {
+    	// Constructor for shared geometries
+	
+	
+    	GeometryT( std::shared_ptr< std::vector<VertexType> >  &sp, IndicesType num_indices, GeometryPrimitive prim_type ) {
     
-      indexed_ = false;
-      size_indices_= num_indices;
+      		indexed_ = false;
+      		size_indices_= num_indices;
   
-      AllocateVertices(vertices_, sp);
+      		AllocateVertices(vertices_, sp);
       
-      AllocateIndices(indices_, num_indices);
-      indexed_ = true;
+      		AllocateIndices(indices_, num_indices);
+      		indexed_ = true;
      
-      AllocateFaces(faces_, num_indices, prim_type);
+      		AllocateFaces(faces_, num_indices, prim_type);
 
-      prim_type_ = prim_type;
-    };
+      		prim_type_ = prim_type;
+    	}
 
     /**
      * operator[] will return the vertex at the position given, ignoring indices

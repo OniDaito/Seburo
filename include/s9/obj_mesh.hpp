@@ -17,6 +17,7 @@
 #include "node.hpp"
 
 #include <set>
+#include <iterator>
 
 namespace s9 {
 
