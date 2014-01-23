@@ -22,8 +22,7 @@ void ObjMesh::Parse(const s9::File &file) {
 
   // Temporary locations for the various information
   std::set<ObjVert> uniques;
-  std::vector<IndicesType> positions;
-
+ 
   std::vector<glm::vec3> vertices;
   std::vector<glm::vec3> normals;
   std::vector<glm::vec2> texcoords;
@@ -295,7 +294,7 @@ void ObjMesh::Parse(const s9::File &file) {
         current_mesh->faces.push_back(new_face_1);
       }  else if (verts.size() > 4) {
         // Apparently we can work it like a triangular fan
-/*
+
         vector<ObjVert> new_vertex;
         for (size_t i = 0; i < verts.size(); ++i)
           new_vertex.push_back(ObjVert());
@@ -355,7 +354,7 @@ void ObjMesh::Parse(const s9::File &file) {
         new_face.vertices[1] = it_start[1];
         new_face.vertices[2] = it_end;
 
-        current_mesh->faces.push_back(new_face);*/
+        current_mesh->faces.push_back(new_face);
       }
     
     }
