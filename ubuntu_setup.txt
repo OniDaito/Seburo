@@ -1,0 +1,1 @@
+apt-get install vim git build-essential cmake cmake-curses-gui pkg-config libgtkmm-3.0-dev libgl1-mesa-dev libxxf86vm-dev libxrandr-dev libxi-dev libudev-dev libglu1-mesa-dev libstdc++-4.8-dev libglu-dev
