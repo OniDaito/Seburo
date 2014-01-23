@@ -25,8 +25,6 @@ namespace s9 {
     ObjMesh(){}
     ObjMesh (const s9::File &file);
 
-    SharedTriMesh mesh_;
-
   protected:
 
     void Parse(const s9::File &file);
@@ -34,11 +32,32 @@ namespace s9 {
 
     /// A struct that represents a unique vertex
 
+    // Annoyingly, lots of new and delete but we must do this because std::set is immutable
+
     struct ObjVert{
-      IndicesType p,t,n,idx;
+      IndicesType p,t,n;
+      IndicesType *final_pos;
+
+      ObjVert() {
+        p = t = n = 0;
+        final_pos = new IndicesType;
+        *final_pos = 0;
+      }
+
+      ObjVert(const ObjVert& other) {
+        p = other.p;
+        t = other.t;
+        n = other.n;
+        final_pos = new IndicesType;
+        *final_pos = *(other.final_pos);
+      }
+
+      ~ObjVert() {
+        delete final_pos;
+      }
 
       const bool operator<(const ObjVert& b) const {
-        return (p < b.p || (p == b.p &&  t < b.t) || ( p == b.p && t == b.t && n < b.n));
+        return (p < b.p || (p == b.p && t < b.t) || ( p == b.p && t == b.t && n < b.n));
       }
 
     };
@@ -66,19 +85,13 @@ namespace s9 {
       Material material;
       gl::Texture texture;
 
+      std::vector<ObjFace> faces;
+
       std::string tag;
 
     };
 
-    // This should still obey the shared object principles more or less as these
-    // can all be copied easily and are mostly blank anyway with the exception of
-    // soup_ which must remain and is shared (I hope!)
-
-  
-
-    std::vector<TempMesh> temp_;
-    bool using_materials_;
-
+    // This is the master set of vertices which we link 
     VertexSoup soup_;
 
   };

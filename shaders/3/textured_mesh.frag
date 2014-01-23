@@ -19,12 +19,15 @@ uniform float uShine;
 //uniform sampler2DRect uTexSampler0;
 uniform sampler2D uTexSampler0;
 
-out vec4 fragColor;
+out vec4 fragColour;
 
 void main() {
   //vec3 n = normalize(vVertexNormal.xyz);
   //vec2 texsize = textureSize(uTexSampler0); 
   //vec4 texcolor = texture(uTexSampler0, vTexCoord * texsize);
-  vec4 texcolor = texture(uTexSampler0, vTexCoord);
-  fragColor = vec4(texcolor.rgb,1.0);
+  //vec4 texcolor = texture(uTexSampler0, vTexCoord);
+  //fragColour = vec4(texcolor.rgb,1.0);
+
+  fragColour = uMatDiffuse;
+
 }

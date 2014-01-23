@@ -28,8 +28,6 @@ void ObjApp::Init(){
     obj_mesh_ = ObjMesh(s9::File("./data/room/Design_room.obj")); 
     node_.Add(obj_mesh_);
 
-    cout << obj_mesh_.mesh_.geometry().size_indices() << endl;
-
     rotation_ = 0.1f;
 
     glEnable(GL_DEPTH_TEST);
@@ -57,7 +55,7 @@ void ObjApp::Display(GLFWwindow* window, double_t dt){
     glm::mat4 Model = glm::rotate(glm::mat4(1.0f), rotation_, glm::vec3(1.0f, 0.0f, 0.0f));
     Model = glm::rotate(Model, rotation_, glm::vec3(0.0f, 1.0f, 0.0f));
     Model = glm::rotate(Model, rotation_, glm::vec3(0.0f, 0.0f, 1.0f));
-    Model = glm::scale(Model, glm::vec3(0.01f, 0.01f, 0.01f));
+    Model = glm::scale(Model, glm::vec3(0.025f, 0.025f, 0.025f));
     node_.set_matrix(Model);
 
     node_.Draw();

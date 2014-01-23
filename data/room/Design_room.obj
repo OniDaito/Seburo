@@ -3,7 +3,6 @@
 # File units = inches
 
 mtllib Design_room.mtl
-o design_room
 g Group17561 Model
 
 usemtl _Snow_1_

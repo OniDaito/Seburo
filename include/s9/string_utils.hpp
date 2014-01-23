@@ -159,6 +159,13 @@ namespace s9 {
 		return s.str();
 	}
 
+	/// return a string from a GLM Vector 2
+	static inline std::string VecToString (const glm::vec2 &vec) {
+		std::stringstream s;
+		s << vec.x << ", " << vec.y;
+		return s.str();
+	} 
+
 	/// return a string from a GLM Vector 3
 	static inline std::string VecToString (const glm::vec3 &vec) {
 		std::stringstream s;

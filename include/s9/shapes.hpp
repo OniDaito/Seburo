@@ -67,9 +67,9 @@ namespace s9 {
     Shape (Shape<VertexType,FaceType,AllocationPolicyNew> s) : obj_( std::shared_ptr<SharedObject>(new SharedObject(s))) {};
     void Brew(gl::BrewFlags b=gl::BrewFlagsDefault) { 
 
-   //   if (!shared_.brewed())
-   //     shared_.Brew(b);
-
+      // Shared must be on the graphics card first!
+      if (!obj_->shared.brewed())
+        obj_->shared.Brew(b);
       obj_->gl_drawable.Brew(obj_->geometry, obj_->shared.gl_drawable(), b); 
 
     }
