@@ -159,7 +159,7 @@ namespace s9 {
 
     	// Constructor for shared geometries
 	
-	
+	   // This used to be templated for AllocationPolicyShared but GCC Complained
     	GeometryT( std::shared_ptr< std::vector<VertexType> >  &sp, IndicesType num_indices, GeometryPrimitive prim_type ) {
     
       		indexed_ = false;

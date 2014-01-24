@@ -86,7 +86,7 @@ bool GLFWApp::MainLoop() {
 	for ( GLFWwindow* b : windows_) {	
 		glfwMakeContextCurrent(b);
 		glfwSwapInterval( 1 ); // vsync basically
-		app_.Display(b, t);
+		app_.Display(b, pp_->dt_);
 		glfwSwapBuffers(b);
 
 	}
@@ -95,8 +95,7 @@ bool GLFWApp::MainLoop() {
 
 	///\todo when we have multiple windows we need to decide how a Window App responds to that
 
-	dt_ = glfwGetTime() - t;
-
+	pp_->dt_ = glfwGetTime() - t;
 
 	glfwPollEvents();
 
@@ -248,15 +247,16 @@ void GLFWApp::CloseWindow(GLFWwindow* window) {
 }
 
 /**
- * Threaded update function. NO GL calls can be made from it
+ * Threaded update function. NO GL calls can be made from it. Calls the application update passing time
+ * elapsed in seconds
  */
 
 void GLFWApp::UpdateThread(){
 
   while(pp_->running_){
   	auto now = std::chrono::high_resolution_clock::now();
-  	double_t ms = std::chrono::duration_cast<std::chrono::milliseconds>(now - pp_->thread_start_).count();
-  	pp_->app_.Update(ms);
+  	double_t ss = std::chrono::duration_cast<std::chrono::seconds>(now - pp_->thread_start_).count();
+  	pp_->app_.Update(ss);
   	pp_->thread_start_ = now;
   }
 }
