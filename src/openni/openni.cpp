@@ -74,10 +74,19 @@ void OpenNIBase::CalculateHistogram(float* pHistogram, int histogramSize, const 
 
 ///\todo dont always assume both streams
 
-OpenNIBase::OpenNIBase( const char* deviceURI) : obj_( shared_ptr<SharedObject> (new SharedObject())) {
+OpenNIBase::OpenNIBase( const char* deviceURI, bool use_colour, bool use_depth , bool use_ir ) : obj_( shared_ptr<SharedObject> (new SharedObject())) {
   openni::Status rc = openni::STATUS_OK;
 
+  obj_->width_depth = obj_->height_depth = 0;
+  obj_->width_colour = obj_->height_colour = 0;
+  obj_->width_ir = obj_->height_ir = 0;
+
+  obj_->ready = false;
+
   rc = openni::OpenNI::initialize();
+
+  obj_->depth_ready = obj_->colour_ready = obj_->ir_ready = false;
+  obj_->num_streams = 0;
 
   cout << "SEBURO OpenNI: After initialization: " << openni::OpenNI::getExtendedError() << endl;
 
@@ -85,89 +94,129 @@ OpenNIBase::OpenNIBase( const char* deviceURI) : obj_( shared_ptr<SharedObject> 
   if (rc != openni::STATUS_OK) {
     cerr << "SEBURO OpenNI: Device open failed: " <<  openni::OpenNI::getExtendedError() << endl;
     openni::OpenNI::shutdown();
-  }
-
-  rc = obj_->depth_stream.create(obj_->device, openni::SENSOR_DEPTH);
-  if (rc == openni::STATUS_OK) {
-    rc = obj_->depth_stream.start();
-    if (rc != openni::STATUS_OK) {
-      cerr << "SEBURO OpenNI: Couldn't start depth stream: " << openni::OpenNI::getExtendedError() << endl;
-      obj_->depth_stream.destroy();
-    }
-  }
-  else {
-    cerr << "SEBURO OpenNI: Couldn't find depth stream: " << openni::OpenNI::getExtendedError() << endl;
-  }
-
-
-  rc = obj_->colour_stream.create(obj_->device, openni::SENSOR_COLOR);
-  if (rc == openni::STATUS_OK) {
-    rc = obj_->colour_stream.start();
-    if (rc != openni::STATUS_OK) {
-      cerr <<  "SEBURO OpenNI: Couldn't start color stream: " << openni::OpenNI::getExtendedError() << endl;
-      obj_->colour_stream.destroy();
-    }
-  }
-  else {
-    cerr << "SEBURO OpenNI: Couldn't find color stream: " << openni::OpenNI::getExtendedError() << endl;
-  }
-
-  if (!(obj_->depth_stream.isValid()) || !(obj_->colour_stream.isValid())) {
-    cerr << "SEBURO OpenNI: No valid streams. Exiting." << endl;
-    openni::OpenNI::shutdown();
-  }
- 
-
-  openni::VideoMode depthVideoMode;
-  openni::VideoMode colorVideoMode;
-
-
-  if (obj_->depth_stream.isValid() && obj_->colour_stream.isValid()) {
-    depthVideoMode = obj_->depth_stream.getVideoMode();
-    colorVideoMode = obj_->colour_stream.getVideoMode();
-
-    int depthWidth = depthVideoMode.getResolutionX();
-    int depthHeight = depthVideoMode.getResolutionY();
-    int colorWidth = colorVideoMode.getResolutionX();
-    int colorHeight = colorVideoMode.getResolutionY();
-
-    if (depthWidth == colorWidth && depthHeight == colorHeight) {
-      obj_->width = depthWidth;
-      obj_->height = depthHeight;
-    } else {
-      cout << "SEBURO OpenNI Error: expect color and depth to be in same resolution: D:" << depthWidth 
-        << "x" << depthHeight << " C: " << colorWidth << "x" << depthWidth << endl;
-      return;
-    }
-  } else if (obj_->depth_stream.isValid()) {
-    depthVideoMode = obj_->depth_stream.getVideoMode();
-    obj_->width = depthVideoMode.getResolutionX();
-    obj_->height = depthVideoMode.getResolutionY();
-  }
-  else if (obj_->colour_stream.isValid()) {
-    colorVideoMode = obj_->colour_stream.getVideoMode();
-    obj_->width = colorVideoMode.getResolutionX();
-    obj_->height = colorVideoMode.getResolutionY();
-  }
-  else {
-    cout <<  "SEBURO OpenNI Error: expects at least one of the streams to be valid." << endl;
     return;
   }
 
-  obj_->streams = new openni::VideoStream*[2];
-  obj_->streams[0] = &(obj_->depth_stream);
-  obj_->streams[1] = &(obj_->colour_stream);
+  openni::DeviceInfo info = obj_->device.getDeviceInfo();
 
-  obj_->tex_buffer_depth = new byte_t[obj_->width * obj_->height];
-  obj_->tex_buffer_colour = new byte_t[obj_->width * obj_->height * 3];
+  // Attempt to open the Depth Stream
+  if (use_depth && obj_->device.hasSensor( openni::SENSOR_DEPTH )){
 
-  // Allocate GL Texture
-  obj_->texture_depth = gl::TextureStream(obj_->width, obj_->height, GREY);
-  obj_->texture_colour = gl::TextureStream(obj_->width, obj_->height);
+    rc = obj_->depth_stream.create(obj_->device, openni::SENSOR_DEPTH);
+    if (rc == openni::STATUS_OK) {
+      rc = obj_->depth_stream.start();
+      if (rc != openni::STATUS_OK) {
+        cerr << "SEBURO OpenNI: Couldn't start depth stream: " << openni::OpenNI::getExtendedError() << endl;
+        obj_->depth_stream.destroy();
+      } else {
+        obj_->depth_ready = true;
+        obj_->num_streams++;
+      }
+    }
+    else {
+      cerr << "SEBURO OpenNI: Couldn't find depth stream: " << openni::OpenNI::getExtendedError() << endl;
+    }
+  }
+
+  // Attempt to open the Colour Stream
+  if (use_colour && obj_->device.hasSensor( openni::SENSOR_COLOR )){
+    rc = obj_->colour_stream.create(obj_->device, openni::SENSOR_COLOR);
+    if (rc == openni::STATUS_OK) {
+      rc = obj_->colour_stream.start();
+      if (rc != openni::STATUS_OK) {
+        cerr <<  "SEBURO OpenNI: Couldn't start color stream: " << openni::OpenNI::getExtendedError() << endl;
+        obj_->colour_stream.destroy();
+      } else{
+        obj_->colour_ready = true;
+        obj_->num_streams++;
+      }
+    }
+    else {
+      cerr << "SEBURO OpenNI: Couldn't find colour stream: " << openni::OpenNI::getExtendedError() << endl;
+    }
+  }
+
+
+  // Finally, attempt to open the IR Stream
+  if (use_ir && obj_->device.hasSensor( openni::SENSOR_IR )){
+    rc = obj_->ir_stream.create(obj_->device, openni::SENSOR_IR);
+    if (rc == openni::STATUS_OK) {
+      rc = obj_->ir_stream.start();
+      if (rc != openni::STATUS_OK) {
+        cerr <<  "SEBURO OpenNI: Couldn't start IR stream: " << openni::OpenNI::getExtendedError() << endl;
+        obj_->ir_stream.destroy();
+      } else {
+        obj_->ir_ready = true;
+        obj_->num_streams++;
+      }
+    }
+    else {
+      cerr << "SEBURO OpenNI: Couldn't find IR stream: " << openni::OpenNI::getExtendedError() << endl;
+    }
+  }
+
+  if ( obj_->num_streams == 0 ) {
+    cerr << "SEBURO OpenNI: No valid streams. Exiting." << endl;
+    openni::OpenNI::shutdown();
+    return;
+  }
+ 
+  // Create a index for our streams
+
+  obj_->streams = new openni::VideoStream*[obj_->num_streams];
+  obj_->frames = new openni::VideoFrameRef*[obj_->num_streams];
+  
+  int stream_idx = 0;
+
+  // Now set the modes on the streams we have found, grabbing sizes and setting texture streams
+
+  if (obj_->depth_ready) {
+    openni::VideoMode depthVideoMode = obj_->depth_stream.getVideoMode();
+    obj_->width_depth = depthVideoMode.getResolutionX();
+    obj_->height_depth = depthVideoMode.getResolutionY();
+    obj_->tex_buffer_depth = new byte_t[ obj_->width_depth * obj_->height_depth];
+    obj_->texture_depth = gl::TextureStream(obj_->width_depth, obj_->height_depth, GREY);
+
+    obj_->streams[stream_idx] = &(obj_->depth_stream);
+    obj_->frames[stream_idx] = &(obj_->depth_frame);
+    stream_idx++;
+
+    cout << "SEBURO OpenNI - Allocated Depth stream of " << obj_->width_depth << "x" << obj_->height_depth << "." << endl;
+
+  }
+
+  if (obj_->colour_ready) {
+    openni::VideoMode colourVideoMode = obj_->colour_stream.getVideoMode();
+    obj_->width_colour = colourVideoMode.getResolutionX();
+    obj_->height_colour = colourVideoMode.getResolutionY();
+    obj_->tex_buffer_colour = new byte_t[obj_->width_colour * obj_->height_colour * 3];
+    obj_->texture_colour = gl::TextureStream(obj_->width_colour, obj_->height_colour);
+
+    obj_->streams[stream_idx] = &(obj_->colour_stream);
+    obj_->frames[stream_idx] = &(obj_->colour_frame);
+    stream_idx++;
+
+    cout << "SEBURO OpenNI - Allocated Colour stream of " << obj_->width_colour << "x" << obj_->height_colour << "." << endl;
+  }
+
+  if (obj_->ir_ready) {
+    openni::VideoMode irVideoMode = obj_->ir_stream.getVideoMode();
+    obj_->width_ir = irVideoMode.getResolutionX();
+    obj_->height_ir = irVideoMode.getResolutionY();
+    obj_->tex_buffer_ir = new byte_t[ obj_->width_ir * obj_->height_ir];
+    obj_->texture_ir = gl::TextureStream(obj_->width_ir, obj_->height_ir, GREY);
+
+    obj_->streams[stream_idx] = &(obj_->ir_stream);
+    obj_->frames[stream_idx] = &(obj_->ir_frame);
+    stream_idx++;
+
+    cout << "SEBURO OpenNI - Allocated IR stream of " << obj_->width_ir << "x" << obj_->height_ir << "." << endl;
+  }
+
 
   obj_->ready = true;
 
-  cout << "SEBURO OpenNI - Allocated Depth / Colour streams of " << obj_->width << "x" << obj_->height << "." << endl;
+
  
 }
 
@@ -179,65 +228,61 @@ void OpenNIBase::Update() {
   if(!obj_->ready)
     return;
 
-  openni::Status rc = openni::OpenNI::waitForAnyStream(obj_->streams, 2, &changedIndex);
+  // Wait and read the appropriate frame
+  openni::Status rc = openni::OpenNI::waitForAnyStream(obj_->streams, obj_->num_streams, &changedIndex);
   if (rc != openni::STATUS_OK) {
     cout << "SEBURO OpenNI Error: Wait failed" << endl;
     return;
   }
-  switch (changedIndex){
-    case 0:
-      obj_->depth_stream.readFrame(& (obj_->depth_frame)); break;
-    case 1:
-      obj_->colour_stream.readFrame(&(obj_->colour_frame)); break;
-    default:
-      cout << "SEBURO OpenNI Error: Wait error" << endl;
-  }
 
-  if (obj_->depth_frame.isValid()) {
-    CalculateHistogram(obj_->depth_hist, S9_OPENNI_MAX_DEPTH, obj_->depth_frame);
-  }
+  obj_->streams[changedIndex]->readFrame ( obj_->frames[changedIndex]);
 
-  int buffer_size = obj_->width * obj_->height * sizeof(byte_t) * 3;
+  // If we have a depth frame, do the histogram conversion
+
+  int buffer_size = obj_->width_colour * obj_->height_colour * sizeof(byte_t) * 3;
 
  
   // check if we need to draw image frame to texture
   // We dont bother with cropping and all that crap OpenNI likes to put in.
-  if (obj_->colour_frame.isValid()) {
-
-    memset(obj_->tex_buffer_colour, 0, buffer_size);
-    memcpy(obj_->tex_buffer_colour, obj_->colour_frame.getData(), buffer_size);
-
-  }
-
-  // Buffer is now set to colour
-
-  buffer_size = obj_->width * obj_->height * sizeof(byte_t);
-
-  // check if we need to draw depth frame to texture
-  if (obj_->depth_frame.isValid()) {
-  
-    memset(obj_->tex_buffer_depth, 0, buffer_size);
-
-    byte_t *td = obj_->tex_buffer_depth;
-    uint16_t *ts = (uint16_t*) obj_->depth_frame.getData(); // This is a 16bit integer for depth data
-
-    for (int i=0; i < obj_->width * obj_->height; ++i){
-      *td = obj_->depth_hist[*ts];
-      ++td;
-      ++ts;
+  if (obj_->colour_ready){
+    if (obj_->colour_frame.isValid()) {
+      memset(obj_->tex_buffer_colour, 0, buffer_size);
+      memcpy(obj_->tex_buffer_colour, obj_->colour_frame.getData(), buffer_size);
     }
-
-
   }
 
-  // Buffer is now set to depth
+
+  if (obj_->depth_ready) {
+    if (obj_->depth_frame.isValid()) {
+      CalculateHistogram(obj_->depth_hist, S9_OPENNI_MAX_DEPTH, obj_->depth_frame);
+    
+      buffer_size = obj_->width_depth * obj_->height_depth * sizeof(byte_t);
+
+      // check if we need to draw depth frame to texture
+    
+      memset(obj_->tex_buffer_depth, 0, buffer_size);
+
+      byte_t *td = obj_->tex_buffer_depth;
+      uint16_t *ts = (uint16_t*) obj_->depth_frame.getData(); // This is a 16bit integer for depth data
+
+      for (int i=0; i < obj_->width_depth * obj_->height_depth; ++i){
+        *td = obj_->depth_hist[*ts];
+        ++td;
+        ++ts;
+      }
+    }
+  }
+
+
 
 }
 
 void OpenNIBase::UpdateTextures() {
   if (obj_->ready){
-    obj_->texture_colour.Update(obj_->tex_buffer_colour);
-    obj_->texture_depth.Update(obj_->tex_buffer_depth);
+    if (obj_->colour_ready)
+      obj_->texture_colour.Update(obj_->tex_buffer_colour);
+    if (obj_->depth_ready)
+      obj_->texture_depth.Update(obj_->tex_buffer_depth);
   }
 }
 

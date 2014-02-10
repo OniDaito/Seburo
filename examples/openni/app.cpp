@@ -103,17 +103,21 @@ void OpenNIApp::Init(){
 
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-    model_ = glm::translate(glm::mat4(1.0f), glm::vec3(160,120,0));
-    node_depth_.set_matrix(model_);
-    openni_.texture_depth().Bind();
-    node_depth_.Draw();
-    openni_.texture_depth().Unbind();
+    if (openni_.depth_ready()) {
+        model_ = glm::translate(glm::mat4(1.0f), glm::vec3(160,120,0));
+        node_depth_.set_matrix(model_);
+        openni_.texture_depth().Bind();
+        node_depth_.Draw();
+        openni_.texture_depth().Unbind();
+    }
 
-    model_ = glm::translate(glm::mat4(1.0f), glm::vec3(480,120,0));
-    node_colour_.set_matrix(model_);
-    openni_.texture_colour().Bind();
-    node_colour_.Draw();
-    openni_.texture_colour().Unbind();
+    if (openni_.colour_ready()) {
+        model_ = glm::translate(glm::mat4(1.0f), glm::vec3(480,120,0));
+        node_colour_.set_matrix(model_);
+        openni_.texture_colour().Bind();
+        node_colour_.Draw();
+        openni_.texture_colour().Unbind();
+    }
 
     //glm::mat4 skel_mat = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f,0.1f,0.1f));
     //skeleton_node_.set_matrix(skel_mat);

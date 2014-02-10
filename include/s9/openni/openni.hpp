@@ -42,27 +42,40 @@ namespace s9 {
 
         openni::VideoFrameRef   depth_frame;
         openni::VideoFrameRef   colour_frame;
+        openni::VideoFrameRef   ir_frame;
+
+        openni::VideoFrameRef**    frames;
 
         openni::Device          device;
         openni::VideoStream     depth_stream;
         openni::VideoStream     colour_stream;
-        openni::VideoStream**   streams;
+        openni::VideoStream     ir_stream;
+
+        openni::VideoStream**    streams;
+        
 
         ///\todo - Depth could be a bit less?
 
         // Seperate buffers as we update OpenGL seperately on a different thread
         byte_t *    tex_buffer_colour;
         byte_t *    tex_buffer_depth;
+        byte_t *    tex_buffer_ir;
 
         gl::TextureStream   texture_depth;
         gl::TextureStream   texture_colour;
+        gl::TextureStream   texture_ir;
 
-        uint16_t     width;
-        uint16_t     height;
+        uint16_t     width_depth, height_depth;
+        uint16_t     width_colour, height_colour;
+        uint16_t     width_ir, height_ir;
 
         float       depth_hist[S9_OPENNI_MAX_DEPTH];
 
         bool        ready = false;
+
+        bool depth_ready, colour_ready, ir_ready;
+
+        int num_streams;
 
         ~SharedObject();
 
@@ -72,7 +85,7 @@ namespace s9 {
 
     public:
       OpenNIBase() {};
-      OpenNIBase(const char * deviceURI); // openni::ANY_DEVICE normally
+      OpenNIBase(const char * deviceURI, bool use_colour = true, bool use_depth = true, bool use_ir = false); // openni::ANY_DEVICE normally
       
       void Update(); // thread safe for update
       void UpdateTextures(); // Update the textures - main thread only
@@ -82,6 +95,11 @@ namespace s9 {
 
       gl::TextureStream texture_depth() {return obj_->texture_depth; }
       gl::TextureStream texture_colour() {return obj_->texture_colour; }
+      gl::TextureStream texture_ir() {return obj_->texture_ir; }
+
+      bool depth_ready() {return obj_->depth_ready; }
+      bool colour_ready() {return obj_->colour_ready; }
+      bool ir_ready() {return obj_->ir_ready; }
 
       static void CalculateHistogram(float* pHistogram, int histogramSize, const openni::VideoFrameRef& frame);
    
