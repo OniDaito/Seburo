@@ -22,7 +22,7 @@ TiXmlElement* _find(TiXmlElement *p, std::vector<std::string> s){
 }
 
 
-std::string Find(std::vector<std::string> strs, TiXmlElement *pRoot){
+TiXmlElement* Find(std::vector<std::string> strs, TiXmlElement *pRoot){
 	
 	string s = accumulate( strs.begin(), strs.end(), string("") );
 	if (pRoot && strs.size() > 1){
@@ -31,90 +31,75 @@ std::string Find(std::vector<std::string> strs, TiXmlElement *pRoot){
 		
 		if (pp == NULL){
 			cerr << "SEBURO - XML Not found: " <<  s << endl; 
-			return "Failed";
+			return nullptr;
 		}
 		
-		try{
-			cout << ((TiXmlNode*)pp)->Value() << endl;
-			return string(pp->GetText());
-		} catch(...){
-			cerr << "SEBURO - Error returning XML Value for: " <<  s << endl; 
-			return "Failed";
-		}
+		
 	}
 	else if (pRoot && strs.size() == 1) {
 		try{
-			return string(pRoot->GetText());
+			return pRoot;
 		} catch(...){
 			cerr << "SEBURO - Error returning XML Value for: " << s << endl; 
-			return "Failed";
+			return nullptr;
 		}
 	}
 	else {
 		
 		cerr << "SEBURO - XML Not found: " << s << endl; 
-		return "Failed";
+		return nullptr;
 	}
 }
 
 
 /// return a std string from the iterator
 std::string XMLIterator::operator* () {
-	return string(pElement->GetText());
+	if (pElement != nullptr)
+		return string(pElement->GetText());
+	return string("");
 }
 
+
+
+std::string XMLIterator::Value() {
+	if (pElement != nullptr)
+		return string(pElement->GetText());
+	return string("");
+}
 
 /// Move the iterator onwards
 bool XMLIterator::Next() {
-	if (pElement != NULL)
+	if (pElement != nullptr)
 		pElement = pElement->NextSiblingElement();
-	return pElement != NULL;
+	return pElement != nullptr;
 }
 
-
-/// Return an iterator at a position of the element passed in
-std::string XMLIterator::operator[](const char *s) {
-	//split_string string via '/' into levels
-	string ss(s);
-	std::vector<std::string> strs;
-	strs = SplitStringChars(s, "/: ");
-	TiXmlElement *pRoot = pElement->FirstChildElement(strs[0].c_str());
-	return Find(strs,pRoot);
-	
-}
 
 
 /**
  * Find the first (as we can have duplicates) of the path given
  */
 
-std::string XMLSettings::operator[](std::string s) {
-
-	// todo - be careful here if we ever add push and pop to the stack
-	// as the cache will need to keep the FULL path
-
-	map< string,string>::iterator it;
-	it = obj_->cache.find(s);
-	if (it == obj_->cache.end()){
-		//split_string string via '/' into levels
-		std::vector<std::string> strs;
-		strs = SplitStringChars(s, "/: ");
-		TiXmlElement *pRoot = obj_->doc->FirstChildElement(strs[0].c_str());
-		string result = Find(strs,pRoot);
-		obj_->cache[s] = result;
-		return result;
-	}
-	return it->second;
+XMLIterator XMLSettings::operator[](std::string s) {
+	return Iterator(s);
 }
-
+/*
+try{
+			cout << ((TiXmlNode*)pp)->Value() << endl;
+			return string(pp->GetText());
+		} catch(...){
+			cerr << "SEBURO - Error returning XML Value for: " <<  s << endl; 
+			return "Failed";
+		}
+*/
 /// Load an xml file from an absolute/relative path
 bool XMLSettings::LoadFile(std::string filename){
 	
 	obj_.reset(new SharedObject());
 	obj_->path = filename;
-
-	obj_->doc.reset(new TiXmlDocument(filename.c_str()));
-	if (!obj_->doc->LoadFile()){
+	obj_->doc = TiXmlDocument(filename.c_str());
+	
+	if (!obj_->doc.LoadFile()){
 		cerr << "SEBURO - XML Failed to load " << filename << endl;
 		return false;
 	}
@@ -127,9 +112,9 @@ bool XMLSettings::LoadFile(s9::File file){
 	
 	obj_.reset(new SharedObject());
 	obj_->path = file.final_path();
-
-	obj_->doc.reset(new TiXmlDocument(obj_->path.c_str()));
-	if (!obj_->doc->LoadFile()){
+	obj_->doc = TiXmlDocument(obj_->path.c_str());
+	
+	if (!obj_->doc.LoadFile()){
 		cerr << "SEBURO - XML Failed to load " << obj_->path << endl;
 		return false;
 	}
@@ -145,7 +130,7 @@ XMLIterator XMLSettings::Iterator(std::string s){
 	
 	XMLIterator it;
 	
-	TiXmlElement *pRoot = obj_->doc->FirstChildElement(strs[0].c_str());
+	TiXmlElement *pRoot = obj_->doc.FirstChildElement(strs[0].c_str());
 		
 	if (pRoot && strs.size() > 1){
 		strs.erase(strs.begin());
