@@ -17,6 +17,8 @@ namespace s9 {
 
 ///\todo set this to go off only once otherwise we end up spamming the logs ( maybe even quit?)
 
+	static std::string LAST_ERROR;
+
 #define CXGLERROR CheckError(__FUNCTION__,__LINE__,__FILE__);
 
 		inline bool CheckError(const char * func, int line, const char* file) {
@@ -44,7 +46,19 @@ namespace s9 {
 					ErrorString = "UNKNOWN";
 					break;
 				}
-				std::cerr << "SEBURO - OpenGL Error " << ErrorString << " at " << line << " in " << func << " in " <<  file << std::endl;
+
+				// Only print the error once as OpenGL has a tendency to spam things a lot
+
+				std::stringstream ss;
+				ss << "SEBURO - OpenGL Error " << ErrorString << " at " << line << " in " << func << " in " << file;
+
+				std::string msg = ss.str();
+
+				if (LAST_ERROR.compare(msg) !=0 ){
+					LAST_ERROR = msg;
+					std::cerr << msg << std::endl;
+				}
+				
 			}
 			return Error == GL_NO_ERROR;
 		}

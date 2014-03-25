@@ -13,6 +13,7 @@
 #include "common.hpp"
 #include "../window.hpp"
 #include "utils.hpp"
+#include "context.hpp"
 
 #include <GLFW/glfw3.h>
 
@@ -27,7 +28,7 @@
 namespace s9 {
 
 	namespace gl {
-
+		
 
 		/**
 		 * A static wrapper around a C++ style class for GLFW - delgates to app class
@@ -38,8 +39,6 @@ namespace s9 {
 		class SEBUROAPI GLFWApp : public WindowSystem<GLFWwindow*> {
 			
 		protected:
-
-			static void InitGL(const int major = -1, const int minor = -1, const int depthbits = 16);
 
 			static void ErrorCallback(int error, const char* description);
 
@@ -64,6 +63,7 @@ namespace s9 {
 			void InitGLEW(GLFWwindow* window);
 
 			bool MainLoop();
+
 
 		public:
 
@@ -103,7 +103,13 @@ namespace s9 {
       size_t 										mx_, my_;
       uint16_t 									flag_;
 
+     	Context	context_; // Just one for now
+
 		};
+
+
+
+
 
 		/**
 		 * This class represents the above, but with a UX window as well.

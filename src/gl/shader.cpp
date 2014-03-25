@@ -19,6 +19,10 @@ const static string fragment_delimiter = "##>FRAGMENT";
 const static string vertex_delimiter = "##>VERTEX";
 const static string geometry_delimiter = "##>GEOMETRY";
 
+
+// Global Shader builder - we call it's methods statically as we really do only need one (unless we have multiple contexts! :S )
+const ShaderBuilder global_builder;
+
 template<typename T, size_t N>
 void ShaderVisitor::Sign( ShaderClause<T, N> &c) {
 	assert(false);
@@ -346,4 +350,120 @@ Shader& Shader::s(const char * name, int i){
 	GLuint l = Location(name);
 	glUniform1i(l,i);
 	return *this;
+}
+
+
+/**
+ * Shader Builder Class constructor
+ */
+
+// For now, we should allow this with the global context maybe?
+ShaderBuilder::ShaderBuilder() {
+}
+
+ShaderBuilder::ShaderBuilder(const Context context) : obj_(shared_ptr<SharedObject>(new SharedObject())) {
+	obj_->library_ = ShaderLibrary(context);
+	Clear();
+}
+
+
+/// Restet Function sets up the buffers with the context boilerplate
+
+ShaderBuilder& ShaderBuilder::Clear() {
+	assert(obj_);
+
+	obj_->vertex_buffer_ = obj_->library_.GetSnippet("Header",VERTEX_SNIPPET);
+	obj_->vertex_main_buffer_ = "";
+	obj_->fragment_buffer_ = obj_->library_.GetSnippet("Header",FRAGMENT_SNIPPET);
+	obj_->fragment_main_buffer_ = "";
+	
+	// Default to empty here for now
+	obj_->geometry_buffer_= "";
+	obj_->geometry_main_buffer_ = "";
+
+	return *this;
+}
+
+
+/// Add a snippet to our current setup, returning the static class - lookup with name 't'
+
+ShaderBuilder& ShaderBuilder::AddSnippet(std::string t) {
+
+	assert(obj_);
+
+	///\TODO we should keep a record of the library items added so we can automagically guess the final output!
+
+	// Build each type up
+	obj_->vertex_buffer_ += obj_->library_.GetSnippet(t,VERTEX_SNIPPET);
+	obj_->vertex_main_buffer_ += obj_->library_.GetSnippet(t,VERTEX_MAIN);
+
+	obj_->fragment_buffer_ += obj_->library_.GetSnippet(t,FRAGMENT_SNIPPET);
+	obj_->fragment_main_buffer_ += obj_->library_.GetSnippet(t,FRAGMENT_MAIN);
+
+	obj_->geometry_buffer_ += obj_->library_.GetSnippet(t,GEOMETRY_SNIPPET);
+	obj_->geometry_main_buffer_ += obj_->library_.GetSnippet(t,GEOMETRY_MAIN);
+
+	return *this;
+
+}
+
+ShaderBuilder& ShaderBuilder::AddUserText(SnippetType type, std::string text) {
+
+	assert(obj_);
+
+	// Build each type up
+	switch (type){
+		case VERTEX_SNIPPET:
+			obj_->vertex_buffer_ += text;
+			break;
+		
+		case VERTEX_MAIN:
+			obj_->vertex_main_buffer_ += text;
+			break;
+
+		case FRAGMENT_SNIPPET:
+			obj_->fragment_buffer_ += text;
+			break;
+
+		case FRAGMENT_MAIN:
+			obj_->fragment_main_buffer_ += text;
+			break;
+
+		case GEOMETRY_SNIPPET:
+			obj_->geometry_buffer_ += text;
+			break;
+
+		case GEOMETRY_MAIN:
+			obj_->geometry_main_buffer_ += text;
+			break;
+
+		default:
+			std::cerr << "SEBURO ShaderBuilder AddUserText Error - must proivide a valid ShaderSnippet type." << endl;
+			break;
+	}
+
+	return *this;
+
+}
+
+
+
+
+/// Build the shader with the given snippets
+Shader ShaderBuilder::Build() {
+
+
+	std::string vbuffer = obj_->vertex_buffer_ + "void main() {\n" + obj_->vertex_main_buffer_ + "}";
+	std::string fbuffer = obj_->fragment_buffer_ + "\nvoid main() {\n" + obj_->fragment_main_buffer_ + "}";
+	std::string gbuffer = obj_->geometry_buffer_ + "\nvoid main() {\n" + obj_->geometry_main_buffer_ +"}";
+
+	if (obj_->geometry_buffer_.compare("\nvoid main() {\n}") == 0) { // basically an empty shader
+		Shader s(obj_->vertex_buffer_, obj_->fragment_buffer_, obj_->geometry_main_buffer_ );
+		Clear();
+		return s;
+	} 
+	
+	Shader s(obj_->vertex_buffer_, obj_->fragment_buffer_ );
+	Clear();
+	return s;
 }

@@ -24,6 +24,7 @@ GLFWApp::GLFWApp (WindowApp<GLFWwindow*> &app, const int major, const int minor)
 
 	pp_ = this;
 	flag_ = 0;
+	int depthbits = 16;
 
 	// Add this app to the Eventor so it can listen for windows events
 	eventor_.AddWindowListener(&app_);
@@ -37,7 +38,26 @@ GLFWApp::GLFWApp (WindowApp<GLFWwindow*> &app, const int major, const int minor)
 			cout << "SEBURO GLFW Monitor Name: " << glfwGetMonitorName(monitors[i]) << endl;
 	}
 
-	InitGL(major, minor);
+	// InitGL and setup Context
+
+	if (major != -1 || minor != -1) {
+ 		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, major);
+		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, minor);
+ 	}
+
+ 	glfwWindowHint(GLFW_DEPTH_BITS, depthbits);
+
+	#ifdef _SEBURO_OSX
+ 		// Forward compatible and CORE Profile
+ 		glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+ 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+	#endif
+
+	//glfwWindowHint(GLFW_FSAA_SAMPLES, 4);
+
+ 	glfwSetErrorCallback(ErrorCallback);
+
+ 
 
 }
 
@@ -86,7 +106,7 @@ bool GLFWApp::MainLoop() {
 	for ( GLFWwindow* b : windows_) {	
 		glfwMakeContextCurrent(b);
 		glfwSwapInterval( 1 ); // vsync basically
-		app_.Display(b, pp_->dt_);
+		app_.Display(*context_, b, pp_->dt_);
 		glfwSwapBuffers(b);
 
 	}
@@ -310,7 +330,9 @@ GLFWwindow* GLFWApp::CreateWindow(const char * title ="SEBURO", size_t width =80
 
 	CXGLERROR
 
-	cout << "SEBURO OpenGL Version: " << glGetString(GL_VERSION) << endl;
+	// Create global context - Should only be one we hope! :S
+	if (!context_)
+ 		context_ = std::unique_ptr<Context>(new Context());
 
 	// Set Basic Callbacks
 	glfwSetKeyCallback(window, KeyCallback);
@@ -441,32 +463,7 @@ void GLFWApp::ErrorCallback(int error, const char* description) {
     std::cerr << "SEBURO - GLFW Error: " <<  error << " - " << description << std::endl;
 }
 
-/*
- * Perform OpenGL initialisation
- * \todo pass params as a struct perhaps? We will no-doubt need more in the future
- */
 
-void GLFWApp::InitGL(int major, int minor, int depthbits) {
-
- 	if (major != -1 || minor != -1) {
- 		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, major);
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, minor);
- 	}
-
- 	glfwWindowHint(GLFW_DEPTH_BITS, depthbits);
-
-#ifdef _SEBURO_OSX
- 	// Forward compatible and CORE Profile
- 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
- 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-#endif
-
-	//glfwWindowHint(GLFW_FSAA_SAMPLES, 4);
-
- 	glfwSetErrorCallback(ErrorCallback);
-
-
-}
 
 
 WithUXApp::WithUXApp(WindowApp<GLFWwindow*> &app, int argc, const char * argv[], 
@@ -503,7 +500,7 @@ void WithUXApp::Run(Gtk::Window &window) {
 
 	
 	// Call the application init method
-	app_.Init();
+	app_.Init(*context_);
 
 	// Fire off resize events per window
 	for ( GLFWwindow* b : windows_) {	

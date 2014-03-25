@@ -28,8 +28,8 @@ namespace s9 {
 
 	class BasicApp : public WindowApp<GLFWwindow*> {
 	public:
-		void Init();
-		void Display(GLFWwindow*  window, double_t dt);
+		void Init(Context context);
+		void Display(Context context, GLFWwindow*  window, double_t dt);
 		void Update(double_t dt);
 		
 

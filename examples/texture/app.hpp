@@ -28,8 +28,8 @@ namespace s9 {
 
 	class TextureApp : public WindowApp<GLFWwindow*> {
 	public:
-		void Init();
-		void Display(GLFWwindow* window, double_t dt);
+		void Init(Context context);
+		void Display(Context context, GLFWwindow* window, double_t dt);
 		void Update(double_t dt);
 
 		// Event handling - you can choose which to override

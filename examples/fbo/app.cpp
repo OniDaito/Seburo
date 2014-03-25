@@ -18,7 +18,7 @@ using namespace s9::gl;
  * Called when the mainloop starts, just once
  */
 
-void FBOApp::Init(){
+void FBOApp::Init(Context context){
     shader_ = Shader( s9::File("./shaders/3/quad.vert"), s9::File("./shaders/3/quad.frag"));
     shader_warp_ = Shader( s9::File("./shaders/3/quad_texture.vert"), s9::File("./shaders/3/quad_texture.frag"));
 
@@ -54,7 +54,7 @@ void FBOApp::Update(double_t dt) {
  * Called as fast as possible. Not set FPS wise but dt is passed in
  */
 		
-void FBOApp::Display(GLFWwindow* window, double_t dt){
+void FBOApp::Display(Context context, GLFWwindow* window, double_t dt){
     GLfloat depth = 1.0f;
 
     // Draw to the FBO

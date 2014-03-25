@@ -57,6 +57,14 @@
 ///\todo check if GLM relies on OpenGL at some point
 
 #define GLM_SWIZZLE 
+
+// Disable the warnings from GLM - I trust it but it does complain about some things
+#pragma warning(push, 0)
+#pragma GCC diagnostic ignored "-Wdeprecated-register"
+#pragma GCC diagnostic ignored "-Wshift-op-parentheses"
+
+#pragma GCC diagnostic push
+
 #include <glm/glm.hpp>
 #include <glm/gtc/quaternion.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -65,6 +73,9 @@
 #include <glm/gtc/swizzle.hpp>
 #include <glm/gtx/matrix_interpolation.hpp>
 #include <glm/gtx/string_cast.hpp>
+
+#pragma warning(pop)
+#pragma GCC diagnostic pop
 
 #if defined(_SEBURO_WIN32) && defined(_SEBURO_BUILD_DLL)
   #define SEBUROAPI __declspec(dllexport)
@@ -75,8 +86,5 @@
 
 /// Type definitions
 typedef uint8_t byte_t;
-
-/// Alias for checking that Shared objects are initialised before use
-#define CXSHARED assert(*this);
 
 #endif

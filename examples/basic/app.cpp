@@ -18,8 +18,22 @@ using namespace s9::gl;
  * Called when the mainloop starts, just once
  */
 
-void BasicApp::Init(){
-    shader_ = Shader( s9::File("./shaders/3/quad.vert"),  s9::File("./shaders/3/quad.frag"));
+void BasicApp::Init(Context context){
+    //shader_ = Shader( s9::File("./shaders/3/quad.vert"),  s9::File("./shaders/3/quad.frag"));
+    ShaderBuilder builder (context); 
+    builder.AddSnippet("Basic").AddSnippet("VertexColour").AddSnippet("BasicCamera");
+
+    // Annoyingly, still need to shift on context here for the moment
+    //if (global_context->major_version() < 4){
+    //    builder.AddUserText(VERTEX_MAIN, "gl_Position = uCameraMatrix * uProjectionMatrix * uModelMatrix * aVertexPosition;");
+    //    builder.AddUserText(FRAGMENT_MAIN, "gl_FragColor = vVertexColour;");
+    //}
+    //else {
+        builder.AddUserText(VERTEX_MAIN, "vVertexPosition = uCameraMatrix * uProjectionMatrix * uModelMatrix * aVertexPosition;");
+        builder.AddUserText(FRAGMENT_MAIN, "fragColor = vVertexColour;");
+    //}
+
+    shader_ = builder.Build();
 
     camera_= Camera( glm::vec3(0,0,10.0f), glm::vec3(0,0,0.0f));
     top_node_.Add(shader_).Add(camera_);
@@ -31,7 +45,6 @@ void BasicApp::Init(){
     top_node_.Add(cuboid_node);
 
   
-
     Sphere s (0.5f, 20);
     Node spike_node(s);
     spike_node.set_matrix(glm::translate(glm::mat4(1.0f), glm::vec3(1.0f,0.0f,0.0f)));
@@ -42,6 +55,7 @@ void BasicApp::Init(){
     top_node_.Add(spike_node2);
 
     rotation_ = 0.1f;
+
 }
 
 void BasicApp::Update(double_t dt) {
@@ -53,7 +67,7 @@ void BasicApp::Update(double_t dt) {
  * Called as fast as possible. Not set FPS wise but dt is passed in
  */
 		
-void BasicApp::Display(GLFWwindow* window, double_t dt){
+void BasicApp::Display(Context context, GLFWwindow* window, double_t dt){
 
     glClearBufferfv(GL_COLOR, 0, &glm::vec4(0.9f, 0.9f, 0.9f, 1.0f)[0]);
     GLfloat depth = 1.0f;

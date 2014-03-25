@@ -19,7 +19,7 @@ using namespace s9::gl;
  * 1 GL Unit = 1m
  */
 
- void OculusApp::Init(){
+ void OculusApp::Init(Context context){
     shader_ = Shader( s9::File("./shaders/3/quad.vert"),  s9::File("./shaders/3/quad.frag"));
     shader_warp_ = Shader( s9::File("./shaders/1.5/barrel.vert"), 
         s9::File("./shaders/1.5/barrel.frag"),
@@ -68,7 +68,7 @@ void OculusApp::Update(double_t dt) {
  * Called as fast as possible. Not set FPS wise but dt is passed in
  */
 
- void OculusApp::Display(GLFWwindow* window, double_t dt){
+ void OculusApp::Display(Context context, GLFWwindow* window, double_t dt){
 
     // Create the FBO and setup the cameras
     if (!fbo_ && oculus_.Connected()){

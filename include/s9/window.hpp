@@ -16,6 +16,8 @@
  
 namespace s9 {
 
+	class WindowSystem;
+
 	/**
 	 * WindowListener class responds to window events given by the
 	 * windowing system. Primtitives and applications can choose to
@@ -38,10 +40,11 @@ namespace s9 {
 	template<class T>
 	class WindowApp : public WindowListener<T> {
 	public:
-		virtual void Init() {}
+		virtual void Init(Context context) {}
 		virtual void Update(double_t dt) {}
-		virtual void Display(T window, double_t dt) {}
-	
+		virtual void Display(Context context, T window, double_t dt) {}
+		
+
 	};
 
 	template<class T>
@@ -53,7 +56,7 @@ namespace s9 {
 		virtual T 		CreateWindow(const char * title, size_t width, size_t height) = 0;
 		virtual void 	CloseWindow(T window) = 0;
 		virtual void 	Shutdown() = 0;
-
+	
 	};
 
 	

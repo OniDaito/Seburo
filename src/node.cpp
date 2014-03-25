@@ -84,6 +84,7 @@ Node& Node::Remove(NodeBasePtr p){
 	    }
 	  }
 	}
+	return *this;
 }
 
 

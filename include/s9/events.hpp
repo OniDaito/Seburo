@@ -10,6 +10,7 @@
 #define EVENTS_HPP
 
 #include "common.hpp"
+#include "context.hpp"
 
 
 ///\todo how does this tie in to GLFW and such? We have some good defines there already!
@@ -41,6 +42,7 @@ namespace s9{
 
 		EventType type;
 		double_t t;
+		const Context context;
 	};
 
 	inline std::ostream& operator<<(std::ostream& os, const Event& obj) {
@@ -48,12 +50,13 @@ namespace s9{
 	}
 
 	struct MouseEvent : public Event {
-		MouseEvent(int xp, int yp, uint16_t flagp, double_t tp=0 ) {
+		MouseEvent(const Context c, int xp, int yp, uint16_t flagp, double_t tp=0 ) {
 			flag = flagp;
 			x = xp;
 			y = yp;
 			type = EVENT_MOUSE;
 			t = tp;
+			context = c;
 		}
 
 		uint16_t flag;
@@ -61,42 +64,46 @@ namespace s9{
 	}; 
 
 	struct KeyboardEvent : public Event {
-		KeyboardEvent(int keyp, int actionp, double_t tp=0){
+		KeyboardEvent(const Context c, int keyp, int actionp, double_t tp=0){
 			key = keyp;
 			action = actionp;
 			type = EVENT_KEY;
 			t = tp;
+			context = c;
 		}
 		int key;
 		int action;
 	};
 
 	struct ResizeEvent : public Event {
-		ResizeEvent(size_t wp, size_t hp, double_t tp=0){
+		ResizeEvent(const Context c, size_t wp, size_t hp, double_t tp=0){
 			w = wp;
 			h = hp;
 			t = tp;
 			type = EVENT_RESIZE;
+			context = c;
 		}
 
 		size_t w,h;
 	};
 
 	struct ScrollEvent : public Event {
-		ScrollEvent (double_t xoffset, double_t yoffset, double_t tp=0) {
+		ScrollEvent (const Context c, double_t xoffset, double_t yoffset, double_t tp=0) {
 			xd = xoffset;
 			yd = yoffset;
 			t = tp;
 			type = EVENT_SCROLL;
+			context = c
 		}
 
 		double_t xd,yd;
 	};
 
 	struct CloseWindowEvent : public Event {
-		CloseWindowEvent(double_t tp=0 ){
+		CloseWindowEvent(const Context c, double_t tp=0 ){
 			t = tp;
 			type = EVENT_CLOSE_WINDOW;
+			context = c;
 		}
 	};
 }

@@ -17,7 +17,7 @@ using namespace s9::gl;
  * Called when the mainloop starts, just once
  */
 
-void MD5App::Init(){
+void MD5App::Init(Context context){
     shader_ = Shader(s9::File("./shaders/3/skinning.glsl"));
     shader_colour_ = Shader(s9::File("./shaders/3/solid_colour.glsl"));
 
@@ -94,7 +94,7 @@ void MD5App::Update(double_t dt) {
  * Called as fast as possible. Not set FPS wise but dt is passed in
  */
 		
-void MD5App::Display(GLFWwindow *window, double_t dt){
+void MD5App::Display(Context context, GLFWwindow *window, double_t dt){
 
     glClearBufferfv(GL_COLOR, 0, &glm::vec4(0.9f, 0.9f, 0.9f, 1.0f)[0]);
     GLfloat depth = 1.0f;

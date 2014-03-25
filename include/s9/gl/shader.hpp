@@ -15,6 +15,7 @@
 #include "../string_utils.hpp"
 #include "utils.hpp"
 #include "../file.hpp"
+#include "shader_library.hpp"
 
 /*
  * Basic Shader class - loads and binds
@@ -174,6 +175,9 @@ namespace s9 {
 		};
 
 
+		/**
+		 * Our Shader Class workhorse. Added to nodes to create our graphics! :D
+		 */
 		
 		class SEBUROAPI Shader { ///\todo shared object? Possibly? If we add caching then fo shure!
 		
@@ -231,6 +235,46 @@ namespace s9 {
 
 
 		};
+		
+		/* Create a shader in various ways, using the shader library class and other files we have
+		 * Mostly static methods in this class really
+		 */
+
+		class ShaderBuilder {
+		public:
+
+			ShaderBuilder();
+			ShaderBuilder(const Context context);
+
+			ShaderBuilder& AddSnippet(std::string t);
+			ShaderBuilder& AddUserText(SnippetType type, std::string text);
+			Shader Build();
+			ShaderBuilder& Clear();
+
+		private:
+
+			struct SharedObject {
+				std::string vertex_buffer_;
+				std::string vertex_main_buffer_;
+				std::string fragment_buffer_;
+				std::string fragment_main_buffer_;
+				std::string geometry_buffer_;
+				std::string geometry_main_buffer_;
+
+				ShaderLibrary library_;
+			};
+
+		std::shared_ptr<SharedObject> obj_ = nullptr;
+
+		public:
+
+	    bool operator == (const ShaderBuilder &ref) const { return this->obj_ == ref.obj_; }
+	    typedef std::shared_ptr<SharedObject> ShaderBuilder::*unspecified_bool_type;
+	    operator unspecified_bool_type() const { return ( obj_.get() == 0 ) ? 0 : &ShaderBuilder::obj_; }
+	    void reset() { obj_.reset(); }
+
+		};
+	
 	}
 }
 

@@ -19,7 +19,7 @@ using namespace s9::oni;
  * Called when the mainloop starts, just once
  */
 
-void OpenNIApp::Init(){
+void OpenNIApp::Init(Context context){
 
     shader_ = Shader( s9::File("./shaders/3/quad_texture.vert"), s9::File("./shaders/3/quad_texture.frag"));
     shader_colour_ = Shader(s9::File("./shaders/3/solid_colour.glsl"));
@@ -71,7 +71,7 @@ void OpenNIApp::Init(){
  * Called as fast as possible. Not set FPS wise but dt is passed in
  */
 
- void OpenNIApp::Display(GLFWwindow* window, double_t dt){
+ void OpenNIApp::Display(Context context, GLFWwindow* window, double_t dt){
 
     // Moved here as GC Seems to be upset
 

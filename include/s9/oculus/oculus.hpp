@@ -122,29 +122,29 @@ namespace s9 {
       operator unspecified_bool_type() const { return ( obj_.get() == 0 ) ? 0 : &OculusBase::obj_; }
       void reset() { obj_.reset(); }
 
-      void Update(double_t dt) { CXSHARED obj_->Update(dt); }
+      void Update(double_t dt) { assert(obj_); obj_->Update(dt); }
 
-      void ResetView() { CXSHARED obj_->fusion.Reset();}
+      void ResetView() { assert(obj_); obj_->fusion.Reset();}
 
-      bool Connected() { CXSHARED return (obj_->Connected() && obj_->initialized);  }
+      bool Connected() { assert(obj_); return (obj_->Connected() && obj_->initialized);  }
 
-      glm::quat orientation() {CXSHARED return obj_->orientation;  } 
+      glm::quat orientation() {assert(obj_); return obj_->orientation;  } 
      
-      glm::ivec4 left_eye_viewport() { CXSHARED return obj_->left_eye_viewport; }
-      glm::ivec4 right_eye_viewport() { CXSHARED return obj_->right_eye_viewport;  }
+      glm::ivec4 left_eye_viewport() { assert(obj_); return obj_->left_eye_viewport; }
+      glm::ivec4 right_eye_viewport() { assert(obj_); return obj_->right_eye_viewport;  }
 
-      std::string monitor_name()  { CXSHARED return obj_->monitor_name;  }
+      std::string monitor_name()  { assert(obj_); return obj_->monitor_name;  }
 
 
       glm::vec4 distortion_parameters() {
-        CXSHARED
+        assert(obj_);
         return glm::vec4(obj_->hmd_info.DistortionK[0], obj_->hmd_info.DistortionK[1],
           obj_->hmd_info.DistortionK[2],obj_->hmd_info.DistortionK[3]);
     
       }
 
       glm::vec4 chromatic_abberation() { 
-       CXSHARED
+       assert(obj_);
         OVR::Util::Render::DistortionConfig dc = obj_->stereo_config.GetDistortionConfig();
         return glm::vec4(dc.ChromaticAberration[0], dc.ChromaticAberration[1],
             dc.ChromaticAberration[2],dc.ChromaticAberration[3]);
@@ -153,80 +153,80 @@ namespace s9 {
       }
 
       float distortion_xcenter_offset() { 
-        CXSHARED 
+        assert(obj_); 
         return obj_->stereo_config.GetDistortionConfig().XCenterOffset;
       }
 
       float distortion_scale() { 
-        CXSHARED
+        assert(obj_);
         return obj_->stereo_config.GetDistortionScale();
       }
 
       /// Return the interpupillary distance if the device exists
       float interpupillary_distance() {
-        CXSHARED
+        assert(obj_);
         return obj_->hmd_info.InterpupillaryDistance;
       }
 
       /// Return the lens separation distance if the device exists
       float lens_separation_distance() {
-        CXSHARED
+        assert(obj_);
         return obj_->hmd_info.LensSeparationDistance;
       }
 
       /// Return the eye to screen distance if the device exists
       float eye_to_screen_distance() {
-        CXSHARED
+        assert(obj_);
         return obj_->hmd_info.EyeToScreenDistance;
       }
 
       /// Return the screen center if the device exists
       glm::vec2 screen_center() {
-        CXSHARED
+        assert(obj_);
         return glm::vec2(obj_->hmd_info.HScreenSize / 2.0, obj_->hmd_info.VScreenCenter );
       }
 
       /// Return the resoultion in pixels
       glm::ivec2 screen_resolution() {
-        CXSHARED
+        assert(obj_);
         return glm::ivec2(obj_->hmd_info.HResolution, obj_->hmd_info.VResolution);
       }
 
       /// Return the screen size in metres (I think)
       glm::vec2 screen_size() {
-        CXSHARED
+        assert(obj_);
         return glm::vec2(obj_->hmd_info.HScreenSize, obj_->hmd_info.VScreenSize);
       }
 
      
       /// Return the final FBO rendering size. This is scaled up
-      glm::vec2 fbo_size(){ CXSHARED return obj_->fbo_size; }
+      glm::vec2 fbo_size(){ assert(obj_); return obj_->fbo_size; }
       
       /// Return the screen size, scaled by rendering scale
-      glm::vec2 screen_size_scaled(){ CXSHARED return obj_->screen_size_scaled; }
+      glm::vec2 screen_size_scaled(){ assert(obj_); return obj_->screen_size_scaled; }
 
  
       glm::mat4 left_inter() {  
-        CXSHARED
+        assert(obj_);
         OVR::Util::Render::StereoEyeParams leftEye = obj_->stereo_config.GetEyeRenderParams (OVR::Util::Render::StereoEye_Left); 
         return ToGLMmatrix(leftEye.ViewAdjust);  
       }
 
       glm::mat4 right_inter() {   
-        CXSHARED
+        assert(obj_);
         OVR::Util::Render::StereoEyeParams rightEye = obj_->stereo_config.GetEyeRenderParams (OVR::Util::Render::StereoEye_Right); 
         return ToGLMmatrix(rightEye.ViewAdjust);  
       }
 
 
       glm::mat4 left_projection() {  
-        CXSHARED
+        assert(obj_);
         OVR::Util::Render::StereoEyeParams leftEye = obj_->stereo_config.GetEyeRenderParams (OVR::Util::Render::StereoEye_Left); 
         return ToGLMmatrix(leftEye.Projection);  
       }
 
       glm::mat4 right_projection() {   
-        CXSHARED
+        assert(obj_);
         OVR::Util::Render::StereoEyeParams rightEye = obj_->stereo_config.GetEyeRenderParams (OVR::Util::Render::StereoEye_Right); 
         return ToGLMmatrix(rightEye.Projection);  
       }

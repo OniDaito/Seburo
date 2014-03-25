@@ -18,7 +18,7 @@ using namespace s9::gl;
  * Called when the mainloop starts, just once
  */
 
-void ObjApp::Init(){
+void ObjApp::Init(Context context){
     shader_ = Shader( s9::File("./shaders/3/basic_mesh.vert"),  s9::File("./shaders/3/textured_mesh.frag"));
 
     camera_= Camera( glm::vec3(0,0,10.0f), glm::vec3(0,0,0.0f));
@@ -44,7 +44,7 @@ void ObjApp::Update(double_t dt) {
  * Called as fast as possible. Not set FPS wise but dt is passed in
  */
 		
-void ObjApp::Display(GLFWwindow* window, double_t dt){
+void ObjApp::Display(Context context, GLFWwindow* window, double_t dt){
 
     glClearBufferfv(GL_COLOR, 0, &glm::vec4(0.9f, 0.9f, 0.9f, 1.0f)[0]);
     GLfloat depth = 1.0f;
