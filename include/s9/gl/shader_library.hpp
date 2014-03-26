@@ -39,21 +39,22 @@ namespace s9 {
 
     public:
 
-      ShaderLibrary() {}
-      ShaderLibrary(const Context &context);
+      ShaderLibrary(){};
+      ShaderLibrary(int major_version);
 
       std::string GetSnippet(std::string name, SnippetType type);
 
     protected: 
       
       struct SharedObject {
-        
+
         ShaderSnippet* snippets;
         int num_snippets;
+
       };
 
       std::shared_ptr<SharedObject> obj_ = nullptr;
-    
+
     };
   }
 }

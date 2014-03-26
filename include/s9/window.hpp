@@ -12,90 +12,74 @@
 #include "common.hpp"
 #include "events.hpp"
 
-
  
 namespace s9 {
 
-	class WindowSystem;
 
 	/**
 	 * WindowListener class responds to window events given by the
 	 * windowing system. Primtitives and applications can choose to
 	 * respond to these. This is a basic interface
+	 * 
 	 */
 
-	
-	template<class T>
+	template < class Window >
 	class SEBUROAPI WindowListener {
 	public:
-		virtual void ProcessEvent(Event e, T w) {};
-		virtual void ProcessEvent(MouseEvent e, T w) {};
-		virtual void ProcessEvent(ResizeEvent e, T w) {};
-		virtual void ProcessEvent(KeyboardEvent e, T w) {};
-		virtual void ProcessEvent(CloseWindowEvent e, T w) {};
+		virtual void ProcessEvent( const Window &w, Event e) {};
+		virtual void ProcessEvent( const Window &w, MouseEvent e) {};
+		virtual void ProcessEvent( const Window &w, ResizeEvent e) {};
+		virtual void ProcessEvent( const Window &w, KeyboardEvent e) {};
+		virtual void ProcessEvent( const Window &w, CloseWindowEvent e) {};
 		
 	};
 
 
-	template<class T>
-	class WindowApp : public WindowListener<T> {
-	public:
-		virtual void Init(Context context) {}
-		virtual void Update(double_t dt) {}
-		virtual void Display(Context context, T window, double_t dt) {}
-		
-
-	};
-
-	template<class T>
-	class WindowSystem {
-
-	public:
-	
-		virtual void 	Run() = 0;
-		virtual T 		CreateWindow(const char * title, size_t width, size_t height) = 0;
-		virtual void 	CloseWindow(T window) = 0;
-		virtual void 	Shutdown() = 0;
-	
-	};
-
-	
 	/**
-	 * WindowEventor - The class we generally want to inherit from
-	 * Windows are generic and are controlled by WindowSystem. They launch events
-	 * that applications are aware of. They have functions that the Window System calls
+	 * WindowManager 
+	 * A class that creates windows of various kinds and provides events
+	 * If your class inherits from WindowListener, you can create a Manager that will
+	 * report back to you.
 	 */
-	
-	template<class T>
-	class SEBUROAPI WindowEventor {
-	
+
+	template < class Window >
+	class SEBUROAPI WindowManager {
 	public:
-		
-		void AddWindowListener(WindowListener<T> *responder) { 
-			listeners_.push_back(responder);
+	
+		WindowManager() { }
+
+		void AddListener(WindowListener<Window> * listener) {
+			listeners_.push_back(listener);
 		}
 
-		void RemoveWindowListener(WindowListener<T> *responder) { 
-			// Cx the use of auto - might be cheating :D
-			for (auto it = listeners_.begin(); it != listeners_.end(); ) {
-				if  (*it == responder){
-					listeners_.erase(it);
-				} else {
-					++it;
+		size_t NumWindows() { return windows_.size(); }
+
+		const Window & CreateWindow(const char * title, size_t width, size_t height) {
+			windows_.push_back( std::unique_ptr<Window> (new Window(title, width, height)) );
+			return *(windows_.back());
+		}
+
+		// Fire Events that are picked up by Window Listeners
+		template<class E>
+		void FireEvent(const Window &t, E e){
+			for(WindowListener<Window> * p : listeners_){
+     		p->ProcessEvent(t,e);
+   		}
+  	}
+
+		void DestroyWindow(const Window &window) {
+			for (auto it = windows_.begin(); it != windows_.end();) {
+				if ( &(**it) == &window){
+	    		it = windows_.erase(it);
 				}
 			}
 		}
-			
-		// Fire Events that are picked up by Window Listeners
-		template<class E>
-		void FireEvent(E e, T t){
-  		for(WindowListener<T> * p : listeners_){
-    		p->ProcessEvent(e, t);
-  		}
-  	}
 
-  protected:
-		std::vector< WindowListener<T>* > listeners_;
+
+	protected:
+
+		std::vector< WindowListener<Window> * > listeners_;
+		std::vector< std::unique_ptr<Window> > windows_;
 
 	};
 

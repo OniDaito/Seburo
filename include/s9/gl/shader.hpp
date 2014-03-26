@@ -243,8 +243,8 @@ namespace s9 {
 		class ShaderBuilder {
 		public:
 
-			ShaderBuilder();
-			ShaderBuilder(const Context context);
+			ShaderBuilder() {};
+			ShaderBuilder(int major_version);
 
 			ShaderBuilder& AddSnippet(std::string t);
 			ShaderBuilder& AddUserText(SnippetType type, std::string text);

@@ -9,6 +9,8 @@
 #ifndef BASICAPP_HPP
 #define BASICAPP_HPP
 
+#include "s9/application.hpp"
+#include "s9/window.hpp"
 #include "s9/common.hpp"
 #include "s9/file.hpp"
 #include "s9/camera.hpp"
@@ -26,20 +28,24 @@ namespace s9 {
  	 * A little multi-inheritence but one is only an interface so its cool
  	 */
 
-	class BasicApp : public WindowApp<GLFWwindow*> {
+	class BasicApp : public WindowListener<gl::GLWindow> {
 	public:
-		void Init(Context context);
-		void Display(Context context, GLFWwindow*  window, double_t dt);
-		void Update(double_t dt);
+		BasicApp();
+		void Init();
+		void MainLoop(double_t dt);
+		void Draw(double_t dt);
 		
 
 		// Event handling - you can choose which to override
-		void ProcessEvent(MouseEvent e, GLFWwindow* window);
-		void ProcessEvent(KeyboardEvent e, GLFWwindow* window);
-		void ProcessEvent(ResizeEvent e, GLFWwindow* window );
-		void ProcessEvent(CloseWindowEvent e, GLFWwindow* window );
+		void ProcessEvent(const gl::GLWindow & window, MouseEvent e);
+		void ProcessEvent(const gl::GLWindow & window, KeyboardEvent e);
+		void ProcessEvent(const gl::GLWindow & window, ResizeEvent e);
+		void ProcessEvent(const gl::GLWindow & window, CloseWindowEvent e);
 		
 	protected:
+
+		gl::GLFWWindowManager<BasicApp> window_manager_;
+
 		Cuboid cuboid_;
 		Node node_;
 		Node top_node_;

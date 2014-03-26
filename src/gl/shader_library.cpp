@@ -115,10 +115,10 @@ ShaderSnippet snippets_4[NUM_SNIPPETS_4] = {
  * Pass in a copy of the context so we can decide which shaders to build
  */
 
-ShaderLibrary::ShaderLibrary(const Context &context) : obj_(shared_ptr<SharedObject>(new SharedObject())) {
+ShaderLibrary::ShaderLibrary(int major_version) : obj_(shared_ptr<SharedObject>(new SharedObject())) {
  
   // This is a bit scrappy but should do for now -  choose between two
-  if (context.major_version() < 4.0) {
+  if (major_version < 4.0) {
     obj_->snippets = snippets_150;
     obj_->num_snippets = NUM_SNIPPETS_150;
   } else {

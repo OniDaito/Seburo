@@ -14,6 +14,5 @@
 #define GL_COMMON_HPP
 
 #include "GL/glew.h"
-#include "context.hpp"
 
 #endif

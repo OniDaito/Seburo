@@ -357,17 +357,13 @@ Shader& Shader::s(const char * name, int i){
  * Shader Builder Class constructor
  */
 
-// For now, we should allow this with the global context maybe?
-ShaderBuilder::ShaderBuilder() {
-}
-
-ShaderBuilder::ShaderBuilder(const Context context) : obj_(shared_ptr<SharedObject>(new SharedObject())) {
-	obj_->library_ = ShaderLibrary(context);
+ShaderBuilder::ShaderBuilder(int major_version) : obj_(shared_ptr<SharedObject>(new SharedObject())) {
+	obj_->library_ = ShaderLibrary(major_version);
 	Clear();
 }
 
 
-/// Restet Function sets up the buffers with the context boilerplate
+/// Clear - clears the buffers and sets them to their default settings
 
 ShaderBuilder& ShaderBuilder::Clear() {
 	assert(obj_);
