@@ -22,8 +22,11 @@ BasicApp::BasicApp(){
 
     window_manager_.AddListener(this);
     
-    // Create a GL Window
-    const GLWindow &window = window_manager_.CreateWindow("Basic Application",800,600, this, &BasicApp::Init, &BasicApp::Draw);
+    // Create a GL Window, passing functions to that window
+
+    std::function<void()> init = std::bind(&BasicApp::Init, this);
+    std::function<void(double_t)> draw = std::bind(&BasicApp::Draw, this, std::placeholders::_1);
+    const GLWindow &window = window_manager_.CreateWindow("Basic Application",800,600, init, draw );
  
 }
 
@@ -32,18 +35,19 @@ void BasicApp::Init() {
     //shader_ = Shader( s9::File("./shaders/3/quad.vert"),  s9::File("./shaders/3/quad.frag"));
     
     int major_version;
-    glGetIntegerv(GL_MAJOR_VERSION, major_version);
+    glGetIntegerv(GL_MAJOR_VERSION, &major_version);
     ShaderBuilder builder (major_version); 
 
-    builder.AddSnippet("Basic").AddSnippet("VertexColour").AddSnippet("BasicCamera");
+    builder.AddSnippet("Basic4").AddSnippet("VertexColour").AddSnippet("BasicCamera");
 
     // Annoyingly, still need to shift on context here for the moment
-    if ( major_version < 4){
-        builder.AddUserText(VERTEX_MAIN, "gl_Position = uCameraMatrix * uProjectionMatrix * uModelMatrix * aVertexPosition;");
+    if ( major_version < 3){
+        builder.AddUserText(VERTEX_MAIN, "gl_Position = uProjectionMatrix * uViewMatrix * uModelMatrix * aVertexPosition;");
         builder.AddUserText(FRAGMENT_MAIN, "gl_FragColor = vVertexColour;");
     }
     else {
-        builder.AddUserText(VERTEX_MAIN, "vVertexPosition = uCameraMatrix * uProjectionMatrix * uModelMatrix * aVertexPosition;");
+        builder.AddUserText(VERTEX_MAIN, "vVertexPosition = aVertexPosition;");
+        builder.AddUserText(VERTEX_MAIN, "gl_Position = uProjectionMatrix * uViewMatrix * uModelMatrix * vVertexPosition;");
         builder.AddUserText(FRAGMENT_MAIN, "fragColor = vVertexColour;");
     }
 
@@ -73,7 +77,7 @@ void BasicApp::Init() {
 
 
 void BasicApp::MainLoop(double_t dt) {
-
+    window_manager_.MainLoop();
 }
 
 

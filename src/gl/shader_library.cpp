@@ -13,15 +13,18 @@ using namespace std;
 using namespace s9;
 using namespace s9::gl;
 
-static const int NUM_SNIPPETS_150 = 17;
-static const int NUM_SNIPPETS_4 = 19;
+static const int NUM_SNIPPETS_150 = 18;
+static const int NUM_SNIPPETS_3 = 22;
 
 
 /**
  * Snippets for 1.50 Shader model
  */
 
+///\todo certain things like basic need to be specified by the user but WHICH basic depends on geometry -  we need a second tag
+
 ///\todo having all this here does mean it ends up in memory that we dont need perhaps :S
+
 
 ShaderSnippet snippets_150[NUM_SNIPPETS_150] = { 
   // Basic Header
@@ -29,8 +32,9 @@ ShaderSnippet snippets_150[NUM_SNIPPETS_150] = {
   {FRAGMENT_SNIPPET,  "Header", "#version 150\n" },
 
   // Bare minimum
-  {VERTEX_SNIPPET,      "Basic",            "attribute vec3 aVertexPosition;\nuniform mat4 uModelMatrix;\n"},
-  
+  {VERTEX_SNIPPET,      "Basic3",            "attribute vec3 aVertexPosition;\nuniform mat4 uModelMatrix;\n"},
+  {VERTEX_SNIPPET,      "Basic4",            "attribute vec4 aVertexPosition;\nuniform mat4 uModelMatrix;\n"},
+
   // Vertex Colour
   {VERTEX_SNIPPET,      "VertexColour",     "attribute vec4 aVertexColour;\nvarying vec4 vVertexColour;\n"},
   {FRAGMENT_SNIPPET,    "VertexColour",     "varying vec4 vVertexColour;\n"},
@@ -66,27 +70,32 @@ ShaderSnippet snippets_150[NUM_SNIPPETS_150] = {
  * \TODO - positional arguments are fixed at present - we will need to change that at some point
  */
 
-ShaderSnippet snippets_4[NUM_SNIPPETS_4] = { 
+ShaderSnippet snippets_3[NUM_SNIPPETS_3] = { 
 
   // Header
-  {VERTEX_SNIPPET,      "Header", "#version 420\n" },
-  {FRAGMENT_SNIPPET,    "Header", "#version 420\n\nout vec4 fragColor;"},
+  {VERTEX_SNIPPET,      "Header", "#version 330\nprecision highp float;\n" },
+  {FRAGMENT_SNIPPET,    "Header", "#version 330\nprecision highp float;\nout vec4 fragColor;\n\n"},
 
   // Bare minimum
-  {VERTEX_SNIPPET,      "Basic",            "layout (location = 0) in vec3 aVertexPosition;\nuniform mat4 uModelMatrix;\n out vec4 vVertexPosition;\n"},
-  
+  {VERTEX_SNIPPET,      "Basic3",            "layout (location = 0) in vec3 aVertexPosition;\nuniform mat4 uModelMatrix;\nout vec4 vVertexPosition;\n"},
+  {FRAGMENT_SNIPPET,    "Basic3",            "in vec4 vVertexPosition;\n"},
+
+  {VERTEX_SNIPPET,      "Basic4",            "layout (location = 0) in vec4 aVertexPosition;\nuniform mat4 uModelMatrix;\nout vec4 vVertexPosition;\n"},
+  {FRAGMENT_SNIPPET,    "Basic4",            "in vec4 vVertexPosition;\n"},
+
+
   // Vertex Colour
   {VERTEX_SNIPPET,      "VertexColour",     "layout (location = 2) in vec4 aVertexColour;\nout vec4 vVertexColour;\n"},
-  {FRAGMENT_SNIPPET,    "VertexColour",     "varying vec4 vVertexColour;\n"},
+  {FRAGMENT_SNIPPET,    "VertexColour",     "in vec4 vVertexColour;\n"},
   {VERTEX_MAIN,         "VertexColour",     "vVertexColour = aVertexColour;\n"},
 
   // Vertex Texture Co-ordinate
   {VERTEX_SNIPPET,      "VertexTexCoord",   "layout (location = 3) in vec2 aVertexTexCoord;\nout vec4 vTexCoord;\n"},
-  {FRAGMENT_SNIPPET,    "VertexTexCoord",   "varying vec2 vTexCoord;\n"},
+  {FRAGMENT_SNIPPET,    "VertexTexCoord",   "in vec2 vTexCoord;\n"},
   {VERTEX_MAIN,         "VertexTexCoord",   "vTexCoord = aVertexTexCoord;\n"},
 
    // Basic Camera matrices
-  {VERTEX_SNIPPET,      "BasicCamera",      "uniform mat4 uCameraMatrix;\nuniform mat4 uProjectionMatrix;\nuniform mat4 uCameraInverseMatrix;\n"},
+  {VERTEX_SNIPPET,      "BasicCamera",      "uniform mat4 uViewMatrix;\nuniform mat4 uProjectionMatrix;\nuniform mat4 uCameraInverseMatrix;\n"},
 
   // Extra camera things like near and far
   {VERTEX_SNIPPET,      "CameraExtra",      "uniform float uCameraNear;\nuniform float uCameraFar;\n"},
@@ -98,11 +107,11 @@ ShaderSnippet snippets_4[NUM_SNIPPETS_4] = {
   {VERTEX_MAIN,         "VertexNormal",     "vVertexNormal = normalize(uNormalMatrix * vec4(aVertexNormal,1.0));\n"},
 
   // Basic Material
-  {FRAGMENT_SNIPPET,    "BasicMaterial",    "uniform vec3 uMaterialAmbientColor;\nuniform vec3 uMaterialDiffuseColor;\nuniform vec3 uMaterialSpecularColor;\nuniform float uMaterialShininess;\nuniform vec3 uMaterialEmissiveColor;\n"},
+  {FRAGMENT_SNIPPET,    "BasicMaterial",    "uniform vec3 uMaterialAmbient;\nuniform vec3 uMaterialDiffuse;\nuniform vec3 uMaterialSpecular;\nuniform float uMaterialShininess;\nuniform vec3 uMaterialEmissive;\n"},
   
   // Vertex Tangent
   {VERTEX_SNIPPET,      "VertexTangent",    "attribute vec3 aVertexTangent;\nvarying vec3 vTangent;\n"},
-  {FRAGMENT_SNIPPET,    "VertexTangent",    "varying vec3 vTangent;\n"},
+  {FRAGMENT_SNIPPET,    "VertexTangent",    "in vec3 vTangent;\n"},
   {VERTEX_MAIN,         "VertexTangent",    "vTangent = aVertexTangent;\n"},
   
 };
@@ -118,12 +127,12 @@ ShaderSnippet snippets_4[NUM_SNIPPETS_4] = {
 ShaderLibrary::ShaderLibrary(int major_version) : obj_(shared_ptr<SharedObject>(new SharedObject())) {
  
   // This is a bit scrappy but should do for now -  choose between two
-  if (major_version < 4.0) {
+  if (major_version < 3.0) {
     obj_->snippets = snippets_150;
     obj_->num_snippets = NUM_SNIPPETS_150;
   } else {
-    obj_->snippets = snippets_4;
-    obj_->num_snippets = NUM_SNIPPETS_4;
+    obj_->snippets = snippets_3;
+    obj_->num_snippets = NUM_SNIPPETS_3;
   }
 
 }
@@ -133,7 +142,7 @@ std::string  ShaderLibrary::GetSnippet(std::string name, SnippetType type) {
   assert(obj_);
 
   for (int i=0; i < obj_->num_snippets; ++i){
-    if (name.compare(obj_->snippets[i].label) != 0){
+    if (name.compare(obj_->snippets[i].label) == 0){
       if (type == obj_->snippets[i].type ){
         return obj_->snippets[i].text;
       }

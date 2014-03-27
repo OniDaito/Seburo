@@ -180,16 +180,20 @@ namespace s9 {
 	public:
 		NodeCamera(Camera c) : NodeBase(CAMERA), camera_(c), 
 			clause_camera_view_("uViewMatrix", view_matrix_global_), 
+			clause_camera_inverse_("uCameraInverseMatrix", inverse_matrix_global_), 
 			clause_camera_projection_("uProjectionMatrix", projection_matrix_global_) {
 				projection_matrix_global_ = glm::mat4(1.0f);
 				view_matrix_global_ = glm::mat4(1.0f);
+				inverse_matrix_global_ = glm::mat4(1.0f);
 			} 
 
 		NodeCamera() : NodeBase(CAMERA), 
 			clause_camera_view_("uViewMatrix", view_matrix_global_), 
+			clause_camera_inverse_("uCameraInverseMatrix", inverse_matrix_global_), 
 			clause_camera_projection_("uProjectionMatrix", projection_matrix_global_) {
 				projection_matrix_global_ = glm::mat4(1.0f);
 				view_matrix_global_ = glm::mat4(1.0f);
+				inverse_matrix_global_ = glm::mat4(1.0f);
 			} 
 
 		void PreDraw() {
@@ -202,6 +206,7 @@ namespace s9 {
 
 				projection_matrix_global_ = camera_.projection_matrix();
 				view_matrix_global_ = camera_.view_matrix();
+				inverse_matrix_global_ = glm::inverse(view_matrix_global_);
 
 				projection_matrix_stack_.push_back(projection_matrix_global_);
 				view_matrix_stack_.push_back(view_matrix_global_);
@@ -235,10 +240,12 @@ namespace s9 {
 		Camera			camera_;	
 
 		gl::ShaderClause<glm::mat4,1> clause_camera_projection_; 
-		gl::ShaderClause<glm::mat4,1> clause_camera_view_; 
+		gl::ShaderClause<glm::mat4,1> clause_camera_view_;
+		gl::ShaderClause<glm::mat4,1> clause_camera_inverse_; 
 
 		glm::mat4 projection_matrix_global_;
 		glm::mat4 view_matrix_global_;
+		glm::mat4 inverse_matrix_global_;
 		static std::vector<glm::mat4> projection_matrix_stack_;
 		static std::vector<glm::mat4> view_matrix_stack_;
 
@@ -334,11 +341,11 @@ namespace s9 {
 	class NodeMaterial : public NodeBase {
 	public:
 		NodeMaterial(Material m) : NodeBase(MATERIAL), material_(m),
-		clause_ambient_("uMatAmbient", material_.ambient),
-		clause_diffuse_("uMatDiffuse", material_.diffuse),
-		clause_specular_("uMatSpecular", material_.specular),
-		clause_emissive_("uMatEmissive", material_.emissive),
-		clause_shine_("uMatShine",material_.shine) {  
+		clause_ambient_("uMaterialAmbient", material_.ambient),
+		clause_diffuse_("uMaterialDiffuse", material_.diffuse),
+		clause_specular_("uMaterialSpecular", material_.specular),
+		clause_emissive_("uMaterialEmissive", material_.emissive),
+		clause_shine_("uMaterialShininess",material_.shine) {  
 
 		};
 

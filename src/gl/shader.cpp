@@ -148,6 +148,8 @@ Shader::Shader(std::string glsl_string)  : obj_(shared_ptr<SharedObject>(new Sha
 Shader::Shader(std::string vert_string, std::string frag_string)  : obj_(shared_ptr<SharedObject>(new SharedObject())) {
 	if(!CreateShader(GL_VERTEX_SHADER, obj_->vs, vert_string)) return;
 	if(!CreateShader(GL_FRAGMENT_SHADER, obj_->fs, frag_string)) return;
+	CreateAndLink();
+
 }
 
 
@@ -155,6 +157,7 @@ Shader::Shader(std::string vert_string, std::string frag_string, std::string geo
 	if(!CreateShader(GL_VERTEX_SHADER, obj_->vs, vert_string)) return;
 	if(!CreateShader(GL_FRAGMENT_SHADER, obj_->fs, frag_string)) return;
 	if(!CreateShader(GL_GEOMETRY_SHADER, obj_->gs, geom_string)) return;
+	CreateAndLink();
 }
 
 
@@ -367,7 +370,7 @@ ShaderBuilder::ShaderBuilder(int major_version) : obj_(shared_ptr<SharedObject>(
 
 ShaderBuilder& ShaderBuilder::Clear() {
 	assert(obj_);
-
+	obj_->use_geometry = false;
 	obj_->vertex_buffer_ = obj_->library_.GetSnippet("Header",VERTEX_SNIPPET);
 	obj_->vertex_main_buffer_ = "";
 	obj_->fragment_buffer_ = obj_->library_.GetSnippet("Header",FRAGMENT_SNIPPET);
@@ -396,8 +399,16 @@ ShaderBuilder& ShaderBuilder::AddSnippet(std::string t) {
 	obj_->fragment_buffer_ += obj_->library_.GetSnippet(t,FRAGMENT_SNIPPET);
 	obj_->fragment_main_buffer_ += obj_->library_.GetSnippet(t,FRAGMENT_MAIN);
 
-	obj_->geometry_buffer_ += obj_->library_.GetSnippet(t,GEOMETRY_SNIPPET);
-	obj_->geometry_main_buffer_ += obj_->library_.GetSnippet(t,GEOMETRY_MAIN);
+	string gb = obj_->library_.GetSnippet(t,GEOMETRY_SNIPPET);
+	string gm = obj_->library_.GetSnippet(t,GEOMETRY_MAIN);
+
+	if ( gb.compare("") != 0 || gm.compare("") != 0 ){
+		obj_->use_geometry = true;
+		obj_->geometry_buffer_ += gb;
+		obj_->geometry_main_buffer_ += gm;
+	}
+
+
 
 	return *this;
 
@@ -410,27 +421,27 @@ ShaderBuilder& ShaderBuilder::AddUserText(SnippetType type, std::string text) {
 	// Build each type up
 	switch (type){
 		case VERTEX_SNIPPET:
-			obj_->vertex_buffer_ += text;
+			obj_->vertex_buffer_ += text + "\n";
 			break;
 		
 		case VERTEX_MAIN:
-			obj_->vertex_main_buffer_ += text;
+			obj_->vertex_main_buffer_ += text + "\n";
 			break;
 
 		case FRAGMENT_SNIPPET:
-			obj_->fragment_buffer_ += text;
+			obj_->fragment_buffer_ += text + "\n";
 			break;
 
 		case FRAGMENT_MAIN:
-			obj_->fragment_main_buffer_ += text;
+			obj_->fragment_main_buffer_ += text + "\n";
 			break;
 
 		case GEOMETRY_SNIPPET:
-			obj_->geometry_buffer_ += text;
+			obj_->geometry_buffer_ += text + "\n";
 			break;
 
 		case GEOMETRY_MAIN:
-			obj_->geometry_main_buffer_ += text;
+			obj_->geometry_main_buffer_ += text + "\n";
 			break;
 
 		default:
@@ -449,17 +460,29 @@ ShaderBuilder& ShaderBuilder::AddUserText(SnippetType type, std::string text) {
 Shader ShaderBuilder::Build() {
 
 
-	std::string vbuffer = obj_->vertex_buffer_ + "void main() {\n" + obj_->vertex_main_buffer_ + "}";
-	std::string fbuffer = obj_->fragment_buffer_ + "\nvoid main() {\n" + obj_->fragment_main_buffer_ + "}";
-	std::string gbuffer = obj_->geometry_buffer_ + "\nvoid main() {\n" + obj_->geometry_main_buffer_ +"}";
+	std::string vbuffer = obj_->vertex_buffer_ + "void main() {\n" + obj_->vertex_main_buffer_ + "\n}";
+	std::string fbuffer = obj_->fragment_buffer_ + "\nvoid main() {\n" + obj_->fragment_main_buffer_ + "\n}";
+	std::string gbuffer = obj_->geometry_buffer_ + "\nvoid main() {\n" + obj_->geometry_main_buffer_ +"\n}";
 
-	if (obj_->geometry_buffer_.compare("\nvoid main() {\n}") == 0) { // basically an empty shader
-		Shader s(obj_->vertex_buffer_, obj_->fragment_buffer_, obj_->geometry_main_buffer_ );
+#ifdef DEBUG
+
+	cout << "VBUFFER" << endl;
+	cout << vbuffer << endl;
+	cout << "FBUFFER" << endl;
+	cout << fbuffer << endl;
+	cout << "GBUFFER" << endl;
+	cout << gbuffer << endl;
+
+#endif
+
+
+	if (obj_->use_geometry) { // basically an empty shader
+		Shader s(vbuffer, fbuffer, gbuffer );
 		Clear();
 		return s;
 	} 
 	
-	Shader s(obj_->vertex_buffer_, obj_->fragment_buffer_ );
+	Shader s(vbuffer, fbuffer );
 	Clear();
 	return s;
 }

@@ -28,7 +28,7 @@ namespace s9 {
  	 * A little multi-inheritence but one is only an interface so its cool
  	 */
 
-	class BasicApp : public WindowListener<gl::GLWindow> {
+	class BasicApp : public Application, public WindowListener<gl::GLWindow> {
 	public:
 		BasicApp();
 		void Init();
@@ -44,7 +44,7 @@ namespace s9 {
 		
 	protected:
 
-		gl::GLFWWindowManager<BasicApp> window_manager_;
+		gl::GLFWWindowManager window_manager_;
 
 		Cuboid cuboid_;
 		Node node_;

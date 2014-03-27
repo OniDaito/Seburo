@@ -73,8 +73,10 @@ namespace s9 {
       	GLint p;
         glGetIntegerv(GL_CURRENT_PROGRAM, &p);
         CXGLERROR
-        if (p > -1)
-        	return glGetUniformLocation(p, name);
+        if (p > -1){
+        	GLuint g = glGetUniformLocation(p, name);
+        	return g;
+        }
         return 0;
       }
 
@@ -193,7 +195,7 @@ namespace s9 {
 			Shader(std::string vert_string, std::string frag_string, std::string geom_string);
 
 			GLuint program() { return obj_->program; };
-			GLint Location(const char * name) {return glGetUniformLocation(obj_->program, name); }
+			GLint Location(const char * name) { GLint g =  glGetUniformLocation(obj_->program, name);  std::cout << "GG " <<  name << std::endl; CXGLERROR return g; }
 			
 			// Fluent interface for quick setting
 
@@ -209,7 +211,7 @@ namespace s9 {
 				glUseProgram(obj_->program); 
 			}
 			
-			/// Restore the previous shader
+			/// Restore the previous shader - bit concerned about state here
 			void Unbind() {	glUseProgram(obj_->prev); }
 			
 		protected:
@@ -260,6 +262,8 @@ namespace s9 {
 				std::string fragment_main_buffer_;
 				std::string geometry_buffer_;
 				std::string geometry_main_buffer_;
+
+				bool use_geometry;
 
 				ShaderLibrary library_;
 			};

@@ -28,7 +28,6 @@ namespace s9 {
 
 	namespace gl {
 
-		template< class T>
 		class SEBUROAPI GLFWWindowManager;
 		
 
@@ -36,7 +35,6 @@ namespace s9 {
 		 * A basic GLFW Window (a nice wrapper basically but with some functions attached)
 		 */
 
-		template<class T>
 		class GLWindow  {
 		public:
 			GLWindow (const char * title, size_t width, size_t height) { 
@@ -44,16 +42,14 @@ namespace s9 {
 			}
 
 			GLWindow (const char * title, size_t width, size_t height,
-				 	WindowListener<GLWindow> *listener,
-					void (T::*init_func)(), 
-					void (T::*draw_func)(double_t dt),
+				 	std::function<void()> init_func,
+					std::function<void(double_t)> draw_func,
 					bool fullscreen, const char * monitor_name, int major, int minor )  { 
 
-				Create(title, width, height, fullscreen, monitor_name, major, minor); 	
-				listener_ = listener;
+				Create(title, width, height, fullscreen, monitor_name, major, minor); 
 
-				init_func_ = std::bind(init_func, listener_);
-				draw_func_ = std::bind(draw_func, listener_, std::placeholders::_1);
+				init_func_ = init_func;
+				draw_func_ = draw_func;
 
 				init_func_();
 
@@ -70,16 +66,14 @@ namespace s9 {
 
 			void Create(const char * title, size_t width, size_t height, bool fullscreen, const char * monitor_name, int major, int minor);
 
-			friend class GLFWWindowManager<T>;
+			friend class GLFWWindowManager;
 
 			void set_glfw_window(GLFWwindow *glfw_window) { glfw_window_ = glfw_window; }
-
 
 			std::function<void(double_t)> draw_func_;
 			std::function<void()> init_func_;
 
 			WindowListener<GLWindow> *listener_;
-
 
 			GLFWwindow* glfw_window_;
 		};
@@ -90,12 +84,11 @@ namespace s9 {
 		 * Considered a template but the static, C-Like nature of GLFW made this more annoying
 		 */
 
-		template< class T>
-		class SEBUROAPI GLFWWindowManager : public WindowManager<GLWindow<T> > {
+		class SEBUROAPI GLFWWindowManager : public WindowManager<GLWindow > {
 			
 		protected:
 
-			friend class GLWindow<T>;
+			friend class GLWindow;
 
 			static void ErrorCallback(int error, const char* description);
 
@@ -113,7 +106,7 @@ namespace s9 {
 
 			static void MouseWheelCallback(GLFWwindow* window, double xpos, double ypos);
 
-			const GLWindow<T> & GetWindow(GLFWwindow* window) {
+			const GLWindow & GetWindow(GLFWwindow* window) {
 				for (auto it = windows_.begin(); it != windows_.end(); ++it) {
 					if ((*it)->glfw_window() == window)
 			    	return **it;
@@ -134,11 +127,10 @@ namespace s9 {
 			
 			GLFWWindowManager();
 
-			const GLWindow<T> & CreateWindow(const char * title,  size_t width, size_t height, 
-					WindowListener<GLWindow<T> > *listener, void (WindowListener<GLWindow<T> >::*init_func)(), 
-					void (WindowListener<GLWindow<T> >::*draw_func)(double_t dt) ){
-
-				windows_.push_back( std::unique_ptr<GLWindow<T> > (new GLWindow(title, width, height, listener, init_func, draw_func, false, nullptr, -1, -1)) );
+			const GLWindow & CreateWindow(const char * title,  size_t width, size_t height, 
+					std::function<void()> init_func,
+					std::function<void(double_t)> draw_func){
+				windows_.push_back( std::unique_ptr<GLWindow > (new GLWindow(title, width, height, init_func, draw_func, false, nullptr, -1, -1)) );
 				return *(windows_.back());
 			}	
  
@@ -150,7 +142,7 @@ namespace s9 {
 
 				for (auto it = windows_.begin(); it != windows_.end(); ++it) {
 					
-					const GLWindow<T> &w = **it;
+					const GLWindow &w = **it;
 
 					GLFWwindow* b = w.glfw_window();
 					glfwMakeContextCurrent(b);
