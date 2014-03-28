@@ -1,5 +1,5 @@
-<map id="TiXmlText" name="TiXmlText">
-<area shape="rect" id="node2" href="$classTiXmlNode.html" title="TiXmlNode" alt="" coords="9,205,95,233"/>
-<area shape="rect" id="node3" href="$classTiXmlBase.html" title="TiXmlBase" alt="" coords="9,99,93,127"/>
-<area shape="rect" id="node4" href="$structTiXmlCursor.html" title="TiXmlCursor" alt="" coords="5,6,99,34"/>
+<map id="G" name="G">
+<area shape="rect" id="node2" href="$classTiXmlNode.html" title="TiXmlNode" alt="" coords="9,209,95,239"/>
+<area shape="rect" id="node4" href="$classTiXmlBase.html" title="TiXmlBase" alt="" coords="9,101,95,131"/>
+<area shape="rect" id="node6" href="$structTiXmlCursor.html" title="TiXmlCursor" alt="" coords="5,5,99,35"/>
 </map>

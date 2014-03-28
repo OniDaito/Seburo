@@ -14,7 +14,7 @@ using namespace s9;
 using namespace s9::gl;
 
 static const int NUM_SNIPPETS_150 = 18;
-static const int NUM_SNIPPETS_3 = 22;
+static const int NUM_SNIPPETS_3 = 26;
 
 
 /**
@@ -74,7 +74,7 @@ ShaderSnippet snippets_3[NUM_SNIPPETS_3] = {
 
   // Header
   {VERTEX_SNIPPET,      "Header", "#version 330\nprecision highp float;\n" },
-  {FRAGMENT_SNIPPET,    "Header", "#version 330\nprecision highp float;\nout vec4 fragColor;\n\n"},
+  {FRAGMENT_SNIPPET,    "Header", "#version 330\nprecision highp float;\nout vec4 fragColour;\n\n"},
 
   // Bare minimum
   {VERTEX_SNIPPET,      "Basic3",            "layout (location = 0) in vec3 aVertexPosition;\nuniform mat4 uModelMatrix;\nout vec4 vVertexPosition;\n"},
@@ -83,14 +83,13 @@ ShaderSnippet snippets_3[NUM_SNIPPETS_3] = {
   {VERTEX_SNIPPET,      "Basic4",            "layout (location = 0) in vec4 aVertexPosition;\nuniform mat4 uModelMatrix;\nout vec4 vVertexPosition;\n"},
   {FRAGMENT_SNIPPET,    "Basic4",            "in vec4 vVertexPosition;\n"},
 
-
   // Vertex Colour
   {VERTEX_SNIPPET,      "VertexColour",     "layout (location = 2) in vec4 aVertexColour;\nout vec4 vVertexColour;\n"},
   {FRAGMENT_SNIPPET,    "VertexColour",     "in vec4 vVertexColour;\n"},
   {VERTEX_MAIN,         "VertexColour",     "vVertexColour = aVertexColour;\n"},
 
   // Vertex Texture Co-ordinate
-  {VERTEX_SNIPPET,      "VertexTexCoord",   "layout (location = 3) in vec2 aVertexTexCoord;\nout vec4 vTexCoord;\n"},
+  {VERTEX_SNIPPET,      "VertexTexCoord",   "layout (location = 3) in vec2 aVertexTexCoord;\nout vec2 vTexCoord;\n"},
   {FRAGMENT_SNIPPET,    "VertexTexCoord",   "in vec2 vTexCoord;\n"},
   {VERTEX_MAIN,         "VertexTexCoord",   "vTexCoord = aVertexTexCoord;\n"},
 
@@ -113,6 +112,14 @@ ShaderSnippet snippets_3[NUM_SNIPPETS_3] = {
   {VERTEX_SNIPPET,      "VertexTangent",    "attribute vec3 aVertexTangent;\nvarying vec3 vTangent;\n"},
   {FRAGMENT_SNIPPET,    "VertexTangent",    "in vec3 vTangent;\n"},
   {VERTEX_MAIN,         "VertexTangent",    "vTangent = aVertexTangent;\n"},
+
+  // Basic Texture Power of Two
+  {FRAGMENT_SNIPPET,    "BasicTexture2",    "uniform sampler2D uTexSampler0;\n"},
+  {FRAGMENT_MAIN,       "BasicTexture2",    "vec4 texcolour = texture(uTexSampler0, vTexCoord);\n"},
+
+  // Basic Texture Rectangle
+  {FRAGMENT_SNIPPET,    "BasicTextureR",    "uniform sampler2DRect uTexSampler0;\n"},
+  {FRAGMENT_MAIN,       "BasicTextureR",    "vec2 texsize = textureSize(uTexSampler0);\nvec4 texcolour = texture(uTexSampler0,vTexCoord * texsize);\n"},
   
 };
 

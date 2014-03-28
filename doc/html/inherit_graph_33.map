@@ -1,3 +1,8 @@
-<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$classs9_1_1gl_1_1FBO.html" title="s9::gl::FBO" alt="" coords="5,5,93,33"/>
+<map id="G" name="G">
+<area shape="rect" id="node1" href="$structs9_1_1Event.html" title="s9::Event" alt="" coords="7,112,84,141"/>
+<area shape="rect" id="node3" href="$structs9_1_1CloseWindowEvent.html" title="s9::CloseWindowEvent" alt="" coords="135,5,292,35"/>
+<area shape="rect" id="node5" href="$structs9_1_1KeyboardEvent.html" title="s9::KeyboardEvent" alt="" coords="147,59,280,88"/>
+<area shape="rect" id="node7" href="$structs9_1_1MouseEvent.html" title="s9::MouseEvent" alt="" coords="155,112,272,141"/>
+<area shape="rect" id="node9" href="$structs9_1_1ResizeEvent.html" title="s9::ResizeEvent" alt="" coords="155,165,272,195"/>
+<area shape="rect" id="node11" href="$structs9_1_1ScrollEvent.html" title="s9::ScrollEvent" alt="" coords="159,219,268,248"/>
 </map>

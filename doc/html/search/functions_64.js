@@ -1,5 +1,6 @@
 var searchData=
 [
+  ['defaults',['Defaults',['../classs9_1_1Camera.html#ae71d2ccdb7904c37d7c8670dc0a2a211',1,'s9::Camera']]],
   ['doublevalue',['DoubleValue',['../classTiXmlAttribute.html#a2880ddef53fc7522c99535273954d230',1,'TiXmlAttribute']]],
-  ['draw',['draw',['../classs9_1_1gl_1_1Drawable.html#a17009f367a17d45ac7f9245b15229c95',1,'s9::gl::Drawable::draw()'],['../classs9_1_1NodeBase.html#aee4bb01fa74d9e7a3e5b95ed8ce34976',1,'s9::NodeBase::draw()'],['../classs9_1_1NodeShape.html#a73adf5ca86fc1aee2d4f1d4ce8c5f411',1,'s9::NodeShape::draw()'],['../classs9_1_1NodeShader.html#a04d0081a5532830beef127123580e509',1,'s9::NodeShader::draw()'],['../classs9_1_1Node.html#a5110feb0ab6c078c4520cf12e91b99db',1,'s9::Node::draw()']]]
+  ['draw',['Draw',['../classs9_1_1gl_1_1Drawable.html#a6cd25a8bb5c332c44181483573c6f755',1,'s9::gl::Drawable::Draw()'],['../classs9_1_1NodeBase.html#a4563c6267af4323073b307487896735a',1,'s9::NodeBase::Draw()'],['../classs9_1_1NodeShape.html#a8b0a07960eebc1d6b52d32557c5f8606',1,'s9::NodeShape::Draw()'],['../classs9_1_1NodeShader.html#a531e492e48f46775ba5df2909a1e384a',1,'s9::NodeShader::Draw()'],['../classs9_1_1NodeTexture.html#a6d4c528c521620b0ab530ed1290fef38',1,'s9::NodeTexture::Draw()'],['../classs9_1_1Node.html#a4c2a34d2785750c30376e79981307acb',1,'s9::Node::Draw()']]]
 ];

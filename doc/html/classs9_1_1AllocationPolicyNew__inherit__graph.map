@@ -1,3 +1,4 @@
-<map id="s9::AllocationPolicyNew" name="s9::AllocationPolicyNew">
-<area shape="rect" id="node2" href="$classs9_1_1GeometryT.html" title="s9::GeometryT\&lt; s9::\lVertexT, s9::FaceT,\l s9::AllocationPolicyNew \&gt;" alt="" coords="4,83,181,143"/>
+<map id="G" name="G">
+<area shape="rect" id="node3" href="$classs9_1_1AllocationPolicyShared.html" title="s9::AllocationPolicyShared" alt="" coords="120,83,299,112"/>
+<area shape="rect" id="node5" href="$classs9_1_1GeometryT.html" title="s9::GeometryT\&lt; VertexType, FaceType, AllocationPolicyShared \&gt;" alt="" coords="5,160,413,189"/>
 </map>

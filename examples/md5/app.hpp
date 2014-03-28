@@ -9,6 +9,7 @@
 #ifndef MD5_APP_HPP
 #define MD5_APP_HPP
 
+#include "s9/application.hpp"
 #include "s9/common.hpp"
 #include "s9/file.hpp"
 #include "s9/camera.hpp"
@@ -29,19 +30,28 @@ namespace s9 {
  	 * Example of texturing a basic Quad
  	 */
 
-	class MD5App : public WindowApp<GLFWwindow*> {
+	class MD5App : public Application, public WindowListener<gl::GLWindow> {
 	public:
-		void Init(Context context);
-		void Display(Context context, GLFWwindow *window, double_t dt);
-		void Update(double_t dt);
+
+		MD5App();
+
+		void Init();
+		void Draw(double_t dt);
+		void MainLoop(double_t dt);
+
+		 void ThreadMainLoop(double_t dt);
 
 		// Event handling - you can choose which to override
-		void ProcessEvent(MouseEvent e, GLFWwindow *window);
-		void ProcessEvent(KeyboardEvent e, GLFWwindow *window);
-		void ProcessEvent(ResizeEvent e, GLFWwindow *window);
+		void ProcessEvent(const gl::GLWindow & window, MouseEvent e);
+		void ProcessEvent(const gl::GLWindow & window, KeyboardEvent e);
+		void ProcessEvent(const gl::GLWindow & window, ResizeEvent e);
+		void ProcessEvent(const gl::GLWindow & window, CloseWindowEvent e);
 
 		
 	protected:
+
+		gl::GLFWWindowManager window_manager_;
+
 		Quad quad_;
 		Image image_;
 		gl::Texture texture_;

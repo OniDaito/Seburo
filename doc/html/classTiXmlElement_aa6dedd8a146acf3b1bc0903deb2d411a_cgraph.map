@@ -1,5 +1,5 @@
-<map id="TiXmlElement::GetText" name="TiXmlElement::GetText">
-<area shape="rect" id="node2" href="$classTiXmlNode.html#a44c8eee26bbe2d1b2762038df9dde2f0" title="The first child of this node. Will be null if there are no children. " alt="" coords="211,5,362,33"/>
-<area shape="rect" id="node3" href="$classTiXmlNode.html#a95a46a52c525992d6b4ee08beb14cd69" title="Cast to a more defined type. Will return null if not of the requested type. " alt="" coords="220,57,353,85"/>
-<area shape="rect" id="node4" href="$classTiXmlNode.html#a77943eb90d12c2892b1337a9f5918b41" title="TiXmlNode::Value" alt="" coords="223,109,350,137"/>
+<map id="G" name="G">
+<area shape="rect" id="node3" href="$classTiXmlNode.html#a44c8eee26bbe2d1b2762038df9dde2f0" title="The first child of this node. Will be null if there are no children." alt="" coords="215,5,364,35"/>
+<area shape="rect" id="node5" href="$classTiXmlNode.html#a95a46a52c525992d6b4ee08beb14cd69" title="Cast to a more defined type. Will return null if not of the requested type." alt="" coords="221,59,357,88"/>
+<area shape="rect" id="node7" href="$classTiXmlNode.html#a77943eb90d12c2892b1337a9f5918b41" title="TiXmlNode::Value" alt="" coords="225,112,353,141"/>
 </map>

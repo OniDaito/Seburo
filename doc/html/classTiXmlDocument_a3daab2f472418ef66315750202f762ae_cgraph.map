@@ -1,7 +1,7 @@
-<map id="TiXmlDocument::Accept" name="TiXmlDocument::Accept">
-<area shape="rect" id="node2" href="$classTiXmlVisitor.html#a07baecb52dd7d8716ae2a48ad0956ee0" title="Visit a document. " alt="" coords="222,5,378,33"/>
-<area shape="rect" id="node3" href="$classTiXmlNode.html#a44c8eee26bbe2d1b2762038df9dde2f0" title="The first child of this node. Will be null if there are no children. " alt="" coords="225,57,375,85"/>
-<area shape="rect" id="node4" href="$classTiXmlNode.html#af854baeba384f5fe9859f5aee03b548e" title="Navigate to a sibling node. " alt="" coords="219,109,381,137"/>
-<area shape="rect" id="node5" href="$classTiXmlNode.html#acc0f88b7462c6cb73809d410a4f5bb86" title="TiXmlNode::Accept" alt="" coords="233,161,367,189"/>
-<area shape="rect" id="node6" href="$classTiXmlVisitor.html#aa0ade4f27087447e93974e975c3246ad" title="Visit a document. " alt="" coords="227,213,373,241"/>
+<map id="G" name="G">
+<area shape="rect" id="node3" href="$classTiXmlVisitor.html#a07baecb52dd7d8716ae2a48ad0956ee0" title="Visit a document." alt="" coords="221,5,379,35"/>
+<area shape="rect" id="node5" href="$classTiXmlNode.html#a44c8eee26bbe2d1b2762038df9dde2f0" title="The first child of this node. Will be null if there are no children." alt="" coords="225,59,375,88"/>
+<area shape="rect" id="node7" href="$classTiXmlNode.html#af854baeba384f5fe9859f5aee03b548e" title="Navigate to a sibling node." alt="" coords="219,112,381,141"/>
+<area shape="rect" id="node9" href="$classTiXmlNode.html#acc0f88b7462c6cb73809d410a4f5bb86" title="TiXmlNode::Accept" alt="" coords="232,165,368,195"/>
+<area shape="rect" id="node11" href="$classTiXmlVisitor.html#aa0ade4f27087447e93974e975c3246ad" title="Visit a document." alt="" coords="225,219,375,248"/>
 </map>

@@ -13,7 +13,9 @@ using namespace s9::gl;
 using namespace std;
 
 /// Internal GLWindow function that creates our actual window using GLFW
-void GLWindow::Create(const char * title, size_t width, size_t height, bool fullscreen, const char * monitor_name, int major, int minor) {
+void GLWindow::Create(const char * title, size_t width, size_t height, bool fullscreen, const char * monitor_name, int major, int minor, GLFWwindow *share) {
+
+	window_name_ = std::string(title);
 
 	// InitGL and setup Context
 	int depthbits = 16;
@@ -54,7 +56,7 @@ void GLWindow::Create(const char * title, size_t width, size_t height, bool full
 						height = mode->height;
 					}
 
-					glfw_window_ = glfwCreateWindow(width, height, title, monitors[i], NULL);
+					glfw_window_ = glfwCreateWindow(width, height, title, monitors[i], share);
 					break;
 				}
 			}
@@ -76,10 +78,10 @@ void GLWindow::Create(const char * title, size_t width, size_t height, bool full
 		GLFWmonitor * m = glfwGetPrimaryMonitor();
 		const GLFWvidmode * mode = glfwGetVideoMode (m);
 		
-		glfw_window_ = glfwCreateWindow(mode->width, mode->height, title, m, NULL);
+		glfw_window_ = glfwCreateWindow(mode->width, mode->height, title, m, share);
 
 	} else {
-		glfw_window_ = glfwCreateWindow(width, height, title, NULL, NULL);
+		glfw_window_ = glfwCreateWindow(width, height, title, NULL, share);
 		glfwSetWindowPos(glfw_window_,100,100);
 	}
 
@@ -98,13 +100,15 @@ void GLWindow::Create(const char * title, size_t width, size_t height, bool full
 
 	cout << "SEBURO OpenGL Version: " << glGetString(GL_VERSION) << endl;
 
-	// Set Basic Callbacks
-	glfwSetFramebufferSizeCallback( glfw_window_, GLFWWindowManager::Reshape								);
+	// Set Basic Callbacks - Checking for AntTweakBar overridding
+
+
 	glfwSetKeyCallback 						( glfw_window_, GLFWWindowManager::KeyCallback 						);
 	glfwSetCursorPosCallback			( glfw_window_, GLFWWindowManager::MousePositionCallback 	);
 	glfwSetMouseButtonCallback		(	glfw_window_, GLFWWindowManager::MouseButtonCallback 		);
 	glfwSetScrollCallback					( glfw_window_, GLFWWindowManager::MouseWheelCallback 		);
 	glfwSetWindowCloseCallback		(	glfw_window_, GLFWWindowManager::WindowCloseCallback  	);
+	glfwSetFramebufferSizeCallback( glfw_window_, GLFWWindowManager::Reshape								);
 
 	// Init GLEW for this context
 
@@ -133,6 +137,11 @@ GLFWWindowManager::GLFWWindowManager () {
 		cerr << "SEBURO ERROR - Failed to initialize GLFW." << endl;
 		exit( EXIT_FAILURE );
 	}
+
+#ifdef USE_ANTTWEAKBAR
+  TwInit(TW_OPENGL, NULL);
+#endif
+
 
 	pp_ = this;
 	flag_ = 0;
@@ -197,7 +206,13 @@ void GLFWWindowManager::Reshape(GLFWwindow* window, int w, int h) {
  */
 
 void GLFWWindowManager::Shutdown() {
+
+#ifdef USE_ANTTWEAKBAR
+  TwTerminate();
+#endif
+
 	glfwTerminate();
+
 }
 
 
@@ -206,6 +221,7 @@ void GLFWWindowManager::Shutdown() {
  */
 
 void GLFWWindowManager::ScrollCallback(GLFWwindow* window, double xoffset, double yoffset) {
+
 	ScrollEvent e (xoffset,yoffset,glfwGetTime());
 	pp_->FireEvent(pp_->GetWindow(window),e);
 }
@@ -215,6 +231,12 @@ void GLFWWindowManager::ScrollCallback(GLFWwindow* window, double xoffset, doubl
  */
 
 void GLFWWindowManager::KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
+
+#ifdef USE_ANTTWEAKBAR
+	if( TwEventKeyGLFW(key, action ))
+		return;
+#endif
+
 	KeyboardEvent e (key,action,glfwGetTime());
 	pp_->FireEvent(pp_->GetWindow(window), e);
 }
@@ -224,6 +246,12 @@ void GLFWWindowManager::KeyCallback(GLFWwindow* window, int key, int scancode, i
  */
 
 void GLFWWindowManager::MouseButtonCallback(GLFWwindow* window, int button, int action, int mods) {
+
+#ifdef USE_ANTTWEAKBAR
+	if( TwEventMouseButtonGLFW(button, action) !=0 )
+		return;
+#endif
+
 	switch(button){
 		case 0: {
 			if (action){
@@ -280,6 +308,12 @@ void GLFWWindowManager::MouseButtonCallback(GLFWwindow* window, int button, int 
 
 
 void GLFWWindowManager::MousePositionCallback(GLFWwindow* window, double x, double y){
+
+#ifdef USE_ANTTWEAKBAR
+	if( TwEventMousePosGLFW(x, y) !=0 )
+		return;
+#endif
+
 	pp_->mx_ = x;
 	pp_->my_ = y;
 	MouseEvent e (pp_->mx_,pp_->my_,pp_->flag_,glfwGetTime());
@@ -290,9 +324,11 @@ void GLFWWindowManager::WindowCloseCallback(GLFWwindow* window) {
 	
 	CloseWindowEvent e (glfwGetTime());
 	pp_->FireEvent(pp_->GetWindow(window), e);
+	
 	glfwDestroyWindow(window);
-	pp_->DestroyWindow(pp_->GetWindow(window));
 
+	pp_->DestroyWindow(pp_->GetWindow(window));
+	
 }
 
 
@@ -303,6 +339,12 @@ void GLFWWindowManager::WindowCloseCallback(GLFWwindow* window) {
 
 
 void GLFWWindowManager::MouseWheelCallback(GLFWwindow* window, double xpos, double ypos) {
+
+#ifdef USE_ANTTWEAKBAR
+	if( TwEventMouseWheelGLFW(static_cast<int>(ypos)) !=0 )
+		return;
+#endif
+
 
 	if (ypos == 1) {
 		pp_->flag_ |= MOUSE_WHEEL_UP;	

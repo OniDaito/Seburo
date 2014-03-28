@@ -1,8 +1,13 @@
 var searchData=
 [
-  ['getbase',['getBase',['../classs9_1_1Node.html#adc7ba2a843fcc8c24317c09e0fbce6a9',1,'s9::Node']]],
+  ['getbase',['GetBase',['../classs9_1_1Node.html#a9e6df6b60cbf591127e770dd358616c2',1,'s9::Node']]],
+  ['getbone',['GetBone',['../classs9_1_1Skeleton.html#ac9680f5ff2ca2ac6bf63b34d62f178e7',1,'s9::Skeleton']]],
+  ['getboneindex',['GetBoneIndex',['../classs9_1_1Skeleton.html#af5643ba938cc0a9a0bf88b123b12b6cc',1,'s9::Skeleton']]],
   ['getdocument',['GetDocument',['../classTiXmlNode.html#aa66f4ebcd175204a168ed7c2d7b43071',1,'TiXmlNode']]],
+  ['getsharedvertices',['GetSharedVertices',['../classs9_1_1GeometryT.html#a78a46ba37ee35e131eecbed038708a24',1,'s9::GeometryT']]],
   ['gettext',['GetText',['../classTiXmlElement.html#aa6dedd8a146acf3b1bc0903deb2d411a',1,'TiXmlElement']]],
+  ['getuserbyid',['GetUserByID',['../classs9_1_1oni_1_1OpenNISkeleton.html#a1962c3391947fe670a15fd443688f102',1,'s9::oni::OpenNISkeleton']]],
   ['getuserdata',['GetUserData',['../classTiXmlBase.html#a6559a530ca6763fc301a14d77ed28c17',1,'TiXmlBase::GetUserData()'],['../classTiXmlBase.html#ad0120210e4680ef2088601753ce0ede4',1,'TiXmlBase::GetUserData() const ']]],
-  ['getvalue',['getValue',['../classs9_1_1compvis_1_1ProcessBlock.html#a2189359475f02db5e99e699a4a9a5fa0',1,'s9::compvis::ProcessBlock']]]
+  ['getvalue',['getValue',['../classs9_1_1compvis_1_1ProcessBlock.html#a2189359475f02db5e99e699a4a9a5fa0',1,'s9::compvis::ProcessBlock']]],
+  ['glfwwindowmanager',['GLFWWindowManager',['../classs9_1_1gl_1_1GLFWWindowManager.html#a6d6fe60ff581a5af83deed3a0a2dc7e3',1,'s9::gl::GLFWWindowManager']]]
 ];

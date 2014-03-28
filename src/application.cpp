@@ -20,16 +20,20 @@ Application::~Application(){
 
 
 void Application::Run() {
+
   running_ = true;
   thread_start_= std::chrono::high_resolution_clock::now();
   main_start_= std::chrono::high_resolution_clock::now();
   update_thread_ = new std::thread(&Application::ThreadMainLoopInternal, this);
 
   MainLoopInternal();
+
 }
 
 void Application::Shutdown() {
   running_ = false;
+
+
 }
 
 void Application::ThreadMainLoopInternal(){

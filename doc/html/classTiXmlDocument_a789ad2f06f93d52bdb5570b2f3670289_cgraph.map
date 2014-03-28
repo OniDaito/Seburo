@@ -1,9 +1,9 @@
-<map id="TiXmlDocument::Parse" name="TiXmlDocument::Parse">
-<area shape="rect" id="node2" href="$classTiXmlDocument.html#ac66b8c28db86363315712a3574e87c35" title="TiXmlDocument::ClearError" alt="" coords="212,5,396,33"/>
-<area shape="rect" id="node3" href="$classTiXmlNode.html#a1a881212554b759865f6cac79a851d38" title="TiXmlNode::LinkEndChild" alt="" coords="218,57,390,85"/>
-<area shape="rect" id="node7" href="$classTiXmlNode.html#a9f43e6984fc7d4afd6eb32714c6b7b72" title="Cast to a more defined type. Will return null if not of the requested type. " alt="" coords="216,109,392,137"/>
-<area shape="rect" id="node8" href="$classTiXmlDeclaration.html#a5d974231f9e9a2f0542f15f3a46cdb76" title="Encoding. Will return an empty string if none was found. " alt="" coords="211,161,397,189"/>
-<area shape="rect" id="node4" href="$classTiXmlNode.html#aa66f4ebcd175204a168ed7c2d7b43071" title="TiXmlNode::GetDocument" alt="" coords="445,31,622,59"/>
-<area shape="rect" id="node6" href="$classTiXmlNode.html#a57b99d5c97d67a42b9752f5210a1ba5e" title="TiXmlNode::Type" alt="" coords="472,83,595,111"/>
-<area shape="rect" id="node5" href="$classTiXmlNode.html#a8a4cda4b15c29f64cff419309aebed08" title="Cast to a more defined type. Will return null if not of the requested type. " alt="" coords="670,31,839,59"/>
+<map id="G" name="G">
+<area shape="rect" id="node3" href="$classTiXmlDocument.html#ac66b8c28db86363315712a3574e87c35" title="TiXmlDocument::ClearError" alt="" coords="215,5,396,35"/>
+<area shape="rect" id="node5" href="$classTiXmlNode.html#a1a881212554b759865f6cac79a851d38" title="TiXmlNode::LinkEndChild" alt="" coords="220,59,391,88"/>
+<area shape="rect" id="node13" href="$classTiXmlNode.html#a9f43e6984fc7d4afd6eb32714c6b7b72" title="Cast to a more defined type. Will return null if not of the requested type." alt="" coords="217,112,393,141"/>
+<area shape="rect" id="node15" href="$classTiXmlDeclaration.html#a5d974231f9e9a2f0542f15f3a46cdb76" title="Encoding. Will return an empty string if none was found." alt="" coords="213,165,397,195"/>
+<area shape="rect" id="node7" href="$classTiXmlNode.html#aa66f4ebcd175204a168ed7c2d7b43071" title="TiXmlNode::GetDocument" alt="" coords="445,32,621,61"/>
+<area shape="rect" id="node11" href="$classTiXmlNode.html#a57b99d5c97d67a42b9752f5210a1ba5e" title="TiXmlNode::Type" alt="" coords="472,85,595,115"/>
+<area shape="rect" id="node9" href="$classTiXmlNode.html#a8a4cda4b15c29f64cff419309aebed08" title="Cast to a more defined type. Will return null if not of the requested type." alt="" coords="669,32,840,61"/>
 </map>

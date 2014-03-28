@@ -15,11 +15,21 @@ using namespace s9::gl;
 using namespace s9::oni;
 
 
+
+OpenNIApp::OpenNIApp() {
+
+  window_manager_.AddListener(this);
+  std::function<void()> init = std::bind(&OpenNIApp::Init, this);
+  std::function<void(double_t)> draw = std::bind(&OpenNIApp::Draw, this, std::placeholders::_1);
+  const GLWindow &windowZero = window_manager_.CreateWindow("OpenNI Application",800,600, init, draw );
+}
+
+
 /*
  * Called when the mainloop starts, just once
  */
 
-void OpenNIApp::Init(Context context){
+void OpenNIApp::Init(){
 
     shader_ = Shader( s9::File("./shaders/3/quad_texture.vert"), s9::File("./shaders/3/quad_texture.frag"));
     shader_colour_ = Shader(s9::File("./shaders/3/solid_colour.glsl"));
@@ -55,23 +65,16 @@ void OpenNIApp::Init(Context context){
 
 }
 
-/*
- * Update loop on another thread
- */
 
-  void OpenNIApp::Update(double_t dt) {
-	
-  }
-
-  OpenNIApp::~OpenNIApp(){
-  }
+OpenNIApp::~OpenNIApp(){
+}
 
 
 /*
  * Called as fast as possible. Not set FPS wise but dt is passed in
  */
 
- void OpenNIApp::Display(Context context, GLFWwindow* window, double_t dt){
+ void OpenNIApp::Draw(double_t dt){
 
     // Moved here as GC Seems to be upset
 
@@ -127,27 +130,42 @@ void OpenNIApp::Init(Context context){
     CXGLERROR
 }
 
+void OpenNIApp::MainLoop(double_t dt) {
+  window_manager_.MainLoop();
+}
+
+
+void OpenNIApp::ProcessEvent( const GLWindow &window, CloseWindowEvent e) {
+  
+    // One window left and we are about to close it
+  if (window_manager_.NumWindows() <= 1){
+    Shutdown();
+  }
+}
+
+
 
 /*
  * This is called by the wrapper function when an event is fired
  */
 
- void OpenNIApp::ProcessEvent(MouseEvent e, GLFWwindow* window){
+ void OpenNIApp::ProcessEvent( const GLWindow &window, MouseEvent e){
  }
 
 /*
  * Called when the window is resized. You should set cameras here
- * and reset the viewport
  */
 
- void OpenNIApp::ProcessEvent(ResizeEvent e, GLFWwindow* window){
-    ortho_camera_.Resize(e.w, e.h);
-    camera_.Resize(e.w, e.h);
+void OpenNIApp::ProcessEvent( const GLWindow &window, ResizeEvent e){
+  cout << "Window Resized:" << e.w << "," << e.h << endl;
+  camera_.Resize(e.w, e.h);
+  ortho_camera_.Resize(e.w, e.h);
 }
 
-void OpenNIApp::ProcessEvent(KeyboardEvent e, GLFWwindow* window){
-    cout << "Key Pressed: " << e.key << endl;
+void OpenNIApp::ProcessEvent( const GLWindow &window, KeyboardEvent e){
+  cout << "Key Pressed: " << e.key << endl;
 }
+
 
 /*
  * Main function - uses boost to parse program arguments
@@ -155,13 +173,7 @@ void OpenNIApp::ProcessEvent(KeyboardEvent e, GLFWwindow* window){
 
  int main (int argc, const char * argv[]) {
 
-    OpenNIApp b;
-
-#ifdef _SEBURO_OSX
-    GLFWApp a(b,3,2);
-#else
-    GLFWApp a(b);
-#endif
+    OpenNIApp a;
 
     a.Run();
 

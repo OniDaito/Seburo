@@ -1,6 +1,6 @@
-<map id="TiXmlNode::Clone" name="TiXmlNode::Clone">
-<area shape="rect" id="node2" href="$classTiXmlNode.html#af287a913ce46d8dbf7ef24fec69bbaf0" title="TiXmlNode::InsertEndChild" alt="" coords="192,5,373,33"/>
-<area shape="rect" id="node3" href="$classTiXmlNode.html#a71e54e393336382bc9875f64aab5cb15" title="TiXmlNode::InsertBeforeChild" alt="" coords="184,57,381,85"/>
-<area shape="rect" id="node4" href="$classTiXmlNode.html#a274db3292218202805c093f66a964cb5" title="TiXmlNode::InsertAfterChild" alt="" coords="190,109,376,137"/>
-<area shape="rect" id="node5" href="$classTiXmlNode.html#a543208c2c801c84a213529541e904b9f" title="TiXmlNode::ReplaceChild" alt="" coords="196,161,369,189"/>
+<map id="G" name="G">
+<area shape="rect" id="node3" href="$classTiXmlNode.html#af287a913ce46d8dbf7ef24fec69bbaf0" title="TiXmlNode::InsertEndChild" alt="" coords="192,5,373,35"/>
+<area shape="rect" id="node5" href="$classTiXmlNode.html#a71e54e393336382bc9875f64aab5cb15" title="TiXmlNode::InsertBeforeChild" alt="" coords="185,59,380,88"/>
+<area shape="rect" id="node7" href="$classTiXmlNode.html#a274db3292218202805c093f66a964cb5" title="TiXmlNode::InsertAfterChild" alt="" coords="189,112,376,141"/>
+<area shape="rect" id="node9" href="$classTiXmlNode.html#a543208c2c801c84a213529541e904b9f" title="TiXmlNode::ReplaceChild" alt="" coords="196,165,369,195"/>
 </map>

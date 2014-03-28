@@ -1,6 +1,7 @@
-<map id="include/s9/skeleton.hpp" name="include/s9/skeleton.hpp">
-<area shape="rect" id="node2" href="$common_8hpp_source.html" title="common.hpp" alt="" coords="1513,315,1611,343"/>
-<area shape="rect" id="node30" href="$geometry_8hpp.html" title="Geometry Classes &#45; Basic placeholders for geometry. " alt="" coords="1421,83,1523,111"/>
-<area shape="rect" id="node31" href="$primitives_8hpp_source.html" title="primitives.hpp" alt="" coords="1538,161,1640,189"/>
-<area shape="rect" id="node32" href="$utils_8hpp_source.html" title="utils.hpp" alt="" coords="1591,238,1661,266"/>
+<map id="G" name="G">
+<area shape="rect" id="node5" href="$common_8hpp_source.html" title="common.hpp" alt="" coords="1323,315,1419,344"/>
+<area shape="rect" id="node65" href="$geometry_8hpp.html" title="Geometry Classes &#45; Basic placeholders for geometry." alt="" coords="1175,83,1276,112"/>
+<area shape="rect" id="node77" href="$math__utils_8hpp.html" title="Maths Utils." alt="" coords="1261,160,1368,189"/>
+<area shape="rect" id="node68" href="$primitives_8hpp_source.html" title="primitives.hpp" alt="" coords="728,160,829,189"/>
+<area shape="rect" id="node71" href="$string__utils_8hpp_source.html" title="string_utils.hpp" alt="" coords="1031,237,1140,267"/>
 </map>

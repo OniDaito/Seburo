@@ -1,17 +1,18 @@
-<map id="include/s9/md5.hpp" name="include/s9/md5.hpp">
-<area shape="rect" id="node2" href="$primitives_8hpp_source.html" title="s9/primitives.hpp" alt="" coords="711,393,832,421"/>
-<area shape="rect" id="node3" href="$common_8hpp_source.html" title="common.hpp" alt="" coords="1272,547,1369,575"/>
-<area shape="rect" id="node32" href="$node_8hpp_source.html" title="s9/node.hpp" alt="" coords="1179,83,1273,111"/>
-<area shape="rect" id="node42" href="$skeleton_8hpp.html" title="Representation of a skeleton with bones. Used in animation and skinning. " alt="" coords="909,238,1005,266"/>
-<area shape="rect" id="node44" href="$file_8hpp.html" title="Cross Platform File Sharing. " alt="" coords="1665,315,1740,343"/>
-<area shape="rect" id="node31" href="$utils_8hpp_source.html" title="utils.hpp" alt="" coords="1463,470,1533,498"/>
-<area shape="rect" id="node33" href="$visualapp_8hpp.html" title="An Application that draws to the screen at some point. " alt="" coords="1098,393,1200,421"/>
-<area shape="rect" id="node35" href="$shapes_8hpp.html" title="OpenGL Specfic Primitives and such. " alt="" coords="1027,161,1116,189"/>
-<area shape="rect" id="node40" href="$gl_2utils_8hpp_source.html" title="utils.hpp" alt="" coords="1330,315,1400,343"/>
-<area shape="rect" id="node41" href="$camera_8hpp.html" title="Camera Classes. " alt="" coords="1449,393,1540,421"/>
-<area shape="rect" id="node43" href="$shader_8hpp.html" title="Shader Classes. " alt="" coords="1527,238,1628,266"/>
-<area shape="rect" id="node34" href="$events_8hpp_source.html" title="events.hpp" alt="" coords="1198,470,1284,498"/>
-<area shape="rect" id="node36" href="$geometry_8hpp.html" title="Geometry Classes &#45; Basic placeholders for geometry. " alt="" coords="958,315,1060,343"/>
-<area shape="rect" id="node37" href="$drawable_8hpp.html" title="DrawableClass. Takes geometry and creates OpenGL. " alt="" coords="1218,238,1333,266"/>
-<area shape="rect" id="node38" href="$gl_2common_8hpp.html" title="Common Headers that are external for OpenGL. " alt="" coords="1327,393,1424,421"/>
+<map id="G" name="G">
+<area shape="rect" id="node3" href="$primitives_8hpp_source.html" title="primitives.hpp" alt="" coords="587,315,688,344"/>
+<area shape="rect" id="node5" href="$common_8hpp_source.html" title="common.hpp" alt="" coords="1363,469,1459,499"/>
+<area shape="rect" id="node65" href="$string__utils_8hpp_source.html" title="string_utils.hpp" alt="" coords="1239,392,1348,421"/>
+<area shape="rect" id="node71" href="$node_8hpp_source.html" title="node.hpp" alt="" coords="1277,83,1352,112"/>
+<area shape="rect" id="node88" href="$skeleton_8hpp.html" title="Representation of a skeleton with bones. Used in animation and skinning." alt="" coords="841,160,937,189"/>
+<area shape="rect" id="node99" href="$texture_8hpp.html" title="Texture class for OpenGL and similar." alt="" coords="1624,160,1725,189"/>
+<area shape="rect" id="node111" href="$file_8hpp.html" title="Cross Platform File Sharing." alt="" coords="1644,315,1727,344"/>
+<area shape="rect" id="node74" href="$shapes_8hpp.html" title="GLFW App." alt="" coords="964,160,1052,189"/>
+<area shape="rect" id="node84" href="$camera_8hpp.html" title="Camera Classes." alt="" coords="1207,315,1297,344"/>
+<area shape="rect" id="node95" href="$material_8hpp.html" title="Representation of a surface material." alt="" coords="1077,160,1171,189"/>
+<area shape="rect" id="node104" href="$utils_8hpp.html" title="Utilities header." alt="" coords="1423,237,1492,267"/>
+<area shape="rect" id="node119" href="$shader_8hpp.html" title="Shader Classes." alt="" coords="1408,160,1507,189"/>
+<area shape="rect" id="node77" href="$geometry_8hpp.html" title="Geometry Classes &#45; Basic placeholders for geometry." alt="" coords="837,237,939,267"/>
+<area shape="rect" id="node81" href="$math__utils_8hpp.html" title="Maths Utils." alt="" coords="1013,237,1120,267"/>
+<area shape="rect" id="node102" href="$gl_2common_8hpp.html" title="Common Headers that are external for OpenGL." alt="" coords="1473,315,1569,344"/>
+<area shape="rect" id="node108" href="$image_8hpp.html" title="Underlying Image loading code &#45; relies on OS libs (GDI+, CoreImage, SDL_Image? )" alt="" coords="1719,237,1817,267"/>
 </map>

@@ -71,6 +71,8 @@ namespace s9 {
 			for (auto it = windows_.begin(); it != windows_.end();) {
 				if ( &(**it) == &window){
 	    		it = windows_.erase(it);
+				} else{
+					++it;
 				}
 			}
 		}

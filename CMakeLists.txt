@@ -47,6 +47,16 @@ elseif (UNIX AND APPLE)
 elseif (UNIX AND NOT APPLE)
     set(_SEBURO_LINUX 1)
     add_definitions(-D_SEBURO_LINUX)
+
+    # Check for 32/64 target
+    if(CMAKE_SIZE_OF_VOID_P EQUAL 4)
+      set(_SEBURO_LINUX_32 1)
+      add_definitions(-D_SEBURO_LINUX_32)
+    else()
+      set(_SEBURO_LINUX_64 1)
+      add_definitions(-D_SEBURO_LINUX_64)
+    endif()
+
     message(STATUS "Building SEBURO Shared on a Unix-like system")
     FILE(GLOB OSSources src/linux/*)
     SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wl,--warn-unresolved-symbols -std=c++11 -pthread -Wl,--no-as-needed")
@@ -163,6 +173,13 @@ if (_SEBURO_LINUX)
   SEBURO_find_pkgconfig_lib(xi)
   SEBURO_find_pkgconfig_lib(libudev)
   SEBURO_find_library(glfw)
+ 
+
+  # Sort out Freetype - including adding its special directory so includes work
+  SEBURO_find_library(freetype)
+  include_directories(${PROJECT_SOURCE_DIR}/include/freetype
+    ${SEBURO_INCLUDES}
+  )
 
   # Glob the SOIL Sources and compile include
   FILE(GLOB SOILSources src/soil/*)
@@ -245,37 +262,6 @@ if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
   SET(CLANG_LIBRARIES "c++")
 endif()
 
-#####################################################################
-# Boost - Regular and installed
-
-# This assumes boost is built for static inclusion as libs for
-# MSVC 2010 in release mode
-# http://cpprocks.com/using-cmake-to-build-a-cross-platform-project-with-a-boost-dependency/
-# TODO - threading is now taken care of with std::thread but maybe not under windows
-# possibly not with GCC either under Linux / Apple
-
-
-
-#if(WIN32)
-#  SET(Boost_USE_STATIC_LIBS   ON)
-#  SET(Boost_USE_MULTITHREADED ON)
-#  SET(Boost_USE_STATIC_RUNTIME ON)
-#  SET(BOOST_ALL_DYN_LINK  OFF)
-  #add_definitions(-DBOOST_ALL_NO_LIB)
-  #SET(CMAKE_SHARED_LINKER_FLAGS /NODEFAULTLIB:LIBC;LIBCMT;MSVCRT)
-#endif()
-
-#message("Looking for Installed BOOST Libraries")
-#find_package(Boost COMPONENTS system filesystem signals iostreams program_options REQUIRED)
-
-#include_directories(${Boost_INCLUDE_DIR})
-#link_directories(${Boost_LIBRARY_DIRS})
-
-#message(status "** Boost Include: ${Boost_INCLUDE_DIR}")
-#message(status "** Boost Libraries: ${Boost_LIBRARY_DIRS}")
-#message(status "** Boost Libraries: ${Boost_LIBRARIES}")
-
-
 ######################################################################
 # Glob Source files
 
@@ -285,9 +271,25 @@ FILE(GLOB CommonSources src/*)
 list(REMOVE_ITEM GLUtils ${PROJECT_SOURCE_DIR}/src/gl/utils/glewinfo.c)
 list(REMOVE_ITEM GLUtils ${PROJECT_SOURCE_DIR}/src/gl/utils/visualinfo.c)
 
+
+
+
+
 ##########################################################
 # Options for further libraries and includes
 # \TODO Should really be library dirs not actual libraries
+
+
+# AntTweakBar
+
+option(USE_ANTTWEAKBAR "Compile and use OpenNI Librares" ON)
+  
+if (USE_ANTTWEAKBAR)
+  add_definitions(-DUSE_ANTTWEAKBAR)
+  SEBURO_find_library(AntTweakBar)
+
+endif()
+
 
 # OpenNI 
 option(USE_OPENNI "Compile and use OpenNI Librares" ON)

@@ -1,4 +1,4 @@
-<map id="s9::NodeShape" name="s9::NodeShape">
-<area shape="rect" id="node2" href="$classs9_1_1NodeBase.html" title="s9::NodeBase" alt="" coords="5,6,109,34"/>
-<area shape="rect" id="node3" href="$classs9_1_1Shape.html" title="s9::Shape" alt="" coords="134,6,215,34"/>
+<map id="G" name="G">
+<area shape="rect" id="node2" href="$classs9_1_1NodeBase.html" title="s9::NodeBase" alt="" coords="13,5,117,35"/>
+<area shape="rect" id="node4" href="$classs9_1_1Shape.html" title="s9::Shape\&lt; VertexType, FaceType, AllocatonType \&gt;" alt="" coords="141,5,469,35"/>
 </map>

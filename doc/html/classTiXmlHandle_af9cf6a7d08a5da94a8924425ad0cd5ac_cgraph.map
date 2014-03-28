@@ -1,4 +1,4 @@
-<map id="TiXmlHandle::Child" name="TiXmlHandle::Child">
-<area shape="rect" id="node2" href="$classTiXmlNode.html#af854baeba384f5fe9859f5aee03b548e" title="Navigate to a sibling node. " alt="" coords="199,5,361,33"/>
-<area shape="rect" id="node3" href="$classTiXmlHandle.html#aba18fd7bdefb942ecdea4bf4b8e29ec8" title="Create a handle from any node (at any depth of the tree.) This can be a null pointer. " alt="" coords="190,57,370,85"/>
+<map id="G" name="G">
+<area shape="rect" id="node3" href="$classTiXmlNode.html#af854baeba384f5fe9859f5aee03b548e" title="Navigate to a sibling node." alt="" coords="199,5,361,35"/>
+<area shape="rect" id="node5" href="$classTiXmlHandle.html#aba18fd7bdefb942ecdea4bf4b8e29ec8" title="Create a handle from any node (at any depth of the tree.) This can be a null pointer." alt="" coords="191,59,369,88"/>
 </map>

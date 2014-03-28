@@ -770,18 +770,21 @@ RECURSIVE              = YES
 # run.
 
 EXCLUDE                = include/assimp \
+                         include/soil \
+                         include/freetype \
                          include/GL \
                          include/GLFW \
                          include/gli \
                          include/glm \
-                         include/anttweakbar
+                         include/anttweakbar \
+                         src/soil
 
 # The EXCLUDE_SYMLINKS tag can be used to select whether or not files or
 # directories that are symbolic links (a Unix file system feature) are excluded
 # from the input.
 # The default value is: NO.
 
-EXCLUDE_SYMLINKS       = NO
+EXCLUDE_SYMLINKS       = YES
 
 # If the value of the INPUT tag contains directories, you can use the
 # EXCLUDE_PATTERNS tag to specify one or more wildcard patterns to exclude

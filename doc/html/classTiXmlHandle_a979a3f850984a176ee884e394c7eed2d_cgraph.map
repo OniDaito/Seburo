@@ -1,6 +1,6 @@
-<map id="TiXmlHandle::ChildElement" name="TiXmlHandle::ChildElement">
-<area shape="rect" id="node2" href="$classTiXmlNode.html#a7667217e269e0da01d1f82aee94d1a3d" title="TiXmlNode::NextSiblingElement" alt="" coords="237,30,448,58"/>
-<area shape="rect" id="node5" href="$classTiXmlHandle.html#aba18fd7bdefb942ecdea4bf4b8e29ec8" title="Create a handle from any node (at any depth of the tree.) This can be a null pointer. " alt="" coords="252,82,433,110"/>
-<area shape="rect" id="node3" href="$classTiXmlNode.html#af854baeba384f5fe9859f5aee03b548e" title="Navigate to a sibling node. " alt="" coords="497,5,658,33"/>
-<area shape="rect" id="node4" href="$classTiXmlNode.html#a72abed96dc9667ab9e0a2a275301bb1c" title="Cast to a more defined type. Will return null if not of the requested type. " alt="" coords="499,57,656,85"/>
+<map id="G" name="G">
+<area shape="rect" id="node3" href="$classTiXmlNode.html#a7667217e269e0da01d1f82aee94d1a3d" title="TiXmlNode::NextSiblingElement" alt="" coords="237,32,448,61"/>
+<area shape="rect" id="node9" href="$classTiXmlHandle.html#aba18fd7bdefb942ecdea4bf4b8e29ec8" title="Create a handle from any node (at any depth of the tree.) This can be a null pointer." alt="" coords="253,85,432,115"/>
+<area shape="rect" id="node5" href="$classTiXmlNode.html#af854baeba384f5fe9859f5aee03b548e" title="Navigate to a sibling node." alt="" coords="496,5,659,35"/>
+<area shape="rect" id="node7" href="$classTiXmlNode.html#a72abed96dc9667ab9e0a2a275301bb1c" title="Cast to a more defined type. Will return null if not of the requested type." alt="" coords="499,59,656,88"/>
 </map>

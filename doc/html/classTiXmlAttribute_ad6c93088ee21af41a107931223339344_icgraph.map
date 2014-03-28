@@ -1,5 +1,5 @@
-<map id="TiXmlAttribute::QueryIntValue" name="TiXmlAttribute::QueryIntValue">
-<area shape="rect" id="node2" href="$classTiXmlElement.html#aa9192e80567b5042dbded80b78c44339" title="TiXmlElement::Attribute" alt="" coords="242,5,403,33"/>
-<area shape="rect" id="node3" href="$classTiXmlElement.html#aea0bfe471380f281c5945770ddbf52b9" title="TiXmlElement::QueryIntAttribute" alt="" coords="217,57,429,85"/>
-<area shape="rect" id="node4" href="$classTiXmlElement.html#ae48df644f890ab86fa19839ac401f00d" title="QueryUnsignedAttribute examines the attribute &#45; see QueryIntAttribute(). " alt="" coords="221,109,425,153"/>
+<map id="G" name="G">
+<area shape="rect" id="node3" href="$classTiXmlElement.html#aa9192e80567b5042dbded80b78c44339" title="TiXmlElement::Attribute" alt="" coords="296,5,456,35"/>
+<area shape="rect" id="node5" href="$classTiXmlElement.html#aea0bfe471380f281c5945770ddbf52b9" title="TiXmlElement::QueryIntAttribute" alt="" coords="271,59,481,88"/>
+<area shape="rect" id="node7" href="$classTiXmlElement.html#ae48df644f890ab86fa19839ac401f00d" title="QueryUnsignedAttribute examines the attribute &#45; see QueryIntAttribute()." alt="" coords="251,112,501,141"/>
 </map>

@@ -53,6 +53,7 @@ namespace s9 {
 		Camera camera_;
 		Node top_node_2_;
 
+
 		float rotation_;
 		
 	};

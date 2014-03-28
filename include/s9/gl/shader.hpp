@@ -195,7 +195,7 @@ namespace s9 {
 			Shader(std::string vert_string, std::string frag_string, std::string geom_string);
 
 			GLuint program() { return obj_->program; };
-			GLint Location(const char * name) { GLint g =  glGetUniformLocation(obj_->program, name);  std::cout << "GG " <<  name << std::endl; CXGLERROR return g; }
+			GLint Location(const char * name) { GLint g =  glGetUniformLocation(obj_->program, name); CXGLERROR return g; }
 			
 			// Fluent interface for quick setting
 

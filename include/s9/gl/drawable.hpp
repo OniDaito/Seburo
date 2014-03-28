@@ -51,6 +51,9 @@ namespace s9{
      * This is loosely coupled with its geometry, only at brew time.
      * \todo at present we are using a single interleaved array and only one brew variable
      * We need to consider what to do if we want non-interleaved with different access types
+     *
+     *
+     * \todo with shared contexts we can share buffers but we cant share VAOs so we need to deal with that :S
      */
 
     class Drawable {

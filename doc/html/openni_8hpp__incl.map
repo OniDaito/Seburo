@@ -1,12 +1,13 @@
-<map id="include/s9/openni/openni.hpp" name="include/s9/openni/openni.hpp">
-<area shape="rect" id="node2" href="$common_8hpp_source.html" title="../common.hpp" alt="" coords="1728,393,1837,421"/>
-<area shape="rect" id="node33" href="$texture_8hpp.html" title="Texture class for OpenGL and similar. " alt="" coords="1635,161,1753,189"/>
-<area shape="rect" id="node40" href="$skeleton_8hpp.html" title="Representation of a skeleton with bones. Used in animation and skinning. " alt="" coords="1871,83,1985,111"/>
-<area shape="rect" id="node34" href="$gl_2common_8hpp.html" title="Common Headers that are external for OpenGL. " alt="" coords="1407,315,1536,343"/>
-<area shape="rect" id="node36" href="$gl_2utils_8hpp_source.html" title="s9/gl/utils.hpp" alt="" coords="1517,238,1619,266"/>
-<area shape="rect" id="node37" href="$image_8hpp.html" title="Underlying Image loading code &#45; relies on OS libs (GDI+, CoreImage, SDL_Image? ) " alt="" coords="1644,238,1745,266"/>
-<area shape="rect" id="node38" href="$file_8hpp.html" title="Cross Platform File Sharing. " alt="" coords="1612,315,1693,343"/>
-<area shape="rect" id="node41" href="$geometry_8hpp.html" title="Geometry Classes &#45; Basic placeholders for geometry. " alt="" coords="1921,161,2023,189"/>
-<area shape="rect" id="node42" href="$primitives_8hpp_source.html" title="primitives.hpp" alt="" coords="2478,238,2580,266"/>
-<area shape="rect" id="node43" href="$utils_8hpp_source.html" title="utils.hpp" alt="" coords="2458,315,2528,343"/>
+<map id="G" name="G">
+<area shape="rect" id="node3" href="$common_8hpp_source.html" title="../common.hpp" alt="" coords="1801,392,1911,421"/>
+<area shape="rect" id="node70" href="$texture_8hpp.html" title="Texture class for OpenGL and similar." alt="" coords="1529,83,1647,112"/>
+<area shape="rect" id="node94" href="$skeleton_8hpp.html" title="Representation of a skeleton with bones. Used in animation and skinning." alt="" coords="1869,83,1984,112"/>
+<area shape="rect" id="node73" href="$gl_2common_8hpp.html" title="Common Headers that are external for OpenGL." alt="" coords="1372,237,1500,267"/>
+<area shape="rect" id="node77" href="$utils_8hpp.html" title="Utilities header." alt="" coords="1449,160,1551,189"/>
+<area shape="rect" id="node81" href="$image_8hpp.html" title="Underlying Image loading code &#45; relies on OS libs (GDI+, CoreImage, SDL_Image? )" alt="" coords="1732,160,1831,189"/>
+<area shape="rect" id="node84" href="$file_8hpp.html" title="Cross Platform File Sharing." alt="" coords="1740,237,1823,267"/>
+<area shape="rect" id="node87" href="$string__utils_8hpp_source.html" title="string_utils.hpp" alt="" coords="2071,315,2180,344"/>
+<area shape="rect" id="node99" href="$geometry_8hpp.html" title="Geometry Classes &#45; Basic placeholders for geometry." alt="" coords="2127,160,2228,189"/>
+<area shape="rect" id="node109" href="$math__utils_8hpp.html" title="Maths Utils." alt="" coords="2031,237,2137,267"/>
+<area shape="rect" id="node102" href="$primitives_8hpp_source.html" title="primitives.hpp" alt="" coords="2468,237,2569,267"/>
 </map>

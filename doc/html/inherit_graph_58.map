@@ -1,6 +1,5 @@
-<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$classs9_1_1Shape.html" title="s9::Shape" alt="" coords="6,57,87,85"/>
-<area shape="rect" id="node2" href="$classs9_1_1Cuboid.html" title="s9::Cuboid" alt="" coords="139,5,224,33"/>
-<area shape="rect" id="node3" href="$classs9_1_1Quad.html" title="s9::Quad" alt="" coords="144,57,219,85"/>
-<area shape="rect" id="node4" href="$classs9_1_1TriMesh.html" title="s9::TriMesh" alt="" coords="136,109,227,137"/>
+<map id="G" name="G">
+<area shape="rect" id="node1" href="$structs9_1_1Node_1_1SharedObject.html" title="s9::Node::SharedObject" alt="" coords="5,32,168,61"/>
+<area shape="rect" id="node3" href="$structs9_1_1gl_1_1Text_1_1SharedObject.html" title="s9::gl::Text::SharedObject" alt="" coords="239,5,412,35"/>
+<area shape="rect" id="node5" href="$structs9_1_1SkeletonShape_1_1SharedObject.html" title="s9::SkeletonShape::SharedObject" alt="" coords="216,59,435,88"/>
 </map>

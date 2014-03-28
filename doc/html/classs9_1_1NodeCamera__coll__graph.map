@@ -1,5 +1,5 @@
-<map id="s9::NodeCamera" name="s9::NodeCamera">
-<area shape="rect" id="node2" href="$classs9_1_1NodeBase.html" title="s9::NodeBase" alt="" coords="5,14,109,42"/>
-<area shape="rect" id="node3" href="$structs9_1_1gl_1_1ShaderClause.html" title="s9::gl::ShaderClause\l\&lt; glm::mat4 \&gt;" alt="" coords="134,6,279,50"/>
-<area shape="rect" id="node4" href="$classs9_1_1Camera.html" title="s9::Camera" alt="" coords="352,14,441,42"/>
+<map id="G" name="G">
+<area shape="rect" id="node2" href="$classs9_1_1NodeBase.html" title="s9::NodeBase" alt="" coords="5,5,109,35"/>
+<area shape="rect" id="node4" href="$structs9_1_1gl_1_1ShaderClause.html" title="s9::gl::ShaderClause\&lt; glm::mat4, 1 \&gt;" alt="" coords="133,5,373,35"/>
+<area shape="rect" id="node6" href="$classs9_1_1Camera.html" title="s9::Camera" alt="" coords="401,5,492,35"/>
 </map>

@@ -1,4 +1,4 @@
-<map id="TiXmlElement::Attribute" name="TiXmlElement::Attribute">
-<area shape="rect" id="node2" href="$classTiXmlAttribute.html#a0f874490eac8ca00ee0070765d0e97e3" title="Return the value of this attribute. " alt="" coords="239,5,385,33"/>
-<area shape="rect" id="node3" href="$classTiXmlAttribute.html#ac87b2a8489906a5d7aa2875f20be3513" title="QueryDoubleValue examines the value string. See QueryIntValue(). " alt="" coords="217,57,407,101"/>
+<map id="G" name="G">
+<area shape="rect" id="node3" href="$classTiXmlAttribute.html#a0f874490eac8ca00ee0070765d0e97e3" title="Return the value of this attribute." alt="" coords="255,5,401,35"/>
+<area shape="rect" id="node5" href="$classTiXmlAttribute.html#ac87b2a8489906a5d7aa2875f20be3513" title="QueryDoubleValue examines the value string. See QueryIntValue()." alt="" coords="217,59,439,88"/>
 </map>

@@ -1,8 +1,7 @@
 var searchData=
 [
-  ['unbind',['unbind',['../classs9_1_1gl_1_1Shader.html#a10c6c9ee752aab4e531536917cc558fe',1,'s9::gl::Shader']]],
+  ['unbind',['Unbind',['../classs9_1_1gl_1_1Shader.html#ab30c347f080ff59bdae19b4ddc12c2d0',1,'s9::gl::Shader']]],
   ['unknown',['Unknown',['../classTiXmlHandle.html#a49675b74357ba2aae124657a9a1ef465',1,'TiXmlHandle']]],
-  ['update',['update',['../classs9_1_1oni_1_1OpenNISkeleton.html#a785d6e82ac21748116fccec0967b6533',1,'s9::oni::OpenNISkeleton']]],
-  ['updateusersstate',['updateUsersState',['../classs9_1_1oni_1_1OpenNISkeleton.html#a741c8c2998d95615d658fc394c24f504',1,'s9::oni::OpenNISkeleton']]],
-  ['user',['user',['../classs9_1_1oni_1_1OpenNISkeleton.html#ae817361f4eda6a95d22abdaa382aa899',1,'s9::oni::OpenNISkeleton']]]
+  ['update',['Update',['../classs9_1_1Camera.html#a4a596a3ea1fdc7d244ba4268031a360b',1,'s9::Camera::Update()'],['../classs9_1_1oni_1_1OpenNISkeleton.html#aee9c2a2e6ac25f0acb80b603e776090d',1,'s9::oni::OpenNISkeleton::Update()'],['../classs9_1_1Skeleton.html#a8eccd70aa7e603a1f798ecb129e059bd',1,'s9::Skeleton::Update()']]],
+  ['updateusersstate',['UpdateUsersState',['../classs9_1_1oni_1_1OpenNISkeleton.html#af748f5bfa459cb5ee584f5ff2675f7fa',1,'s9::oni::OpenNISkeleton']]]
 ];

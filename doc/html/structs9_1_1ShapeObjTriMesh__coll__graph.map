@@ -1,6 +1,0 @@
-<map id="s9::ShapeObjTriMesh" name="s9::ShapeObjTriMesh">
-<area shape="rect" id="node2" href="$structs9_1_1ShapeObj.html" title="s9::ShapeObj" alt="" coords="12,115,113,143"/>
-<area shape="rect" id="node3" href="$classs9_1_1gl_1_1Drawable.html" title="s9::gl::Drawable" alt="" coords="4,6,120,34"/>
-<area shape="rect" id="node4" href="$classs9_1_1GeometryT.html" title="s9::GeometryT\&lt; s9::\lVertexT, s9::FaceT,\l s9::AllocationPolicyNew \&gt;" alt="" coords="138,99,315,159"/>
-<area shape="rect" id="node5" href="$classs9_1_1AllocationPolicyNew.html" title="s9::AllocationPolicyNew" alt="" coords="145,6,308,34"/>
-</map>

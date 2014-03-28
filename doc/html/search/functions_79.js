@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['yaw',['yaw',['../classs9_1_1Node.html#abf84276da34f295abef63302b530951c',1,'s9::Node']]]
+  ['yaw',['Yaw',['../classs9_1_1Camera.html#a0a9402ff86918c93314acc6094e18e5b',1,'s9::Camera']]]
 ];

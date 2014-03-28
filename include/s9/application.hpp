@@ -17,6 +17,11 @@
 #include <ctime>
 #include <chrono>
 
+#ifdef USE_ANTTWEAKBAR
+#include <AntTweakBar/AntTweakBar.h>
+#endif
+
+
 namespace s9 {
 
 

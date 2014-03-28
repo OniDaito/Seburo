@@ -24,12 +24,17 @@
 #include <gtkmm.h>
 #endif
 
+#ifdef USE_ANTTWEAKBAR
+#include <AntTweakBar/AntTweakBar.h>
+#endif
+
 namespace s9 {
 
 	namespace gl {
 
 		class SEBUROAPI GLFWWindowManager;
 		
+
 
 		/**
 		 * A basic GLFW Window (a nice wrapper basically but with some functions attached)
@@ -38,19 +43,20 @@ namespace s9 {
 		class GLWindow  {
 		public:
 			GLWindow (const char * title, size_t width, size_t height) { 
-				Create(title,width,height,false, nullptr,-1,-1); 
+				Create(title,width,height,false, nullptr,-1,-1,nullptr); 
 			}
 
 			GLWindow (const char * title, size_t width, size_t height,
 				 	std::function<void()> init_func,
 					std::function<void(double_t)> draw_func,
-					bool fullscreen, const char * monitor_name, int major, int minor )  { 
+					bool fullscreen, const char * monitor_name, int major, int minor, GLFWwindow *share )  { 
 
-				Create(title, width, height, fullscreen, monitor_name, major, minor); 
+				Create(title, width, height, fullscreen, monitor_name, major, minor, share ); 
 
 				init_func_ = init_func;
 				draw_func_ = draw_func;
 
+			
 				init_func_();
 
 			}
@@ -61,10 +67,11 @@ namespace s9 {
 			//void SetResizeFunc(	void (*resize_func)(size_t width, size_t height) ) {  resize_func_ = resize_func;  }
 
 			GLFWwindow* glfw_window() const { return glfw_window_; }
+			std::string window_name() const { return window_name_; }
 
 		protected:
 
-			void Create(const char * title, size_t width, size_t height, bool fullscreen, const char * monitor_name, int major, int minor);
+			void Create(const char * title, size_t width, size_t height, bool fullscreen, const char * monitor_name, int major, int minor, GLFWwindow *share);
 
 			friend class GLFWWindowManager;
 
@@ -73,8 +80,7 @@ namespace s9 {
 			std::function<void(double_t)> draw_func_;
 			std::function<void()> init_func_;
 
-			WindowListener<GLWindow> *listener_;
-
+			std::string window_name_;
 			GLFWwindow* glfw_window_;
 		};
 
@@ -130,9 +136,45 @@ namespace s9 {
 			const GLWindow & CreateWindow(const char * title,  size_t width, size_t height, 
 					std::function<void()> init_func,
 					std::function<void(double_t)> draw_func){
-				windows_.push_back( std::unique_ptr<GLWindow > (new GLWindow(title, width, height, init_func, draw_func, false, nullptr, -1, -1)) );
+
+				///\todo Default is to create Shared Contexts
+				GLFWwindow* share = nullptr;
+				if (windows_.size() > 0){
+#ifdef DEBUG
+					std::cout << "SEBURO - Sharing Context." << std::endl;
+#endif
+					share = windows_.front()->glfw_window();
+				}
+
+				windows_.push_back( std::unique_ptr<GLWindow> (new GLWindow(title, width, height, init_func, draw_func, false, nullptr, -1, -1, share)) );
+				
+				Reshape(windows_.back()->glfw_window(), width,height);
+
 				return *(windows_.back());
 			}	
+
+			/// This is the full fat create window
+
+			const GLWindow & CreateWindow(const char * title,  size_t width, size_t height, 
+					std::function<void()> init_func,
+					std::function<void(double_t)> draw_func,
+					bool fullscreen, const char * monitor_name, int major, int minor){
+
+				///\todo Default is to create Shared Contexts
+				GLFWwindow* share = nullptr;
+				if (windows_.size() > 0){
+#ifdef DEBUG
+					std::cout << "SEBURO - Sharing Context." << std::endl;
+#endif
+					share = windows_.front()->glfw_window();
+				}
+
+				windows_.push_back( std::unique_ptr<GLWindow> (new GLWindow(title, width, height, init_func, draw_func, fullscreen, monitor_name, major, minor, share)) );
+				
+				Reshape(windows_.back()->glfw_window(), width,height);
+
+				return *(windows_.back());
+			}
  
 			
 			void MainLoop() {
@@ -140,13 +182,19 @@ namespace s9 {
 				
 				double_t t = glfwGetTime();
 
+				// Seems odd but it keeps the contexts running at 60fps! :D
+				if (windows_.size() == 1)
+					glfwSwapInterval( 1 );
+				else
+					glfwSwapInterval( 0 );
+
 				for (auto it = windows_.begin(); it != windows_.end(); ++it) {
 					
 					const GLWindow &w = **it;
 
 					GLFWwindow* b = w.glfw_window();
 					glfwMakeContextCurrent(b);
-					glfwSwapInterval( 1 ); // vsync basically
+				
 
 					if (w.draw_func_ != nullptr){
 						w.draw_func_(dt_);
@@ -158,9 +206,10 @@ namespace s9 {
 
 				dt_ = glfwGetTime() - t;
 
-				glfwPollEvents();
-			}
 
+				glfwPollEvents();
+
+			}
 
 			void Shutdown();
 

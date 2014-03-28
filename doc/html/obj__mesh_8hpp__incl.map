@@ -1,0 +1,17 @@
+<map id="G" name="G">
+<area shape="rect" id="node3" href="$common_8hpp_source.html" title="common.hpp" alt="" coords="1376,547,1472,576"/>
+<area shape="rect" id="node63" href="$geometry_8hpp.html" title="Geometry Classes &#45; Basic placeholders for geometry." alt="" coords="1704,315,1805,344"/>
+<area shape="rect" id="node69" href="$string__utils_8hpp_source.html" title="string_utils.hpp" alt="" coords="1201,469,1311,499"/>
+<area shape="rect" id="node75" href="$file_8hpp.html" title="Cross Platform File Sharing." alt="" coords="948,392,1012,421"/>
+<area shape="rect" id="node83" href="$math__utils_8hpp.html" title="Maths Utils." alt="" coords="1649,237,1756,267"/>
+<area shape="rect" id="node87" href="$node_8hpp_source.html" title="node.hpp" alt="" coords="1336,83,1411,112"/>
+<area shape="rect" id="node66" href="$primitives_8hpp_source.html" title="primitives.hpp" alt="" coords="1989,392,2091,421"/>
+<area shape="rect" id="node90" href="$shapes_8hpp.html" title="GLFW App." alt="" coords="1377,160,1465,189"/>
+<area shape="rect" id="node97" href="$utils_8hpp.html" title="Utilities header." alt="" coords="1343,392,1412,421"/>
+<area shape="rect" id="node102" href="$camera_8hpp.html" title="Camera Classes." alt="" coords="1228,392,1319,421"/>
+<area shape="rect" id="node106" href="$skeleton_8hpp.html" title="Representation of a skeleton with bones. Used in animation and skinning." alt="" coords="1743,160,1839,189"/>
+<area shape="rect" id="node111" href="$material_8hpp.html" title="Representation of a surface material." alt="" coords="1565,160,1659,189"/>
+<area shape="rect" id="node115" href="$texture_8hpp.html" title="Texture class for OpenGL and similar." alt="" coords="1361,315,1463,344"/>
+<area shape="rect" id="node119" href="$shader_8hpp.html" title="Shader Classes." alt="" coords="1087,315,1185,344"/>
+<area shape="rect" id="node94" href="$drawable_8hpp.html" title="DrawableClass. Takes geometry and creates OpenGL." alt="" coords="1412,237,1524,267"/>
+</map>
