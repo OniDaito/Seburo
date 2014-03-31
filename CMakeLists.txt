@@ -256,6 +256,7 @@ endif()
 
 if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
   message (STATUS "Using CLANG to build Seburo")
+  add_definitions(-DSEBURO_CLANG)  
   SET(CMAKE_COMPILER_IS_CLANG 1)
   SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Qunused-arguments")
   SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++ -Qunused-arguments -Wno-invalid-offsetof ${SSE_FLAGS}")

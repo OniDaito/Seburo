@@ -103,6 +103,8 @@ namespace s9 {
 
       static void CalculateHistogram(float* pHistogram, int histogramSize, const openni::VideoFrameRef& frame);
    
+      void Shutdown();
+
     };
 
   

@@ -59,11 +59,15 @@
 #define GLM_SWIZZLE 
 
 // Disable the warnings from GLM - I trust it but it does complain about some things
+
+#ifdef SEBURO_CLANG
 #pragma warning(push, 0)
 #pragma GCC diagnostic ignored "-Wdeprecated-register"
 #pragma GCC diagnostic ignored "-Wshift-op-parentheses"
 
 #pragma GCC diagnostic push
+
+#endif
 
 #include <glm/glm.hpp>
 #include <glm/gtc/quaternion.hpp>
@@ -74,8 +78,10 @@
 #include <glm/gtx/matrix_interpolation.hpp>
 #include <glm/gtx/string_cast.hpp>
 
+#ifdef SEBURO_CLANG
 #pragma warning(pop)
 #pragma GCC diagnostic pop
+#endif
 
 #if defined(_SEBURO_WIN32) && defined(_SEBURO_BUILD_DLL)
   #define SEBUROAPI __declspec(dllexport)

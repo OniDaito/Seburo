@@ -1,6 +1,9 @@
 ## Todo
 
 
+* Destructors are great but we need shutdown methods as some things need to be controlled in their shutdown like OpenNI and devices
+*Shared contexts cant really share geometry as we are pairing geometry with a drawable and this drawable contains a VAO which we cant share :S
+
 * Cuboid still isnt right with its face winding ><
 
 MD5 Issues

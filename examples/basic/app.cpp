@@ -48,7 +48,7 @@ void BasicApp::Init() {
     else {
         builder.AddUserText(VERTEX_MAIN, "vVertexPosition = aVertexPosition;");
         builder.AddUserText(VERTEX_MAIN, "gl_Position = uProjectionMatrix * uViewMatrix * uModelMatrix * vVertexPosition;");
-        builder.AddUserText(FRAGMENT_MAIN, "fragColor = vVertexColour;");
+        builder.AddUserText(FRAGMENT_MAIN, "fragColour = vVertexColour;");
     }
 
     shader_ = builder.Build();

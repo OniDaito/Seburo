@@ -88,10 +88,9 @@ OpenNIApp::~OpenNIApp(){
             cout << skeleton_base_ << endl;
         } 
     }
+    
     skeleton_base_.Update();
-
-
-
+    
     GLfloat depth = 1.0f;
     // Now draw to the screen
 

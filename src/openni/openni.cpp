@@ -37,9 +37,20 @@ OpenNIBase::SharedObject::~SharedObject() {
     delete[] tex_buffer_depth;
     delete[] tex_buffer_colour;
   }
- 
 }
 
+void OpenNIBase::Shutdown() {
+
+  assert(obj_);
+
+  obj_->depth_stream.destroy();
+  obj_->colour_stream.destroy();
+
+  // this line seems to cause problems with the extended nite shared object :S
+  // Also, this seems to be called twice
+
+  openni::OpenNI::shutdown(); // Assuming there is only one base ;)
+}
 
 // Taken from the OpenNI Libraries
 
