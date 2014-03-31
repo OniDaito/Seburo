@@ -199,6 +199,7 @@ namespace s9 {
 			
 			// Fluent interface for quick setting
 
+			Shader& s(const char * name, glm::vec2 v);
 			Shader& s(const char * name, glm::vec3 v);
 			Shader& s(const char * name, glm::vec4 v);
 			Shader& s(const char * name, glm::mat4 v);

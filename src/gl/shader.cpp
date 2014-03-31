@@ -323,6 +323,12 @@ bool Shader::CreateAndLink() {
  * Fluent Style interface - Overloaded setters for uniforms
  */
 
+Shader& Shader::s(const char * name, glm::vec2 v) {
+	GLuint l = Location(name);
+	glUniform2f(l,v.x,v.y);
+	return *this;
+}
+
 Shader& Shader::s(const char * name, glm::vec3 v) {
 	GLuint l = Location(name);
 	glUniform3f(l,v.x,v.y,v.z);
