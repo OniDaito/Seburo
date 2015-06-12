@@ -35,7 +35,7 @@ VidCam::VidCam(std::string dev, size_t w, size_t h, size_t fps) : obj_( shared_p
 }
 
 void VidCam::Update() {
-	obj_->texture.Update(obj_->cam->getBuffer());
+	obj_->texture.Update(obj_->cam->GetBuffer());
 	//obj_->texture.update(obj_->cam->getBuffer());
 }
 

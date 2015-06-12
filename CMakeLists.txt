@@ -223,7 +223,12 @@ elseif(_SEBURO_OSX)
     CACHE STRING "Local Library search paths")
 
   SEBURO_find_library(glfw)
-  SEBURO_find_library(AssImp)
+    # Sort out Freetype - including adding its special directory so includes work
+  SEBURO_find_library(freetype)
+  include_directories(${PROJECT_SOURCE_DIR}/include/freetype
+    ${SEBURO_INCLUDES}
+  )
+
 
 
 elseif(_SEBURO_WIN32)

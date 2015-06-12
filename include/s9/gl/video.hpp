@@ -46,7 +46,7 @@ namespace s9 {
 			void Stop();		
 			void SetControl(unsigned int id, int value);
 			void Update();
-			unsigned char* GetBuffer() {return obj_->cam->getBuffer(); };
+			unsigned char* GetBuffer() {return obj_->cam->GetBuffer(); };
 
 			void Bind() {obj_->texture.Bind(); };
 			void Unbind() {obj_->texture.Unbind(); };

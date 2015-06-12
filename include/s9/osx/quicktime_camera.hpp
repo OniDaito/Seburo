@@ -16,9 +16,9 @@ namespace s9{
   class QuicktimeCamera {
   public:
     QuicktimeCamera () {};
-    bool startCapture(std::string devname, unsigned int width, unsigned int height, unsigned int fps);
-    void stop();
-    unsigned char* getBuffer();
+    bool StartCapture(std::string devname, unsigned int width, unsigned int height, unsigned int fps);
+    void Stop();
+    unsigned char* GetBuffer();
 
     void video_list_controls(int dev);
     void set_control(unsigned int id, int value);
